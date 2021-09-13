@@ -1,0 +1,13 @@
+* text=auto
+
+*.osgt binary
+*.osg binary
+*.osgb binary
+*.dmd binary
+
+*.png binary
+*.bmp binary
+*.tga binary
+*.jpg binary
+*.jpeg binary
+*.wav binary
