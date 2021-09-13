@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <Vehicle>
+        <EmptyMass>50500</EmptyMass>
+        <PayloadMass>0</PayloadMass> 
+        <Length>23.780</Length>
+        <WheelDiameter>0.86</WheelDiameter>
+        <MainResist>loco-resist</MainResist>
+        <NumAxis>4</NumAxis>
+        <SoundDir>ra3</SoundDir>
+        <WheelInertia>2.0</WheelInertia>  
+    </Vehicle>
+</Config>
