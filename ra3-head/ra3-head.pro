@@ -26,5 +26,3 @@ HEADERS += $$files(./include/*.h)
 HEADERS += $$files(../ra3-equipment/include/*.h)
 SOURCES += $$files(./src/*.cpp)
 SOURCES += $$files(../ra3-equipment/src/*.cpp)
-
-

@@ -4,6 +4,7 @@
 #include    "vehicle-api.h"
 
 #include    "fuel-tank.h"
+#include    "battery.h"
 
 //------------------------------------------------------------------------------
 //
@@ -18,6 +19,12 @@ public:
 
 private:
 
+    /// Аккумуляторная батарея 110 В
+    Battery     *bat110;
+
+    /// Аккумуляторная батарея 24 В
+    Battery     *bat24;
+
     enum
     {
         NUM_TANKS = 2,
@@ -25,6 +32,7 @@ private:
         RIGHT_TANK = 1
     };
 
+    /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
     void initialization() override;
@@ -32,10 +40,16 @@ private:
     /// Инициализация системы питания топливом
     void initFuelSystem();
 
+    /// Инициализация цепей управления
+    void initControlCircuit();
+
     void step(double t, double dt) override;
 
     /// Моедлирования работы системы питания топливом
     void stepFuelSystem(double t, double dt);
+
+    /// Моделирование работы цепей управления
+    void stepControlCircuit(double t, double dt);
 
     void keyProcess() override;
 
