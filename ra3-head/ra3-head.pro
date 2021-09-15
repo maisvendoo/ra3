@@ -6,7 +6,7 @@ QT += xml
 
 # Имя итогового файла DLL и путь, куда он должен быть помещен после
 # сборки
-TARGET = ep1m
+TARGET = ra3-head
 DESTDIR = $$(RRS_DEV_ROOT)/modules/$$join(TARGET,,,)
 
 # Библиотеки симулятора, с которыми компонуется DLL локомотива
@@ -19,7 +19,12 @@ LIBS += -L$$(RRS_DEV_ROOT)/bin -lfilesystem
 # Путь к необходимым заголовочным файлам
 INCLUDEPATH += ./include
 INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
+INCLUDEPATH += ../ra3-equipment/include
 
 # Указываем файлы, включаемые в проект
 HEADERS += $$files(./include/*.h)
+HEADERS += $$files(../ra3-equipment/include/*.h)
 SOURCES += $$files(./src/*.cpp)
+SOURCES += $$files(../ra3-equipment/src/*.cpp)
+
+

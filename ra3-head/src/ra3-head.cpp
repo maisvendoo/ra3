@@ -21,7 +21,8 @@ RA3HeadMotor::~RA3HeadMotor()
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initialization()
 {
-
+    // Инициализация системы питания топливом
+    initFuelSystem();
 }
 
 //------------------------------------------------------------------------------
@@ -29,7 +30,8 @@ void RA3HeadMotor::initialization()
 //------------------------------------------------------------------------------
 void RA3HeadMotor::step(double t, double dt)
 {
-
+    // Работа системы питания топливом
+    stepFuelSystem(t, dt);
 }
 
 //------------------------------------------------------------------------------
@@ -38,6 +40,33 @@ void RA3HeadMotor::step(double t, double dt)
 void RA3HeadMotor::keyProcess()
 {
 
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void RA3HeadMotor::loadConfig(QString cfg_path)
+{
+    CfgReader cfg;
+
+    if (cfg.load(cfg_path))
+    {
+        QString secName = "Vehicle";
+
+        // Создаем и инициализируем топливные баки
+        double fuel_capacity = 0;
+        cfg.getDouble(secName, "FuelCapacity", fuel_capacity);
+
+        double fuel_level = 0;
+        cfg.getDouble(secName, "FuelLevel", fuel_level);
+
+        for (size_t i = 0; i < fuel_tank.size(); ++i)
+        {
+            fuel_tank[i] = new FuelTank();
+            fuel_tank[i]->setCapacity(fuel_capacity);
+            fuel_tank[i]->setFuelLevel(fuel_level);
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

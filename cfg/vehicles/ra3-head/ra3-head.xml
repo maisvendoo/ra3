@@ -9,5 +9,9 @@
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
         <WheelInertia>2.0</WheelInertia>  
+		
+		<FuelCapacity>350</FuelCapacity>
+		<FuelLevel>1.0</FuelLevel>
+		
     </Vehicle>
 </Config>
