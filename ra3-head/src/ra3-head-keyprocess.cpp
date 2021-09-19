@@ -5,15 +5,15 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::keyProcess()
 {
-    if (getKeyState(KEY_J))
-    {
-        if ( isShift() )
-        {
-            tumbler[TUMBLER_CABINE_CHANGE].set();
-        }
-        else
-        {
-            tumbler[TUMBLER_CABINE_CHANGE].reset();
-        }
-    }
+    // БОРТСЕТЬ ВКЛ.
+    if (getKeyState(KEY_U))
+        tumbler[BUTTON_PWR_ON].set();
+    else
+        tumbler[BUTTON_PWR_ON].reset();
+
+    // БОРТСЕТЬ ОТКЛ.
+    if (getKeyState(KEY_I))
+        tumbler[BUTTON_PWR_OFF].reset();
+    else
+        tumbler[BUTTON_PWR_OFF].set();
 }

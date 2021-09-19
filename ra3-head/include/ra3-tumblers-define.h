@@ -7,7 +7,8 @@
 enum
 {
     TUMBLERS_NUM = 100,
-    TUMBLER_CABINE_CHANGE = 0
+    BUTTON_PWR_ON = 0,
+    BUTTON_PWR_OFF = 1,
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

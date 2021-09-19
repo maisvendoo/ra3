@@ -6,6 +6,10 @@
 #include    "ra3-tumblers-define.h"
 #include    "fuel-tank.h"
 #include    "battery.h"
+#include    "relay.h"
+#include    "mpsu.h"
+
+#include    "ra3-head-signals.h"
 
 //------------------------------------------------------------------------------
 //
@@ -33,8 +37,14 @@ private:
         RIGHT_TANK = 1
     };
 
+    /// Напряжение от батареи 110 В
+    double U_bat_110;
+
     /// Напряжение питания цепей управления
     double Ucc;
+
+    /// Контактор включения батареи 110 В
+    Relay   *KM_bat_110;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
@@ -60,6 +70,9 @@ private:
 
     /// Моделирование работы цепей управления
     void stepControlCircuit(double t, double dt);
+
+    /// Выбод сигналов
+    void stepSignalsOutput(double t, double dt);
 
     /// Отладочный вывод
     void debugOutput(double t, double dt);

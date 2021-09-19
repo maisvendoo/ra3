@@ -21,6 +21,17 @@
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
-	</Sound>	
+	</Sound>
+
+	<!-- Звук включения контактора -->
+	<Sound>
+		<Name>Relay</Name>
+		<Path>relay.wav</Path>
+		<InitVolume>100</InitVolume>
+		<MaxVolume>100</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
 
 </Config>

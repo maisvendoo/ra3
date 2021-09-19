@@ -6,7 +6,9 @@
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , bat110(Q_NULLPTR)
   , bat24(Q_NULLPTR)
+  , U_bat_110(0.0)
   , Ucc(0.0)
+  , KM_bat_110(Q_NULLPTR)
 {
 
 }
@@ -44,6 +46,9 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа цепей управления
     stepControlCircuit(t, dt);
+
+    // Вывод сигналов
+    stepSignalsOutput(t, dt);
 
     // Отладочный вывод по F1
     debugOutput(t, dt);
