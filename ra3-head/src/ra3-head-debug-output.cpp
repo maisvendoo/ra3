@@ -3,11 +3,9 @@
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::stepControlCircuit(double t, double dt)
+void RA3HeadMotor::debugOutput(double t, double dt)
 {
-    Ucc = tumbler[TUMBLER_CABINE_CHANGE].getState() * bat110->getVoltage();
-
-    bat110->step(t, dt);
-
-    bat24->step(t, dt);
+    DebugMsg = QString("t: %1 Ucc: %2")
+            .arg(t, 10, 'f', 1)
+            .arg(Ucc, 5, 'f', 1);
 }
