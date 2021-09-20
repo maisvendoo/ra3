@@ -83,6 +83,7 @@ private:
     /// Отладочный вывод
     void debugOutput(double t, double dt);
 
+    /// Обработка клавиш
     void keyProcess() override;
 
     void loadConfig(QString cfg_path) override;
