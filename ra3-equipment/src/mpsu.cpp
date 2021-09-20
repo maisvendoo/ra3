@@ -22,6 +22,7 @@ MPSU::~MPSU()
 //------------------------------------------------------------------------------
 void MPSU::step(double t, double dt)
 {
+    // При выключенном питании - ничего не делаем
     if (!mpsu_input.is_power_on)
     {
         is_reseted = false;

@@ -74,6 +74,9 @@ private:
     /// Моделирование работы цепей управления
     void stepControlCircuit(double t, double dt);
 
+    /// Моделирование работы МПСУ
+    void stepMPSU(double t, double dt);
+
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
 

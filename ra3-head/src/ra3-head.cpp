@@ -47,6 +47,9 @@ void RA3HeadMotor::step(double t, double dt)
     // Работа цепей управления
     stepControlCircuit(t, dt);
 
+    // Работа МПСУ
+    stepMPSU(t, dt);
+
     // Вывод сигналов
     stepSignalsOutput(t, dt);
 
