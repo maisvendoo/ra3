@@ -17,4 +17,6 @@ void RA3HeadMotor::initControlCircuit()
     KM_bat_110->read_custom_config(config_dir + QDir::separator() + "mk");
     KM_bat_110->setInitContactState(0, false);
     KM_bat_110->setInitContactState(1, false);
+
+    mpsu = new MPSU();
 }

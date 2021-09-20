@@ -46,6 +46,9 @@ private:
     /// Контактор включения батареи 110 В
     Relay   *KM_bat_110;
 
+    /// Микропроцессорная система управления МПСУ
+    MPSU    *mpsu;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 

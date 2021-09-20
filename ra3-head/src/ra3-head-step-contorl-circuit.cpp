@@ -17,4 +17,6 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     KM_bat_110->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_bat_110->step(t, dt);
+
+    mpsu->step(t, dt);
 }
