@@ -8,6 +8,7 @@
 #include    "battery.h"
 #include    "relay.h"
 #include    "mpsu.h"
+#include    "electric-fuel-pump.h"
 
 #include    "ra3-head-signals.h"
 
@@ -48,6 +49,9 @@ private:
 
     /// Микропроцессорная система управления МПСУ
     MPSU    *mpsu;
+
+    /// Топливоподкачивающий насос
+    ElectricFuelPump    *fuel_pump;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;

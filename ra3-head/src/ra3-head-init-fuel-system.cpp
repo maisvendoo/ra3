@@ -5,5 +5,5 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initFuelSystem()
 {
-
+    fuel_pump = new ElectricFuelPump();
 }

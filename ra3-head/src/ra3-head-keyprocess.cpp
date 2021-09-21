@@ -16,4 +16,9 @@ void RA3HeadMotor::keyProcess()
         tumbler[BUTTON_PWR_OFF].reset();
     else
         tumbler[BUTTON_PWR_OFF].set();
+
+    if (getKeyState(KEY_B))
+        soundPlay("Tifon");
+    else
+        soundStop("Tifon");
 }

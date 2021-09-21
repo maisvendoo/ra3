@@ -10,4 +10,6 @@ void RA3HeadMotor::stepFuelSystem(double t, double dt)
         fuel_tank->setFuelConsumption(0.0);
         fuel_tank->step(t, dt);
     }
+
+    fuel_pump->step(t, dt);
 }
