@@ -53,6 +53,9 @@ void RA3HeadMotor::step(double t, double dt)
     // Вывод сигналов
     stepSignalsOutput(t, dt);
 
+    // Обрабока линий СМЕ
+    stepVehiclesConnect();
+
     // Отладочный вывод по F1
     debugOutput(t, dt);
 }

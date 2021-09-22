@@ -84,6 +84,9 @@ private:
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
 
+    /// Связывание сигналов СМЕ
+    void stepVehiclesConnect();
+
     /// Отладочный вывод
     void debugOutput(double t, double dt);
 
