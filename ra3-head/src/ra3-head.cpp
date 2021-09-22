@@ -4,6 +4,7 @@
 //
 //------------------------------------------------------------------------------
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
+  , is_active(false)
   , bat110(Q_NULLPTR)
   , bat24(Q_NULLPTR)
   , U_bat_110(0.0)
@@ -84,6 +85,8 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
             fuel_tank[i]->setCapacity(fuel_capacity);
             fuel_tank[i]->setFuelLevel(fuel_level);
         }
+
+        cfg.getBool(secName, "IsActive", is_active);
     }
 }
 

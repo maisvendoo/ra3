@@ -25,6 +25,9 @@ public:
 
 private:
 
+    /// Признак активной кабины
+    bool is_active;
+
     /// Аккумуляторная батарея 110 В
     Battery     *bat110;
 

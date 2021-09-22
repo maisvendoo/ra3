@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::keyProcess()
 {
+    if (getIndex() != 0)
+        return;
+
     // БОРТСЕТЬ ВКЛ.
     if (getKeyState(KEY_U))
         tumbler[BUTTON_PWR_ON].set();
@@ -15,10 +18,5 @@ void RA3HeadMotor::keyProcess()
     if (getKeyState(KEY_I))
         tumbler[BUTTON_PWR_OFF].reset();
     else
-        tumbler[BUTTON_PWR_OFF].set();
-
-    if (getKeyState(KEY_B))
-        soundPlay("Tifon");
-    else
-        soundStop("Tifon");
+        tumbler[BUTTON_PWR_OFF].set();   
 }

@@ -13,10 +13,10 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     bat24->step(t, dt);
 
     bool is_KM_bat_110 = tumbler[BUTTON_PWR_ON].getState() ||
-            (tumbler[BUTTON_PWR_OFF].getState() && KM_bat_110->getContactState(0));/* ||
-            static_cast<bool>(forward_inputs[SME_POWER_ON]);*/
+            (tumbler[BUTTON_PWR_OFF].getState() && KM_bat_110->getContactState(0)) ||
+            static_cast<bool>(forward_inputs[SME_POWER_ON]);
 
-    //backward_outputs[SME_POWER_ON] = static_cast<float>(KM_bat_110->getContactState(2));
+    backward_outputs[SME_POWER_ON] = static_cast<float>(KM_bat_110->getContactState(2));
 
     KM_bat_110->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_bat_110->step(t, dt);    
