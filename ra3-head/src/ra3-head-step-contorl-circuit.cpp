@@ -22,4 +22,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     KM_bat_110->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_bat_110->step(t, dt);    
+
+    // Сигнал включения топливного насоса на ведомом дизеле
+    backward_outputs[SME_BWD_FUEL_PUMP] = static_cast<float>(mpsu->getOutputData().is_fuel_pump2_ON);
 }

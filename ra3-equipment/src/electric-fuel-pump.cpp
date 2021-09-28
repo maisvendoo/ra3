@@ -18,6 +18,7 @@ ElectricFuelPump::ElectricFuelPump(QObject *parent) : Device(parent)
   , fuel_level(0.0)
   , fuel_press(0.0)
   , is_started(false)
+  , soundName("Fuel_Pump")
 {
 
 }
@@ -77,18 +78,18 @@ void ElectricFuelPump::preStep(state_vector_t &Y, double t)
 
     if ( (Y[0] >= 0.1) && !is_started)
     {
-        emit soundPlay("Fuel_Pump");
+        emit soundPlay(soundName);
         is_started = true;
     }
 
     if ((Y[0] < 0.1) && is_started)
     {
-        emit soundStop("Fuel_Pump");
+        emit soundStop(soundName);
         is_started = false;
     }
 
-    emit soundSetPitch("Fuel_Pump", static_cast<float>(Y[0] / omega_nom));
-    emit soundSetVolume("Fuel_Pump", static_cast<int>(Y[0] * 100 / omega_nom));
+    emit soundSetPitch(soundName, static_cast<float>(Y[0] / omega_nom));
+    emit soundSetVolume(soundName, static_cast<int>(Y[0] * 100 / omega_nom));
 }
 
 //------------------------------------------------------------------------------

@@ -26,6 +26,8 @@ public:
     /// Задать напряжение на двигателе насоса
     void setVoltage(double U);
 
+    void setSoundName(QString soundName) { this->soundName = soundName; }
+
 private:
 
     /// Напряжение питания, В
@@ -68,6 +70,8 @@ private:
     double fuel_press;
 
     bool is_started;
+
+    QString soundName;
 
     void preStep(state_vector_t &Y, double t);
 

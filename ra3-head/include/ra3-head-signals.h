@@ -32,7 +32,8 @@ enum
 enum
 {
     SME_BWD_POWER_ON = 0,
-    SME_FWD_POWER_ON = 1
+    SME_FWD_POWER_ON = 1,
+    SME_BWD_FUEL_PUMP = 2
 };
 
 #endif // RA3_HEAD_SIGNALS_H

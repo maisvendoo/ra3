@@ -92,6 +92,8 @@ void MPSU::reset()
     mpsu_input = mpsu_input_t();
     mpsu_output = mpsu_output_t();
 
+    old_start_state = false;
+
     is_reseted = true;
 }
 
@@ -100,5 +102,36 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
+    // Включение дисплея
+    mpsu_output.is_display_ON = true;
 
+    // Обработка кнопки "СТАРТ"
+    start_button_process(mpsu_input.start_disel);
+
+    // Команды на включение топливных насосов
+    mpsu_output.is_fuel_pump1_ON = trig_disel_start[FWD_DISEL].getState();
+    mpsu_output.is_fuel_pump2_ON = trig_disel_start[BWD_DISEL].getState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::start_button_process(bool is_start_button)
+{
+    // Обработка нажатия исключительно после того, как кнопка была отпущена
+    if (is_start_button && (!old_start_state) )
+    {
+        // Выбираем дизель
+        mpsu_output.current_started_disel++;
+        // "Режем" индекс
+        mpsu_output.current_started_disel = cut(mpsu_output.current_started_disel,
+                                                0,
+                                                static_cast<int>(NUM_DISELS) - 1);
+
+        // Взводим триггер признака пуска
+        trig_disel_start[mpsu_output.current_started_disel].set();
+    }
+
+    // Запоминаем предыдущее состояние кнопки
+    old_start_state = is_start_button;
 }

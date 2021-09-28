@@ -27,12 +27,24 @@ private:
     /// Признак сброса МПСУ
     bool is_reseted;
 
+    /// Предыдущее состояние кнопки "СТАРТ"
+    bool old_start_state;
+
     /// Входные сигналы
     mpsu_input_t    mpsu_input;
 
     /// Выходные сигналы
     mpsu_output_t   mpsu_output;
 
+    enum
+    {
+        NUM_DISELS = 2,
+        FWD_DISEL = 0,
+        BWD_DISEL = 1
+    };
+
+    /// Тригер активации запуска дизеля
+    std::array<Trigger, NUM_DISELS> trig_disel_start;
 
     void preStep(state_vector_t &Y, double t);
 
@@ -45,6 +57,9 @@ private:
 
     /// Главный цикл управления
     void main_loop_step(double t, double dt);
+
+    /// Обработка кнопки старт
+    void start_button_process(bool is_start_button);
 };
 
 #endif // MPSU_H
