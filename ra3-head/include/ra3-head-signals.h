@@ -16,6 +16,9 @@ enum
     // Подача питания на дисплей БЛОК-М
     SIG_BLOK_ON = 3,
 
+    SIG_BUTTON_START = 4,
+    SIG_BUTTON_STOP = 5,
+
     // Углы поворота колесных пар
     WHEEL_1 = 194,
     WHEEL_2 = 195,

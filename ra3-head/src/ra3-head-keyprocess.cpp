@@ -18,5 +18,17 @@ void RA3HeadMotor::keyProcess()
     if (getKeyState(KEY_I))
         tumbler[BUTTON_PWR_OFF].reset();
     else
-        tumbler[BUTTON_PWR_OFF].set();   
+        tumbler[BUTTON_PWR_OFF].set();
+
+    // СТАРТ
+    if (getKeyState(KEY_K))
+        tumbler[BUTTON_START].set();
+    else
+        tumbler[BUTTON_START].reset();
+
+    // СТОП
+    if (getKeyState(KEY_H))
+        tumbler[BUTTON_STOP].set();
+    else
+        tumbler[BUTTON_STOP].reset();
 }
