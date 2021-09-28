@@ -56,6 +56,9 @@ private:
     /// Топливоподкачивающий насос
     ElectricFuelPump    *fuel_pump;
 
+    /// Свисток и тифон
+    TrainHorn *horn;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
@@ -69,6 +72,9 @@ private:
 
     /// Инициализация цепей управления
     void initControlCircuit();
+
+    /// Инициализация прочего оборудования
+    void initOtherEquipment();
 
     /// Инициализация звуков
     void initSounds();
@@ -86,6 +92,9 @@ private:
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
+
+    ///
+    void stepOtherEquipment(double t, double dt);
 
     /// Связывание сигналов СМЕ
     void stepVehiclesConnect();

@@ -28,7 +28,13 @@ struct mpsu_input_t
 //------------------------------------------------------------------------------
 struct mpsu_output_t
 {
+    bool is_fuel_pump_ON;
 
+    mpsu_output_t()
+        : is_fuel_pump_ON(false)
+    {
+
+    }
 };
 
 #endif // MPSU_DATA_H

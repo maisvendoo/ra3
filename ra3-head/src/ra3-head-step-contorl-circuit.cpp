@@ -17,6 +17,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
             (tumbler[BUTTON_PWR_OFF].getState() && KM_bat_110->getContactState(0)) ||
            static_cast<bool>(forward_inputs[SME_BWD_POWER_ON]);
 
+    // Сигнал включения контактора "Бортсеть" на ведомую секцию
     backward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_bat_110->getContactState(2));
 
     KM_bat_110->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));

@@ -33,6 +33,8 @@ void RA3HeadMotor::initialization()
     // Инициализация цепей управления
     initControlCircuit();
 
+    initOtherEquipment();
+
     // Инициализация озвучки
     initSounds();
 }
@@ -50,6 +52,8 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа МПСУ
     stepMPSU(t, dt);
+
+    stepOtherEquipment(t, dt);
 
     // Вывод сигналов
     stepSignalsOutput(t, dt);
