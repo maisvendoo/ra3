@@ -7,14 +7,11 @@ void RA3HeadMotor::stepVehiclesConnect()
 {
     for (size_t i = 0; i < forward_inputs.size(); ++i)
     {
-        // Соединяем раъемы СМЕ в пределах данной ПЕ
-        backward_outputs[i] = forward_inputs[i];
-        forward_outputs[i] = backward_inputs[i];
-
         // Соединяемся с предыдущим вагоном
         if (prev_vehicle != Q_NULLPTR)
         {
-            forward_inputs[i] = prev_vehicle->getBwdOutput(i);
+            float tmp = prev_vehicle->getBwdOutput(i);
+            forward_inputs[i] = tmp;
             prev_vehicle->setBwdInput(i, forward_outputs[i]);
         }
 

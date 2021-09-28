@@ -13,14 +13,14 @@
  
     <Vehicle>
          <Module>ra3-head</Module>
-         <ModuleConfig>ra3-head</ModuleConfig>
+         <ModuleConfig>ra3-head-fwd</ModuleConfig>
          <Count>1</Count>
          <PayloadCoeff>1</PayloadCoeff>    
     </Vehicle>
 
 	<Vehicle>
          <Module>ra3-head</Module>
-         <ModuleConfig>ra3-head</ModuleConfig>
+         <ModuleConfig>ra3-head-bwd</ModuleConfig>
          <Count>1</Count>
          <PayloadCoeff>1</PayloadCoeff>    
     </Vehicle>
