@@ -94,6 +94,9 @@ void MPSU::reset()
 
     old_start_state = false;
 
+    for (size_t i = 0; i < trig_disel_start.size(); ++i)
+        trig_disel_start[i].reset();
+
     is_reseted = true;
 }
 
