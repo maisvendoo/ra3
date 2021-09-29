@@ -19,12 +19,20 @@ struct mpsu_input_t
     /// Давление масла в дизеле 2
     double oil_press2;
 
+    /// Давление топлива в рампе ТНВД1
+    double fuel_press1;
+
+    /// Давление топлива в рампе ТНВД2
+    double fuel_press2;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
         , stop_disel(false)
         , oil_press1(0.0)
         , oil_press2(0.0)
+        , fuel_press1(0.0)
+        , fuel_press2(0.0)
     {
 
     }

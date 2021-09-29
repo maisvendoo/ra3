@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Device>
+			<P_nom>1440.0</P_nom>
+			<omega_nom>48.0</omega_nom>
+			<I_nom>62.5</I_nom>
+			<U_nom>24.0</U_nom>
+	</Device>
+</Config>

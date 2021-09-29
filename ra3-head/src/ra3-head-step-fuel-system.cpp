@@ -21,4 +21,7 @@ void RA3HeadMotor::stepFuelSystem(double t, double dt)
     fuel_pump->setVoltage(Ucc * static_cast<double>(is_fuel_pump));
     fuel_pump->setFuelLevel(common_fuel_level / 2.0);
     fuel_pump->step(t, dt);
+
+    // Передаем давление топлива в ведущую секцию
+    forward_outputs[SME_BWD_FUEL_PRESS] = static_cast<float>(fuel_pump->getFuelPressure());
 }

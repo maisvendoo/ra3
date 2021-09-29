@@ -10,6 +10,7 @@
 #include    "mpsu.h"
 #include    "electric-fuel-pump.h"
 #include    "disel.h"
+#include    "starter.h"
 
 #include    "ra3-head-signals.h"
 
@@ -62,6 +63,9 @@ private:
 
     /// Дизель
     Disel   *disel;
+
+    /// Стартер
+    Starter *starter;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
