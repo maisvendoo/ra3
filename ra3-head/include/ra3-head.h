@@ -9,6 +9,7 @@
 #include    "relay.h"
 #include    "mpsu.h"
 #include    "electric-fuel-pump.h"
+#include    "disel.h"
 
 #include    "ra3-head-signals.h"
 
@@ -59,6 +60,9 @@ private:
     /// Свисток и тифон
     TrainHorn *horn;
 
+    /// Дизель
+    Disel   *disel;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
@@ -72,6 +76,9 @@ private:
 
     /// Инициализация цепей управления
     void initControlCircuit();
+
+    /// Инициализация дизеля
+    void initDisel();
 
     /// Инициализация прочего оборудования
     void initOtherEquipment();
@@ -89,6 +96,9 @@ private:
 
     /// Моделирование работы МПСУ
     void stepMPSU(double t, double dt);
+
+    /// Работа дизеля
+    void stepDisel(double t, double dt);
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);

@@ -59,7 +59,7 @@
 		<Name>Fuel_Pump1</Name>
 		<Path>fuel_pump.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>10</MaxVolume>
+		<MaxVolume>50</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -69,7 +69,7 @@
 		<Name>Fuel_Pump2</Name>
 		<Path>fuel_pump.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<MaxVolume>25</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>

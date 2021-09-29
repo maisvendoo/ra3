@@ -10,6 +10,10 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , U_bat_110(0.0)
   , Ucc(0.0)
   , KM_bat_110(Q_NULLPTR)
+  , mpsu(Q_NULLPTR)
+  , fuel_pump(Q_NULLPTR)
+  , horn(Q_NULLPTR)
+  , disel(Q_NULLPTR)
 {
 
 }
@@ -33,6 +37,9 @@ void RA3HeadMotor::initialization()
     // Инициализация цепей управления
     initControlCircuit();
 
+    // Инициализация дизеля
+    initDisel();
+
     initOtherEquipment();
 
     // Инициализация озвучки
@@ -52,6 +59,9 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа МПСУ
     stepMPSU(t, dt);
+
+    // Работа дизеля
+    stepDisel(t, dt);
 
     stepOtherEquipment(t, dt);
 
