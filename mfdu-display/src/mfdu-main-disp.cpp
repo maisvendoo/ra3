@@ -21,6 +21,8 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
     verticalScaleBar_ = new VerticalScaleBar(QSize(36, 348), parent);
     verticalScaleBar_->move(51,163);
     //verticalScaleBar_->setStyleSheet("border: 1px solid red");
+    // блок нижних параметров
+    setBlockDownParameters_(parent);
 
 
 
@@ -901,6 +903,47 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
 
 }
 
+
+
+void MfduMainDisp::setBlockDownParameters_(QLabel *parent)
+{
+    int fooX = 90;
+    int fooY = 438;
+
+    //
+    drawLabel_(parent, labPpm_, QPoint(fooX,fooY));
+    drawLabel_(parent, labPtm_, QPoint(fooX + 66,fooY));
+    drawLabel_(parent, labPtc_max_, QPoint(fooX,fooY + 42));
+    drawLabel_(parent, labPtc_min_, QPoint(fooX + 66,fooY + 42));
+    drawLabel_(parent, labTkab_, QPoint(fooX + 570,fooY + 10), "00ffff", Qt::AlignRight | Qt::AlignVCenter);
+    drawLabel_(parent, labIakb24_, QPoint(fooX + 570,fooY + 46), "ffff00");
+    drawLabel_(parent, labIakb110_, QPoint(fooX + 570 + 69,fooY + 46), "ffff00");
+
+
+    // в отдельный метод (установка значений)
+    labPpm_->setText(QString::number(0.0, 'f', 3));
+    labPtm_->setText(QString::number(0.5, 'f', 3));
+    labPtc_max_->setText(QString::number(0.0, 'f', 3));
+    labPtc_min_->setText(QString::number(0.0, 'f', 3));
+    labTkab_->setText(QString::number(0, 'f', 1));
+    labIakb24_->setText(QString::number(103.7, 'f', 1));
+    labIakb110_->setText(QString::number(103.7, 'f', 1));
+
+}
+
+
+
+void MfduMainDisp::drawLabel_(QLabel *parent, QLabel *&lab, QPoint pos, QString color, Qt::Alignment align)
+{
+    lab = new QLabel("0", parent);
+    lab->move(pos);
+    lab->resize(66, 20);
+    lab->setAlignment(Qt::AlignCenter);
+    lab->setFont(QFont("Arial", 14, 63));
+    lab->setStyleSheet("border: none;"
+                       "color: #" + color);
+    lab->setAlignment(align);
+}
 
 
 

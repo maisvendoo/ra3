@@ -69,6 +69,18 @@ private:
     // Вертикальная шкала тяги/торможения
     VerticalScaleBar* verticalScaleBar_;
 
+    // блок нижних параметров
+    void setBlockDownParameters_(QLabel* parent);
+    void drawLabel_(QLabel* parent, QLabel* &lab, QPoint pos, QString color = "00ffff",
+                    Qt::Alignment align = Qt::AlignCenter);
+    QLabel* labPpm_;
+    QLabel* labPtm_;
+    QLabel* labPtc_max_;
+    QLabel* labPtc_min_;
+    QLabel* labTkab_;
+    QLabel* labIakb24_;
+    QLabel* labIakb110_;
+
 
 
 
