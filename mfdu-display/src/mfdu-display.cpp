@@ -19,8 +19,8 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
     : AbstractDisplay(parent, f)
 {
     this->setWindowFlag(Qt::WindowType::FramelessWindowHint);
-    //this->resize(644, 465);
-    this->resize(1000, 600);
+//    this->resize(644, 465);
+//    this->resize(1000, 600);
     this->setAutoFillBackground(true);
     this->setPalette(QPalette(QColor(0, 0, 0)));
     this->setAttribute(Qt::WA_TransparentForMouseEvents);

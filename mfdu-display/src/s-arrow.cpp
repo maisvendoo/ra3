@@ -14,7 +14,7 @@ SArrow::SArrow(QSize _size, int otstupSverhu, QWidget *parent)
     w_2_ = this->width()/2.0;
     h_2_ = this->height()/2.0;
 
-    cpX_ = this->width()/2.0 - 1;
+    cpX_ = this->width()/2.0;
     cpY_ = this->height()/2.0 + otstupSverhu;
 
     img_ = QImage(this->size(), QImage::Format_ARGB32_Premultiplied);
@@ -72,7 +72,7 @@ void SArrow::draw_(double _val)
     // длина стрелки
     double r  = 1.0;
     // половина ширины основания стрелки
-    double r2 = 12.0;
+    double r2 = 10.0;
 
 
     QPolygonF triangle;
@@ -89,12 +89,12 @@ void SArrow::draw_(double _val)
 
 
     paint.setPen(QPen( QColor(Qt::red),
-                       65,
+                       56,
                        Qt::SolidLine,
                        Qt::RoundCap ));
     paint.drawPoint(QPoint(cpX_, cpY_));
     paint.setPen(QPen( QColor(Qt::black),
-                       60,
+                       54,
                        Qt::SolidLine,
                        Qt::RoundCap ));
     paint.drawPoint(QPoint(cpX_, cpY_));

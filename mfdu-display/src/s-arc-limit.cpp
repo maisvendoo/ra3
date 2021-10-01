@@ -11,7 +11,7 @@ SArcLimit::SArcLimit(QWidget *parent)
 {
     this->resize(parent->size());
 
-    int otstup = 20;
+    int otstup = 13;
     rect_.setRect( otstup,
                    otstup,
                    this->width()-otstup*2,
@@ -23,7 +23,7 @@ SArcLimit::SArcLimit(QWidget *parent)
 
     img_ = QImage(this->size(), QImage::Format_ARGB32_Premultiplied);
 
-    setVal(110);
+    setVal(0);
 
 }
 
@@ -52,11 +52,11 @@ void SArcLimit::draw_()
 //                       10.0,
 //                       Qt::SolidLine ));
     paint.setPen(QPen( QColor(255,0,0, 120),
-                       10.0,
+                       8.0,
                        Qt::SolidLine ));
     paint.drawArc(rect_,
-                  sgp_angleArcEnd_*16 + 10.0,
-                  aCSL_ - 10.0*3);
+                  sgp_angleArcEnd_*16 + 8.0,
+                  aCSL_ - 8.0*3);
 
     paint.end();
     this->setPixmap(pix);
