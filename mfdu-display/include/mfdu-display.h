@@ -4,6 +4,7 @@
 #include    "display.h"
 
 #include    <QLabel>
+#include <QTimer>
 
 
 class MfduMainDisp;
@@ -29,13 +30,20 @@ private:
     QPixmap pic_;
 
 
+    // Текущая дата
+    QLabel* labelCurDate_;
+    // Текущее время
+    QLabel* labelCurTime_;
+
+
     MfduMainDisp* mfduMainDisp_;
 
 
+    QTimer* updateTimer_;
 
 
 private slots:
-
+    void slotUpdateTimer();
 
 
 };

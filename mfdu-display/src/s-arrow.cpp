@@ -83,13 +83,13 @@ void SArrow::draw_(double _val)
              << QPointF( cpX_ + r2*cos(angle-fooAngle),
                          cpY_ + r2*sin(angle-fooAngle) );
 
-    paint.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+    paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
     paint.setBrush(Qt::transparent);
     paint.drawPolygon(triangle);
 
 
     paint.setPen(QPen( QColor(Qt::red),
-                       56,
+                       58,
                        Qt::SolidLine,
                        Qt::RoundCap ));
     paint.drawPoint(QPoint(cpX_, cpY_));

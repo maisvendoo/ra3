@@ -7,7 +7,6 @@
 #include    <QLabel>
 
 #include "speedometer.h"
-#include "horizont-bar.h"
 #include "vertical-scale-bar.h"
 
 
@@ -81,10 +80,22 @@ private:
     QLabel* labIakb24_;
     QLabel* labIakb110_;
 
+    // блок иконок сверху от спидометра
+    void setBlockIcon_topSpeedometer_(QLabel* parent);
+    std::vector<QLabel*> labVagonEquipment_left_;
+    std::vector<QLabel*> labVagonEquipment_right_;
+    std::vector<QLabel*> labPzdMini_left_;
+    std::vector<QLabel*> labPzdMini_right_;
+    std::vector<QLabel*> labBrakes_left_;
+    std::vector<QLabel*> labBrakes_right_;
+    std::vector<QLabel*> labCan_right_;
+    QLabel* labT_left_;
+    QLabel* labT_right_;
 
 
+    void fooNoneAdd_(QPixmap &pixmap, QLabel* parent, std::vector<QLabel*> &label, int x, int y);
+    void fooNoneAdd2_(QPixmap &pixmap, QLabel* parent, std::vector<QLabel*> &label, int x, int y);
 
-    HorizontBar* hBar_;
 
 };
 

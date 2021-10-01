@@ -23,14 +23,9 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
     //verticalScaleBar_->setStyleSheet("border: 1px solid red");
     // блок нижних параметров
     setBlockDownParameters_(parent);
+    // блок иконок сверху от спидометра
+    setBlockIcon_topSpeedometer_(parent);
 
-
-
-
-
-
-    hBar_ = new HorizontBar(QSize(202, 25), parent);
-//    hBar_->move(50, 150);
 
 }
 
@@ -66,11 +61,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooY = startY;
 
     // 11
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    lab110380_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, lab110380_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_110380_380")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -101,11 +92,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 12
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labPvu_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labPvu_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pvu")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -126,11 +113,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 13
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labEpk_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labEpk_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_epk_on")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -151,11 +134,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 14
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labFier1_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labFier1_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fier1_noSignals")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -177,7 +156,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labFier1_.push_back(labFoo);
 
-    int SIG_FIER_1 = 0; // 111111111111111111111111111111111111111111111111111111111
+    int SIG_FIER_1 = 1;
     for (int i = 0, n = labFier1_.size(); i < n; ++i)
     {
         labFier1_[i]->setVisible(i == SIG_FIER_1);
@@ -186,11 +165,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 15
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labFier2_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labFier2_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fier2_noSignals")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -212,7 +187,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labFier2_.push_back(labFoo);
 
-    int SIG_FIER_2 = 0; //111111111111111111111111111111111111111111111111111111111111111
+    int SIG_FIER_2 = 1;
     for (int i = 0, n = labFier2_.size(); i < n; ++i)
     {
         labFier2_[i]->setVisible(i == SIG_FIER_2);
@@ -222,11 +197,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX + fooDeltaX;
     fooY += fooDeltaY;
     // 22
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labPtf_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labPtf_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_ptf")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -247,11 +218,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 23
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labPzd_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labPzd_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pzd")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -282,11 +249,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 24
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labPump_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labPump_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pump")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -312,11 +275,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 25
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labTpn_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labTpn_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_tpn")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -338,11 +297,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 31
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labFire_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labFire_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fire")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -363,11 +318,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 32
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labOz_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labOz_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_oz_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -393,11 +344,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 33
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labDoor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labDoor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_door")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -418,11 +365,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 34
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labGenerator_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labGenerator_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_generator")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -443,11 +386,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 35
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labVip_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labVip_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_vip")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -469,11 +408,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 41
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labIncOzMotor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labIncOzMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_incOzMotor_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -499,11 +434,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 42
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labDecOzMotor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labDecOzMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_decOzMotor_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -529,11 +460,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX*2;
     // 44
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labWc_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labWc_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_wc")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -554,11 +481,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 45
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labAntyYuz_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labAntyYuz_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_antyYuz_work")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -585,11 +508,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 51
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labRevers_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labRevers_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_revers")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -610,11 +529,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 52
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labTransmission_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labTransmission_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_transmission")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -635,11 +550,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 53
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labOilMotor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labOilMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_oilMotor_up")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -665,11 +576,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 54
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labPressureOilMotor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labPressureOilMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pressureOilMotor_up")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -695,11 +602,7 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 55
-    if (!pixmap.load(":/mfdu/none")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
-    labFoo->setPixmap(pixmap);
-    labMotor_.push_back(labFoo);
+    fooNoneAdd_(pixmap, parent, labMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_motor_work")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -943,6 +846,211 @@ void MfduMainDisp::drawLabel_(QLabel *parent, QLabel *&lab, QPoint pos, QString 
     lab->setStyleSheet("border: none;"
                        "color: #" + color);
     lab->setAlignment(align);
+}
+
+
+
+void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
+{
+    int fooX = 277;
+    int fooY = 102;
+    int fooDelta12 = 134;
+
+
+    labT_left_ = new QLabel("0", parent);
+    labT_left_->move(fooX + 43, fooY - 27);
+    labT_left_->resize(50, 20);
+    labT_left_->setAlignment(Qt::AlignCenter);
+    labT_left_->setFont(QFont("Arial", 12, 63));
+    labT_left_->setStyleSheet("color: white;");
+    labT_left_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    labT_left_->setText(QString::number(0.0, 'f', 1));
+
+    labT_right_ = new QLabel("0", parent);
+    labT_right_->move(fooX + 43 + fooDelta12, fooY - 27);
+    labT_right_->resize(50, 20);
+    labT_right_->setAlignment(Qt::AlignCenter);
+    labT_right_->setFont(QFont("Arial", 12, 63));
+    labT_right_->setStyleSheet("color: white;");
+    labT_right_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    labT_right_->setText(QString::number(0.0, 'f', 1));
+
+
+
+
+    QPixmap pixmap;
+
+    QLabel* labFoo = Q_NULLPTR;
+
+
+    fooNoneAdd2_(pixmap, parent, labCan_right_, fooX + fooDelta12, fooY);
+    if (!pixmap.load(":/mfdu/main_can")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labCan_right_.push_back(labFoo);
+
+    int SIG_CAN_RIGHT = 0;
+    for (int i = 0, n = labCan_right_.size(); i < n; ++i)
+    {
+        labCan_right_[i]->setVisible(i == SIG_CAN_RIGHT);
+    }
+
+
+
+
+    fooNoneAdd2_(pixmap, parent, labVagonEquipment_left_, fooX, fooY);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_work")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_left_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_warn")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_left_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_error")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_left_.push_back(labFoo);
+
+    int SIG_VAGON_EQUIPMENT_LEFT = 0;
+    for (int i = 0, n = labVagonEquipment_left_.size(); i < n; ++i)
+    {
+        labVagonEquipment_left_[i]->setVisible(i == SIG_VAGON_EQUIPMENT_LEFT);
+    }
+
+
+    fooNoneAdd2_(pixmap, parent, labVagonEquipment_right_, fooX + fooDelta12, fooY);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_work")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_right_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_warn")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_right_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_vagonEquipment_error")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labVagonEquipment_right_.push_back(labFoo);
+
+    int SIG_VAGON_EQUIPMENT_RIGHT = 0;
+    for (int i = 0, n = labVagonEquipment_right_.size(); i < n; ++i)
+    {
+        labVagonEquipment_right_[i]->setVisible(i == SIG_VAGON_EQUIPMENT_RIGHT);
+    }
+
+
+    fooX += 36;
+    fooNoneAdd2_(pixmap, parent, labPzdMini_left_, fooX, fooY);
+    if (!pixmap.load(":/mfdu/main_pzdMini")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labPzdMini_left_.push_back(labFoo);
+
+    int SIG_PZD_MINI_LEFT = 0;
+    for (int i = 0, n = labPzdMini_left_.size(); i < n; ++i)
+    {
+        labPzdMini_left_[i]->setVisible(i == SIG_PZD_MINI_LEFT);
+    }
+
+
+    fooNoneAdd2_(pixmap, parent, labPzdMini_right_, fooX + fooDelta12, fooY);
+    if (!pixmap.load(":/mfdu/main_pzdMini")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labPzdMini_right_.push_back(labFoo);
+
+    int SIG_PZD_MINI_RIGHT = 0;
+    for (int i = 0, n = labPzdMini_right_.size(); i < n; ++i)
+    {
+        labPzdMini_right_[i]->setVisible(i == SIG_PZD_MINI_RIGHT);
+    }
+
+
+    fooX += 36;
+    fooNoneAdd2_(pixmap, parent, labBrakes_left_, fooX, fooY);
+    if (!pixmap.load(":/mfdu/main_brakes_gidro")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_left_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_mix")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_left_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_ept")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_left_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_parking")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_left_.push_back(labFoo);
+
+    int SIG_BRAKES_LEFT = 0;
+    for (int i = 0, n = labBrakes_left_.size(); i < n; ++i)
+    {
+        labBrakes_left_[i]->setVisible(i == SIG_BRAKES_LEFT);
+    }
+
+
+    fooNoneAdd2_(pixmap, parent, labBrakes_right_, fooX + fooDelta12, fooY);
+    if (!pixmap.load(":/mfdu/main_brakes_gidro")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_right_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_mix")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_right_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_ept")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_right_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_brakes_parking")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX + fooDelta12,fooY);
+    labFoo->setPixmap(pixmap);
+    labBrakes_right_.push_back(labFoo);
+
+    int SIG_BRAKES_RIGHT = 0;
+    for (int i = 0, n = labBrakes_right_.size(); i < n; ++i)
+    {
+        labBrakes_right_[i]->setVisible(i == SIG_BRAKES_RIGHT);
+    }
+}
+
+void MfduMainDisp::fooNoneAdd_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)
+{
+//    if (!pixmap.load(":/mfdu/none")) { return; }
+//    QLabel* lab = new QLabel(parent);
+//    lab->move(x,y);
+//    lab->setPixmap(pixmap);
+//    label.push_back(lab);
+}
+
+void MfduMainDisp::fooNoneAdd2_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)
+{
+//    if (!pixmap.load(":/mfdu/none35")) { return; }
+//    QLabel* lab = new QLabel(parent);
+//    lab->move(x,y);
+//    lab->setPixmap(pixmap);
+//    label.push_back(lab);
 }
 
 

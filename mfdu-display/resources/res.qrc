@@ -2,6 +2,7 @@
     <qresource prefix="/mfdu">
         <file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
         <file alias="none">img/none.png</file>
+        <file alias="none35">img/none35.png</file>
 
 
         <!--    блок иконок справа от спидометра    -->
@@ -107,6 +108,21 @@
         <file alias="main_xren1">img/main-disp/xren1.png</file>
         <file alias="main_xren2">img/main-disp/xren2.png</file>
         <file alias="main_xren3">img/main-disp/xren3.png</file>
+
+
+        <!--    блок иконок сверху от спидометра    -->
+        <file alias="main_vagonEquipment_work">img/main-disp/vagonEquipment_work.png</file>
+        <file alias="main_vagonEquipment_warn">img/main-disp/vagonEquipment_warn.png</file>
+        <file alias="main_vagonEquipment_error">img/main-disp/vagonEquipment_error.png</file>
+
+        <file alias="main_pzdMini">img/main-disp/pzdMini.png</file>
+
+        <file alias="main_brakes_gidro">img/main-disp/brakes_gidro.png</file>
+        <file alias="main_brakes_mix">img/main-disp/brakes_mix.png</file>
+        <file alias="main_brakes_ept">img/main-disp/brakes_ept.png</file>
+        <file alias="main_brakes_parking">img/main-disp/brakes_parking.png</file>
+
+        <file alias="main_can">img/main-disp/can.png</file>
 
 
     </qresource>

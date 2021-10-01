@@ -53,6 +53,29 @@ void MfduDisplay::init()
     background_->setPixmap(pic_);
 
 
+    // Шапка. Дата/время
+    // Текущее время
+    labelCurTime_ = new QLabel(background_);
+    labelCurTime_->setFont(QFont("Arial", 14, 63));
+    labelCurTime_->setText(QTime::currentTime().toString());
+    labelCurTime_->setStyleSheet("color: white;");
+    labelCurTime_->resize(140,20);
+    labelCurTime_->move(650, 5);
+    labelCurTime_->setAlignment(Qt::AlignCenter);
+    // Текущая дата
+    labelCurDate_ = new QLabel(background_);
+    labelCurDate_->setFont(QFont("Arial", 14, 63));
+    labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+    labelCurDate_->setStyleSheet("color: white;");
+    labelCurDate_->resize(140,20);
+    labelCurDate_->move(650, 32);
+    labelCurDate_->setAlignment(Qt::AlignCenter);
+
+    updateTimer_ = new QTimer(this);
+    connect(updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
+    updateTimer_->setInterval(1000);
+    updateTimer_->start();
+
 
 
     // Элементы основного экрана. Основной экран
@@ -66,6 +89,14 @@ void MfduDisplay::init()
     this->layout()->addWidget(background_);
 
     AbstractDisplay::init();
+}
+
+
+
+void MfduDisplay::slotUpdateTimer()
+{
+    labelCurTime_->setText(QTime::currentTime().toString());
+    labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 }
 
 
