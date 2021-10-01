@@ -8,24 +8,15 @@ QT += xml
 
 TARGET = mfdu-display
 
-DESTDIR = ../../../../modules/tep70bs
+DESTDIR = $$(RRS_DEV_ROOT)/modules/$$join(TARGET,,,)
 
-CONFIG(debug, debug|release) {
+LIBS += -L$$(RRS_DEV_ROOT)/bin -ldisplay
+LIBS += -L$$(RRS_DEV_ROOT)/bin -lCfgReader
 
-    LIBS += -L../../../../lib -ldisplay_d
-    LIBS += -L../../../../lib -lCfgReader_d
-
-} else {
-
-    LIBS += -L../../../../lib -ldisplay
-    LIBS += -L../../../../lib -lCfgReader
-}
 
 INCLUDEPATH += ./include
-INCLUDEPATH += ../tep70bs/include
-INCLUDEPATH += ../../../simulator/vehicle/include
-INCLUDEPATH += ../../../CfgReader/include
-INCLUDEPATH += ../../../viewer/display/include
+INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
+
 
 HEADERS += $$files(./include/*.h)
 SOURCES += $$files(./src/*.cpp)
