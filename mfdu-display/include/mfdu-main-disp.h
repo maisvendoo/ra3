@@ -8,6 +8,7 @@
 
 #include "speedometer.h"
 #include "horizont-bar.h"
+#include "vertical-scale-bar.h"
 
 
 
@@ -64,6 +65,9 @@ private:
     std::vector<QLabel*> labXren1_;
     std::vector<QLabel*> labXren2_;
     std::vector<QLabel*> labXren3_;
+
+    // Вертикальная шкала тяги/торможения
+    VerticalScaleBar* verticalScaleBar_;
 
 
 

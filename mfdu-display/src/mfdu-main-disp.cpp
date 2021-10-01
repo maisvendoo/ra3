@@ -1,5 +1,6 @@
 #include "mfdu-main-disp.h"
 
+#include <QPainter>
 
 
 MfduMainDisp::MfduMainDisp(QLabel *parent)
@@ -16,7 +17,10 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
     setBlockIcons_rightSpeedometer_(parent);
     // блок иконок слева от спидометра
     setBlockIcons_leftSpeedometer_(parent);
-
+    // вертикальная шкала тяги/торможения
+    verticalScaleBar_ = new VerticalScaleBar(QSize(36, 348), parent);
+    verticalScaleBar_->move(51,163);
+    //verticalScaleBar_->setStyleSheet("border: 1px solid red");
 
 
 
@@ -896,5 +900,7 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
 
 
 }
+
+
 
 
