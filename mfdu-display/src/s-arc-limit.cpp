@@ -23,7 +23,7 @@ SArcLimit::SArcLimit(QWidget *parent)
 
     img_ = QImage(this->size(), QImage::Format_ARGB32_Premultiplied);
 
-    setVal(0);
+    setVal(55);
 
 }
 
@@ -31,6 +31,11 @@ SArcLimit::SArcLimit(QWidget *parent)
 
 void SArcLimit::setVal(int limit)
 {
+    if (limit < 0)
+        limit = 0;
+    if (limit > 140)
+        limit = 140;
+
     this->cSL_ = limit;
     aCSL_ = stepSpeedInDegrees_*(sgp_maxSpeedScale_ - cSL_)*16;
 
@@ -51,7 +56,7 @@ void SArcLimit::draw_()
 //    paint.setPen(QPen( QColor(Qt::red),
 //                       10.0,
 //                       Qt::SolidLine ));
-    paint.setPen(QPen( QColor(255,0,0, 120),
+    paint.setPen(QPen( QColor(255,0,0, 160),
                        8.0,
                        Qt::SolidLine ));
     paint.drawArc(rect_,

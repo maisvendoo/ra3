@@ -96,6 +96,7 @@ private:
     void fooNoneAdd_(QPixmap &pixmap, QLabel* parent, std::vector<QLabel*> &label, int x, int y);
     void fooNoneAdd2_(QPixmap &pixmap, QLabel* parent, std::vector<QLabel*> &label, int x, int y);
 
+    void setNeededIcon_(std::vector<QLabel*> &vec_lab, int val);
 
 };
 

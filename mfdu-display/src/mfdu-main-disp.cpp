@@ -1,5 +1,7 @@
 #include "mfdu-main-disp.h"
 
+#include    "tep70-signals.h"
+
 #include <QPainter>
 
 
@@ -30,9 +32,82 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
 }
 
 
-
+//-----------------------------------------------------------------------------
+// Обновление данных на экране: "Основнй экран"
+//-----------------------------------------------------------------------------
 void MfduMainDisp::updateData(display_signals_t input_signals)
 {
+    // спидометр
+    speedometer_->setSpeed(input_signals[MFDU_S_SPEED]);
+    speedometer_->setSpeedLimit(input_signals[MFDU_S_SPEED_LIMIT]);
+    speedometer_->setGreenDigit(input_signals[MFDU_S_GREEN_DIGIT]);
+    speedometer_->setWhiteDigit(input_signals[MFDU_S_WHITE_DIGIT]);
+
+    // блок иконок справа от спидометра
+    // 11-15
+    setNeededIcon_(lab110380_, input_signals[MFDU_ACTIVE_CHARGE]);
+    setNeededIcon_(labPvu_, input_signals[MFDU_PVU]);
+    setNeededIcon_(labEpk_, input_signals[MFDU_EPK]);
+    setNeededIcon_(labFier1_, input_signals[MFDU_MANEUVER_LIGHTS1]);
+    setNeededIcon_(labFier2_, input_signals[MFDU_MANEUVER_LIGHTS2]);
+    // 21-25
+    setNeededIcon_(labPtf_, input_signals[MFDU_PTF]);
+    setNeededIcon_(labPzd_, input_signals[MFDU_PZD]);
+    setNeededIcon_(labPump_, input_signals[MFDU_PUMP]);
+    setNeededIcon_(labTpn_, input_signals[MFDU_TPN]);
+    // 31-35
+    setNeededIcon_(labFire_, input_signals[MFDU_FIRE]);
+    setNeededIcon_(labOz_, input_signals[MFDU_OZ]);
+    setNeededIcon_(labDoor_, input_signals[MFDU_DOOR]);
+    setNeededIcon_(labGenerator_, input_signals[MFDU_GENERATOR]);
+    setNeededIcon_(labVip_, input_signals[MFDU_VIP]);
+    // 41-45
+    setNeededIcon_(labIncOzMotor_, input_signals[MFDU_INC_OZ_MOTOR]);
+    setNeededIcon_(labDecOzMotor_, input_signals[MFDU_DEC_OZ_MOTOR]);
+    setNeededIcon_(labWc_, input_signals[MFDU_WC]);
+    setNeededIcon_(labAntyYuz_, input_signals[MFDU_ANTY_YUZ]);
+    // 51-55
+    setNeededIcon_(labRevers_, input_signals[MFDU_REVERS]);
+    setNeededIcon_(labTransmission_, input_signals[MFDU_TRANSMISSION]);
+    setNeededIcon_(labOilMotor_, input_signals[MFDU_OIL_MOTOR]);
+    setNeededIcon_(labPressureOilMotor_, input_signals[MFDU_PRESSURE_OIL_MOTOR]);
+    setNeededIcon_(labMotor_, input_signals[MFDU_MOTOR]);
+
+    // блок иконок слева от спидометра
+    setNeededIcon_(labMotorCompressor_, input_signals[MFDU_COMPRESSOR]);
+    setNeededIcon_(labMotorCompressor1_, input_signals[MFDU_COMPRESSOR_1]);
+    setNeededIcon_(labMotorCompressor2_, input_signals[MFDU_COMPRESSOR_2]);
+    setNeededIcon_(labAttention_, input_signals[MFDU_ATTENTION]);
+    setNeededIcon_(labStop_, input_signals[MFDU_STOP]);
+    setNeededIcon_(labFwd_, input_signals[MFDU_REVERS_FWD]);
+    setNeededIcon_(labBwd_, input_signals[MFDU_REVERS_BWD]);
+    setNeededIcon_(labBwdFwd_, input_signals[MFDU_REVERS_NEUTRAL]);
+    setNeededIcon_(labXren1_, input_signals[MFDU_XREN1]);
+    setNeededIcon_(labXren2_, input_signals[MFDU_XREN2]);
+    setNeededIcon_(labXren3_, input_signals[MFDU_XREN3]);
+
+    // вертикальная шкала тяги/торможения
+    verticalScaleBar_->setVal(input_signals[MFDU_TRACTION_BRAKING]);
+
+    // блок нижних параметров
+    labPpm_->setText(QString::number(input_signals[MFDU_PRESSURE_PM], 'f', 3));
+    labPtm_->setText(QString::number(input_signals[MFDU_PRESSURE_TM], 'f', 3));
+    labPtc_max_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MAX], 'f', 3));
+    labPtc_min_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MIN], 'f', 3));
+    labTkab_->setText(QString::number(input_signals[MFDU_TEMPERATURE_KAB], 'f', 1));
+    labIakb24_->setText(QString::number(input_signals[MFDU_I_AKB_24], 'f', 1));
+    labIakb110_->setText(QString::number(input_signals[MFDU_I_AKB_110], 'f', 1));
+
+    // блок иконок сверху от спидометра
+    setNeededIcon_(labVagonEquipment_left_, input_signals[MFDU_VAGON_EQUIPMENT_LEFT]);
+    setNeededIcon_(labVagonEquipment_right_, input_signals[MFDU_VAGON_EQUIPMENT_RIGHT]);
+    setNeededIcon_(labPzdMini_left_, input_signals[MFDU_PZD_MINI_LEFT]);
+    setNeededIcon_(labPzdMini_right_, input_signals[MFDU_PZD_MINI_RIGHT]);
+    setNeededIcon_(labBrakes_left_, input_signals[MFDU_BRAKES_LEFT]);
+    setNeededIcon_(labBrakes_right_, input_signals[MFDU_BRAKES_RIGHT]);
+    setNeededIcon_(labCan_right_, input_signals[MFDU_CAN_RIGHT]);
+    labT_left_->setText(QString::number(input_signals[MFDU_T_LEFT], 'f', 1));
+    labT_right_->setText(QString::number(input_signals[MFDU_T_RIGHT], 'f', 1));
 
 }
 
@@ -83,12 +158,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     lab110380_.push_back(labFoo);
 
-    int SIG_ACTIVE_CHARGE = 0;
-    for (int i = 0, n = lab110380_.size(); i < n; ++i)
-    {
-        lab110380_[i]->setVisible(i == SIG_ACTIVE_CHARGE);
-    }
-
 
     fooX += fooDeltaX;
     // 12
@@ -104,12 +173,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labPvu_.push_back(labFoo);
 
-    int SIG_PVU = 0;
-    for (int i = 0, n = labPvu_.size(); i < n; ++i)
-    {
-        labPvu_[i]->setVisible(i == SIG_PVU);
-    }
-
 
     fooX += fooDeltaX;
     // 13
@@ -124,12 +187,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labEpk_.push_back(labFoo);
-
-    int SIG_EPK = 0;
-    for (int i = 0, n = labEpk_.size(); i < n; ++i)
-    {
-        labEpk_[i]->setVisible(i == SIG_EPK);
-    }
 
 
     fooX += fooDeltaX;
@@ -156,12 +213,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labFier1_.push_back(labFoo);
 
-    int SIG_FIER_1 = 1;
-    for (int i = 0, n = labFier1_.size(); i < n; ++i)
-    {
-        labFier1_[i]->setVisible(i == SIG_FIER_1);
-    }
-
 
     fooX += fooDeltaX;
     // 15
@@ -187,12 +238,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labFier2_.push_back(labFoo);
 
-    int SIG_FIER_2 = 1;
-    for (int i = 0, n = labFier2_.size(); i < n; ++i)
-    {
-        labFier2_[i]->setVisible(i == SIG_FIER_2);
-    }
-
 
     fooX = startX + fooDeltaX;
     fooY += fooDeltaY;
@@ -208,12 +253,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labPtf_.push_back(labFoo);
-
-    int SIG_PTF = 0;
-    for (int i = 0, n = labPtf_.size(); i < n; ++i)
-    {
-        labPtf_[i]->setVisible(i == SIG_PTF);
-    }
 
 
     fooX += fooDeltaX;
@@ -240,12 +279,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labPzd_.push_back(labFoo);
 
-    int SIG_PZD = 0;
-    for (int i = 0, n = labPzd_.size(); i < n; ++i)
-    {
-        labPzd_[i]->setVisible(i == SIG_PZD);
-    }
-
 
     fooX += fooDeltaX;
     // 24
@@ -266,12 +299,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labPump_.push_back(labFoo);
 
-    int SIG_PUMP = 0;
-    for (int i = 0, n = labPump_.size(); i < n; ++i)
-    {
-        labPump_[i]->setVisible(i == SIG_PUMP);
-    }
-
 
     fooX += fooDeltaX;
     // 25
@@ -286,12 +313,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labTpn_.push_back(labFoo);
-
-    int SIG_TPN = 0;
-    for (int i = 0, n = labTpn_.size(); i < n; ++i)
-    {
-        labTpn_[i]->setVisible(i == SIG_TPN);
-    }
 
 
     fooX = startX;
@@ -308,12 +329,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labFire_.push_back(labFoo);
-
-    int SIG_FIRE = 0;
-    for (int i = 0, n = labFire_.size(); i < n; ++i)
-    {
-        labFire_[i]->setVisible(i == SIG_FIRE);
-    }
 
 
     fooX += fooDeltaX;
@@ -335,12 +350,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labOz_.push_back(labFoo);
 
-    int SIG_OZ = 0;
-    for (int i = 0, n = labOz_.size(); i < n; ++i)
-    {
-        labOz_[i]->setVisible(i == SIG_OZ);
-    }
-
 
     fooX += fooDeltaX;
     // 33
@@ -355,12 +364,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labDoor_.push_back(labFoo);
-
-    int SIG_DOOR = 0;
-    for (int i = 0, n = labDoor_.size(); i < n; ++i)
-    {
-        labDoor_[i]->setVisible(i == SIG_DOOR);
-    }
 
 
     fooX += fooDeltaX;
@@ -377,12 +380,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labGenerator_.push_back(labFoo);
 
-    int SIG_GENERATOR = 0;
-    for (int i = 0, n = labGenerator_.size(); i < n; ++i)
-    {
-        labGenerator_[i]->setVisible(i == SIG_GENERATOR);
-    }
-
 
     fooX += fooDeltaX;
     // 35
@@ -397,12 +394,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labVip_.push_back(labFoo);
-
-    int SIG_VIP = 0;
-    for (int i = 0, n = labVip_.size(); i < n; ++i)
-    {
-        labVip_[i]->setVisible(i == SIG_VIP);
-    }
 
 
     fooX = startX;
@@ -425,12 +416,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labIncOzMotor_.push_back(labFoo);
 
-    int SIG_INC_OZ_MOTOR = 0;
-    for (int i = 0, n = labIncOzMotor_.size(); i < n; ++i)
-    {
-        labIncOzMotor_[i]->setVisible(i == SIG_INC_OZ_MOTOR);
-    }
-
 
     fooX += fooDeltaX;
     // 42
@@ -451,12 +436,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labDecOzMotor_.push_back(labFoo);
 
-    int SIG_DEC_OZ_MOTOR = 0;
-    for (int i = 0, n = labDecOzMotor_.size(); i < n; ++i)
-    {
-        labDecOzMotor_[i]->setVisible(i == SIG_DEC_OZ_MOTOR);
-    }
-
 
     fooX += fooDeltaX*2;
     // 44
@@ -471,12 +450,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labWc_.push_back(labFoo);
-
-    int SIG_WC = 0;
-    for (int i = 0, n = labWc_.size(); i < n; ++i)
-    {
-        labWc_[i]->setVisible(i == SIG_WC);
-    }
 
 
     fooX += fooDeltaX;
@@ -498,12 +471,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labAntyYuz_.push_back(labFoo);
 
-    int SIG_ANTY_YUZ = 0;
-    for (int i = 0, n = labAntyYuz_.size(); i < n; ++i)
-    {
-        labAntyYuz_[i]->setVisible(i == SIG_ANTY_YUZ);
-    }
-
 
     fooX = startX;
     fooY += fooDeltaY;
@@ -520,12 +487,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labRevers_.push_back(labFoo);
 
-    int SIG_REVERS = 0;
-    for (int i = 0, n = labRevers_.size(); i < n; ++i)
-    {
-        labRevers_[i]->setVisible(i == SIG_REVERS);
-    }
-
 
     fooX += fooDeltaX;
     // 52
@@ -540,12 +501,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labTransmission_.push_back(labFoo);
-
-    int SIG_TRANSMISSION = 0;
-    for (int i = 0, n = labTransmission_.size(); i < n; ++i)
-    {
-        labTransmission_[i]->setVisible(i == SIG_TRANSMISSION);
-    }
 
 
     fooX += fooDeltaX;
@@ -567,12 +522,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labOilMotor_.push_back(labFoo);
 
-    int SIG_OIL_MOTOR = 0;
-    for (int i = 0, n = labOilMotor_.size(); i < n; ++i)
-    {
-        labOilMotor_[i]->setVisible(i == SIG_OIL_MOTOR);
-    }
-
 
     fooX += fooDeltaX;
     // 54
@@ -593,12 +542,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labPressureOilMotor_.push_back(labFoo);
 
-    int SIG_PRESSURE_OIL_MOTOR = 0;
-    for (int i = 0, n = labPressureOilMotor_.size(); i < n; ++i)
-    {
-        labPressureOilMotor_[i]->setVisible(i == SIG_PRESSURE_OIL_MOTOR);
-    }
-
 
     fooX += fooDeltaX;
     // 55
@@ -618,12 +561,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labMotor_.push_back(labFoo);
-
-    int SIG_MOTOR = 0;
-    for (int i = 0, n = labMotor_.size(); i < n; ++i)
-    {
-        labMotor_[i]->setVisible(i == SIG_MOTOR);
-    }
 
 }
 
@@ -652,12 +589,6 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labMotorCompressor_.push_back(labFoo);
 
-    int SIG_MOTOR_COMPRESSOR = 0;
-    for (int i = 0, n = labMotorCompressor_.size(); i < n; ++i)
-    {
-        labMotorCompressor_[i]->setVisible(i == SIG_MOTOR_COMPRESSOR);
-    }
-
 
     fooX = startX + 74;
     if (!pixmap.load(":/mfdu/main_motor_compressor_1_on")) { return; }
@@ -670,12 +601,6 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->move(fooX, startY + 4);
     labFoo->setPixmap(pixmap);
     labMotorCompressor1_.push_back(labFoo);
-
-    int SIG_MOTOR_COMPRESSOR_1 = 0;
-    for (int i = 0, n = labMotorCompressor1_.size(); i < n; ++i)
-    {
-        labMotorCompressor1_[i]->setVisible(i == SIG_MOTOR_COMPRESSOR_1);
-    }
 
 
     fooX += 38;
@@ -690,24 +615,12 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labMotorCompressor2_.push_back(labFoo);
 
-    int SIG_MOTOR_COMPRESSOR_2 = 0;
-    for (int i = 0, n = labMotorCompressor2_.size(); i < n; ++i)
-    {
-        labMotorCompressor2_[i]->setVisible(i == SIG_MOTOR_COMPRESSOR_2);
-    }
-
 
     if (!pixmap.load(":/mfdu/main_attention")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(startX + 2, startY + 104);
     labFoo->setPixmap(pixmap);
     labAttention_.push_back(labFoo);
-
-    int SIG_ATTENTION = 0;
-    for (int i = 0, n = labAttention_.size(); i < n; ++i)
-    {
-        labAttention_[i]->setVisible(i == SIG_ATTENTION);
-    }
 
 
     if (!pixmap.load(":/mfdu/main_stop")) { return; }
@@ -716,24 +629,12 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labStop_.push_back(labFoo);
 
-    int SIG_STOP = 0;
-    for (int i = 0, n = labStop_.size(); i < n; ++i)
-    {
-        labStop_[i]->setVisible(i == SIG_STOP);
-    }
-
 
     if (!pixmap.load(":/mfdu/main_fwd")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(startX + 60, startY + 82);
     labFoo->setPixmap(pixmap);
     labFwd_.push_back(labFoo);
-
-    int SIG_FWD = 0;
-    for (int i = 0, n = labFwd_.size(); i < n; ++i)
-    {
-        labFwd_[i]->setVisible(i == SIG_FWD);
-    }
 
 
     if (!pixmap.load(":/mfdu/main_bwd")) { return; }
@@ -742,24 +643,12 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labBwd_.push_back(labFoo);
 
-    int SIG_BWD = 0;
-    for (int i = 0, n = labBwd_.size(); i < n; ++i)
-    {
-        labBwd_[i]->setVisible(i == SIG_BWD);
-    }
-
 
     if (!pixmap.load(":/mfdu/main_bwdfwd")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(startX + 60, startY + 112);
     labFoo->setPixmap(pixmap);
     labBwdFwd_.push_back(labFoo);
-
-    int SIG_BWDFWD = 0;
-    for (int i = 0, n = labBwdFwd_.size(); i < n; ++i)
-    {
-        labBwdFwd_[i]->setVisible(i == SIG_BWDFWD);
-    }
 
 
     fooX = startX;
@@ -769,12 +658,6 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labXren1_.push_back(labFoo);
 
-    int SIG_XREN1 = 0;
-    for (int i = 0, n = labXren1_.size(); i < n; ++i)
-    {
-        labXren1_[i]->setVisible(i == SIG_XREN1);
-    }
-
 
     fooX += 52;
     if (!pixmap.load(":/mfdu/main_xren2")) { return; }
@@ -783,12 +666,6 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labXren2_.push_back(labFoo);
 
-    int SIG_XREN2 = 0;
-    for (int i = 0, n = labXren2_.size(); i < n; ++i)
-    {
-        labXren2_[i]->setVisible(i == SIG_XREN2);
-    }
-
 
     fooX += 52;
     if (!pixmap.load(":/mfdu/main_xren3")) { return; }
@@ -796,13 +673,6 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo->move(fooX, startY + 190);
     labFoo->setPixmap(pixmap);
     labXren3_.push_back(labFoo);
-
-    int SIG_XREN3 = 0;
-    for (int i = 0, n = labXren3_.size(); i < n; ++i)
-    {
-        labXren3_[i]->setVisible(i == SIG_XREN3);
-    }
-
 
 }
 
@@ -821,16 +691,6 @@ void MfduMainDisp::setBlockDownParameters_(QLabel *parent)
     drawLabel_(parent, labTkab_, QPoint(fooX + 570,fooY + 10), "00ffff", Qt::AlignRight | Qt::AlignVCenter);
     drawLabel_(parent, labIakb24_, QPoint(fooX + 570,fooY + 46), "ffff00");
     drawLabel_(parent, labIakb110_, QPoint(fooX + 570 + 69,fooY + 46), "ffff00");
-
-
-    // в отдельный метод (установка значений)
-    labPpm_->setText(QString::number(0.0, 'f', 3));
-    labPtm_->setText(QString::number(0.5, 'f', 3));
-    labPtc_max_->setText(QString::number(0.0, 'f', 3));
-    labPtc_min_->setText(QString::number(0.0, 'f', 3));
-    labTkab_->setText(QString::number(0, 'f', 1));
-    labIakb24_->setText(QString::number(103.7, 'f', 1));
-    labIakb110_->setText(QString::number(103.7, 'f', 1));
 
 }
 
@@ -864,7 +724,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labT_left_->setFont(QFont("Arial", 12, 63));
     labT_left_->setStyleSheet("color: white;");
     labT_left_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    labT_left_->setText(QString::number(0.0, 'f', 1));
 
     labT_right_ = new QLabel("0", parent);
     labT_right_->move(fooX + 43 + fooDelta12, fooY - 27);
@@ -873,7 +732,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labT_right_->setFont(QFont("Arial", 12, 63));
     labT_right_->setStyleSheet("color: white;");
     labT_right_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    labT_right_->setText(QString::number(0.0, 'f', 1));
 
 
 
@@ -883,20 +741,12 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     QLabel* labFoo = Q_NULLPTR;
 
 
-    fooNoneAdd2_(pixmap, parent, labCan_right_, fooX + fooDelta12, fooY);
+    fooNoneAdd2_(pixmap, parent, labCan_right_, fooX + fooDelta12 + 5, fooY - 35);
     if (!pixmap.load(":/mfdu/main_can")) { return; }
     labFoo = new QLabel(parent);
-    labFoo->move(fooX,fooY);
+    labFoo->move(fooX + fooDelta12 + 5, fooY - 35);
     labFoo->setPixmap(pixmap);
     labCan_right_.push_back(labFoo);
-
-    int SIG_CAN_RIGHT = 0;
-    for (int i = 0, n = labCan_right_.size(); i < n; ++i)
-    {
-        labCan_right_[i]->setVisible(i == SIG_CAN_RIGHT);
-    }
-
-
 
 
     fooNoneAdd2_(pixmap, parent, labVagonEquipment_left_, fooX, fooY);
@@ -916,12 +766,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labVagonEquipment_left_.push_back(labFoo);
 
-    int SIG_VAGON_EQUIPMENT_LEFT = 0;
-    for (int i = 0, n = labVagonEquipment_left_.size(); i < n; ++i)
-    {
-        labVagonEquipment_left_[i]->setVisible(i == SIG_VAGON_EQUIPMENT_LEFT);
-    }
-
 
     fooNoneAdd2_(pixmap, parent, labVagonEquipment_right_, fooX + fooDelta12, fooY);
     if (!pixmap.load(":/mfdu/main_vagonEquipment_work")) { return; }
@@ -940,12 +784,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labVagonEquipment_right_.push_back(labFoo);
 
-    int SIG_VAGON_EQUIPMENT_RIGHT = 0;
-    for (int i = 0, n = labVagonEquipment_right_.size(); i < n; ++i)
-    {
-        labVagonEquipment_right_[i]->setVisible(i == SIG_VAGON_EQUIPMENT_RIGHT);
-    }
-
 
     fooX += 36;
     fooNoneAdd2_(pixmap, parent, labPzdMini_left_, fooX, fooY);
@@ -955,12 +793,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labPzdMini_left_.push_back(labFoo);
 
-    int SIG_PZD_MINI_LEFT = 0;
-    for (int i = 0, n = labPzdMini_left_.size(); i < n; ++i)
-    {
-        labPzdMini_left_[i]->setVisible(i == SIG_PZD_MINI_LEFT);
-    }
-
 
     fooNoneAdd2_(pixmap, parent, labPzdMini_right_, fooX + fooDelta12, fooY);
     if (!pixmap.load(":/mfdu/main_pzdMini")) { return; }
@@ -968,12 +800,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->move(fooX + fooDelta12,fooY);
     labFoo->setPixmap(pixmap);
     labPzdMini_right_.push_back(labFoo);
-
-    int SIG_PZD_MINI_RIGHT = 0;
-    for (int i = 0, n = labPzdMini_right_.size(); i < n; ++i)
-    {
-        labPzdMini_right_[i]->setVisible(i == SIG_PZD_MINI_RIGHT);
-    }
 
 
     fooX += 36;
@@ -999,12 +825,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labBrakes_left_.push_back(labFoo);
 
-    int SIG_BRAKES_LEFT = 0;
-    for (int i = 0, n = labBrakes_left_.size(); i < n; ++i)
-    {
-        labBrakes_left_[i]->setVisible(i == SIG_BRAKES_LEFT);
-    }
-
 
     fooNoneAdd2_(pixmap, parent, labBrakes_right_, fooX + fooDelta12, fooY);
     if (!pixmap.load(":/mfdu/main_brakes_gidro")) { return; }
@@ -1028,11 +848,6 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labBrakes_right_.push_back(labFoo);
 
-    int SIG_BRAKES_RIGHT = 0;
-    for (int i = 0, n = labBrakes_right_.size(); i < n; ++i)
-    {
-        labBrakes_right_[i]->setVisible(i == SIG_BRAKES_RIGHT);
-    }
 }
 
 void MfduMainDisp::fooNoneAdd_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)
@@ -1051,6 +866,16 @@ void MfduMainDisp::fooNoneAdd2_(QPixmap &pixmap, QLabel *parent, std::vector<QLa
 //    lab->move(x,y);
 //    lab->setPixmap(pixmap);
 //    label.push_back(lab);
+}
+
+
+
+void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val)
+{
+    for (int i = 0, n = vec_lab.size(); i < n; ++i)
+    {
+        vec_lab[i]->setVisible(i == val);
+    }
 }
 
 

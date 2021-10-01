@@ -36,13 +36,14 @@ SArrow::SArrow(QSize _size, int otstupSverhu, QWidget *parent)
 
 
 
-void SArrow::setVal(double val)
+void SArrow::setVal(float val)
 {
-//    if (val < 0) val = 0;
-//    if (val > maxVal_) val = maxVal_;
+    if (val < 0) val = 0;
+    if (val > maxVal_) val = maxVal_;
 
     draw_(val);
 
+    labCenter_->setText(QString::number(static_cast<int>(val)));
 }
 
 
@@ -70,7 +71,7 @@ void SArrow::draw_(double _val)
     angle = qDegreesToRadians(angleInDeg);
     double fooAngle = qDegreesToRadians(90.0);
     // длина стрелки
-    double r  = 1.0;
+    double r  = 0.98;
     // половина ширины основания стрелки
     double r2 = 10.0;
 

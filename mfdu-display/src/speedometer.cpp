@@ -34,3 +34,34 @@ Speedometer::Speedometer(QSize _size, QWidget *parent)
     //sArrow_->setVal(0.00 + 30.0);
 
 }
+
+void Speedometer::setSpeed(float speed)
+{
+    sArrow_->setVal(speed);
+}
+
+void Speedometer::setSpeedLimit(int speedLimit)
+{
+    sArcLimit_->setVal(speedLimit);
+}
+
+void Speedometer::setGreenDigit(int val)
+{
+    if (val < 0)
+        val = 0;
+    if (val > 140)
+        val = 140;
+
+    labSpeedFoo_->setText(QString::number(val));
+}
+
+void Speedometer::setWhiteDigit(float val)
+{
+    if (val < 0)
+        val = 0;
+    if (val > 140)
+        val = 140;
+
+    labSpeedFoo2_->setText(QString::number(val, 'f', 1));
+}
+

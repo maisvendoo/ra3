@@ -8,7 +8,7 @@ class SArrow : public QLabel
 public:
     SArrow(QSize _size, int otstupSverhu, QWidget* parent = Q_NULLPTR);
 
-    void setVal(double val);
+    void setVal(float val);
 
 private:
     double w_2_;
