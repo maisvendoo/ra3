@@ -121,6 +121,12 @@ void MPSU::main_loop_step(double t, double dt)
 
     mpsu_output.is_starter2_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press2 - 0.1)) &&
             static_cast<bool>(hs_n(mpsu_input.disel2_shaft_freq - 700.0));
+
+    if (static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0)))
+            trig_disel_start[FWD_DISEL].reset();
+
+    if (static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0)))
+            trig_disel_start[BWD_DISEL].reset();
 }
 
 //------------------------------------------------------------------------------
