@@ -20,16 +20,8 @@ private:
 
     double stepSpeedInDegrees_; ///< шаг скорости в градусах
 
-    int nSL_;       ///< значение следующего ограничения
     int cSL_;       ///< значение текущего ограничения
     double aCSL_;   ///< угол "nSL_"
-    double aNSL_;   ///< угол "cSL_"
-
-    // --- cfg параметры --- //
-    int     widthArc_;      ///< ширина линии дуги
-    QString curArc_color_;  ///< цвет
-    QString nextArc_color_; ///< цвет
-    // --------------------- //
 
     int sgp_maxSpeedScale_;
     int sgp_angleArcEnd_;

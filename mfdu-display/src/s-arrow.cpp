@@ -4,11 +4,10 @@
 
 
 
-SArrow::SArrow(QSize _size, int otstupSverhu, QWidget *parent)
+SArrow::SArrow(int otstupSverhu, QWidget *parent)
     : QLabel(parent)
     , maxVal_(140)
 {
-    //this->resize(_size);
     this->resize(parent->size());
 
     w_2_ = this->width()/2.0;

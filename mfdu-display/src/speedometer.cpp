@@ -29,7 +29,7 @@ Speedometer::Speedometer(QSize _size, QWidget *parent)
 
 
     //
-    sArrow_ = new SArrow(/*_size*/this->size(), 0, this);
+    sArrow_ = new SArrow(0, this);
     //sArrow_->setStyleSheet("border: 2px solid red;");
     //sArrow_->setVal(0.00 + 30.0);
 
