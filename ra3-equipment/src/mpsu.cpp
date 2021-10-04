@@ -132,6 +132,17 @@ void MPSU::main_loop_step(double t, double dt)
 
     if (mpsu_output.is_disel2_started)
             trig_disel_start[BWD_DISEL].reset();
+
+    mpsu_output.is_fuel_valve1_open = trig_fuel_valve[FWD_DISEL].getState();
+    mpsu_output.is_fuel_valve2_open = trig_fuel_valve[BWD_DISEL].getState();
+
+    // Останов дизелей
+    if (mpsu_input.stop_disel)
+    {
+        trig_fuel_valve[FWD_DISEL].reset();
+        trig_fuel_valve[BWD_DISEL].reset();
+        mpsu_output.current_started_disel = -1;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -151,6 +162,9 @@ void MPSU::start_button_process(bool is_start_button)
 
         // Взводим триггер признака пуска
         trig_disel_start[mpsu_output.current_started_disel].set();
+
+        // Взводим триггер топливного клапана
+        trig_fuel_valve[mpsu_output.current_started_disel].set();
     }
 
     // Запоминаем предыдущее состояние кнопки

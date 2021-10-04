@@ -46,6 +46,9 @@ private:
     /// Тригер активации запуска дизеля
     std::array<Trigger, NUM_DISELS> trig_disel_start;
 
+    /// Тригеры открытия топливных клапанов
+    std::array<Trigger, NUM_DISELS> trig_fuel_valve;
+
     void preStep(state_vector_t &Y, double t);
 
     void ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t);

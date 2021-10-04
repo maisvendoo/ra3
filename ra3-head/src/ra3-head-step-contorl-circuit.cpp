@@ -28,4 +28,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     // Сигнал включения стартера на ведомом дизеле
     backward_outputs[SME_BWD_STARTER_ON] = static_cast<float>(mpsu->getOutputData().is_starter2_ON);
+
+    // Сигнал открытия топливного клапана на ведомом дизеле
+    backward_outputs[SME_BWD_FUEL_VALVE_OPEN] = static_cast<float>(mpsu->getOutputData().is_fuel_valve2_open);
 }

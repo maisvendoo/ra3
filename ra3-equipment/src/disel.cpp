@@ -88,7 +88,7 @@ void Disel::preStep(state_vector_t &Y, double t)
         }
 
         if (Y[1] < 1.0)
-            emit soundStop(name + "-Disel");
+            emit soundStop(soundName);
     }
     else
     {

@@ -74,6 +74,12 @@ struct mpsu_output_t
     /// Работа дизеля 2
     bool is_disel2_started;
 
+    /// Сигнал открытия клапана питания дизеля 1 топливом
+    bool is_fuel_valve1_open;
+
+    /// Сигнал открытия клапана питания дизеля 1 топливом
+    bool is_fuel_valve2_open;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -83,6 +89,8 @@ struct mpsu_output_t
         , is_starter2_ON(false)
         , is_disel1_started(false)
         , is_disel2_started(false)
+        , is_fuel_valve1_open(false)
+        , is_fuel_valve2_open(false)
     {
 
     }
