@@ -22,6 +22,8 @@ public:
 
     void setSoundName(QString soundName) { this->soundName = soundName; }
 
+    double getCurrent() const { return I; }
+
 private:
 
     /// Номинальная механическая мощность
