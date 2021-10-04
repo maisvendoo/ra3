@@ -68,6 +68,12 @@ struct mpsu_output_t
     /// Включение стартера на дизель 2
     bool is_starter2_ON;
 
+    /// Работа дизеля 1
+    bool is_disel1_started;
+
+    /// Работа дизеля 2
+    bool is_disel2_started;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -75,8 +81,15 @@ struct mpsu_output_t
         , current_started_disel(-1)
         , is_starter1_ON(false)
         , is_starter2_ON(false)
+        , is_disel1_started(false)
+        , is_disel2_started(false)
     {
 
+    }
+
+    bool is_disel_started() const
+    {
+        return is_disel1_started || is_disel2_started;
     }
 };
 

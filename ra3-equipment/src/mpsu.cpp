@@ -111,21 +111,26 @@ void MPSU::main_loop_step(double t, double dt)
     // Обработка кнопки "СТАРТ"
     start_button_process(mpsu_input.start_disel);
 
+    // Признак запуска дизеля 1
+    mpsu_output.is_disel1_started = static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0));
+    // Признак запуска дизеля 2
+    mpsu_output.is_disel2_started = static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0));
+
     // Команды на включение топливных насосов
     mpsu_output.is_fuel_pump1_ON = trig_disel_start[FWD_DISEL].getState();
     mpsu_output.is_fuel_pump2_ON = trig_disel_start[BWD_DISEL].getState();
 
     // Команды на включение стартеров
     mpsu_output.is_starter1_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press1 - 0.1)) &&
-            static_cast<bool>(hs_n(mpsu_input.disel1_shaft_freq - 700.0));
+            (!mpsu_output.is_disel1_started);
 
     mpsu_output.is_starter2_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press2 - 0.1)) &&
-            static_cast<bool>(hs_n(mpsu_input.disel2_shaft_freq - 700.0));
+            (!mpsu_output.is_disel2_started);
 
-    if (static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0)))
+    if (mpsu_output.is_disel1_started)
             trig_disel_start[FWD_DISEL].reset();
 
-    if (static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0)))
+    if (mpsu_output.is_disel2_started)
             trig_disel_start[BWD_DISEL].reset();
 }
 
