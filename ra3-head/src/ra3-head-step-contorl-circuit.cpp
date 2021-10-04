@@ -25,4 +25,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     // Сигнал включения топливного насоса на ведомом дизеле
     backward_outputs[SME_BWD_FUEL_PUMP] = static_cast<float>(mpsu->getOutputData().is_fuel_pump2_ON);
+
+    // Сигнал включения стартера на ведомом дизеле
+    backward_outputs[SME_BWD_STARTER_ON] = static_cast<float>(mpsu->getOutputData().is_starter2_ON);
 }

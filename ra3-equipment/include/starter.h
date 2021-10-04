@@ -20,6 +20,8 @@ public:
 
     void setOmega(double omega) { this->omega = omega; }
 
+    void setSoundName(QString soundName) { this->soundName = soundName; }
+
 private:
 
     /// Номинальная механическая мощность
@@ -48,6 +50,11 @@ private:
 
     /// Напряжение на якоре
     double U;
+
+    /// Имя звукового файла
+    QString soundName;
+
+    bool is_sound;
 
     void preStep(state_vector_t &Y, double t);
 

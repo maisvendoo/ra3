@@ -13,6 +13,8 @@ Starter::Starter(QObject *parent) : Device(parent)
   , Ra(0.1)
   , omega(0.0)
   , U(0.0)
+  , soundName("")
+  , is_sound(true)
 {
 
 }
@@ -39,6 +41,17 @@ double Starter::getTorque() const
 void Starter::preStep(state_vector_t &Y, double t)
 {
     I = (U - cPhi * omega) / Ra;
+
+    if ( static_cast<bool>(hs_p(U - 0.9 * U_nom)) && is_sound )
+    {
+        emit soundPlay(soundName);
+        is_sound = false;
+    }
+
+    if (!static_cast<bool>(hs_p(U - 0.9 * U_nom)))
+    {
+        is_sound = true;
+    }
 }
 
 //------------------------------------------------------------------------------

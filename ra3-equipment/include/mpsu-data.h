@@ -25,6 +25,12 @@ struct mpsu_input_t
     /// Давление топлива в рампе ТНВД2
     double fuel_press2;
 
+    /// Обороты дизеля 1
+    double disel1_shaft_freq;
+
+    /// Обороты дизеля 2
+    double disel2_shaft_freq;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
@@ -33,6 +39,8 @@ struct mpsu_input_t
         , oil_press2(0.0)
         , fuel_press1(0.0)
         , fuel_press2(0.0)
+        , disel1_shaft_freq(0.0)
+        , disel2_shaft_freq(0.0)
     {
 
     }

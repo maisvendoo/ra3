@@ -35,7 +35,9 @@ enum
     SME_FWD_POWER_ON = 1,
     SME_BWD_FUEL_PUMP = 2,
     SME_BWD_FUEL_PRESS = 3,
-    SME_BWD_OIL_PRESS = 4
+    SME_BWD_OIL_PRESS = 4,
+    SME_BWD_STARTER_ON = 5,
+    SME_BWD_OMEGA = 6
 };
 
 #endif // RA3_HEAD_SIGNALS_H

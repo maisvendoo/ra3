@@ -13,6 +13,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.fuel_press2 = static_cast<double>(backward_inputs[SME_BWD_FUEL_PRESS]);
     mpsu_input.oil_press1 = disel->getOilPressure();
     mpsu_input.oil_press2 = static_cast<double>(backward_inputs[SME_BWD_OIL_PRESS]);
+    mpsu_input.disel1_shaft_freq = disel->getShaftFreq();
+    mpsu_input.disel2_shaft_freq = static_cast<double>(backward_inputs[SME_BWD_OMEGA]);
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);

@@ -153,8 +153,10 @@ private:
     enum
     {
         MIN_POS = 0,
-        MAX_POS = 15
+        MAX_POS = 7
     };
+
+    QString name;
 
     std::array<double, NUM_COEFFS>  K;
 

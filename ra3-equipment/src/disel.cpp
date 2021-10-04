@@ -15,7 +15,7 @@ Disel::Disel(QObject *parent) : Device(parent)
   , is_fuel_ignition(false)
   , state_mv6(false)
   , state_vtn(false)
-  , n_ref(350.0)
+  , n_ref(800.0)
   , n_ref_prev(n_ref)
   , Q_max(0.166)
   , Q_fuel(0.0)
@@ -28,6 +28,7 @@ Disel::Disel(QObject *parent) : Device(parent)
   , pos_count(0)
   , soundName("pos0")
   , fuel_level(0.0)
+  , name("d1")
 {
     std::fill(K.begin(), K.end(), 0.0);
 
@@ -87,7 +88,7 @@ void Disel::preStep(state_vector_t &Y, double t)
         }
 
         if (Y[1] < 1.0)
-            emit soundStop("Disel");
+            emit soundStop(name + "-Disel");
     }
     else
     {
@@ -117,7 +118,7 @@ void Disel::preStep(state_vector_t &Y, double t)
     switchDiselSound(n_ref_prev, n_ref);
 
     emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / n_ref));
-    emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 36.7));
+    emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 83.8));
 }
 
 //------------------------------------------------------------------------------
@@ -152,6 +153,9 @@ void Disel::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "Qmax", Q_max);
     cfg.getDouble(secName, "omega_min", omega_min);
     cfg.getDouble(secName, "start_time", start_time);
+    cfg.getString(secName, "Name", name);
+
+    soundName = name + "-pos0";
 
     timer->firstProcess(false);
     timer->setTimeout(start_time);
@@ -185,7 +189,7 @@ void Disel::switchDiselSound(double n_ref_prev, double n_ref)
         pos_count = cut(pos_count, static_cast<int>(MIN_POS), static_cast<int>(MAX_POS));
 
         emit soundStop(soundName);
-        soundName = QString("pos%1").arg(pos_count);
+        soundName = name + QString("-pos%1").arg(pos_count);
         emit soundPlay(soundName);
     }
 }
