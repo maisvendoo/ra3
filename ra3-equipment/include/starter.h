@@ -14,6 +14,12 @@ public:
 
     ~Starter();
 
+    double getTorque() const;
+
+    void setVoltage(double U) { this->U = U; }
+
+    void setOmega(double omega) { this->omega = omega; }
+
 private:
 
     /// Номинальная механическая мощность
@@ -33,6 +39,15 @@ private:
 
     /// Постоянная намагничивания
     double cPhi;
+
+    /// Эквивалентное сопротивление цепи якоря
+    double Ra;
+
+    /// Угловая скорость вращения вала
+    double omega;
+
+    /// Напряжение на якоре
+    double U;
 
     void preStep(state_vector_t &Y, double t);
 

@@ -67,6 +67,9 @@ private:
     /// Стартер
     Starter *starter;
 
+    /// Реле стартера
+    Relay *starter_relay;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 

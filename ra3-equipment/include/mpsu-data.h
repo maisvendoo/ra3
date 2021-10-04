@@ -54,11 +54,19 @@ struct mpsu_output_t
     /// Текущий дизель для запуска
     int  current_started_disel;
 
+    /// Включение стартера на дизель 1
+    bool is_starter1_ON;
+
+    /// Включение стартера на дизель 2
+    bool is_starter2_ON;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
         , is_display_ON(false)
         , current_started_disel(-1)
+        , is_starter1_ON(false)
+        , is_starter2_ON(false)
     {
 
     }
