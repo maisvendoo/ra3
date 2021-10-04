@@ -8,7 +8,7 @@ QT += xml
 
 TARGET = mfdu-display
 
-DESTDIR = $$(RRS_DEV_ROOT)/modules/$$join(TARGET,,,)
+DESTDIR = $$(RRS_DEV_ROOT)/modules/ra3-head
 
 LIBS += -L$$(RRS_DEV_ROOT)/bin -ldisplay
 LIBS += -L$$(RRS_DEV_ROOT)/bin -lCfgReader
