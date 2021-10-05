@@ -14,6 +14,7 @@ Disel::Disel(QObject *parent) : Device(parent)
   , J_shaft(1.0)
   , is_fuel_ignition(false)
   , state_mv6(false)
+  , old_state_mv6(false)
   , state_vtn(false)
   , n_ref(800.0)
   , n_ref_prev(n_ref)
@@ -85,10 +86,7 @@ void Disel::preStep(state_vector_t &Y, double t)
         if (static_cast<bool>(hs_p(Y[1] - omega_min)))
         {
             timer->start();
-        }
-
-        if (Y[1] < 1.0)
-            emit soundStop(soundName);
+        }        
     }
     else
     {
@@ -119,6 +117,15 @@ void Disel::preStep(state_vector_t &Y, double t)
 
     emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / n_ref));
     emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 83.8));
+
+    if (old_state_mv6)
+    {
+        if (state_mv6 != old_state_mv6)
+        {
+            emit soundStop(soundName);
+            emit soundPlay(name + "-stop");
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

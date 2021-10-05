@@ -40,7 +40,7 @@ double Starter::getTorque() const
 //------------------------------------------------------------------------------
 void Starter::preStep(state_vector_t &Y, double t)
 {
-    double Rp = 0.014 * hs_n(omega - 50.0) + 0.016 * hs_n(omega - 90.0);
+    double Rp = 0.014 * hs_n(omega - 50.0) + 0.016;
 
     I = (U - cPhi * omega) / (Ra + Rp);
 

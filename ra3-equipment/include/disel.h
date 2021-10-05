@@ -29,7 +29,11 @@ public:
     void setGenTorque(double M_gen) { this->M_gen = M_gen; }
 
     /// Задать состояние МВ6
-    void setMV6state(bool state_mv6) { this->state_mv6 = state_mv6; }
+    void setMV6state(bool state_mv6)
+    {
+        old_state_mv6 = this->state_mv6;
+        this->state_mv6 = state_mv6;
+    }
 
     /// Задать состояние ВНТ
     void setVTNstate(bool state_vtn) { this->state_vtn = state_vtn; }
@@ -107,6 +111,9 @@ private:
 
     /// Состояние вентиля МВ6
     bool    state_mv6;
+
+    /// Предыдущее состояние вентиля МВ6
+    bool    old_state_mv6;
 
     /// Состояние вентиля ВТН
     bool    state_vtn;

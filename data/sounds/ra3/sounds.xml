@@ -136,4 +136,24 @@
 		<PlayOnStart>0</PlayOnStart>
 	</Sound>
 	
+	<Sound>
+		<Name>d1-stop</Name>
+		<Path>disel-stop.wav</Path>
+		<InitVolume>25</InitVolume>
+		<MaxVolume>25</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
+	
+	<Sound>
+		<Name>d2-stop</Name>
+		<Path>disel-stop.wav</Path>
+		<InitVolume>25</InitVolume>
+		<MaxVolume>25</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
+	
 </Config>
