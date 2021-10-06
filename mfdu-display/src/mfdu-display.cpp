@@ -1,13 +1,9 @@
 #include    "mfdu-display.h"
 
-#include    "tep70-signals.h"
-
 #include    <QLayout>
-#include    <QPainter>
-#include    <QtCore/qmath.h>
 #include    <QDate>
 
-
+#include "ra3-head-signals.h"
 #include "mfdu-main-disp.h"
 
 
@@ -161,6 +157,9 @@ void MfduDisplay::slotUpdateTimer()
 {
     labelCurTime_->setText(QTime::currentTime().toString());
     labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+
+    mfduMainDisp_->updateData(input_signals);
+
 }
 
 

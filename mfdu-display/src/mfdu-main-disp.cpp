@@ -1,10 +1,17 @@
 #include "mfdu-main-disp.h"
 
-#include    "tep70-signals.h"
-
 #include <QPainter>
 
+#include "ra3-head-signals.h"
 
+#include "speedometer.h"
+#include "vertical-scale-bar.h"
+
+
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 MfduMainDisp::MfduMainDisp(QLabel *parent)
     : QLabel(parent)
 {

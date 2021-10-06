@@ -3,6 +3,8 @@
 
 #include <QLabel>
 
+
+
 class SArrow : public QLabel
 {
 public:

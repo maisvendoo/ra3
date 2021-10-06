@@ -4,8 +4,7 @@
 #include    "display.h"
 
 #include    <QLabel>
-#include <QTimer>
-
+#include    <QTimer>
 
 class MfduMainDisp;
 

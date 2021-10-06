@@ -1,13 +1,12 @@
 #ifndef MFDUMAINDISP_H
 #define MFDUMAINDISP_H
 
-#include    "display.h"
-
-
 #include    <QLabel>
 
-#include "speedometer.h"
-#include "vertical-scale-bar.h"
+#include    "display-types.h"
+
+class Speedometer;
+class VerticalScaleBar;
 
 
 
