@@ -33,5 +33,6 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     backward_outputs[SME_BWD_FUEL_VALVE_OPEN] = static_cast<float>(mpsu->getOutputData().is_fuel_valve2_open);
 
     // Главный генератор
+    generator->setDiselOmega(disel->getOmega());
     generator->step(t, dt);
 }
