@@ -49,11 +49,13 @@ private:
     /// Тригеры открытия топливных клапанов
     std::array<Trigger, NUM_DISELS> trig_fuel_valve;
 
-    void preStep(state_vector_t &Y, double t);
+    void preStep(state_vector_t &Y, double t) override;
 
-    void ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t);
+    void ode_system(const state_vector_t &Y,
+                    state_vector_t &dYdt,
+                    double t) override;
 
-    void load_config(CfgReader &cfg);
+    void load_config(CfgReader &cfg) override;
 
     /// Сброс МПСУ
     void reset();
@@ -63,6 +65,12 @@ private:
 
     /// Обработка кнопки старт
     void start_button_process(bool is_start_button);
+
+    /// Запуск дизелей
+    void start_disels();
+
+    /// Останов дизелей
+    void stop_disels();
 };
 
 #endif // MPSU_H

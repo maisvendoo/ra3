@@ -7,7 +7,7 @@ void RA3HeadMotor::debugOutput(double t, double dt)
 {
     Q_UNUSED(dt)
 
-    DebugMsg = QString("t: %1 Ucc: %2 D: %3 FUEL PRESS.: %4 OIL PRESS.: %5 n1: %6 n2: %7 Is: %8 U_gen: %9")
+    DebugMsg = QString("t: %1 Ucc: %2 D: %3 FUEL PRESS.: %4 OIL PRESS.: %5 n1: %6 n2: %7 Is: %8 U_gen: %9 U110: %10")
             .arg(t, 10, 'f', 1)
             .arg(Ucc, 5, 'f', 1)
             .arg(mpsu->getOutputData().current_started_disel + 1, 1)
@@ -16,5 +16,6 @@ void RA3HeadMotor::debugOutput(double t, double dt)
             .arg(disel->getShaftFreq(), 6, 'f', 1)
             .arg(backward_inputs[SME_BWD_OMEGA], 6, 'f', 1)
             .arg(starter->getCurrent(), 6, 'f', 1)
-            .arg(generator->getVoltage(), 5, 'f', 1);
+            .arg(generator->getVoltage(), 5, 'f', 1)
+            .arg(aux_conv->getU_110(), 5, 'f', 1);
 }

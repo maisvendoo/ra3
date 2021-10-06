@@ -37,6 +37,11 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     generator->step(t, dt);
 
     // ПСН
+    if (is_active)
+        aux_conv->setPowerON(mpsu->getOutputData().is_disel1_started);
+    else
+        aux_conv->setPowerON(mpsu->getOutputData().is_disel2_started);
+
     aux_conv->setBatteryVoltage(Ucc);
     aux_conv->setInputVoltage(generator->getVoltage());
     aux_conv->step(t, dt);

@@ -103,15 +103,8 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void MPSU::main_loop_step(double t, double dt)
+void MPSU::start_disels()
 {
-    // Включение дисплея
-    mpsu_output.is_display_ON = true;
-
-    // Обработка кнопки "СТАРТ"
-    start_button_process(mpsu_input.start_disel);
-
-    // Признак запуска дизеля 1
     mpsu_output.is_disel1_started = static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0));
     // Признак запуска дизеля 2
     mpsu_output.is_disel2_started = static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0));
@@ -135,14 +128,37 @@ void MPSU::main_loop_step(double t, double dt)
 
     mpsu_output.is_fuel_valve1_open = trig_fuel_valve[FWD_DISEL].getState();
     mpsu_output.is_fuel_valve2_open = trig_fuel_valve[BWD_DISEL].getState();
+}
 
-    // Останов дизелей
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::stop_disels()
+{
     if (mpsu_input.stop_disel)
     {
         trig_fuel_valve[FWD_DISEL].reset();
         trig_fuel_valve[BWD_DISEL].reset();
         mpsu_output.current_started_disel = -1;
     }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::main_loop_step(double t, double dt)
+{
+    // Включение дисплея
+    mpsu_output.is_display_ON = true;
+
+    // Обработка кнопки "СТАРТ"
+    start_button_process(mpsu_input.start_disel);
+
+    // Запуск дизелей
+    start_disels();
+
+    // Останов дизелей
+    stop_disels();
 }
 
 //------------------------------------------------------------------------------

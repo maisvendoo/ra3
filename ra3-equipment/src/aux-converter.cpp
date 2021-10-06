@@ -1,9 +1,11 @@
 #include    "aux-converter.h"
 
+#include    <QDir>
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-AuxiliaryConverter::AuxiliaryConverter(QObject *parent) : Device(parent)
+AuxiliaryConverter::AuxiliaryConverter(QString config_dir, QObject *parent) : Device(parent)
   , k_380(0.0)
   , k_110(0.0)
   , k_27(0.0)
@@ -16,7 +18,10 @@ AuxiliaryConverter::AuxiliaryConverter(QObject *parent) : Device(parent)
   , U_110(0.0)
   , U_27(0.0)
 {
+    setCustomConfigDir(config_dir);
+
     KM_gen = new Relay(2);
+    KM_gen->read_custom_config(custom_config_dir + QDir::separator() + "mk");
     KM_gen->setInitContactState(0, false);
     KM_gen->setInitContactState(1, false);
 }
@@ -58,6 +63,7 @@ void AuxiliaryConverter::preStep(state_vector_t &Y, double t)
     // Напряжение на входе в преобразователь
     double U = U_in * static_cast<double>(KM_gen->getContactState(1));
 
+    // Выходные напряжения каналов ПСН
     U_380 = k_380 * U;
     U_110 = k_110 * U;
     U_27 = k_27 * U;
