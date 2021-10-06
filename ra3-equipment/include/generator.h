@@ -18,13 +18,11 @@ public:
 
     void setLoadCurrent(double I) { this->I = I; }
 
-    double getOmega() const { return getY(0); }
+    double getOmega() const { return getY(0); }    
 
-    double getVoltage110() const { return U * U_110 / U_nom; }
+    double getPhaseVoltage() const { return U / sqrt(3.0); }
 
-    double getVoltage27() const { return U * U_27 / U_nom; }
-
-    double getVoltage() const { return U / sqrt(3.0); }
+    double getVoltage() const { return U; }
 
 private:
 
@@ -59,11 +57,7 @@ private:
     /// Ошибка по угловой скорости
     double delta_omega;
 
-    ///
-    double U_110;
-
-    double U_27;
-
+    /// Момент сопротивления в подшипниках
     double Mc;
 
     enum

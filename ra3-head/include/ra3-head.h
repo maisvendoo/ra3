@@ -12,6 +12,7 @@
 #include    "disel.h"
 #include    "starter.h"
 #include    "generator.h"
+#include    "aux-converter.h"
 
 #include    "ra3-head-signals.h"
 
@@ -73,6 +74,9 @@ private:
 
     /// Главный генератор
     Generator   *generator;
+
+    /// Преобразователь собственных нужд (ПСН)
+    AuxiliaryConverter  *aux_conv;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;

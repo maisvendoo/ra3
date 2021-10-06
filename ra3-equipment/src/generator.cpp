@@ -15,9 +15,7 @@ Generator::Generator(QObject *parent) : Device(parent)
   , I(0.0)
   , U(0.0)
   , u(0.0)
-  , delta_omega(0.0)
-  , U_110(110.0)
-  , U_27(27.0)
+  , delta_omega(0.0)  
   , Mc(0.0)
 {
     std::fill(K.begin(), K.end(), 0.0);
@@ -80,9 +78,7 @@ void Generator::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "omega_nom", omega_nom);
     cfg.getDouble(secName, "U_nom", U_nom);
     cfg.getDouble(secName, "I_nom", I_nom);
-    cfg.getDouble(secName, "J", J);
-    cfg.getDouble(secName, "U_110", U_110);
-    cfg.getDouble(secName, "U_27", U_27);
+    cfg.getDouble(secName, "J", J);    
     cfg.getDouble(secName, "Mc", Mc);
 
     // Условный КПД генератора

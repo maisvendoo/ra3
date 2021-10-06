@@ -35,4 +35,9 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     // Главный генератор
     generator->setDiselOmega(disel->getOmega());
     generator->step(t, dt);
+
+    // ПСН
+    aux_conv->setBatteryVoltage(Ucc);
+    aux_conv->setInputVoltage(generator->getVoltage());
+    aux_conv->step(t, dt);
 }

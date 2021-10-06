@@ -16,5 +16,5 @@ void RA3HeadMotor::debugOutput(double t, double dt)
             .arg(disel->getShaftFreq(), 6, 'f', 1)
             .arg(backward_inputs[SME_BWD_OMEGA], 6, 'f', 1)
             .arg(starter->getCurrent(), 6, 'f', 1)
-            .arg(generator->getVoltage() * sqrt(3.0), 5, 'f', 1);
+            .arg(generator->getVoltage(), 5, 'f', 1);
 }

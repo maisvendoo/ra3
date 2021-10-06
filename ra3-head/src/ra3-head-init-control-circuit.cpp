@@ -23,4 +23,8 @@ void RA3HeadMotor::initControlCircuit()
 
     generator = new Generator();
     generator->read_custom_config(config_dir + QDir::separator() + "generator");
+
+    aux_conv = new AuxiliaryConverter();
+    aux_conv->read_custom_config(config_dir + QDir::separator() + "aux-coverter");
+    aux_conv->setCustomConfigDir(config_dir);
 }
