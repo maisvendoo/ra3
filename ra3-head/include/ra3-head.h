@@ -11,6 +11,7 @@
 #include    "electric-fuel-pump.h"
 #include    "disel.h"
 #include    "starter.h"
+#include    "hydro-pump.h"
 #include    "generator.h"
 #include    "aux-converter.h"
 
@@ -77,6 +78,9 @@ private:
 
     /// Преобразователь собственных нужд (ПСН)
     AuxiliaryConverter  *aux_conv;
+
+    /// Насос гидростатического привода
+    HydroPump   *hydro_pump;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;

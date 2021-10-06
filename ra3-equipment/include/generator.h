@@ -14,7 +14,8 @@ public:
 
     ~Generator();
 
-    void setDiselOmega(double omega) { this->omega = omega; }
+    /// Задать давление в системе гидростатического привода
+    void setHydroStaticPress(double press) { this->pressure = press; }
 
     void setLoadCurrent(double I) { this->I = I; }
 
@@ -43,7 +44,7 @@ private:
     double J;
 
     /// Угловая скорость вращения коленчатого вала дизеля
-    double omega;
+    double pressure;
 
     /// Ток нагрузки фазы
     double I;

@@ -11,7 +11,7 @@ Generator::Generator(QObject *parent) : Device(parent)
   , cF(0.75)
   , r(0.0)
   , J(1.0)
-  , omega(0.0)
+  , pressure(0.0)
   , I(0.0)
   , U(0.0)
   , u(0.0)
@@ -56,11 +56,8 @@ void Generator::ode_system(const state_vector_t &Y,
                            state_vector_t &dYdt,
                            double t)
 {
-    // Давление в системе гидростатического привода
-    double p_hs = K[1] * omega;
-
     // Момент на приводном гидромоторе
-    double M_hm = K[2] * p_hs * u;
+    double M_hm = K[2] * pressure * u;
 
     dYdt[0] = (M_hm - cF * I - Physics::fricForce(Mc, Y[0])) / J;
 
