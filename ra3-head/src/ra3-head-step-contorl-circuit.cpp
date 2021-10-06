@@ -31,4 +31,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     // Сигнал открытия топливного клапана на ведомом дизеле
     backward_outputs[SME_BWD_FUEL_VALVE_OPEN] = static_cast<float>(mpsu->getOutputData().is_fuel_valve2_open);
+
+    // Главный генератор
+    generator->step(t, dt);
 }

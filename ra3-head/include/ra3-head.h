@@ -11,6 +11,7 @@
 #include    "electric-fuel-pump.h"
 #include    "disel.h"
 #include    "starter.h"
+#include    "generator.h"
 
 #include    "ra3-head-signals.h"
 
@@ -69,6 +70,9 @@ private:
 
     /// Реле стартера
     Relay *starter_relay;
+
+    /// Главный генератор
+    Generator   *generator;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;

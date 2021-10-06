@@ -20,4 +20,7 @@ void RA3HeadMotor::initControlCircuit()
     KM_bat_110->setInitContactState(2, false);
 
     mpsu = new MPSU();
+
+    generator = new Generator();
+    generator->read_custom_config(config_dir + QDir::separator() + "generator");
 }
