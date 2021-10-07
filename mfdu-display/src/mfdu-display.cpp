@@ -16,7 +16,7 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
     : AbstractDisplay(parent, f)
 {
     this->setWindowFlag(Qt::WindowType::FramelessWindowHint);
-//    this->resize(644, 465);
+    this->resize(800, 588);
 //    this->resize(1000, 600);
     this->setAutoFillBackground(true);
     this->setPalette(QPalette(QColor(255, 0, 0)));
@@ -26,10 +26,9 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
     this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     this->layout()->setContentsMargins(0, 0, 0, 0);
 
-    updateTimer_ = new QTimer(this);
-    connect(updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
-    updateTimer_->setInterval(1000);
-    updateTimer_->start();
+    connect(&updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
+    updateTimer_.setInterval(1000);
+    updateTimer_.start();
 }
 
 //------------------------------------------------------------------------------
@@ -150,8 +149,9 @@ void MfduDisplay::init()
 
 
 
-    //
+
     this->layout()->addWidget(background_);
+
 
     AbstractDisplay::init();
 
@@ -170,7 +170,6 @@ void MfduDisplay::slotUpdateTimer()
 
     //
     mfduDispOff_->setVisible(!TO_BOOL(input_signals[MFDU_DISPLAY_ON]));
-
 }
 
 

@@ -40,7 +40,7 @@ private:
     MfduMainDisp*   mfduMainDisp_;
 
 
-    QTimer* updateTimer_;
+    QTimer updateTimer_;
 
 
 private slots:
