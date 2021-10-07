@@ -169,7 +169,7 @@ void MfduDisplay::slotUpdateTimer()
     mfduMainDisp_->updateData(input_signals);
 
     //
-    mfduDispOff_->setVisible(!input_signals[MFDU_DISPLAY_ON]);
+    mfduDispOff_->setVisible(false);//!input_signals[MFDU_DISPLAY_ON]);
 
 }
 
