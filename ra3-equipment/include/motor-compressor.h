@@ -10,7 +10,7 @@ class MotorCompressor : public Device
 {
 public:
 
-    MotorCompressor(QString config_path, QObject *parent = Q_NULLPTR);
+    MotorCompressor(QObject *parent = Q_NULLPTR);
 
     ~MotorCompressor();
 
@@ -21,6 +21,21 @@ public:
     void setU_power(double value);
 
 private:
+
+    /// Номинальная мощность
+    double P_nom;
+
+    /// Номинальная угловая скорость
+    double omega_nom;
+
+    /// Число пар полюсов обмотки статора
+    int zp;
+
+    /// Частота питающего напряжения
+    double freq;
+
+    /// Перегрузочная способность по моменту
+    double lambda;
 
     /// Внешнее противодавление
     double  p;
@@ -58,9 +73,7 @@ private:
 
     void ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t);
 
-    void load_config(CfgReader &cfg);
-
-    void load_config(QString cfg_path);
+    void load_config(CfgReader &cfg);    
 };
 
 #endif // MOTOR_COMPRESSOR_H

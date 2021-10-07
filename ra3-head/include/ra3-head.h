@@ -133,7 +133,7 @@ private:
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
 
-    ///
+    /// Работа прочего оборудования
     void stepOtherEquipment(double t, double dt);
 
     /// Связывание сигналов СМЕ
