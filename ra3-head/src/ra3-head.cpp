@@ -40,6 +40,10 @@ void RA3HeadMotor::initialization()
     // Инициализация дизеля
     initDisel();
 
+    // Инициализация системы обеспечения сжатым воздухом
+    initPneumoSystem();
+
+    // Инициализация разного оборудования
     initOtherEquipment();
 
     // Инициализация озвучки
@@ -63,6 +67,10 @@ void RA3HeadMotor::step(double t, double dt)
     // Работа дизеля
     stepDisel(t, dt);
 
+    // Работа системы обеспечения сжатым воздухом
+    stepPneumoSystem(t, dt);
+
+    // Работа разного оборудования
     stepOtherEquipment(t, dt);
 
     // Вывод сигналов

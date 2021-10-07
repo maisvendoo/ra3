@@ -23,7 +23,7 @@ public:
 
     void step(double t, double dt) override;
 
-    double getU_380() const { return U_110; }
+    double getU_380() const { return U_380; }
 
     double getU_110() const { return U_110; }
 
