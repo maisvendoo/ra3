@@ -18,7 +18,7 @@ MotorCompressor::MotorCompressor(QObject *parent) : Device(parent)
   , U_power(0.0)
   , omega0(157.08)
   , J(0.5)
-  , Mxx(50.0)
+  , Mc(50.0)
   , Vnk(0.05)
 
 {
@@ -87,7 +87,7 @@ void MotorCompressor::ode_system(const state_vector_t &Y,
     // Расчитываем электромагнитный момент (формула Клосса)
     double Ma = 2 * M_maximal / ( s / s_kr + s_kr / s );
 
-    double Mr = Physics::fricForce(Mxx, Y[0]);
+    double Mr = Physics::fricForce(Mc, Y[0]);
 
     double Qnk =  K[1] * Y[0] - K[2] * Y[1] - K[3] * pf(Y[1] - p);
 
@@ -108,6 +108,21 @@ void MotorCompressor::load_config(CfgReader &cfg)
         QString coeff = QString("K%1").arg(i);
         cfg.getDouble(secName, coeff, K[i]);
     }
+
+    cfg.getDouble(secName, "P_nom", P_nom);
+    cfg.getDouble(secName, "omega_nom", omega_nom);
+    cfg.getInt(secName, "zp", zp);
+    cfg.getDouble(secName, "U_nom", Un);
+    cfg.getDouble(secName, "freq", freq);
+    cfg.getDouble(secName, "lambda", lambda);
+    cfg.getDouble(secName, "Mc", Mc);
+    cfg.getDouble(secName, "J", J);
+
+    omega0 = 2.0 * Physics::PI * freq / zp;
+    double sn = 1 - omega_nom / omega0;
+    s_kr = sn * (lambda + sqrt( lambda * lambda - 1 ) );
+
+    Mmax = P_nom * lambda / omega_nom;
 }
 
 

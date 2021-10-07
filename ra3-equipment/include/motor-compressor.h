@@ -58,7 +58,7 @@ private:
 
     double  J;
 
-    double  Mxx;
+    double  Mc;
 
     double  Vnk;
 

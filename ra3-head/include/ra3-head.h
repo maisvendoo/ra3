@@ -87,6 +87,12 @@ private:
     /// Главный резервуар
     Reservoir   *main_res;
 
+    /// Компрессорный агрегат
+    MotorCompressor *motor_compr;
+
+    /// Регулятор давления в ГР
+    PressureRegulator *press_reg;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
