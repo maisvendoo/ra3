@@ -14,6 +14,8 @@
 #include    "hydro-pump.h"
 #include    "generator.h"
 #include    "aux-converter.h"
+#include    "motor-compressor.h"
+#include    "pressure-regulator.h"
 
 #include    "ra3-head-signals.h"
 
@@ -80,7 +82,10 @@ private:
     AuxiliaryConverter  *aux_conv;
 
     /// Насос гидростатического привода
-    HydroPump   *hydro_pump;
+    HydroPump   *hydro_pump;    
+
+    /// Главный резервуар
+    Reservoir   *main_res;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
@@ -98,6 +103,9 @@ private:
 
     /// Инициализация дизеля
     void initDisel();
+
+    /// Инициализация системы обеспечения сжатым воздухом
+    void initPneumoSystem();
 
     /// Инициализация прочего оборудования
     void initOtherEquipment();
@@ -118,6 +126,9 @@ private:
 
     /// Работа дизеля
     void stepDisel(double t, double dt);
+
+    /// Работа системы обеспечения сжатым воздухом
+    void stepPneumoSystem(double t, double dt);
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
