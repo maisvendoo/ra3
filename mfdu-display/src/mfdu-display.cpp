@@ -19,14 +19,17 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
 //    this->resize(644, 465);
 //    this->resize(1000, 600);
     this->setAutoFillBackground(true);
-    this->setPalette(QPalette(QColor(0, 0, 0)));
+    this->setPalette(QPalette(QColor(255, 0, 0)));
     this->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     this->setLayout(new QVBoxLayout);
     this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     this->layout()->setContentsMargins(0, 0, 0, 0);
 
-
+    updateTimer_ = new QTimer(this);
+    connect(updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
+    updateTimer_->setInterval(1000);
+    updateTimer_->start();
 }
 
 //------------------------------------------------------------------------------
@@ -68,10 +71,7 @@ void MfduDisplay::init()
     labelCurDate_->move(650, 32);
     labelCurDate_->setAlignment(Qt::AlignCenter);
 
-    updateTimer_ = new QTimer(this);
-    connect(updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
-    updateTimer_->setInterval(1000);
-    updateTimer_->start();
+
 
 
     // "Выключить" окно.
@@ -145,7 +145,7 @@ void MfduDisplay::init()
     input_signals[MFDU_T_LEFT] = 0;                 //
     input_signals[MFDU_T_RIGHT] = 0;                //
 
-    mfduMainDisp_->updateData(input_signals);
+    //mfduMainDisp_->updateData(input_signals);
 
 
 
@@ -169,7 +169,7 @@ void MfduDisplay::slotUpdateTimer()
     mfduMainDisp_->updateData(input_signals);
 
     //
-    mfduDispOff_->setVisible(false);//!input_signals[MFDU_DISPLAY_ON]);
+    mfduDispOff_->setVisible(!TO_BOOL(input_signals[MFDU_DISPLAY_ON]));
 
 }
 

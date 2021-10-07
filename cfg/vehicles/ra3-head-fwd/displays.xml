@@ -3,7 +3,7 @@
 
 	<!-- Дисплейный модуль БЛОК -->
 	<Display>
-		<Module>mfdu-display</Module>
+		<Module>msut-display</Module>
 		<SurfaceName>BI-3</SurfaceName>
 		
 		<Corner1>1.0 1.0</Corner1>
