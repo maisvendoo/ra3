@@ -21,7 +21,7 @@ enum
 
 
     // МФДУ (МНОГОФУНКЦИОНАЛЬНЫЙ ДИСПЛЕЙ УПРАВЛЕНИЯ)
-    MFDU_TURN_ON_OFF = 6,
+    MFDU_DISPLAY_ON = 6,
     MFDU_S_SPEED,       // Спидометр. Скорость
     MFDU_S_SPEED_LIMIT, // Спидометр. Ограничение скорости
     MFDU_S_GREEN_DIGIT, // Спидометр. Зеленое число

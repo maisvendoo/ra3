@@ -120,13 +120,6 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
 
 
 
-void MfduMainDisp::setDispVisible(bool flag)
-{
-    speedometer_->setVisible(flag);
-}
-
-
-
 void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 {
     int startX = speedometer_->x() + speedometer_->width() + 13;

@@ -4,6 +4,7 @@
 #include    <QDate>
 
 #include "ra3-head-signals.h"
+#include "mfdu-disp-off.h"
 #include "mfdu-main-disp.h"
 
 
@@ -73,10 +74,14 @@ void MfduDisplay::init()
     updateTimer_->start();
 
 
+    // "Выключить" окно.
+    mfduDispOff_ = new MfduDispOff(background_);
 
     // Элементы основного экрана. Основной экран
     mfduMainDisp_ = new MfduMainDisp(background_);
 
+
+    input_signals[MFDU_DISPLAY_ON] = 1;
     // UPDATE ДАННЫХ ОСНОВНОГО ЭКРАНА
     // Спидометр
     input_signals[MFDU_S_SPEED] = 55.0;             // Спидометр. Скорость
@@ -149,6 +154,8 @@ void MfduDisplay::init()
     this->layout()->addWidget(background_);
 
     AbstractDisplay::init();
+
+    mfduDispOff_->raise();
 }
 
 
@@ -158,7 +165,11 @@ void MfduDisplay::slotUpdateTimer()
     labelCurTime_->setText(QTime::currentTime().toString());
     labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
+    //
     mfduMainDisp_->updateData(input_signals);
+
+    //
+    mfduDispOff_->setVisible(!input_signals[MFDU_DISPLAY_ON]);
 
 }
 

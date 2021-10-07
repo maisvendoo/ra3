@@ -17,8 +17,6 @@ public:
 
     void updateData(display_signals_t input_signals);
 
-    void setDispVisible(bool flag = true);
-
 
 private:
     Speedometer* speedometer_;

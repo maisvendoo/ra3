@@ -6,6 +6,7 @@
 #include    <QLabel>
 #include    <QTimer>
 
+class MfduDispOff;
 class MfduMainDisp;
 
 
@@ -35,7 +36,8 @@ private:
     QLabel* labelCurTime_;
 
 
-    MfduMainDisp* mfduMainDisp_;
+    MfduDispOff*    mfduDispOff_;
+    MfduMainDisp*   mfduMainDisp_;
 
 
     QTimer* updateTimer_;
