@@ -20,6 +20,7 @@ MotorCompressor::MotorCompressor(QObject *parent) : Device(parent)
   , J(0.5)
   , Mc(50.0)
   , Vnk(0.05)
+  , is_powered(false)
 
 {
     std::fill(K.begin(), K.end(), 0);    
@@ -65,6 +66,8 @@ void MotorCompressor::preStep(state_vector_t &Y, double t)
     Q_UNUSED(t)
 
     Q = K[4] * pf(Y[1] - p);
+
+    is_powered = static_cast<bool>(hs_p(U_power - 0.9 * Un));
 
     emit soundSetPitch("Motor_Compressor", static_cast<float>(Y[0] / omega0));
 }

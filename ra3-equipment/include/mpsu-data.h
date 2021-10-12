@@ -111,6 +111,12 @@ struct mpsu_output_t
     {
         return is_disel1_started || is_disel2_started;
     }
+
+    int getReversorDir() const
+    {
+        return static_cast<int>(!revers_fwd) -
+               static_cast<int>(!revers_bwd);
+    }
 };
 
 #endif // MPSU_DATA_H

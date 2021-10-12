@@ -19,7 +19,6 @@ enum
     SIG_BUTTON_START = 4,
     SIG_BUTTON_STOP = 5,
 
-
     // МФДУ (МНОГОФУНКЦИОНАЛЬНЫЙ ДИСПЛЕЙ УПРАВЛЕНИЯ)
     MFDU_DISPLAY_ON = 6,
     MFDU_S_SPEED,       // Спидометр. Скорость
@@ -88,6 +87,9 @@ enum
     BLOK_VELOCITY_NEXT_LIMIT = 106,
     BLOK_REVERS = 107,
 
+    STRELKA_VOLTMETER110 = 108,
+    STRELKA_VOLTMETER24 = 109,
+
     // Углы поворота колесных пар
     WHEEL_1 = 194,
     WHEEL_2 = 195,
@@ -108,7 +110,8 @@ enum
     SME_BWD_STARTER_ON = 5,
     SME_BWD_OMEGA = 6,
     SME_BWD_FUEL_VALVE_OPEN = 7,
-    SME_BWD_DISEL_STARTED = 8
+    SME_BWD_DISEL_STARTED = 8,
+    SME_BWD_COMPRESSOR = 9
 };
 
 #endif // RA3_HEAD_SIGNALS_H

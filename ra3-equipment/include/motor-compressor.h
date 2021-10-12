@@ -20,6 +20,8 @@ public:
 
     void setU_power(double value);
 
+    bool isPowered() const { return is_powered; }
+
 private:
 
     /// Номинальная мощность
@@ -61,6 +63,8 @@ private:
     double  Mc;
 
     double  Vnk;
+
+    bool is_powered;
 
     enum
     {
