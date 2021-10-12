@@ -10,5 +10,5 @@ MfduDispOff::MfduDispOff(QLabel *parent)
     if (!pic.load(":/mfdu/mfdu-disp-off")) { return; }
     this->setFixedSize(pic.size());
     this->setPixmap(pic);
-
+    this->resize(800, 588);
 }

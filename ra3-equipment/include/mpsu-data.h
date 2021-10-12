@@ -78,7 +78,16 @@ struct mpsu_output_t
     bool is_fuel_valve1_open;
 
     /// Сигнал открытия клапана питания дизеля 1 топливом
-    bool is_fuel_valve2_open;    
+    bool is_fuel_valve2_open;
+
+    /// Сигнал "Реверс: ВПЕРЕД"
+    bool revers_fwd;
+
+    /// Сигнал "Реверс: НАЗАД"
+    bool revers_bwd;
+
+    /// Сигнал "Реверс: НЕЙТРАЛЬ"
+    bool revers_neutral;
 
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
@@ -90,7 +99,10 @@ struct mpsu_output_t
         , is_disel1_started(false)
         , is_disel2_started(false)
         , is_fuel_valve1_open(false)
-        , is_fuel_valve2_open(false)        
+        , is_fuel_valve2_open(false)
+        , revers_fwd(true)
+        , revers_bwd(true)
+        , revers_neutral(false)
     {
 
     }

@@ -45,7 +45,7 @@ struct ip_t
     QString distanceTarget;
     QString typeTarget;
     QString nameTarget;
-    QString zz;
+    QString zz;    
 
     ip_t()
     {
@@ -63,7 +63,7 @@ struct ip_t
         distanceTarget      = "distance";
         typeTarget          = "type";
         nameTarget          = "name";
-        zz                  = "zz";
+        zz                  = "zz";       
     }
 };
 
@@ -75,12 +75,14 @@ struct ip2_t
     QString BC;
     QString TM;
     QString UR;
+    int revers;
 
     ip2_t()
     {
         BC = "BC";
         TM = "TM";
         UR = "UR";
+        revers = 0;
     }
 };
 

@@ -80,7 +80,7 @@ void MfduDisplay::init()
     mfduMainDisp_ = new MfduMainDisp(background_);
 
 
-    input_signals[MFDU_DISPLAY_ON] = 1;
+    input_signals[MFDU_DISPLAY_ON] = 0;
     // UPDATE ДАННЫХ ОСНОВНОГО ЭКРАНА
     // Спидометр
     input_signals[MFDU_S_SPEED] = 55.0;             // Спидометр. Скорость
@@ -169,7 +169,7 @@ void MfduDisplay::slotUpdateTimer()
     mfduMainDisp_->updateData(input_signals);
 
     //
-    mfduDispOff_->setVisible(!TO_BOOL(input_signals[MFDU_DISPLAY_ON]));
+    mfduDispOff_->setVisible(!static_cast<bool>(input_signals[MFDU_DISPLAY_ON]));
 }
 
 

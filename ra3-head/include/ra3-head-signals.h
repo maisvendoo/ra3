@@ -86,6 +86,7 @@ enum
     BLOK_VELOCITY = 104,
     BLOK_VELOCITY_CURRENT_LIMIT = 105,
     BLOK_VELOCITY_NEXT_LIMIT = 106,
+    BLOK_REVERS = 107,
 
     // Углы поворота колесных пар
     WHEEL_1 = 194,

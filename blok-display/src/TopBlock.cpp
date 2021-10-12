@@ -44,6 +44,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
 //    curTime->start();
 
     ip_ = new ip_t();
+    ip2_ = new ip2_t();
 
     QRect geoIP; // размер и положение элементов
     int fooH_ip = 70; // высота элементов
@@ -147,9 +148,8 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
     ipTriangle_ = new InformPartTriangle( QPoint(speedometer_->x() - 30,
                                                  speedometer_->y() + speedometer_->height()*0.78),
                                           40,
-                                          QColor(255,255,0),
-                                          this );
-    ipTriangle_->setTriangle(180, true);
+                                          QColor(0,0,0),
+                                          this );    
 }
 
 //-----------------------------------------------------------------------------
@@ -176,7 +176,7 @@ void TopBlock::set_ipVal(ip_val_t *val)
     informPartMap_[ip_->distanceTarget]->setText(QString::number(val->distanceTarget) + "м");
     informPartMap_[ip_->typeTarget]->setText(QString(val->typeTarget));
     informPartMap_[ip_->nameTarget]->setText(QString(val->nameTarget));
-    informPartMap_[ip_->zz]->setText(QString(val->zz));
+    informPartMap_[ip_->zz]->setText(QString(val->zz));    
 }
 
 //-----------------------------------------------------------------------------
@@ -187,6 +187,26 @@ void TopBlock::set_ip2Val(ip2_val_t *val)
     ipPressureUR_->setValPressure(val->UR);
     ipPressureTM_->setValPressure(val->TM);
     ipPressureTC_->setValPressure(val->BC);
+
+    if (ip2_->revers != val->revers)
+    {
+        ip2_->revers = val->revers;
+
+        if (ip2_->revers != 0)
+        {
+            ipTriangle_->setColor(QColor(255, 255, 0));
+
+            if (ip2_->revers > 0)
+                ipTriangle_->setTriangle(180, true);
+            else
+                ipTriangle_->setTriangle(0, true);
+        }
+        else
+        {
+            ipTriangle_->setColor(QColor(0, 0, 0));
+            ipTriangle_->setTriangle(180, true);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------

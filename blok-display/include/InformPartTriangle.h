@@ -50,6 +50,7 @@ public:
     void setTriangle(int angle, bool isBrush,
                      bool drawCircle = false, bool drawStr = false);
 
+    void setColor(const QColor &color) { colorTriangle_ = color; }
 
 private:
 

@@ -57,7 +57,7 @@ struct ip_val_t
         distanceTarget = 0;
         strcpy(typeTarget, "Вид цели");
         strcpy(nameTarget, "Название цели");
-        strcpy(zz, "");
+        strcpy(zz, "");        
     }
 };
 #pragma pack(pop)
@@ -69,14 +69,16 @@ struct ip_val_t
 struct ip2_val_t
 {
     double BC;  ///< давление тормозного цилиндра
-    double TM;  /// давление тормозной магистрали
-    double UR;  /// давление уравнительного резервуара
+    double TM;  ///< давление тормозной магистрали
+    double UR;  ///< давление уравнительного резервуара
+    int    revers; ///< положение реверсора
 
     ip2_val_t()
     {
         BC = 0.5;
         TM = 0.0;
         UR = 0.0;
+        revers = 0;
     }
 };
 #pragma pack(pop)

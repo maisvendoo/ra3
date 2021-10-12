@@ -103,6 +103,7 @@ void BlokDisplay::slotUpdateTimer()
     structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_TM_PRESS]);
     structsBLOK.ip2_val.UR = static_cast<double>(input_signals[BLOK_UR_PRESS]);
     structsBLOK.ip2_val.BC = static_cast<double>(input_signals[BLOK_TC_PRESS]);
+    structsBLOK.ip2_val.revers = static_cast<int>(input_signals[BLOK_REVERS]);
 
     topBlock->set_ip2Val(&structsBLOK.ip2_val);
 
