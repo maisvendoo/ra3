@@ -18,5 +18,7 @@
         <CabineModel>ra3/RA3-cabview.osgt</CabineModel>
         <CabineShift>0.0 0.0 0.317</CabineShift>
 		
+		<DriverPos>0.55 9.75 3.8</DriverPos> 
+		
     </Vehicle>
 </Config>

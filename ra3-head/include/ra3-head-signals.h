@@ -78,6 +78,14 @@ enum
     MFDU_T_LEFT,                //
     MFDU_T_RIGHT = 61,          //
 
+    BLOK_TM_PRESS = 100,
+    BLOK_UR_PRESS = 101,
+    BLOK_TC_PRESS = 102,
+
+    BLOK_RAILWAY_COORD = 103,
+    BLOK_VELOCITY = 104,
+    BLOK_VELOCITY_CURRENT_LIMIT = 105,
+    BLOK_VELOCITY_NEXT_LIMIT = 106,
 
     // Углы поворота колесных пар
     WHEEL_1 = 194,
