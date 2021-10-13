@@ -28,11 +28,10 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     analogSignal[WHEEL_3] = static_cast<float>(dir * wheel_rotation_angle[2] / 2.0 / Physics::PI);
     analogSignal[WHEEL_4] = static_cast<float>(dir * wheel_rotation_angle[3] / 2.0 / Physics::PI);
 
-    analogSignal[ACTIVE_COCKPIT] = 1.0f;
-    analogSignal[ALARM] = 1.0f;
-    analogSignal[PARKING_BRAKE] = 1.0f;
 
     analogSignal[LS_G1] = analogSignal[LS_G1_1] =  1.0f;
 
     mdfuSignalsOutput(t, dt);
+
+    controlLampsSignalsOutput(t, dt);
 }

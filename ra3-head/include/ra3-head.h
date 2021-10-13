@@ -153,7 +153,11 @@ private:
 
     void loadConfig(QString cfg_path) override;
 
+    /// Вывод сигналов на дисплей МФДУ
     void mdfuSignalsOutput(double t, double dt);
+
+    /// Вывод сигналов на панель контрольных ламп
+    void controlLampsSignalsOutput(double t, double dt);
 };
 
 #endif // RA3_HEAD_H
