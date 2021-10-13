@@ -92,6 +92,9 @@ struct mpsu_output_t
     /// Уровень давления масла в дизеле для МФДУ
     int mfdu_oil_press_level;
 
+    int mfdu_oil_press_level1;
+    int mfdu_oil_press_level2;
+
     /// Желтая тревога
     bool is_yellow_alarm;
 
@@ -100,6 +103,9 @@ struct mpsu_output_t
 
     /// Состояние дизелей
     int mfdu_disel_state_level;
+
+    int mfdu_disel_state_level1;
+    int mfdu_disel_state_level2;
 
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
@@ -116,9 +122,13 @@ struct mpsu_output_t
         , revers_bwd(true)
         , revers_neutral(false)
         , mfdu_oil_press_level(1)
+        , mfdu_oil_press_level1(1)
+        , mfdu_oil_press_level2(1)
         , is_yellow_alarm(false)
         , is_red_alarm(false)
         , mfdu_disel_state_level(2)
+        , mfdu_disel_state_level1(2)
+        , mfdu_disel_state_level2(2)
     {
 
     }

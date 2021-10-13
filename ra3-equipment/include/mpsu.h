@@ -73,10 +73,11 @@ private:
     void stop_disels();
 
     /// Контроль давления масла дизелей
-    void check_disels_oil_pressure();
+    int check_disels_oil_pressure(double p_oil);
 
     /// Диагностика дизелей
-    void check_disels();
+    int check_disels(int mfdu_oil_press_level);
+    void check_alarm_level();
 };
 
 #endif // MPSU_H
