@@ -15,6 +15,8 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     analogSignal[STRELKA_VOLTMETER110] = static_cast<float>(Ucc / 150.0);
     //analogSignal[STRELKA_VOLTMETER24] = static_cast<float>(0);//bat24->getVoltage() / 30.0);
 
+    analogSignal[STRELKA_P_GR] = static_cast<float>(main_res->getPressure() / 1.2);
+
     // Кнопки пуска и остановки дизелей
     analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[BUTTON_START].getState());
     analogSignal[SIG_BUTTON_STOP] = static_cast<float>(tumbler[BUTTON_STOP].getState());

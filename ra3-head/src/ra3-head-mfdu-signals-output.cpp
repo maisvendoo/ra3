@@ -74,4 +74,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_PZD_MINI_LEFT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level1);
     analogSignal[MFDU_PZD_MINI_RIGHT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level2);
+
+    analogSignal[MFDU_I_AKB_110] = static_cast<float>(Icc);
 }
