@@ -32,7 +32,7 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     analogSignal[ALARM] = 1.0f;
     analogSignal[PARKING_BRAKE] = 1.0f;
 
-    analogSignal[LS_G1] = 1.0f;
+    analogSignal[LS_G1] = analogSignal[LS_G1_1] =  1.0f;
 
     mdfuSignalsOutput(t, dt);
 }
