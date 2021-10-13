@@ -90,6 +90,19 @@ enum
     STRELKA_VOLTMETER110 = 108,
     STRELKA_VOLTMETER24 = 109,
 
+    ACTIVE_COCKPIT = 150,
+    ALARM = 151,
+    ANXIETY = 152,
+    SOTH = 153,
+    SOT = 154,
+    OVERHEATING_OF_AXLE_BOXES = 155,
+    PARKING_BRAKE = 156,
+    BATTERY = 157,
+    CDL = 158,
+    KDP = 159,
+
+    LS_G1 = 164,
+
     // Углы поворота колесных пар
     WHEEL_1 = 194,
     WHEEL_2 = 195,
