@@ -146,7 +146,7 @@ void MPSU::stop_disels()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void MPSU::check_disels()
+void MPSU::check_disels_oil_pressure()
 {
     // Проверка давления масла
 
@@ -167,6 +167,54 @@ void MPSU::check_disels()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::check_disels()
+{
+    // Контроль по маслу
+    int oil_level = 2;
+
+    switch (mpsu_output.mfdu_oil_press_level)
+    {
+    case 0:
+        oil_level = 1;
+        break;
+
+    case 1:
+        oil_level = 2;
+        break;
+
+    case 2:
+        oil_level = 0;
+        break;
+
+    default:
+        oil_level = 2;
+        break;
+    }
+
+    mpsu_output.mfdu_disel_state_level = max(oil_level, 0);
+
+    switch (mpsu_output.mfdu_disel_state_level)
+    {
+    case 0:
+        mpsu_output.is_red_alarm = false;
+        mpsu_output.is_yellow_alarm = false;
+        break;
+
+    case 1:
+        mpsu_output.is_red_alarm = false;
+        mpsu_output.is_yellow_alarm = true;
+        break;
+
+    case 2:
+        mpsu_output.is_red_alarm = true;
+        mpsu_output.is_yellow_alarm = false;
+        break;
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
     // Включение дисплея
@@ -181,7 +229,10 @@ void MPSU::main_loop_step(double t, double dt)
     // Останов дизелей
     stop_disels();
 
-    // Контроль параметров дизелей
+    // Контроль давления масла дизелей
+    check_disels_oil_pressure();
+
+    // контроль дизелей по всем параметрам
     check_disels();
 }
 

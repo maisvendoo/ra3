@@ -11,6 +11,9 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     // "БАТАРЕЯ" (показывает что сеть питается от батареи)
     analogSignal[BATTERY] = static_cast<float>(hs_n(bat110->getCargeCurrent()));
 
+    analogSignal[ALARM] = static_cast<float>(mpsu->getOutputData().is_red_alarm);
+    analogSignal[ANXIETY] = static_cast<float>(mpsu->getOutputData().is_yellow_alarm);
+
     // Проверка наличия питания "БОРТСЕТЬ"
     bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));
 

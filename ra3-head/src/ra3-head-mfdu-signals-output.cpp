@@ -55,6 +55,11 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     // ЭПК
     analogSignal[MFDU_EPK] = 1.0f;
 
+    // Экстренное и стояночный тормоз
+    analogSignal[MFDU_XREN1] = 1.0f;
+    analogSignal[MFDU_XREN2] = 1.0f;
+    analogSignal[MFDU_XREN3] = 1.0f;
+
     // Статус топливоподкачивающего насоса
     bool is_fuel_pump_active = fuel_pump->isStarted() ||
             static_cast<bool>(backward_inputs[SME_BWD_FUEL_PUMP_ON]);
@@ -63,4 +68,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Статус давления масла в дизеле
     analogSignal[MFDU_PRESSURE_OIL_MOTOR] = mpsu->getOutputData().mfdu_oil_press_level;
+
+    // Общий статус дизеля
+    analogSignal[MFDU_MOTOR] = mpsu->getOutputData().mfdu_disel_state_level;
 }
