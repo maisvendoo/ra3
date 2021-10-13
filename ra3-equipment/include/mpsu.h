@@ -71,6 +71,9 @@ private:
 
     /// Останов дизелей
     void stop_disels();
+
+    /// Контроль параметров работы дизелей
+    void check_disels();
 };
 
 #endif // MPSU_H

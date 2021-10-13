@@ -89,6 +89,9 @@ struct mpsu_output_t
     /// Сигнал "Реверс: НЕЙТРАЛЬ"
     bool revers_neutral;
 
+    /// Уровень давления масла в дизеле для МФДУ
+    int mfdu_oil_press_level;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -103,6 +106,7 @@ struct mpsu_output_t
         , revers_fwd(true)
         , revers_bwd(true)
         , revers_neutral(false)
+        , mfdu_oil_press_level(1)
     {
 
     }

@@ -42,6 +42,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_INC_OZ_MOTOR] = 2.0f;
     analogSignal[MFDU_OIL_MOTOR] = 2.0f;
     analogSignal[MFDU_DEC_OZ_MOTOR] = 2.0f;
+    analogSignal[MFDU_ACTIVE_CHARGE] = 3.0f;
 
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
@@ -51,9 +52,15 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_ATTENTION] = 1.0f;
     analogSignal[MFDU_STOP] = 1.0f;
 
+    // ЭПК
+    analogSignal[MFDU_EPK] = 1.0f;
+
     // Статус топливоподкачивающего насоса
     bool is_fuel_pump_active = fuel_pump->isStarted() ||
             static_cast<bool>(backward_inputs[SME_BWD_FUEL_PUMP_ON]);
 
     analogSignal[MFDU_TPN] = static_cast<float>(!is_fuel_pump_active);
+
+    // Статус давления масла в дизеле
+    analogSignal[MFDU_PRESSURE_OIL_MOTOR] = mpsu->getOutputData().mfdu_oil_press_level;
 }

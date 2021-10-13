@@ -5,7 +5,18 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
 {
-    analogSignal[ACTIVE_COCKPIT] = 1.0f;
-    analogSignal[ALARM] = 1.0f;
-    analogSignal[PARKING_BRAKE] = 1.0f;
+    // "АКТИВНАЯ КАБИНА"
+    analogSignal[ACTIVE_COCKPIT] = static_cast<float>(is_active);
+
+    // "БАТАРЕЯ" (показывает что сеть питается от батареи)
+    analogSignal[BATTERY] = static_cast<float>(hs_n(bat110->getCargeCurrent()));
+
+    // Проверка наличия питания "БОРТСЕТЬ"
+    bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));
+
+    // Активация ламп с учетом наличия питания
+    for (size_t i = ACTIVE_COCKPIT; i <= KDP; ++i)
+    {
+        analogSignal[i] = analogSignal[i] && is_power_on;
+    }
 }

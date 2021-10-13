@@ -8,6 +8,10 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     U_bat_110 = bat110->getVoltage();
     Ucc = static_cast<double>(KM_bat_110->getContactState(1)) * U_bat_110;
 
+    Icc = Ucc / 22.0;
+
+    bat110->setLoadCurrent(Icc);
+    bat110->setChargeVoltage(aux_conv->getU_110());
     bat110->step(t, dt);
 
     bat24->step(t, dt);
