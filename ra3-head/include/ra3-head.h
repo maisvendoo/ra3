@@ -152,6 +152,8 @@ private:
     void keyProcess() override;
 
     void loadConfig(QString cfg_path) override;
+
+    void mdfuSignalsOutput(double t, double dt);
 };
 
 #endif // RA3_HEAD_H

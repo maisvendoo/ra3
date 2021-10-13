@@ -36,6 +36,8 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     generator->setHydroStaticPress(hydro_pump->getPressure());
     generator->step(t, dt);
 
+    forward_outputs[SME_BWD_GENERATOR] = static_cast<float>(generator->isActive());
+
     // ПСН
     aux_conv->setPowerON(mpsu->getOutputData().is_disel1_started ||
                          static_cast<bool>(forward_inputs[SME_BWD_DISEL_STARTED]));

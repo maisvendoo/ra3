@@ -25,6 +25,8 @@ public:
 
     double getVoltage() const { return U; }
 
+    bool isActive() const { return is_active; }
+
 private:
 
     double P_nom;
@@ -60,6 +62,8 @@ private:
 
     /// Момент сопротивления в подшипниках
     double Mc;
+
+    bool is_active;
 
     enum
     {

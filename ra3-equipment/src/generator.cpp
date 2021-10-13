@@ -17,6 +17,7 @@ Generator::Generator(QObject *parent) : Device(parent)
   , u(0.0)
   , delta_omega(0.0)  
   , Mc(0.0)
+  , is_active(false)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }
@@ -47,6 +48,8 @@ void Generator::preStep(state_vector_t &Y, double t)
 
     // Ограничиваем управляющее воздействие
     u = cut(u, 0.0, 1.0);
+
+    is_active = static_cast<bool>(hs_p(U - 0.9 * U_nom));
 }
 
 //------------------------------------------------------------------------------
