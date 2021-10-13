@@ -28,6 +28,8 @@ public:
 
     void setSoundName(QString soundName) { this->soundName = soundName; }
 
+    bool isStarted() const { return is_started; }
+
 private:
 
     /// Напряжение питания, В
