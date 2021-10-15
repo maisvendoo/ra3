@@ -16,6 +16,7 @@
 #include    "aux-converter.h"
 #include    "motor-compressor.h"
 #include    "pressure-regulator.h"
+#include    "ra3-brake-mech.h"
 
 #include    "ra3-head-signals.h"
 
@@ -98,6 +99,16 @@ private:
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
+
+    enum
+    {
+        NUM_TROLLEYS = 2,
+        FWD_TROLLEY = 0,
+        BWD_TROLLEY = 1
+    };
+
+    /// Тормозная механика тележек
+    //std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
 
     /// Выключатели в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;

@@ -12,13 +12,19 @@
 		
 		<FuelCapacity>350</FuelCapacity>
 		<FuelLevel>1.0</FuelLevel>
+        
+        <!--<ExtTexturesDir>ra3/rzd</ExtTexturesDir>-->
 		
 		<IsActive>1</IsActive>
 
         <CabineModel>ra3/RA3-cabview.osgt</CabineModel>
-        <CabineShift>0.0 0.0 0.317</CabineShift>
-		
-		<DriverPos>0.55 9.75 3.8</DriverPos> 
+        <CabineShift>0.0 -12.0 0.05</CabineShift>
+
+        <ExtModelName>ra3/RA3-head-fwd.osgt</ExtModelName>
+        <ModelShift>0.0 -12.0 0.05</ModelShift>
+
+
+		<DriverPos>0.55 9.85 3.0</DriverPos> 
 		
     </Vehicle>
 </Config>

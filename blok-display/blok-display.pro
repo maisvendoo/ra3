@@ -16,6 +16,7 @@ LIBS += -L$$(RRS_DEV_ROOT)/bin -lCfgReader
 INCLUDEPATH += ./include
 INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
 INCLUDEPATH += ../ra3-head/include
+INCLUDEPATH += ../ra3-equipment/include
 
 HEADERS += $$files(./include/*.h)
 HEADERS += $$files(../ra3-head/include/*.h)

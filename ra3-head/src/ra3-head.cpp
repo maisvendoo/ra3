@@ -15,6 +15,7 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , fuel_pump(Q_NULLPTR)
   , horn(Q_NULLPTR)
   , disel(Q_NULLPTR)
+  , starter(Q_NULLPTR)
 {
 
 }

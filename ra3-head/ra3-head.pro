@@ -18,8 +18,8 @@ LIBS += -L$$(RRS_DEV_ROOT)/bin -lfilesystem
 
 # Путь к необходимым заголовочным файлам
 INCLUDEPATH += ./include
-INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
 INCLUDEPATH += ../ra3-equipment/include
+INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
 
 # Указываем файлы, включаемые в проект
 HEADERS += $$files(./include/*.h)
