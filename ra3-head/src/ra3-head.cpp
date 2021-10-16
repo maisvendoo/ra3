@@ -45,6 +45,9 @@ void RA3HeadMotor::initialization()
     // Инициализация системы обеспечения сжатым воздухом
     initPneumoSystem();
 
+    // Инициализируем тормозные механизмы
+    initBrakeMech();
+
     // Инициализация разного оборудования
     initOtherEquipment();
 
@@ -71,6 +74,9 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа системы обеспечения сжатым воздухом
     stepPneumoSystem(t, dt);
+
+    // Работа тормозных механизмов
+    stepBrakeMech(t, dt);
 
     // Работа разного оборудования
     stepOtherEquipment(t, dt);

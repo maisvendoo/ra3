@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Device>
+		<Order>1</Order>
+		<ShoeType>composite</ShoeType>
+		<ShoesCyl>1</ShoesCyl>
+		<ShoesAxis>2</ShoesAxis>
+		<CylNum>4</CylNum>
+		<DeadVolume>0.0</DeadVolume>
+		<CylinderDiameter>0.356</CylinderDiameter>		
+		<InitPressure>0.0</InitPressure>
+
+		<Kmax>1.03</Kmax>
+		<p_max>0.4</p_max>
+	</Device>
+</Config>

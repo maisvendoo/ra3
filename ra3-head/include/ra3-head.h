@@ -107,8 +107,17 @@ private:
         BWD_TROLLEY = 1
     };
 
+    /// Индексы осей
+    enum
+    {
+        AXIS_1 = 1,
+        AXIS_2 = 2,
+        AXIS_3 = 3,
+        ASIS_4 = 4
+    };
+
     /// Тормозная механика тележек
-    //std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
+    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
 
     /// Выключатели в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
@@ -126,6 +135,9 @@ private:
 
     /// Инициализация системы обеспечения сжатым воздухом
     void initPneumoSystem();
+
+    /// Инициализация механической части тормозной системы
+    void initBrakeMech();
 
     /// Инициализация прочего оборудования
     void initOtherEquipment();
@@ -149,6 +161,9 @@ private:
 
     /// Работа системы обеспечения сжатым воздухом
     void stepPneumoSystem(double t, double dt);
+
+    /// Работа механической части тормозной системы
+    void stepBrakeMech(double t, double dt);
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
