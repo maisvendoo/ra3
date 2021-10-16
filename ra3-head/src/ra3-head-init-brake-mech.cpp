@@ -12,5 +12,7 @@ void RA3HeadMotor::initBrakeMech()
         brake_mech[i] = new RA3BrakeMech();
         brake_mech[i]->read_custom_config(config_dir + QDir::separator() +
                                           "brake-mech");
+
+        brake_mech[i]->setEffFricRadius(wheel_diameter / 2.0);
     }
 }
