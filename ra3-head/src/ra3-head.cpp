@@ -33,6 +33,9 @@ RA3HeadMotor::~RA3HeadMotor()
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initialization()
 {
+    // Инициализация органов управления в кабине
+    initCabineControls();
+
     // Инициализация системы питания топливом
     initFuelSystem();
 

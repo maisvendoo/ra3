@@ -124,6 +124,12 @@ private:
 
     void initialization() override;
 
+    /// Инициализация органов управления в кабине
+    void initCabineControls();
+
+    /// Инициализация переключателей
+    void initTumblers(QString config_name);
+
     /// Инициализация системы питания топливом
     void initFuelSystem();
 

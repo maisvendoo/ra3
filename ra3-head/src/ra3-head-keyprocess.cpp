@@ -31,4 +31,15 @@ void RA3HeadMotor::keyProcess()
         tumbler[BUTTON_STOP].set();
     else
         tumbler[BUTTON_STOP].reset();
+
+    // СПТ
+    if (getKeyState(KEY_Leftbracket) && !getKeyState(KEY_Rightbracket))
+    {
+        tumbler[SWITCH_PARKING_BRAKE].reset();
+    }
+
+    if (getKeyState(KEY_Rightbracket) && !getKeyState(KEY_Leftbracket))
+    {
+        tumbler[SWITCH_PARKING_BRAKE].set();
+    }
 }

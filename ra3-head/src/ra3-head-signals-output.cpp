@@ -21,8 +21,11 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[BUTTON_START].getState());
     analogSignal[SIG_BUTTON_STOP] = static_cast<float>(tumbler[BUTTON_STOP].getState());
 
+    analogSignal[SW_PARKING_BRAKE] = static_cast<float>(tumbler[SWITCH_PARKING_BRAKE].getState());
 
     analogSignal[BLOK_REVERS] = static_cast<float>(mpsu->getOutputData().getReversorDir());
+
+
 
     // Колесные пары
     analogSignal[WHEEL_1] = static_cast<float>(dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);

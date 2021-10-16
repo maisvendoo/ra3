@@ -17,7 +17,10 @@ enum
     /// Кнопка "СТАРТ" (запуск дизелей)
     BUTTON_START = 2,
     /// Кнопка "СТОП" (остановка дизелей)
-    BUTTON_STOP = 3
+    BUTTON_STOP = 3,
+
+    /// Выключатель СПТ
+    SWITCH_PARKING_BRAKE = 4
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

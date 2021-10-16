@@ -16,6 +16,8 @@ public:
 
     void setParkingBrakeAirFlow(double Q_st) { this->Q_st = Q_st; }
 
+    bool isParkingBrake() const { return is_parking_brake; }
+
 private:
 
     /// Объем камеры стояночного тормоза
@@ -29,6 +31,9 @@ private:
 
     /// Общее число пружинных энергоаккумуляторов
     int num_ea;
+
+    /// Признак зажатия СТ
+    bool is_parking_brake;
 
     void preStep(state_vector_t &Y, double t) override;
 
