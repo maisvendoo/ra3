@@ -17,13 +17,6 @@ void RA3HeadMotor::stepDisel(double t, double dt)
     disel->setStarterTorque(starter->getTorque() * static_cast<double>(starter_relay->getContactState(0)));
     disel->step(t, dt);
 
-    // Передаем давление масла в ведущую секцию
-    forward_outputs[SME_BWD_OIL_PRESS] = static_cast<float>(disel->getOilPressure());
-
-    // Передаем обороты дизеля на ведущую секцию
-    double tmp = 0;
-    forward_outputs[SME_BWD_OMEGA] = tmp = static_cast<float>(disel->getShaftFreq());
-
     starter->setVoltage(U_bat24 * static_cast<double>(starter_relay->getContactState(1)));
     starter->setOmega(disel->getStarterOmega() * static_cast<double>(starter_relay->getContactState(0)));
     starter->step(t, dt);

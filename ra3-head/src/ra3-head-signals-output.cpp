@@ -39,4 +39,6 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     mdfuSignalsOutput(t, dt);
 
     controlLampsSignalsOutput(t, dt);
+
+    stepSMESignalsOutput(t, dt);
 }

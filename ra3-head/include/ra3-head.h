@@ -212,6 +212,9 @@ private:
 
     /// Вывод сигналов на панель контрольных ламп
     void controlLampsSignalsOutput(double t, double dt);
+
+    /// Вывод сигналов СМЕ
+    void stepSMESignalsOutput(double t, double dt);
 };
 
 #endif // RA3_HEAD_H

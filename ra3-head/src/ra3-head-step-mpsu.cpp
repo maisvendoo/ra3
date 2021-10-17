@@ -17,8 +17,5 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.disel2_shaft_freq = static_cast<double>(backward_inputs[SME_BWD_OMEGA]);
 
     mpsu->setInputData(mpsu_input);
-    mpsu->step(t, dt);
-
-    // Сигнал запуска дизеля для включения ПСН в ведущей секции
-    backward_outputs[SME_BWD_DISEL_STARTED] = static_cast<float>(mpsu->getOutputData().is_disel2_started);
+    mpsu->step(t, dt);    
 }

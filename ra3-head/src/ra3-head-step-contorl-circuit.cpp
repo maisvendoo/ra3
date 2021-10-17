@@ -21,26 +21,12 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
             (tumbler[BUTTON_PWR_OFF].getState() && KM_bat_110->getContactState(0)) ||
            static_cast<bool>(forward_inputs[SME_BWD_POWER_ON]);
 
-    // Сигнал включения контактора "Бортсеть" на ведомую секцию
-    backward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_bat_110->getContactState(2));
-
     KM_bat_110->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_bat_110->step(t, dt);    
-
-    // Сигнал включения топливного насоса на ведомом дизеле
-    backward_outputs[SME_BWD_FUEL_PUMP] = static_cast<float>(mpsu->getOutputData().is_fuel_pump2_ON);
-
-    // Сигнал включения стартера на ведомом дизеле
-    backward_outputs[SME_BWD_STARTER_ON] = static_cast<float>(mpsu->getOutputData().is_starter2_ON);
-
-    // Сигнал открытия топливного клапана на ведомом дизеле
-    backward_outputs[SME_BWD_FUEL_VALVE_OPEN] = static_cast<float>(mpsu->getOutputData().is_fuel_valve2_open);
 
     // Главный генератор
     generator->setHydroStaticPress(hydro_pump->getPressure());
     generator->step(t, dt);
-
-    forward_outputs[SME_BWD_GENERATOR] = static_cast<float>(generator->isActive());
 
     // ПСН
     aux_conv->setPowerON(mpsu->getOutputData().is_disel1_started ||

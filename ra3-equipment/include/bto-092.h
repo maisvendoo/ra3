@@ -14,9 +14,25 @@ public:
 
     ~BTO092();
 
+    void setParkingBrakePressure(double p_pb) { this->p_pb = p_pb; }
 
+    double getParkingBrakeAirFlow() const { return Q_pb; }
+
+    void setParkingBrakeState(bool is_parking_braked)
+    {
+        this->is_parking_braked = is_parking_braked;
+    }
 
 private:
+
+    /// Давление в магистрали стояночного тормоза
+    double p_pb;
+
+    /// Поток в магистраль стояночного тормоза
+    double Q_pb;
+
+    /// Состояние стояночного тормоза
+    bool is_parking_braked;
 
     void preStep(state_vector_t &Y, double t) override;
 

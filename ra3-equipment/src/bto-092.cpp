@@ -4,6 +4,9 @@
 //
 //------------------------------------------------------------------------------
 BTO092::BTO092(QObject *parent) : AirDistributor(parent)
+  , p_pb(0.0)
+  , Q_pb(0.0)
+  , is_parking_braked(false)
 {
 
 }
