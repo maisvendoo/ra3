@@ -47,9 +47,7 @@ void RA3BrakeMech::preStep(state_vector_t &Y, double t)
     double shoe_brake_force2 = K_b2 * phi(K_b2, velocity) * Physics::g * 1000.0;
 
     // Момент от тормозных сил на колесной паре
-    brakeTorque = shoesAxis * (shoe_brake_force1 + shoe_brake_force2) * effRadius;
-
-    is_parking_brake = static_cast<bool>(hs_n(Y[1] - 0.9 * p_max));
+    brakeTorque = shoesAxis * (shoe_brake_force1 + shoe_brake_force2) * effRadius;    
 }
 
 //------------------------------------------------------------------------------

@@ -14,9 +14,7 @@ public:
 
     ~RA3BrakeMech();
 
-    void setParkingBrakeAirFlow(double Q_st) { this->Q_st = Q_st; }
-
-    bool isParkingBrake() const { return is_parking_brake; }
+    void setParkingBrakeAirFlow(double Q_st) { this->Q_st = Q_st; }    
 
     double getParkingBrakePressure() const { return getY(1); }
 
@@ -32,10 +30,7 @@ private:
     double pPM_max;
 
     /// Общее число пружинных энергоаккумуляторов
-    int num_ea;
-
-    /// Признак зажатия СТ
-    bool is_parking_brake;
+    int num_ea;    
 
     void preStep(state_vector_t &Y, double t) override;
 

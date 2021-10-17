@@ -2,6 +2,7 @@
 #define     BTO_092_H
 
 #include    "airdistributor.h"
+#include    "hysteresis.h"
 
 //------------------------------------------------------------------------------
 //
@@ -20,10 +21,12 @@ public:
 
     void setParkingBrakeState(bool is_parking_braked)
     {
-        this->is_parking_braked = is_parking_braked;
+        this->is_parking_brake_ON = is_parking_braked;
     }
 
     void setVoltage(double U_pow) { this->U_pow = U_pow; }
+
+    bool isParkingBraked();
 
 private:
 
@@ -34,6 +37,9 @@ private:
     double Q_pb;
 
     /// Состояние стояночного тормоза
+    bool is_parking_brake_ON;
+
+    /// Признак срабатывания стояночного тормоза
     bool is_parking_braked;
 
     /// Уставка давления в цилиндрах стояночного тормоза (ЦСТ)
@@ -51,6 +57,9 @@ private:
     };
 
     std::array<double, NUM_COEFFS> K;
+
+    /// Гистерезисный блок, для определения статуса СТ
+    Hysteresis  parking_brake;
 
     void preStep(state_vector_t &Y, double t) override;
 

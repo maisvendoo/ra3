@@ -6,7 +6,7 @@
 void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
 {
     bool is_parking_braked = tumbler[SWITCH_PARKING_BRAKE].getState() ||
-            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE]);
+            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
     brake_module->setVoltage(Ucc);
     brake_module->setParkingBrakeState(is_parking_braked);

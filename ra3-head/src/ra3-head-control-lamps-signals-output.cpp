@@ -14,7 +14,10 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     analogSignal[ALARM] = static_cast<float>(mpsu->getOutputData().is_red_alarm);
     analogSignal[ANXIETY] = static_cast<float>(mpsu->getOutputData().is_yellow_alarm);
 
-    analogSignal[PARKING_BRAKE] = static_cast<float>(brake_mech[FWD_TROLLEY]->isParkingBrake());
+    bool is_parking_braked = brake_module->isParkingBraked() &&
+            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
+
+    analogSignal[PARKING_BRAKE] = static_cast<float>(is_parking_braked);
 
     // Проверка наличия питания "БОРТСЕТЬ"
     bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));

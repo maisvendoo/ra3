@@ -44,5 +44,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_BWD_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
 
     // Команда управления стояночным тормозом на ведущую секцию
-    backward_outputs[SME_PARKING_BRAKE] = static_cast<float>(tumbler[SWITCH_PARKING_BRAKE].getState());
+    backward_outputs[SME_PARKING_BRAKE_ON] = static_cast<float>(tumbler[SWITCH_PARKING_BRAKE].getState());
+
+    // Сигнал состояния стояночного тормоза на ведущую секцию
+    forward_outputs[SME_PARKING_BRAKE_STATE] = static_cast<float>(brake_module->isParkingBraked());
 }

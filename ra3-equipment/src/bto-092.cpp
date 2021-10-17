@@ -6,7 +6,7 @@
 BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , p_pb(0.0)
   , Q_pb(0.0)
-  , is_parking_braked(false)
+  , is_parking_brake_ON(false)
   , pPB_max(0.4)
   , U_pow(0.0)
   , U_nom(110.0)
@@ -25,13 +25,21 @@ BTO092::~BTO092()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+bool BTO092::isParkingBraked()
+{
+    return  parking_brake.getState(p_pb);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BTO092::preStep(state_vector_t &Y, double t)
 {
     // Проверка питания
     bool is_powered = static_cast<bool>(hs_p(U_pow - 0.9 * U_nom));
 
     // Признак активации наполнения ЦСТ
-    bool is_release = is_powered && (!is_parking_braked);
+    bool is_release = is_powered && (!is_parking_brake_ON);
 
     // Состояние вентилей В1 (зажатие) В2 (отпуск) СТ
     double v2 = static_cast<double>(is_release);
@@ -65,6 +73,9 @@ void BTO092::load_config(CfgReader &cfg)
     }
 
     cfg.getDouble(secName, "pPB_max", pPB_max);
+
+    parking_brake.setRange(0.125 * pPB_max, 0.975 * pPB_max);
+
     cfg.getDouble(secName, "U_nom", U_nom);
 }
 
