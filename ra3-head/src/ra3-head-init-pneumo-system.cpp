@@ -13,4 +13,6 @@ void RA3HeadMotor::initPneumoSystem()
     motor_compr->read_custom_config(config_dir + QDir::separator() + "motor-compressor");    
 
     press_reg = new PressureRegulator(0.65, 0.8);
+
+    aux_res = new Reservoir(0.1);
 }

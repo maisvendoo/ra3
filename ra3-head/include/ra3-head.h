@@ -95,6 +95,9 @@ private:
     /// Главный резервуар
     Reservoir   *main_res;
 
+    /// Запасный резервуар
+    Reservoir   *aux_res;
+
     /// Компрессорный агрегат
     MotorCompressor *motor_compr;
 

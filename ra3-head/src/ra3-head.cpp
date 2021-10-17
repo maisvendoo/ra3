@@ -52,6 +52,9 @@ void RA3HeadMotor::initialization()
     // Инициализируем тормозные механизмы
     initBrakeMech();
 
+    // Инициализация тормозного оборудования
+    initBrakeEquipment();
+
     // Инициализация разного оборудования
     initOtherEquipment();
 
@@ -81,6 +84,9 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа тормозных механизмов
     stepBrakeMech(t, dt);
+
+    // Работа тормозного оборудования
+    stepBrakeEquipment(t, dt);
 
     // Работа разного оборудования
     stepOtherEquipment(t, dt);
