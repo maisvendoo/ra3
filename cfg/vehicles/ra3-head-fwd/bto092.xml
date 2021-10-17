@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <Device>
+    	
+        <pPB_max>0.4</pPB_max>
+
+        <!-- Темп выпуска из ЦСТ в атмосферу -->
+        <K1>5e-4</K1>
+
+        <!-- Темп наполнения ЦСТ -->
+        <K2>1.3e-3</K2>
+
+    </Device>
+</Config>

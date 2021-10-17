@@ -25,8 +25,10 @@ RA3BrakeMech::~RA3BrakeMech()
 //------------------------------------------------------------------------------
 void RA3BrakeMech::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(t)
+
     // Нажатие от пружинного аккумулятора стояночного тормоза
-    double K_st = Kmax * (1 - Y[1] / pPM_max);
+    double K_st = Kmax * (1 - Y[1] / p_max);
 
     // Нажатие от блок-тормоза без энергоаккумулятора
     double K_b1 = Kmax * Y[0] / p_max;
@@ -47,7 +49,7 @@ void RA3BrakeMech::preStep(state_vector_t &Y, double t)
     // Момент от тормозных сил на колесной паре
     brakeTorque = shoesAxis * (shoe_brake_force1 + shoe_brake_force2) * effRadius;
 
-    is_parking_brake = static_cast<bool>(hs_n(Y[1] - p_max));
+    is_parking_brake = static_cast<bool>(hs_n(Y[1] - 0.9 * p_max));
 }
 
 //------------------------------------------------------------------------------

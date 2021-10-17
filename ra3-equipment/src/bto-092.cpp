@@ -7,8 +7,9 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , p_pb(0.0)
   , Q_pb(0.0)
   , is_parking_braked(false)
+  , pPB_max(0.4)
 {
-
+    std::fill(K.begin(), K.end(), 0.0);
 }
 
 //------------------------------------------------------------------------------
@@ -24,7 +25,11 @@ BTO092::~BTO092()
 //------------------------------------------------------------------------------
 void BTO092::preStep(state_vector_t &Y, double t)
 {
+    // Управление стояночным тормозом
+    double u_pb = cut(static_cast<double>(is_parking_braked), 0.0, 1.0);
 
+    // Расход в цилиндры стояночного тормоза
+    Q_pb = K[2] * (1.0 - u_pb) * (pAS - p_pb) - K[1] * u_pb * p_pb;
 }
 
 //------------------------------------------------------------------------------
@@ -42,6 +47,14 @@ void BTO092::ode_system(const state_vector_t &Y,
 //------------------------------------------------------------------------------
 void BTO092::load_config(CfgReader &cfg)
 {
+    QString secName = "Device";
 
+    for (size_t i = 1; i < K.size(); ++i)
+    {
+        QString coeff = QString("K%1").arg(i);
+        cfg.getDouble(secName, coeff, K[i]);
+    }
+
+    cfg.getDouble(secName, "pPB_max", pPB_max);
 }
 
