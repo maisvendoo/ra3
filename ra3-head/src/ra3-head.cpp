@@ -4,6 +4,7 @@
 //
 //------------------------------------------------------------------------------
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
+  , main_res_leak(0.0)
   , is_active(false)
   , bat110(Q_NULLPTR)
   , bat24(Q_NULLPTR)
@@ -120,6 +121,8 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
         }
 
         cfg.getBool(secName, "IsActive", is_active);
+
+        cfg.getDouble(secName, "MainResLeak", main_res_leak);
     }
 }
 

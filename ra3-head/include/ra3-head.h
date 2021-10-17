@@ -34,6 +34,9 @@ public:
 
 private:
 
+    /// Темп утечки из ГР
+    double main_res_leak;
+
     /// Признак активной кабины
     bool is_active;
 

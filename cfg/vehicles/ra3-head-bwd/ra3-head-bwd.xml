@@ -8,7 +8,9 @@
         <MainResist>loco-resist</MainResist>
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
-        <WheelInertia>2.0</WheelInertia>	
+        <WheelInertia>2.0</WheelInertia>
+
+        <MainResLeak>4e-5</MainResLeak>	
 
         <!--<ExtTexturesDir>ra3/rzd</ExtTexturesDir>-->		
 		

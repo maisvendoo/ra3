@@ -12,6 +12,8 @@
 		
 		<FuelCapacity>350</FuelCapacity>
 		<FuelLevel>1.0</FuelLevel>
+
+        <MainResLeak>4e-5</MainResLeak>
         
         <!--<ExtTexturesDir>ra3/rzd</ExtTexturesDir>-->
 		
