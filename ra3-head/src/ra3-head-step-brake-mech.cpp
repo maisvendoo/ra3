@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepBrakeMech(double t, double dt)
 {
+    brake_mech[FWD_TROLLEY]->setParkingBrakeAirFlow(pb_split->getQ_out1());
+    brake_mech[BWD_TROLLEY]->setParkingBrakeAirFlow(pb_split->getQ_out2());
+
     for (size_t i = 0; i < brake_mech.size(); ++i)
     {
         brake_mech[i]->step(t, dt);

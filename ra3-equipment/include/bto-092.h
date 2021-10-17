@@ -23,6 +23,8 @@ public:
         this->is_parking_braked = is_parking_braked;
     }
 
+    void setVoltage(double U_pow) { this->U_pow = U_pow; }
+
 private:
 
     /// Давление в магистрали стояночного тормоза
@@ -36,6 +38,12 @@ private:
 
     /// Уставка давления в цилиндрах стояночного тормоза (ЦСТ)
     double pPB_max;
+
+    /// Напряжение питания
+    double U_pow;
+
+    /// Номинальное напряжение питания
+    double U_nom;
 
     enum
     {

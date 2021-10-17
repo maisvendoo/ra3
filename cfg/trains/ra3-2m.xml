@@ -5,7 +5,7 @@
         <CouplingModule>ef-coupling</CouplingModule>
         <CabineInVehicle>0</CabineInVehicle>
         <ChargingPressure>0.5</ChargingPressure>
-        <InitMainResPressure>0.9</InitMainResPressure>
+        <InitMainResPressure>0.8</InitMainResPressure>
         <NoAir>0</NoAir>
         <Title>РА3 (двухвагонный)</Title>
         <Description>Дизель-поезд РА3</Description>            

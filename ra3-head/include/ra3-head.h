@@ -107,6 +107,9 @@ private:
     /// Блок тормозного оборудования БТО-092
     BTO092  *brake_module;
 
+    /// Тройник на питание СТ
+    PneumoSplitter *pb_split;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
@@ -133,6 +136,8 @@ private:
     std::array<Trigger, TUMBLERS_NUM> tumbler;
 
     void initialization() override;
+
+    void initBrakeDevices(double p0, double pTM, double pFL) override;
 
     /// Инициализация органов управления в кабине
     void initCabineControls();
