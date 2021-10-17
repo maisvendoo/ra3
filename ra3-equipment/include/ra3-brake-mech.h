@@ -18,6 +18,8 @@ public:
 
     bool isParkingBrake() const { return is_parking_brake; }
 
+    double getParkingBrakePressure() const { return getY(1); }
+
 private:
 
     /// Объем камеры стояночного тормоза

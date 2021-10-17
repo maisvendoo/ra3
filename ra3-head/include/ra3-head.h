@@ -17,6 +17,7 @@
 #include    "motor-compressor.h"
 #include    "pressure-regulator.h"
 #include    "ra3-brake-mech.h"
+#include    "bto-092.h"
 
 #include    "ra3-head-signals.h"
 
@@ -97,6 +98,9 @@ private:
     /// Регулятор давления в ГР
     PressureRegulator *press_reg;
 
+    /// Блок тормозного оборудования БТО-092
+    BTO092  *brake_module;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
@@ -145,6 +149,9 @@ private:
     /// Инициализация механической части тормозной системы
     void initBrakeMech();
 
+    /// Инициализация тормозного оборудования
+    void initBrakeEquipment();
+
     /// Инициализация прочего оборудования
     void initOtherEquipment();
 
@@ -152,6 +159,9 @@ private:
     void initSounds();
 
     void step(double t, double dt) override;
+
+    /// Моделирование работы органов управления в кабине
+    void stepCabineControls(double t, double dt);
 
     /// Моедлирования работы системы питания топливом
     void stepFuelSystem(double t, double dt);
@@ -170,6 +180,9 @@ private:
 
     /// Работа механической части тормозной системы
     void stepBrakeMech(double t, double dt);
+
+    /// Работа тормозного оборудования
+    void stepBrakeEquipment(double t, double dt);
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);
