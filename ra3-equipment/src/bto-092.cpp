@@ -10,6 +10,7 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , pPB_max(0.4)
   , U_pow(0.0)
   , U_nom(110.0)
+  , sw_valve(new SwitchingValve)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }
@@ -33,7 +34,7 @@ bool BTO092::isParkingBraked()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void BTO092::preStep(state_vector_t &Y, double t)
+void BTO092::stepParkingBrake()
 {
     // Проверка питания
     bool is_powered = static_cast<bool>(hs_p(U_pow - 0.9 * U_nom));
@@ -45,8 +46,17 @@ void BTO092::preStep(state_vector_t &Y, double t)
     double v2 = static_cast<double>(is_release);
     double v1 = 1.0 - v2;
 
+    // Расход воздуха в цилиндры СТ
     Q_pb = K[2] * (pAS - p_pb) * v2 * hs_n(p_pb - pPB_max) -
            K[1] * p_pb * v1;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BTO092::preStep(state_vector_t &Y, double t)
+{
+    stepParkingBrake();
 }
 
 //------------------------------------------------------------------------------
