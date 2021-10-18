@@ -2,6 +2,7 @@
 #define     KRU091_H
 
 #include    "brake-crane.h"
+#include    "pneumo-reducer.h"
 
 //------------------------------------------------------------------------------
 //
@@ -14,7 +15,17 @@ public:
 
     ~KRU091();
 
+    void step(double t, double dt) override;
+
+    void setPosition(int &position) override;
+
+    QString getPositionName() override;
+
+    float getHandlePosition() override;
+
 private:
+
+
 
     void preStep(state_vector_t &Y, double t) override;
 

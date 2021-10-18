@@ -18,6 +18,7 @@
 #include    "pressure-regulator.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
+#include    "kru-091.h"
 
 #include    "ra3-head-signals.h"
 
@@ -110,6 +111,9 @@ private:
     /// Тройник на питание СТ
     PneumoSplitter *pb_split;
 
+    /// Кран резервного управления
+    KRU091  *kru;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
@@ -163,6 +167,9 @@ private:
     /// Инициализация тормозного оборудования
     void initBrakeEquipment();
 
+    /// Инициализация приборов управления тормозами
+    void initBrakeControls();
+
     /// Инициализация прочего оборудования
     void initOtherEquipment();
 
@@ -194,6 +201,9 @@ private:
 
     /// Работа тормозного оборудования
     void stepBrakeEquipment(double t, double dt);
+
+    /// Работа приборов управления тормозами
+    void stepBrakeControls(double t, double dt);
 
     /// Выбод сигналов
     void stepSignalsOutput(double t, double dt);

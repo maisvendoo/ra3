@@ -1,0 +1,12 @@
+#include    "ra3-head.h"
+
+#include    <QDir>
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void RA3HeadMotor::initBrakeControls()
+{
+    kru = new KRU091();
+    kru->read_custom_config(config_dir + QDir::separator() + "kru091");
+}
