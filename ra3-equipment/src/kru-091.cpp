@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
 {
-
+    std::fill(K.begin(), K.end(), 0.0);
 }
 
 //------------------------------------------------------------------------------
@@ -71,6 +71,12 @@ void KRU091::ode_system(const state_vector_t &Y,
 //------------------------------------------------------------------------------
 void KRU091::load_config(CfgReader &cfg)
 {
+    QString secName = "Device";
 
+    for (size_t i = 1; i < K.size(); ++i)
+    {
+        QString coeff = QString("K%1").arg(i);
+        cfg.getDouble(secName, coeff, K[i]);
+    }
 }
 

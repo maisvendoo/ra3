@@ -26,6 +26,13 @@ public:
 private:
 
 
+    enum
+    {
+        NUM_COEFFS = 10
+    };
+
+    std::array<double, NUM_COEFFS> K;
+
 
     void preStep(state_vector_t &Y, double t) override;
 
