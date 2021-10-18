@@ -1,5 +1,7 @@
 #include    "kru-091.h"
 
+#include    <QDir>
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -11,6 +13,9 @@ KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
   , incTimer(new Timer(pos_delay))
   , decTimer(new Timer(pos_delay))
   , eq_res(new Reservoir(0.002))
+  , vr(1.0)
+  , vb(0.0)
+  , reducer(new PneumoReducer)
 {
     std::fill(K.begin(), K.end(), 0.0);
 
@@ -34,6 +39,13 @@ void KRU091::step(double t, double dt)
     incTimer->step(t, dt);
     decTimer->step(t, dt);
 
+    reducer->setRefPressure(p0);
+    reducer->setInputPressure(pFL);
+    reducer->step(t, dt);
+
+    eq_res->setFlowCoeff(eq_res_leak);
+    eq_res->step(t, dt);
+
     BrakeCrane::step(t, dt);
 }
 
@@ -42,7 +54,20 @@ void KRU091::step(double t, double dt)
 //------------------------------------------------------------------------------
 void KRU091::setPosition(int &position)
 {
+    switch (position)
+    {
+    case POS_RELEASE:
+        vr = 1.0;
+        break;
 
+    case POS_BRAKE:
+        vb = 1.0;
+        break;
+
+    default:
+        vr = vb = 0.0;
+        break;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -66,7 +91,20 @@ float KRU091::getHandlePosition()
 //------------------------------------------------------------------------------
 void KRU091::preStep(state_vector_t &Y, double t)
 {
+    // Поток воздуха в РР
+    Y[ER_PRESSURE] = eq_res->getPressure();
 
+    // Расход воздуха из редуктора
+    double Qr = K[1] * (reducer->getOutPressure() - Y[ER_PRESSURE]);
+
+    // Расход воздуха из РР
+    double Qer = Qr * vr - K[2] * Y[ER_PRESSURE] * vb;
+
+    eq_res->setAirFlow(Qer);
+
+    reducer->setQ_out(-Qr * vr);
+
+    DebugMsg = QString(" RD: %1").arg(reducer->getOutPressure(), 4, 'f', 2);
 }
 
 //------------------------------------------------------------------------------
@@ -101,6 +139,12 @@ void KRU091::load_config(CfgReader &cfg)
 
     incTimer->setTimeout(pos_delay);
     decTimer->setTimeout(pos_delay);
+
+    reducer->read_custom_config(custom_config_dir +
+                                QDir::separator() +
+                                "pneumo-reducer");
+
+    cfg.getDouble(secName, "EqResLeak", eq_res_leak);
 }
 
 //------------------------------------------------------------------------------

@@ -47,6 +47,18 @@ private:
 
     Reservoir *eq_res;
 
+    /// Клапан зарядки РР
+    double vr;
+
+    /// Клапан разрядки РР
+    double vb;
+
+    /// Редуктор
+    PneumoReducer *reducer;
+
+    /// Утечка из РР
+    double eq_res_leak;
+
     enum
     {
         NUM_COEFFS = 10

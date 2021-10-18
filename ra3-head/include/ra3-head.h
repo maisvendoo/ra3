@@ -35,6 +35,9 @@ public:
 
 private:
 
+    /// Зарядное давление ТМ
+    double charge_press;
+
     /// Темп утечки из ГР
     double main_res_leak;
 

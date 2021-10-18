@@ -4,6 +4,7 @@
 //
 //------------------------------------------------------------------------------
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
+  , charge_press(0.5)
   , main_res_leak(0.0)
   , is_active(false)
   , bat110(Q_NULLPTR)
@@ -72,6 +73,8 @@ void RA3HeadMotor::initBrakeDevices(double p0, double pTM, double pFL)
 {
     main_res->setY(0, pFL);
     aux_res->setY(0, pFL);
+
+    charge_press = p0;
 }
 
 //------------------------------------------------------------------------------
