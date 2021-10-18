@@ -23,6 +23,8 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
 
     analogSignal[SW_PARKING_BRAKE] = static_cast<float>(tumbler[SWITCH_PARKING_BRAKE].getState());
 
+    analogSignal[HANDLE_KRU_091] = kru->getHandlePosition();
+
     analogSignal[BLOK_REVERS] = static_cast<float>(mpsu->getOutputData().getReversorDir());
 
 

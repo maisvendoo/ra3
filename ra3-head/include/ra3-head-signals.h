@@ -97,6 +97,8 @@ enum
 
     SW_PARKING_BRAKE = 114,
 
+    HANDLE_KRU_091 = 115,
+
     ACTIVE_COCKPIT = 150,
     ALARM = 151,
     ANXIETY = 152,

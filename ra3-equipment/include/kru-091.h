@@ -3,6 +3,7 @@
 
 #include    "brake-crane.h"
 #include    "pneumo-reducer.h"
+#include    "reservoir.h"
 
 //------------------------------------------------------------------------------
 //
@@ -25,6 +26,26 @@ public:
 
 private:
 
+    enum
+    {
+        POS_RELEASE = 0,
+        POS_HOLD = 1,
+        POS_BRAKE = 2
+    };
+
+    int handle_pos;
+
+    int min_pos;
+
+    int max_pos;
+
+    double pos_delay;
+
+    Timer *incTimer;
+
+    Timer *decTimer;
+
+    Reservoir *eq_res;
 
     enum
     {
@@ -41,6 +62,14 @@ private:
                     double t) override;
 
     void load_config(CfgReader &cfg) override;
+
+    void stepKeysControl(double t, double dt) override;
+
+private slots:
+
+    void inc_position();
+
+    void dec_position();
 };
 
 #endif // KRU091_H
