@@ -14,6 +14,14 @@ public:
 
     ~PneumoReducer();
 
+    void setRefPressure(double p_ref) { this->p_ref = p_ref; }
+
+    void setQ_out(double Q_out) { this->Q_out = Q_out; }
+
+    void setInputPressure(double p_in) { this->p_in = p_in; }
+
+    double getOutPressure() const { return getY(0); }
+
 private:
 
     /// Уставка давления на выходе редуктора
@@ -24,6 +32,19 @@ private:
 
     /// Давление на входе редуктора
     double p_in;
+
+    /// Расход из рабочей полости редуктора
+    double Q_out;
+
+    /// Расход в рабочую полость
+    double Q_in;
+
+    enum
+    {
+        NUM_COEFFS = 10
+    };
+
+    std::array<double, NUM_COEFFS> K;
 
     void preStep(state_vector_t &Y, double t);
 
