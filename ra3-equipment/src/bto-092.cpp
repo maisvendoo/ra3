@@ -10,6 +10,7 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , pPB_max(0.4)
   , U_pow(0.0)
   , U_nom(110.0)
+  , sw_valve(new SwitchingValve)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }

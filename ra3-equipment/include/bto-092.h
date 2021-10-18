@@ -3,6 +3,7 @@
 
 #include    "airdistributor.h"
 #include    "hysteresis.h"
+#include    "switching-valve.h"
 
 //------------------------------------------------------------------------------
 //
@@ -50,6 +51,9 @@ private:
 
     /// Номинальное напряжение питания
     double U_nom;
+
+    /// Переключательный клапан
+    SwitchingValve *sw_valve;
 
     enum
     {
