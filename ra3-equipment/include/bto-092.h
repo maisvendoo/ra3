@@ -68,6 +68,9 @@ private:
                     double t) override;
 
     void load_config(CfgReader &cfg) override;
+
+    /// Моделирование управления стояночным тормозом
+    void stepParkingBrake();
 };
 
 #endif // BTO092_H
