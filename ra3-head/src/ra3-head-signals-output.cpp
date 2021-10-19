@@ -17,6 +17,8 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
 
     analogSignal[STRELKA_P_GR] = static_cast<float>(main_res->getPressure() / 1.2);
     analogSignal[STRELKA_P_TM] = static_cast<float>(pTM / 1.2);
+    analogSignal[STRELKA_P_TC1] = static_cast<float>(brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure() / 0.6);
+    analogSignal[STRELKA_P_TC2] = static_cast<float>(brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure() / 0.6);
 
     // Кнопки пуска и остановки дизелей
     analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[BUTTON_START].getState());
