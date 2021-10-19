@@ -16,6 +16,11 @@ KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
   , vr(1.0)
   , vb(0.0)
   , reducer(new PneumoReducer)
+  , eq_res_leak(0.0)
+  , V_bp(0.002)
+  , A(1.0)
+  , u1(0.0)
+  , u2(0.0)
 {
     std::fill(K.begin(), K.end(), 0.0);
 
@@ -100,9 +105,18 @@ void KRU091::preStep(state_vector_t &Y, double t)
     // Расход воздуха из РР
     double Qer = Qr * vr - K[2] * Y[ER_PRESSURE] * vb;
 
+    // Задаем расход в РР
     eq_res->setAirFlow(Qer);
 
+    // Задаем расход из рабочего объема редуктора
     reducer->setQ_out(-Qr * vr);
+
+    // Разница давлений в УР и ТМ
+    double dp = Y[ER_PRESSURE] - Y[BP_PRESSURE];
+
+    // Расчет проходных сечений клапанов РД
+    u1 = cut(nf(A * dp), 0.0, 1.0); // Разрядка ТМ
+    u2 = cut(pf(A * dp), 0.0, 1.0); // Зарядка ТМ
 
     DebugMsg = QString(" RD: %1").arg(reducer->getOutPressure(), 4, 'f', 2);
 }
@@ -114,7 +128,10 @@ void KRU091::ode_system(const state_vector_t &Y,
                         state_vector_t &dYdt,
                         double t)
 {
+    // Расход воздуха из ТМ
+    double Q_bp = - K[3] * Y[BP_PRESSURE] * u1 + K[4] * (pFL - Y[BP_PRESSURE]) * u2;
 
+    dYdt[BP_PRESSURE] = Q_bp / V_bp;
 }
 
 //------------------------------------------------------------------------------
@@ -145,6 +162,9 @@ void KRU091::load_config(CfgReader &cfg)
                                 "pneumo-reducer");
 
     cfg.getDouble(secName, "EqResLeak", eq_res_leak);
+
+    cfg.getDouble(secName, "V_bp", V_bp);
+    cfg.getDouble(secName, "A", A);
 }
 
 //------------------------------------------------------------------------------
