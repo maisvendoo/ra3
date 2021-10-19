@@ -29,6 +29,8 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     analogSignal[HANDLE_KRU_091] = kru->getHandlePosition();
 
     analogSignal[BLOK_REVERS] = static_cast<float>(mpsu->getOutputData().getReversorDir());
+    analogSignal[BLOK_TM_PRESS] = static_cast<float>(pTM);
+    analogSignal[BLOK_TC_PRESS] = static_cast<float>(brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure());
 
 
 

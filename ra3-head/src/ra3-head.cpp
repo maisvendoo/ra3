@@ -75,6 +75,9 @@ void RA3HeadMotor::initBrakeDevices(double p0, double pTM, double pFL)
     aux_res->setY(0, pFL);
 
     charge_press = p0;
+
+    kru->init(pTM, pFL);
+    brake_module->init(pTM, pFL);
 }
 
 //------------------------------------------------------------------------------
