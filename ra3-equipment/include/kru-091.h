@@ -24,6 +24,8 @@ public:
 
     float getHandlePosition() override;
 
+    void init(double pTM, double pFL) override;
+
 private:
 
     enum
