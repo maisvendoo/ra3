@@ -236,6 +236,12 @@ private:
 
     /// Вывод сигналов СМЕ
     void stepSMESignalsOutput(double t, double dt);
+
+    /// Вывод сигналов на дисплей БЛОК-М
+    void blokSignalsOutput(double t, double dt);
+
+    /// Вывод сигналов на анимации модели поезда
+    void animationSignalsOutput(double t, double dt);
 };
 
 #endif // RA3_HEAD_H
