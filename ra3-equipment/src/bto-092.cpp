@@ -110,9 +110,24 @@ void BTO092::stepPneumoBrake()
     double Qpk1 = K[6] * (bc_reducer->getOutPressure() - p1) * v2 -
                  K[4] * p1 * v1;
 
-    // Переключательный клапан
-    sw_valve->setInputFlow1(Qpk1);
-    sw_valve->setInputFlow2(0.0);
+    // Состояние вентилей ЭПТ
+    double vr = qAbs(state_ept);
+    double vb = pf(state_ept);
+
+    release_valve->setVoltage(U_pow * vr);
+    brake_valve->setVoltage(U_pow * vb);
+
+    // Расход воздуха в ПК при работе ЭПТ
+    double p2 = sw_valve->getPressure2();
+
+    double ub = static_cast<double>(brake_valve->getContactState(0));
+    double ur = static_cast<double>(release_valve->getContactState(0));
+
+    double Qpk2 = K[8] * (pAS - p2) * ub - K[9] * p2 * ur;
+
+    // Переключательный клапан (ПК)
+    sw_valve->setInputFlow1(Qpk1); // Пневматическое торможение от КПУ
+    sw_valve->setInputFlow2(Qpk2); // Электропневматическое торможение (ЭПТ)
     sw_valve->setOutputPressure(keb->getP_in());
 
     // КЭБ
