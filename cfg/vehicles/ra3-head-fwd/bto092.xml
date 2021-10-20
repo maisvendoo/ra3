@@ -3,8 +3,9 @@
     <Device>
     	
         <pPB_max>0.4</pPB_max>
-        <pBC_max>0.4</pBC_max>
-        <A>0.5</A>
+        <pBC_max>0.38</pBC_max>
+        <A>0.47</A>
+        <ps>0.485</ps>
         <U_nom>110</U_nom>
 
         <!-- Темп выпуска из ЦСТ в атмосферу -->
