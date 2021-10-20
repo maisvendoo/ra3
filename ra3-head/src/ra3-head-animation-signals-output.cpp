@@ -10,7 +10,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[SIG_BUTTON_OFF] = static_cast<float>(!tumbler[BUTTON_PWR_OFF].getState());
 
     analogSignal[STRELKA_VOLTMETER110] = static_cast<float>(Ucc / 150.0);
-    //analogSignal[STRELKA_VOLTMETER24] = static_cast<float>(0);//bat24->getVoltage() / 30.0);
+    analogSignal[STRELKA_VOLTMETER24] = static_cast<float>(bat24->getVoltage() / 30.0);
 
     analogSignal[STRELKA_P_GR] = static_cast<float>(main_res->getPressure() / 1.2);
     analogSignal[STRELKA_P_TM] = static_cast<float>(pTM / 1.2);
@@ -26,6 +26,10 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[HANDLE_KRU_091] = kru->getHandlePosition();
 
     analogSignal[LS_G1] = analogSignal[LS_G1_1] =  1.0f;
+
+    // Свисток и тифон
+    analogSignal[SIG_BUTTON_WHISTLE] = static_cast<float>(horn->isSvistok());
+    analogSignal[SIG_BUTTON_TYPHON] = static_cast<float>(horn->isTifon());
 
     // Колесные пары
     analogSignal[WHEEL_1] = static_cast<float>(dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
