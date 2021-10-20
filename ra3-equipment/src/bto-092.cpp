@@ -21,6 +21,9 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , work_res(new Reservoir(0.001))
   , is_release(false)
   , keb(new ElectroLockValve)
+  , release_valve(new Relay(1))
+  , brake_valve(new Relay(1))
+  , state_ept(0)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }
@@ -107,15 +110,18 @@ void BTO092::stepPneumoBrake()
     double Qpk1 = K[6] * (bc_reducer->getOutPressure() - p1) * v2 -
                  K[4] * p1 * v1;
 
+    // Переключательный клапан
     sw_valve->setInputFlow1(Qpk1);
     sw_valve->setInputFlow2(0.0);
     sw_valve->setOutputPressure(keb->getP_in());
 
+    // КЭБ
     keb->setVoltage(U_pow);
     keb->setState(is_release);
     keb->setQ_in(sw_valve->getOutputFlow());
     keb->setP_out(bc_relay->getWorkPressure());
 
+    // Реле давления
     bc_relay->setWorkAirFlow(keb->getQ_out());
     bc_relay->setBrakeCylPressure(pBC);
     bc_relay->setPipelinePressure(pAS);
@@ -174,5 +180,17 @@ void BTO092::load_config(CfgReader &cfg)
 
     keb->setCustomConfigDir(custom_config_dir);
     keb->read_custom_config(custom_config_dir + QDir::separator() + "keb");
+
+    release_valve->read_custom_config(custom_config_dir +
+                                      QDir::separator() +
+                                      "mk");
+
+    release_valve->setInitContactState(0, true);
+
+    brake_valve->read_custom_config(custom_config_dir +
+                                    QDir::separator() +
+                                    "mk");
+
+    brake_valve->setInitContactState(0, false);
 }
 

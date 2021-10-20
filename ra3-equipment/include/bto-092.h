@@ -35,7 +35,9 @@ public:
 
     void step(double t, double dt) override;
 
-    void releaseBrakes(bool is_release) { this->is_release = is_release; };
+    void releaseBrakes(bool is_release) { this->is_release = is_release; }
+
+    //void setStateEPT(int state_ept) { this->state_ept = state_ept; }
 
 private:
 
@@ -86,6 +88,16 @@ private:
 
     /// КЭБ (Клапан электроблокировочный)
     ElectroLockValve *keb;
+
+    /// Вентиль отпуска ЭПТ (ВО)
+    Relay   *release_valve;
+
+    /// Вентиль торможения ЭПТ (ВТ)
+    Relay   *brake_valve;
+
+    /// Управляющий сигнал ЭПТ
+    /// (0 - "Отпуск", -1 - "Перекрыша", 1 - "Торможение")
+    int state_ept;
 
     enum
     {
