@@ -26,7 +26,7 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
     this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     this->layout()->setContentsMargins(0, 0, 0, 0);
 
-    connect(&updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer);
+    connect(&updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer, Qt::QueuedConnection);
     updateTimer_.setInterval(1000);
     updateTimer_.start();
 }
