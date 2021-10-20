@@ -19,6 +19,8 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , A(0.5)
   , ps(0.5)
   , work_res(new Reservoir(0.001))
+  , is_release(false)
+  , keb(new ElectroLockValve)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }
@@ -51,6 +53,8 @@ void BTO092::step(double t, double dt)
     bc_relay->step(t, dt);
 
     work_res->step(t, dt);
+
+    keb->step(t, dt);
 
     AirDistributor::step(t, dt);
 }
@@ -105,9 +109,14 @@ void BTO092::stepPneumoBrake()
 
     sw_valve->setInputFlow1(Qpk1);
     sw_valve->setInputFlow2(0.0);
-    sw_valve->setOutputPressure(bc_relay->getWorkPressure());
+    sw_valve->setOutputPressure(keb->getP_in());
 
-    bc_relay->setWorkAirFlow(sw_valve->getOutputFlow());
+    keb->setVoltage(U_pow);
+    keb->setState(is_release);
+    keb->setQ_in(sw_valve->getOutputFlow());
+    keb->setP_out(bc_relay->getWorkPressure());
+
+    bc_relay->setWorkAirFlow(keb->getQ_out());
     bc_relay->setBrakeCylPressure(pBC);
     bc_relay->setPipelinePressure(pAS);
 
@@ -162,5 +171,8 @@ void BTO092::load_config(CfgReader &cfg)
     bc_reducer->read_custom_config(custom_config_dir +
                                    QDir::separator() +
                                    "pneumo-reducer");
+
+    keb->setCustomConfigDir(custom_config_dir);
+    keb->read_custom_config(custom_config_dir + QDir::separator() + "keb");
 }
 

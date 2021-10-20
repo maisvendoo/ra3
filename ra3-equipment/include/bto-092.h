@@ -7,6 +7,7 @@
 #include    "pneumo-reducer.h"
 #include    "pneumo-relay.h"
 #include    "reservoir.h"
+#include    "electro-lock-valve.h"
 
 //------------------------------------------------------------------------------
 //
@@ -33,6 +34,8 @@ public:
     bool isParkingBraked();
 
     void step(double t, double dt) override;
+
+    void releaseBrakes(bool is_release) { this->is_release = is_release; };
 
 private:
 
@@ -77,6 +80,12 @@ private:
 
     /// Условный резервуар, имитирующий рабочую полость КПУ
     Reservoir   *work_res;
+
+    /// Сигнал включения КЭБ для отпуска тормозов
+    bool is_release;
+
+    /// КЭБ (Клапан электроблокировочный)
+    ElectroLockValve *keb;
 
     enum
     {

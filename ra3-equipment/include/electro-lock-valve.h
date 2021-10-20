@@ -30,8 +30,6 @@ public:
 
     double getP_in() const { return p_in; }
 
-    double getQ_atm() const { return Q_atm; }
-
 private:
 
     double U;
@@ -45,8 +43,6 @@ private:
     double p_in;
 
     double p_out;
-
-    double Q_atm;
 
     double K_atm;
 
