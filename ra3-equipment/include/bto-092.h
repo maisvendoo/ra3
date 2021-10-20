@@ -4,6 +4,9 @@
 #include    "airdistributor.h"
 #include    "hysteresis.h"
 #include    "switching-valve.h"
+#include    "pneumo-reducer.h"
+#include    "pneumo-relay.h"
+#include    "reservoir.h"
 
 //------------------------------------------------------------------------------
 //
@@ -28,6 +31,8 @@ public:
     void setVoltage(double U_pow) { this->U_pow = U_pow; }
 
     bool isParkingBraked();
+
+    void step(double t, double dt) override;
 
 private:
 
@@ -55,6 +60,24 @@ private:
     /// Переключательный клапан
     SwitchingValve *sw_valve;
 
+    /// Редуктор питания магистрали ТЦ
+    PneumoReducer *bc_reducer;
+
+    /// Реле давления для наполнения ТЦ
+    PneumoReley *bc_relay;
+
+    /// Максимальное давление в тормозных цилиндрах
+    double pBC_max;
+
+    /// Условная площадь управляющего поршня
+    double A;
+
+    /// Давление пружин
+    double ps;
+
+    /// Условный резервуар, имитирующий рабочую полость КПУ
+    Reservoir   *work_res;
+
     enum
     {
         NUM_COEFFS = 10
@@ -75,6 +98,9 @@ private:
 
     /// Моделирование управления стояночным тормозом
     void stepParkingBrake();
+
+    /// Моделирование работы пневматического торможения
+    void stepPneumoBrake();
 };
 
 #endif // BTO092_H

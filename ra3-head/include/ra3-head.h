@@ -117,6 +117,9 @@ private:
     /// Кран резервного управления
     KRU091  *kru;
 
+    /// Тройник на питание ТЦ
+    PneumoSplitter *bc_split;
+
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
