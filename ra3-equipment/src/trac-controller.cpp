@@ -9,13 +9,16 @@ TracController::TracController(QObject *parent) : Device(parent)
   , old_brake_key(false)
   , trac_min(0.17)
   , brake_min(0.26)
-  , trac_level(0.0)
-  , brake_level(0.0)
+  , trac_level(0)
+  , brake_level(0)
   , handle_pos(0.0)
-  , handle_omega(0.5)
+  , omega_handle(0.5)
   , dir(0)
+  , brakeTimer(new Timer)
+  , tracTimer(new Timer)
 {
-
+    connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
+    connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
 }
 
 //------------------------------------------------------------------------------
@@ -31,7 +34,9 @@ TracController::~TracController()
 //------------------------------------------------------------------------------
 float TracController::getHandlePosition() const
 {
-    return handle_pos / 5.0;
+    double level = mode_pos * 100 + trac_level - brake_level;
+
+    return static_cast<float>(level) / 500.0f;
 }
 
 //------------------------------------------------------------------------------
@@ -61,7 +66,10 @@ void TracController::load_config(CfgReader &cfg)
 
     cfg.getDouble(secName, "trac_min", trac_min);
     cfg.getDouble(secName, "brake_min", brake_min);
-    cfg.getDouble(secName, "handle_omega", handle_omega);
+    cfg.getDouble(secName, "omega_handle", omega_handle);
+
+    brakeTimer->setTimeout(0.02);
+    tracTimer->setTimeout(0.02);
 }
 
 //------------------------------------------------------------------------------
@@ -69,47 +77,78 @@ void TracController::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 void TracController::stepKeysControl(double t, double dt)
 {
-    if (getKeyState(KEY_A))
+    processDiscretePositions(getKeyState(KEY_A), old_traction_key, 1);
+    processDiscretePositions(getKeyState(KEY_D), old_brake_key, -1);
+
+    if (mode_pos == -1)
     {
-        if (isZero() && !old_traction_key)
+        traction.reset();
+        dir = 0;
+
+        if (!brakeTimer->isStarted())
+            brakeTimer->start();
+
+        if (getKeyState(KEY_A))
         {
-            traction.set();
-            handle_pos = 1;
+            if (brake_level == 0)
+            {
+                mode_pos = 0;
+                brakeTimer->stop();
+                brake.reset();
+            }
+            else
+            {
+                dir = 1;
+            }
         }
 
-        dir = 1;
-    }
-    else
-    {
-        dir = 0;
-    }
-
-    if (getKeyState(KEY_D))
-    {
-        if (isZero() && !old_brake_key)
+        if (getKeyState(KEY_D))
+        {
+            if (brake.getState())
+                dir = -1;
+        }
+        else
         {
             brake.set();
-            handle_pos = -1;
+        }
+    }
+
+    brakeTimer->step(t, dt);
+
+    if (mode_pos == 1)
+    {
+        brake.reset();
+        dir = 0;
+
+        if (!tracTimer->isStarted())
+            tracTimer->start();
+
+        if (getKeyState(KEY_D))
+        {
+            if (trac_level == 0)
+            {
+                mode_pos = 0;
+                tracTimer->stop();
+                traction.reset();
+            }
+            else
+            {
+                dir = -1;
+            }
         }
 
-        dir = -1;
+        if (getKeyState(KEY_A))
+        {
+            if (traction.getState())
+                dir = 1;
+        }
+        else
+        {
+            traction.set();
+        }
     }
-    else
-    {
-        dir = 0;
-    }
 
-    handle_pos += handle_omega * dir *dt;
-
-    handle_pos = cut(handle_pos, -2.0, 2.0);
-
-    /*if ( (handle_pos >= -1) && (handle_pos <= 1) )
-    {
-        dir = 0;
-        handle_pos = 0;
-        traction.reset();
-        brake.reset();
-    }*/
+    tracTimer->step(t, dt);
 
     old_traction_key = getKeyState(KEY_A);
     old_brake_key = getKeyState(KEY_D);
@@ -118,7 +157,34 @@ void TracController::stepKeysControl(double t, double dt)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void TracController::slotHandleRotate()
+void TracController::processDiscretePositions(bool key_state, bool old_key_state, int dir)
 {
+    if (mode_pos != 0)
+        return;
 
+    if ( (key_state) && (!old_key_state) )
+    {
+        mode_pos += dir;
+        mode_pos = cut(mode_pos, -1, 1);
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void TracController::slotTracLevelProcess()
+{
+    trac_level += dir * mode_pos;
+
+    trac_level = cut(trac_level, 0, 100);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void TracController::slotBrakeLevelProcess()
+{
+    brake_level += dir * mode_pos;
+
+    brake_level = cut(brake_level, 0, 100);
 }

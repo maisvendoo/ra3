@@ -22,9 +22,15 @@ public:
 
     float getHandlePosition() const;
 
-    double getTractionLevel() const { return trac_level; }
+    double getTractionLevel() const
+    {
+        return trac_min * qAbs(mode_pos) + static_cast<double>(trac_level) / 100.0;
+    }
 
-    double getBrakeLevel() const { return brake_level; }
+    double getBrakeLevel() const
+    {
+        return brake_min * qAbs(mode_pos) + static_cast<double>(brake_level) / 100.0;
+    }
 
 private:
 
@@ -40,15 +46,19 @@ private:
 
     double brake_min;
 
-    double trac_level;
+    int trac_level;
 
-    double brake_level;
+    int brake_level;
 
     double handle_pos;
 
-    double handle_omega;
+    double omega_handle;
 
     int dir;
+
+    Timer *brakeTimer;
+
+    Timer *tracTimer;
 
     /// Блок-контакт "ХОД"
     Trigger traction;
@@ -66,9 +76,13 @@ private:
 
     void stepKeysControl(double t, double dt) override;
 
+    void processDiscretePositions(bool key_state, bool old_key_state, int dir);
+
 private slots:
 
-    void slotHandleRotate();
+    void slotTracLevelProcess();
+
+    void slotBrakeLevelProcess();
 };
 
 #endif // TRAC_CONTROLLER_H
