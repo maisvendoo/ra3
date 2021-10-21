@@ -24,12 +24,12 @@ public:
 
     double getTractionLevel() const
     {
-        return trac_min * qAbs(mode_pos) + static_cast<double>(trac_level) / 100.0;
+        return static_cast<double>(trac_min * pf(mode_pos) + trac_level) / 100.0;
     }
 
     double getBrakeLevel() const
     {
-        return brake_min * qAbs(mode_pos) + static_cast<double>(brake_level) / 100.0;
+        return static_cast<double>(brake_min * nf(mode_pos) + brake_level) / 100.0;
     }
 
 private:
@@ -42,9 +42,9 @@ private:
 
     bool old_brake_key;
 
-    double trac_min;
+    int trac_min;
 
-    double brake_min;
+    int brake_min;
 
     int trac_level;
 

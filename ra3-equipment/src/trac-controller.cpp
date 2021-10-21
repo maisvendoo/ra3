@@ -64,8 +64,8 @@ void TracController::load_config(CfgReader &cfg)
 {
     QString secName = "Device";
 
-    cfg.getDouble(secName, "trac_min", trac_min);
-    cfg.getDouble(secName, "brake_min", brake_min);
+    cfg.getInt(secName, "trac_min", trac_min);
+    cfg.getInt(secName, "brake_min", brake_min);
     cfg.getDouble(secName, "omega_handle", omega_handle);
 
     brakeTimer->setTimeout(0.02);
@@ -162,6 +162,10 @@ void TracController::processDiscretePositions(bool key_state, bool old_key_state
     if (mode_pos != 0)
         return;
 
+    trac_level = brake_level = 0;
+    traction.reset();
+    brake.reset();
+
     if ( (key_state) && (!old_key_state) )
     {
         mode_pos += dir;
@@ -176,7 +180,7 @@ void TracController::slotTracLevelProcess()
 {
     trac_level += dir * mode_pos;
 
-    trac_level = cut(trac_level, 0, 100);
+    trac_level = cut(trac_level, 0, 100 - trac_min);
 }
 
 //------------------------------------------------------------------------------
@@ -186,5 +190,5 @@ void TracController::slotBrakeLevelProcess()
 {
     brake_level += dir * mode_pos;
 
-    brake_level = cut(brake_level, 0, 100);
+    brake_level = cut(brake_level, 0, 100 - brake_min);
 }
