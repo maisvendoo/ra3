@@ -158,16 +158,16 @@ void BTO092::stepPneumoBrake()
 //------------------------------------------------------------------------------
 void BTO092::pressureRegulatorEPT(double p_ref, double p)
 {
-    if (p_ref > p)
-    {
-        if (p <= p_ref - ept_eps / 2.0)
-            state_ept = 1;
-    }
-    else
-    {
-        if (p >= p_ref + ept_eps / 2.0)
-            state_ept = -1;
-    }
+    double dp = p_ref - p;
+
+    if (qAbs(dp) < ept_eps / 2.0)
+        state_ept = -1;
+
+    if (dp >= ept_eps / 2.0)
+        state_ept = 1;
+
+    if (dp <= -ept_eps / 2.0)
+        state_ept = 0;
 }
 
 //------------------------------------------------------------------------------
