@@ -37,7 +37,7 @@ public:
 
     void releaseBrakes(bool is_release) { this->is_release = is_release; }
 
-    void setRefPressure(double p_ref) { this->p_ref = p_ref; }
+    void setRefPressureLevel(double p_ref) { this->p_ref = p_ref * pBC_max; }
 
 private:
 

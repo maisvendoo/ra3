@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Device>
+		<Order>1</Order>
+
+		<trac_min>1</trac_min>
+		<brake_min>-1</brake_min>
+
+		<handle_omega>0.2</handle_omega>		
+
+	</Device>
+</Config>

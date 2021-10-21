@@ -22,6 +22,10 @@ public:
 
     float getHandlePosition() const;
 
+    double getTractionLevel() const { return trac_level; }
+
+    double getBrakeLevel() const { return brake_level; }
+
 private:
 
     /// Позиция, определяющая режим управления
@@ -31,6 +35,20 @@ private:
     bool old_traction_key;
 
     bool old_brake_key;
+
+    double trac_min;
+
+    double brake_min;
+
+    double trac_level;
+
+    double brake_level;
+
+    double handle_pos;
+
+    double handle_omega;
+
+    int dir;
 
     /// Блок-контакт "ХОД"
     Trigger traction;

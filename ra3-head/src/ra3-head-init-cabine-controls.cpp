@@ -10,6 +10,7 @@ void RA3HeadMotor::initCabineControls()
     initTumblers("tumblers-config");
 
     km = new TracController();
+    km->read_custom_config(config_dir + QDir::separator() + "trac-controller");
 }
 
 //------------------------------------------------------------------------------
