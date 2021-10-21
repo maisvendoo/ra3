@@ -37,7 +37,7 @@ public:
 
     void releaseBrakes(bool is_release) { this->is_release = is_release; }
 
-    //void setStateEPT(int state_ept) { this->state_ept = state_ept; }
+    void setRefPressure(double p_ref) { this->p_ref = p_ref; }
 
 private:
 
@@ -93,10 +93,17 @@ private:
     Relay   *release_valve;
 
     /// Вентиль торможения ЭПТ (ВТ)
-    Relay   *brake_valve;
+    Relay   *brake_valve;    
 
-    /// Управляющий сигнал ЭПТ
-    /// (0 - "Отпуск", -1 - "Перекрыша", 1 - "Торможение")
+    /// Заданное давление в ТЦ для ЭПТ
+    double p_ref;
+
+    /// Точность поддержания давления в ТЦ при ЭПТ
+    double ept_eps;
+
+    /// Минимальная ступень торможения ЭПТ
+    double p_min;
+
     int state_ept;
 
     enum
@@ -122,6 +129,9 @@ private:
 
     /// Моделирование работы пневматического торможения
     void stepPneumoBrake();
+
+    /// Регулятор ЭПТ
+    void pressureRegulatorEPT(double p_ref, double p);
 };
 
 #endif // BTO092_H

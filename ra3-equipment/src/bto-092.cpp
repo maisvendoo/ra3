@@ -23,6 +23,9 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , keb(new ElectroLockValve)
   , release_valve(new Relay(1))
   , brake_valve(new Relay(1))
+  , p_ref(0.0)
+  , ept_eps(0.01)
+  , p_min(0.1)
   , state_ept(0)
 {
     std::fill(K.begin(), K.end(), 0.0);
@@ -58,6 +61,10 @@ void BTO092::step(double t, double dt)
     work_res->step(t, dt);
 
     keb->step(t, dt);
+
+    release_valve->step(t, dt);
+
+    brake_valve->step(t, dt);
 
     AirDistributor::step(t, dt);
 }
@@ -111,6 +118,8 @@ void BTO092::stepPneumoBrake()
                  K[4] * p1 * v1;
 
     // Состояние вентилей ЭПТ
+    pressureRegulatorEPT(p_ref, keb->getP_in());
+
     double vr = qAbs(state_ept);
     double vb = pf(state_ept);
 
@@ -142,6 +151,23 @@ void BTO092::stepPneumoBrake()
     bc_relay->setPipelinePressure(pAS);
 
     Qbc = bc_relay->getBrakeCylAirFlow();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BTO092::pressureRegulatorEPT(double p_ref, double p)
+{
+    if (p_ref > p)
+    {
+        if (p <= p_ref - ept_eps / 2.0)
+            state_ept = 1;
+    }
+    else
+    {
+        if (p >= p_ref + ept_eps / 2.0)
+            state_ept = -1;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -198,14 +224,17 @@ void BTO092::load_config(CfgReader &cfg)
 
     release_valve->read_custom_config(custom_config_dir +
                                       QDir::separator() +
-                                      "mk");
+                                      "ept_valve");
 
     release_valve->setInitContactState(0, true);
 
     brake_valve->read_custom_config(custom_config_dir +
                                     QDir::separator() +
-                                    "mk");
+                                    "ept_valve");
 
     brake_valve->setInitContactState(0, false);
+
+    cfg.getDouble(secName, "ept_eps", ept_eps);
+    cfg.getDouble(secName, "p_min", p_min);
 }
 

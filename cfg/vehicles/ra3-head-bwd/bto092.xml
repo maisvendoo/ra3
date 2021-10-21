@@ -22,8 +22,11 @@
 
         <K7>0.1</K7>
 
-        <K8>5e-2</K8>
-        <K9>5e-2</K9>
+        <K8>1e-2</K8>
+        <K9>1e-2</K9>
+
+        <ept_eps>0.01</ept_eps>
+        <p_min>0.1</p_min>
 
     </Device>
 </Config>
