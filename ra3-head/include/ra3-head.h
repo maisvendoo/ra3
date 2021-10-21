@@ -19,6 +19,7 @@
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
 #include    "kru-091.h"
+#include    "trac-controller.h"
 
 #include    "ra3-head-signals.h"
 
@@ -119,6 +120,9 @@ private:
 
     /// Тройник на питание ТЦ
     PneumoSplitter *bc_split;
+
+    /// Контроллер тяги/торможения
+    TracController *km;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;

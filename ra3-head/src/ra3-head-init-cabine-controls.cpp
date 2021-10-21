@@ -8,6 +8,8 @@
 void RA3HeadMotor::initCabineControls()
 {
     initTumblers("tumblers-config");
+
+    km = new TracController();
 }
 
 //------------------------------------------------------------------------------

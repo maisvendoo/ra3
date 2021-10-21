@@ -85,6 +85,8 @@ void RA3HeadMotor::initBrakeDevices(double p0, double pTM, double pFL)
 //------------------------------------------------------------------------------
 void RA3HeadMotor::step(double t, double dt)
 {
+    stepCabineControls(t, dt);
+
     // Работа системы питания топливом
     stepFuelSystem(t, dt);
 

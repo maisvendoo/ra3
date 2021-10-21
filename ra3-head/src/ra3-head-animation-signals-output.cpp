@@ -31,6 +31,8 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[SIG_BUTTON_WHISTLE] = static_cast<float>(horn->isSvistok());
     analogSignal[SIG_BUTTON_TYPHON] = static_cast<float>(horn->isTifon());
 
+    analogSignal[DRIVER_CONTROLLER] = km->getHandlePosition();
+
     // Колесные пары
     analogSignal[WHEEL_1] = static_cast<float>(dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
     analogSignal[WHEEL_2] = static_cast<float>(dir * wheel_rotation_angle[1] / 2.0 / Physics::PI);

@@ -6,17 +6,37 @@
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-class TractionController : public Device
+class TracController : public Device
 {
 public:
 
-    TractionController(QObject *parent = Q_NULLPTR);
+    TracController(QObject *parent = Q_NULLPTR);
 
-    ~TractionController();
+    ~TracController();
+
+    /// Признак нулевого положения
+    bool isZero()
+    {
+        return !(traction.getState() || brake.getState());
+    }
+
+    float getHandlePosition() const;
 
 private:
 
-    int handle_pos;
+    /// Позиция, определяющая режим управления
+    /// (0 - выбег, 1 - ход, -1 - торможение)
+    int mode_pos;
+
+    bool old_traction_key;
+
+    bool old_brake_key;
+
+    /// Блок-контакт "ХОД"
+    Trigger traction;
+
+    /// Блок-контакт "ТОРМОЖЕНИЕ"
+    Trigger brake;
 
     void preStep(state_vector_t &Y, double t) override;
 
@@ -27,6 +47,10 @@ private:
     void load_config(CfgReader &cfg) override;
 
     void stepKeysControl(double t, double dt) override;
+
+private slots:
+
+    void slotHandleRotate();
 };
 
 #endif // TRAC_CONTROLLER_H
