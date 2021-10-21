@@ -7,7 +7,7 @@ void RA3HeadMotor::stepDisel(double t, double dt)
 {
     double U_bat24 = bat24->getVoltage();
 
-    disel->setRefFreq(800);
+    disel->setRefFreq(800.0 + 1000.0 * km->getTractionLevel());
 
     disel->setMV6state(mpsu->getOutputData().is_fuel_valve1_open ||
                        static_cast<bool>(forward_inputs[SME_BWD_FUEL_VALVE_OPEN]));

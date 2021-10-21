@@ -48,4 +48,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     // Сигнал состояния стояночного тормоза на ведущую секцию
     forward_outputs[SME_PARKING_BRAKE_STATE] = static_cast<float>(brake_module->isParkingBraked());
+
+    // Заданный уровень торможения ЭПТ на ведомую секцию
+    backward_outputs[SME_BRAKE_LEVEL] = km->getBrakeLevel();
+
+    // Сигнал отпуска тормозов (КЭБ) на ведомую секцию
+    backward_outputs[SME_BRAKE_RELEASE] = static_cast<float>(false);
 }
