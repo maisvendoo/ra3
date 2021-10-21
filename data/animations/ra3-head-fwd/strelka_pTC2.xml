@@ -4,7 +4,7 @@
 		<SignalID>113</SignalID>
 		<Duration>20.0</Duration>
 		<Axis>0.0 0.0 -1.0</Axis>
-		<!-- <FixedSignal>0.7</FixedSignal> -->
+		<!-- <FixedSignal>0.7</FixedSignal>-->
 	</AnalogRotation>
 
 	<KeyPoint>
@@ -13,8 +13,8 @@
 	</KeyPoint>	
 	
 	<KeyPoint>
-		<Param>0.2</Param>
-		<Value>53.5</Value>
+		<Param>0.2333</Param>
+		<Value>53</Value>
 	</KeyPoint>	
 	
 	<KeyPoint>
