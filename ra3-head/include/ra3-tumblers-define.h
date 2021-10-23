@@ -20,7 +20,13 @@ enum
     BUTTON_STOP = 3,
 
     /// Выключатель СПТ
-    SWITCH_PARKING_BRAKE = 4
+    SWITCH_PARKING_BRAKE = 4,
+
+    /// Рукоятка бдительности (РБ)
+    BUTTON_RB = 5,
+
+    /// Рукоятка бдительности специальная (РБС)
+    BUTTON_RBS = 6
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

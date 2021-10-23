@@ -54,4 +54,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     // Сигнал отпуска тормозов (КЭБ) на ведомую секцию
     backward_outputs[SME_BRAKE_RELEASE] = static_cast<float>(false);
+
+    // Питание удерживающей катушки ЭПК
+    backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
 }

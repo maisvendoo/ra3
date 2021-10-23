@@ -141,7 +141,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
                                            speedW ),
                                     this, config_dir );
     speedometer_->move(240, 130);
-    speedometer_->setSpeedLimits(120, 80);                                      // zБогос. Удалить.
+    //speedometer_->setSpeedLimits(120, 80);                                      // zБогос. Удалить.
     speedometer_->setSpeedCur(0.0);                                             // zБогос. Удалить.
 
     // устанавливаем маленький треугольник возле спидометра снизу справа

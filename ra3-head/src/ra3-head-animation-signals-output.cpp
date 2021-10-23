@@ -25,7 +25,14 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     analogSignal[HANDLE_KRU_091] = kru->getHandlePosition();
 
-    analogSignal[LS_G1] = analogSignal[LS_G1_1] =  1.0f;
+    analogSignal[LS_W] = analogSignal[LS_W_1] =  blok->getLampState(WHITE_LAMP);
+    analogSignal[LS_R] = analogSignal[LS_R_1] =  blok->getLampState(RED_LAMP);
+    analogSignal[LS_RY] = analogSignal[LS_RY_1] =  blok->getLampState(RED_YELLOW_LAMP);
+    analogSignal[LS_Y] = analogSignal[LS_Y_1] =  blok->getLampState(YELLOW_LAMP);
+    analogSignal[LS_G1] = analogSignal[LS_G1_1] =  blok->getLampState(GREEN_LAMP1);
+    analogSignal[LS_G2] = analogSignal[LS_G2_1] =  blok->getLampState(GREEN_LAMP2);
+    analogSignal[LS_G3] = analogSignal[LS_G3_1] =  blok->getLampState(GREEN_LAMP3);
+    analogSignal[LS_G4] = analogSignal[LS_G4_1] =  blok->getLampState(GREEN_LAMP4);
 
     // Свисток и тифон
     analogSignal[SIG_BUTTON_WHISTLE] = static_cast<float>(horn->isSvistok());

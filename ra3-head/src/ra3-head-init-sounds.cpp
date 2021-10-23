@@ -34,4 +34,10 @@ void RA3HeadMotor::initSounds()
         fuel_pump->setSoundName("Fuel_Pump2");
         starter->setSoundName("Starter2");
     }
+
+    connect(epk, &AutoTrainStop::soundPlay,
+            this, &RA3HeadMotor::soundPlay);
+
+    connect(epk, &AutoTrainStop::soundStop,
+            this, &RA3HeadMotor::soundStop);
 }

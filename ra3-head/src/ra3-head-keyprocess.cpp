@@ -42,4 +42,16 @@ void RA3HeadMotor::keyProcess()
     {
         tumbler[SWITCH_PARKING_BRAKE].set();
     }
+
+    // РБ
+    if (getKeyState(KEY_M))
+        tumbler[BUTTON_RB].set();
+    else
+        tumbler[BUTTON_RB].reset();
+
+    // РБС
+    if (getKeyState(KEY_Z))
+        tumbler[BUTTON_RBS].set();
+    else
+        tumbler[BUTTON_RBS].reset();
 }

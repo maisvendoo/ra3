@@ -20,6 +20,7 @@
 #include    "bto-092.h"
 #include    "kru-091.h"
 #include    "trac-controller.h"
+#include    "blok.h"
 
 #include    "ra3-head-signals.h"
 
@@ -123,6 +124,15 @@ private:
 
     /// Контроллер тяги/торможения
     TracController *km;
+
+    /// Безопасны локомотивный комплекс (БЛОК)
+    BLOK    *blok;
+
+    /// ЭПК
+    AutoTrainStop *epk;
+
+    /// Путь поиска загружаемых модулей оборудования
+    QString modules_dir;
 
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
