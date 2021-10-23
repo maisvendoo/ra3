@@ -190,6 +190,12 @@ private:
     /// Инициализация приборов управления тормозами
     void initBrakeControls();
 
+    /// Инициализация приборов безопасности
+    void initSafetyDevices();
+
+    /// Инициализация подсистемы тяги (гидропередача и т.п.)
+    void initTraction();
+
     /// Инициализация прочего оборудования
     void initOtherEquipment();
 
@@ -221,6 +227,12 @@ private:
 
     /// Работа тормозного оборудования
     void stepBrakeEquipment(double t, double dt);
+
+    /// Работа приборов безопасности
+    void stepSafetyDevices(double t, double dt);
+
+    /// Работа подсистемы тяги
+    void stepTraction(double t, double dt);
 
     /// Работа приборов управления тормозами
     void stepBrakeControls(double t, double dt);

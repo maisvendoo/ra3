@@ -65,6 +65,12 @@ void RA3HeadMotor::initialization()
     // Инициализация приборов управления тормозами
     initBrakeControls();
 
+    // Инициализация приборов безопасности
+    initSafetyDevices();
+
+    // Инициализация подсистемы тяги
+    initTraction();
+
     // Инициализация разного оборудования
     initOtherEquipment();
 
@@ -116,6 +122,12 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа приборов управления тормозами
     stepBrakeControls(t, dt);
+
+    // Работа приборов безопасности
+    stepSafetyDevices(t, dt);
+
+    // Работа подсистемы тяги
+    stepTraction(t, dt);
 
     // Работа разного оборудования
     stepOtherEquipment(t, dt);
