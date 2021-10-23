@@ -53,7 +53,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_STOP] = 1.0f;
 
     // ЭПК
-    analogSignal[MFDU_EPK] = 1.0f;
+    analogSignal[MFDU_EPK] = static_cast<float>(!epk->getStateKey());
 
     // Экстренное и стояночный тормоз
     analogSignal[MFDU_XREN1] = 1.0f;

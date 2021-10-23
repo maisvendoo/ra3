@@ -51,6 +51,7 @@ private:
     // блок иконок слева от спидометра
     void setBlockIcons_leftSpeedometer_(QLabel* parent);
     std::vector<QLabel*> labMotorCompressor_;
+    std::vector<QLabel*> labMkFrame_;
     std::vector<QLabel*> labMotorCompressor1_;
     std::vector<QLabel*> labMotorCompressor2_;
     std::vector<QLabel*> labAttention_;

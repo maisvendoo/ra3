@@ -81,6 +81,7 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     setNeededIcon_(labMotor_, input_signals[MFDU_MOTOR]);
 
     // блок иконок слева от спидометра
+    setNeededIcon_(labMkFrame_, input_signals[MFDU_COMPRESSOR]);
     setNeededIcon_(labMotorCompressor_, input_signals[MFDU_COMPRESSOR]);
     setNeededIcon_(labMotorCompressor1_, input_signals[MFDU_COMPRESSOR_1]);
     setNeededIcon_(labMotorCompressor2_, input_signals[MFDU_COMPRESSOR_2]);
@@ -575,11 +576,25 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
 
     QPixmap pixmap;
 
-    QLabel* labFoo = new QLabel(parent);
+    /*QLabel* labFoo = new QLabel(parent);
     labFoo->resize(151, 76);
     labFoo->move(startX, startY);
     labFoo->setStyleSheet("border: 1px solid white;"
-                          "border-radius: 5px;");
+                          "border-radius: 5px;");*/
+
+    fooX = startX;
+    fooY = startY;
+    QLabel *labFoo = new QLabel(parent);
+    if (!pixmap.load(":/mfdu/mk_frame_on")) { return; }
+    labFoo->move(fooX, fooY);
+    labFoo->setPixmap(pixmap);
+    labMkFrame_.push_back(labFoo);
+
+    labFoo = new QLabel(parent);
+    if (!pixmap.load(":/mfdu/mk_frame_off")) { return; }
+    labFoo->move(fooX, fooY);
+    labFoo->setPixmap(pixmap);
+    labMkFrame_.push_back(labFoo);
 
     fooX = startX + 15;
     fooY = startY + 17;

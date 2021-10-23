@@ -3,127 +3,91 @@
         <file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
         <file alias="none">img/none.png</file>
         <file alias="none35">img/none35.png</file>
-
-
-        <!--    блок иконок справа от спидометра    -->
         <file alias="main_110380_380">img/main-disp/110380_380.png</file>
         <file alias="main_110380_110">img/main-disp/110380_110.png</file>
         <file alias="main_110380_380110">img/main-disp/110380_380110.png</file>
         <file alias="main_110380_noActive">img/main-disp/110380_noActive.png</file>
-
         <file alias="main_pvu">img/main-disp/pvu.png</file>
         <file alias="main_pvu_noActive">img/main-disp/pvu_noActive.png</file>
-
         <file alias="main_epk_on">img/main-disp/epk_on.png</file>
         <file alias="main_epk_off">img/main-disp/epk_off.png</file>
-
         <file alias="main_fier1_maneuver">img/main-disp/fier1_maneuver.png</file>
         <file alias="main_fier1_redFiers">img/main-disp/fier1_redFiers.png</file>
         <file alias="main_fier1_2signals">img/main-disp/fier1_2signals.png</file>
         <file alias="main_fier1_noSignals">img/main-disp/fier1_noSignals.png</file>
-
         <file alias="main_fier2_noSignals">img/main-disp/fier2_noSignals.png</file>
         <file alias="main_fier2_whiteFiers">img/main-disp/fier2_whiteFiers.png</file>
         <file alias="main_fier2_whiteRedFiers">img/main-disp/fier2_whiteRedFiers.png</file>
         <file alias="main_fier2_2signals">img/main-disp/fier2_2signals.png</file>
-
         <file alias="main_ptf">img/main-disp/ptf.png</file>
         <file alias="main_ptf_noActive">img/main-disp/ptf_noActive.png</file>
-
         <file alias="main_pzd">img/main-disp/pzd.png</file>
         <file alias="main_pzd_burn">img/main-disp/pzd_burn.png</file>
         <file alias="main_pzd_fail">img/main-disp/pzd_fail.png</file>
         <file alias="main_pzd_noActive">img/main-disp/pzd_noActive.png</file>
-
         <file alias="main_pump">img/main-disp/pump.png</file>
         <file alias="main_pump_fail">img/main-disp/pump_fail.png</file>
         <file alias="main_pump_noActive">img/main-disp/pump_noActive.png</file>
-
         <file alias="main_tpn">img/main-disp/tpn.png</file>
         <file alias="main_tpn_noActive">img/main-disp/tpn_noActive.png</file>
-
         <file alias="main_fire">img/main-disp/fire.png</file>
         <file alias="main_fire_noActive">img/main-disp/fire_noActive.png</file>
-
         <file alias="main_oz_1">img/main-disp/oz_1.png</file>
         <file alias="main_oz_2">img/main-disp/oz_2.png</file>
         <file alias="main_oz_noActive">img/main-disp/oz_noActive.png</file>
-
         <file alias="main_door">img/main-disp/door.png</file>
         <file alias="main_door_noActive">img/main-disp/door_noActive.png</file>
-
         <file alias="main_generator">img/main-disp/generator.png</file>
         <file alias="main_generator_noActive">img/main-disp/generator_noActive.png</file>
-
         <file alias="main_vip">img/main-disp/vip.png</file>
         <file alias="main_vip_noActive">img/main-disp/vip_noActive.png</file>
-
         <file alias="main_incOzMotor_1">img/main-disp/incOzMotor_1.png</file>
         <file alias="main_incOzMotor_2">img/main-disp/incOzMotor_2.png</file>
         <file alias="main_incOzMotor_noActive">img/main-disp/incOzMotor_noActive.png</file>
-
         <file alias="main_decOzMotor_1">img/main-disp/decOzMotor_1.png</file>
         <file alias="main_decOzMotor_2">img/main-disp/decOzMotor_2.png</file>
         <file alias="main_decOzMotor_noActive">img/main-disp/decOzMotor_noActive.png</file>
-
         <file alias="main_wc">img/main-disp/wc.png</file>
         <file alias="main_wc_noActive">img/main-disp/wc_noActive.png</file>
-
         <file alias="main_antyYuz_work">img/main-disp/antyYuz_work.png</file>
         <file alias="main_antyYuz_fail">img/main-disp/antyYuz_fail.png</file>
         <file alias="main_antyYuz_noActive">img/main-disp/antyYuz_noActive.png</file>
-
         <file alias="main_revers">img/main-disp/revers.png</file>
         <file alias="main_revers_noActive">img/main-disp/revers_noActive.png</file>
-
         <file alias="main_transmission">img/main-disp/transmission.png</file>
         <file alias="main_transmission_noActive">img/main-disp/transmission_noActive.png</file>
-
         <file alias="main_oilMotor_up">img/main-disp/oilMotor_up.png</file>
         <file alias="main_oilMotor_down">img/main-disp/oilMotor_down.png</file>
         <file alias="main_oilMotor_noActive">img/main-disp/oilMotor_noActive.png</file>
-
         <file alias="main_pressureOilMotor_up">img/main-disp/pressureOilMotor_up.png</file>
         <file alias="main_pressureOilMotor_down">img/main-disp/pressureOilMotor_down.png</file>
         <file alias="main_pressureOilMotor_noActive">img/main-disp/pressureOilMotor_noActive.png</file>
-
         <file alias="main_motor_work">img/main-disp/motor_work.png</file>
         <file alias="main_motor_warn">img/main-disp/motor_warn.png</file>
         <file alias="main_motor_error">img/main-disp/motor_error.png</file>
-
-
-        <!--    блок иконок слева от спидометра    -->
         <file alias="main_motor-compressor-on">img/main-disp/motor-compressor-on.png</file>
         <file alias="main_motor_compressor_1_on">img/main-disp/motor_compressor_1_on.png</file>
         <file alias="main_motor_compressor_1_off">img/main-disp/motor_compressor_1_off.png</file>
         <file alias="main_motor_compressor_2_on">img/main-disp/motor_compressor_2_on.png</file>
         <file alias="main_motor_compressor_2_off">img/main-disp/motor_compressor_2_off.png</file>
-
         <file alias="main_attention">img/main-disp/attention.png</file>
         <file alias="main_stop">img/main-disp/stop.png</file>
         <file alias="main_fwd">img/main-disp/fwd.png</file>
         <file alias="main_bwd">img/main-disp/bwd.png</file>
         <file alias="main_bwdfwd">img/main-disp/bwdfwd.png</file>
-
         <file alias="main_xren1">img/main-disp/xren1.png</file>
         <file alias="main_xren2">img/main-disp/xren2.png</file>
         <file alias="main_xren3">img/main-disp/xren3.png</file>
-
-
-        <!--    блок иконок сверху от спидометра    -->
         <file alias="main_vagonEquipment_work">img/main-disp/vagonEquipment_work.png</file>
         <file alias="main_vagonEquipment_warn">img/main-disp/vagonEquipment_warn.png</file>
         <file alias="main_vagonEquipment_error">img/main-disp/vagonEquipment_error.png</file>
-
         <file alias="main_pzdMini">img/main-disp/pzdMini.png</file>
-
         <file alias="main_brakes_gidro">img/main-disp/brakes_gidro.png</file>
         <file alias="main_brakes_mix">img/main-disp/brakes_mix.png</file>
         <file alias="main_brakes_ept">img/main-disp/brakes_ept.png</file>
         <file alias="main_brakes_parking">img/main-disp/brakes_parking.png</file>
-
         <file alias="main_can">img/main-disp/can.png</file>
-
-
+        <file alias="mk_frame_on">img/main-disp/motor-compressor-frame_on.png</file>
+        <file alias="mk_frame_off">img/main-disp/motor-compressor-frame_off.png</file>
     </qresource>
 </RCC>
