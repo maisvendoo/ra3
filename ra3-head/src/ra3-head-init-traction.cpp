@@ -5,5 +5,5 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initTraction()
 {
-
+    hydro_trans = new HydroTransmission();
 }

@@ -5,5 +5,5 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepTraction(double t, double dt)
 {
-
+    hydro_trans->step(t, dt);
 }

@@ -21,6 +21,7 @@
 #include    "kru-091.h"
 #include    "trac-controller.h"
 #include    "blok.h"
+#include    "hydro-transmission.h"
 
 #include    "ra3-head-signals.h"
 
@@ -130,6 +131,9 @@ private:
 
     /// ЭПК
     AutoTrainStop *epk;
+
+    /// Гидропередача
+    HydroTransmission *hydro_trans;
 
     /// Путь поиска загружаемых модулей оборудования
     QString modules_dir;
