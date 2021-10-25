@@ -26,6 +26,24 @@ public:
     /// Задать угловую скорость на выходном валу
     void setOutputTorque(double omega) { this->omega_out = omega; }
 
+    /// Сигнал наполнения гидротрансформатора
+    void setHydroTransFill(bool is_fill)
+    {
+        u_gt = static_cast<double>(is_fill);
+    }
+
+    /// Сигнал наполнения гидромуфты
+    void setHydroCouplingFill(bool is_fill)
+    {
+        u_gm = static_cast<double>(is_fill);
+    }
+
+    /// Сигнал наполнения гидротормоза
+    void setHydroBrakeFill(bool is_fill)
+    {
+        u_gb = static_cast<double>(is_fill);
+    }
+
 private:
 
     double omega_in;
@@ -35,6 +53,24 @@ private:
     double M_out;
 
     double omega_out;
+
+    /// Коэффициент гидравлического сопротивления вращению насосных колес
+    double k;
+
+    /// Постянная времени наполнения гидротрансформатора
+    double T_gt;
+
+    /// Постоянная времения наполнения гидромуфты
+    double T_gm;
+
+    /// Постоянная времения наполнения гидротормоза
+    double T_gb;
+
+    double u_gt;
+
+    double u_gm;
+
+    double u_gb;
 
     void preStep(state_vector_t &Y, double t) override;
 
