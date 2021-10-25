@@ -6,6 +6,8 @@
 //
 //------------------------------------------------------------------------------
 HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
+  , is_traction(false)
+  , is_brake(false)
   , omega_in(0.0)
   , M_in(0.0)
   , M_out(0.0)
@@ -17,6 +19,8 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
   , u_gt(0.0)
   , u_gm(0.0)
   , u_gb(0.0)
+  , i_min(0.8)
+  , i_max(0.9)
 {
 
 }
@@ -34,9 +38,22 @@ HydroTransmission::~HydroTransmission()
 //------------------------------------------------------------------------------
 void HydroTransmission::preStep(state_vector_t &Y, double t)
 {
-    M_in = (Y[0] + Y[1]) * k *  pow(omega_in, 2);
+    double u_torque = static_cast<double>(is_traction);
 
-    M_out = getHydroTranstCoeff(omega_in, omega_out) * M_in;
+    double i_gp = 0;
+
+    if (omega_in >= 0.001)
+        i_gp = omega_out / omega_in;
+
+    u_gt = static_cast<double>(switch_relay.getState(i_gp));
+    u_gm = 1.0 - u_gt;
+
+    M_in = u_torque * k *  pow(omega_in, 2);
+
+    double k_gm = getHydroCouplingCoeff(omega_in, omega_out);
+
+    M_out = Y[0] * getHydroTranstCoeff(omega_in, omega_out) * M_in +
+            Y[1] * k_gm * M_in;
 }
 
 //------------------------------------------------------------------------------
@@ -66,9 +83,16 @@ void HydroTransmission::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "T_gt", T_gt);
     cfg.getDouble(secName, "T_gm", T_gm);
     cfg.getDouble(secName, "T_gb", T_gb);
+    cfg.getDouble(secName, "i_min", i_min);
+    cfg.getDouble(secName, "i_max", i_max);
+
+    switch_relay.setRange(i_min, i_max);
 
     QString path = custom_config_dir + QDir::separator() + "gdt.csv";
     gt_char.load(path.toStdString());
+
+    path = custom_config_dir + QDir::separator() + "gdm.csv";
+    gm_char.load(path.toStdString());
 }
 
 //------------------------------------------------------------------------------
@@ -80,4 +104,15 @@ double HydroTransmission::getHydroTranstCoeff(double omega_in, double omega_out)
         return 0.0;
 
     return gt_char.getValue(qAbs(omega_out) / qAbs(omega_in));
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double HydroTransmission::getHydroCouplingCoeff(double omega_in, double omega_out)
+{
+    if (qAbs(omega_in) < 0.001)
+        return 0.0;
+
+    return gm_char.getValue(1.0 - qAbs(omega_out) / qAbs(omega_in));
 }

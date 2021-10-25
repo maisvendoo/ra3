@@ -4,7 +4,7 @@
 		<Order>1</Order>
 
 		<n_min>800</n_min>
-		<n_max>1800</n_max>		
+		<n_max>2500</n_max>		
 
 	</Device>
 </Config>

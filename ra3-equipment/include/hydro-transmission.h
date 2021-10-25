@@ -4,6 +4,7 @@
 #include    "device.h"
 
 #include    "linear-interpolation.h"
+#include    "hysteresis.h"
 
 //------------------------------------------------------------------------------
 //
@@ -28,24 +29,26 @@ public:
     double getOutputTorque() const { return M_out; }    
 
     /// Сигнал наполнения гидротрансформатора
-    void setHydroTransFill(bool is_fill)
+    void setTractionMode(bool is_fill)
     {
-        u_gt = static_cast<double>(is_fill);
-    }
-
-    /// Сигнал наполнения гидромуфты
-    void setHydroCouplingFill(bool is_fill)
-    {
-        u_gm = static_cast<double>(is_fill);
-    }
+        is_traction = is_fill;
+    }    
 
     /// Сигнал наполнения гидротормоза
-    void setHydroBrakeFill(bool is_fill)
+    void setBrakeMode(bool is_fill)
     {
-        u_gb = static_cast<double>(is_fill);
+        is_brake = is_fill;
     }
 
+    double getOmegaInput() const { return omega_in; }
+
+    double getOmegaOutput() const { return omega_out; }
+
 private:
+
+    bool is_traction;
+
+    bool is_brake;
 
     double omega_in;
 
@@ -73,8 +76,18 @@ private:
 
     double u_gb;
 
+    double i_min;
+
+    double i_max;
+
     /// Характеристика гидротрансформатора
     LinearInterpolation gt_char;
+
+    /// Характеристика гидромуфты
+    LinearInterpolation gm_char;
+
+    /// Гистерезис для реализации переключения скоростей
+    Hysteresis  switch_relay;
 
     void preStep(state_vector_t &Y, double t) override;
 
@@ -85,6 +98,8 @@ private:
     void load_config(CfgReader &cfg) override;
 
     double getHydroTranstCoeff(double omega_in, double omega_out);
+
+    double getHydroCouplingCoeff(double omega_in, double omega_out);
 };
 
 #endif // HYDRO_TRANSMISSION_H

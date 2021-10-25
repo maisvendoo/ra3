@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 	<Device>
-		<Order>1</Order>
+		<Order>4</Order>
 
-		<k>0.062</k>
+		<k>0.033</k>
 
 		<T_gt>0.5</T_gt>
 
 		<T_gm>0.5</T_gm>
 
-		<T_gb>0.5</T_gb>		
+		<T_gb>0.5</T_gb>
+
+		<i_min>0.87</i_min>
+
+		<i_max>0.93</i_max>		
 
 	</Device>
 </Config>

@@ -7,7 +7,7 @@ void RA3HeadMotor::stepTraction(double t, double dt)
 {
     double ip = 3.32;
 
-    hydro_trans->setHydroTransFill(km->isTraction() || static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
+    hydro_trans->setTractionMode(km->isTraction() || static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
 
     hydro_trans->setOmegaInput(disel->getOmega());
     hydro_trans->setOmegaOutput(ip * wheel_omega[0]);
