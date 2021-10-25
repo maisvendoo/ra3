@@ -4,6 +4,10 @@
 //
 //------------------------------------------------------------------------------
 HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
+  , omega_in(0.0)
+  , M_in(0.0)
+  , M_out(0.0)
+  , omega_out(0.0)
 {
 
 }
