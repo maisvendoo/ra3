@@ -15,6 +15,7 @@ void RA3HeadMotor::stepDisel(double t, double dt)
     disel->setFuelLevel((fuel_tank[0]->getFuelLevel() + fuel_tank[1]->getFuelLevel()) / 2.0);
     disel->setFuelPressure(fuel_pump->getFuelPressure());
     disel->setStarterTorque(starter->getTorque() * static_cast<double>(starter_relay->getContactState(0)));
+    disel->setGenTorque(hydro_trans->getInputTorque());
     disel->step(t, dt);
 
     starter->setVoltage(U_bat24 * static_cast<double>(starter_relay->getContactState(1)));

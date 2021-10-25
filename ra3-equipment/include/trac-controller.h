@@ -20,6 +20,10 @@ public:
         return !(traction.getState() || brake.getState());
     }
 
+    bool isTraction() { return traction.getState(); }
+
+    bool isBrake() { return brake.getState(); }
+
     float getHandlePosition() const;
 
     double getTractionLevel() const

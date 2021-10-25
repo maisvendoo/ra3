@@ -3,6 +3,8 @@
 
 #include    "device.h"
 
+#include    "linear-interpolation.h"
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -15,16 +17,15 @@ public:
     ~HydroTransmission();
 
     /// Задать угловую скорость вражения выходного вала
-    double setOmega(double omega) { this->omega_in = omega; }
+    double setOmegaInput(double omega) { this->omega_in = omega; }
+
+    double setOmegaOutput(double omega) { this->omega_out = omega; }
 
     /// Вернуть момент на входном валу
     double getInputTorque() const { return M_in; }
 
     /// Вернуть момент на выходном валу
-    double getOutputTorque() const { return M_out; }
-
-    /// Задать угловую скорость на выходном валу
-    void setOutputTorque(double omega) { this->omega_out = omega; }
+    double getOutputTorque() const { return M_out; }    
 
     /// Сигнал наполнения гидротрансформатора
     void setHydroTransFill(bool is_fill)
@@ -72,6 +73,9 @@ private:
 
     double u_gb;
 
+    /// Характеристика гидротрансформатора
+    LinearInterpolation gt_char;
+
     void preStep(state_vector_t &Y, double t) override;
 
     void ode_system(const state_vector_t &Y,
@@ -79,6 +83,8 @@ private:
                     double t) override;
 
     void load_config(CfgReader &cfg) override;
+
+    double getHydroTranstCoeff(double omega_in, double omega_out);
 };
 
 #endif // HYDRO_TRANSMISSION_H

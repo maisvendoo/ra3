@@ -57,4 +57,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     // Питание удерживающей катушки ЭПК
     backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
+
+    backward_outputs[SME_HYDRO_TRANS_FILL] = static_cast<float>(km->isTraction());
 }

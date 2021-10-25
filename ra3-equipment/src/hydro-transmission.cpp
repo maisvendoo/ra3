@@ -1,5 +1,7 @@
 #include    "hydro-transmission.h"
 
+#include    <QDir>
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -33,6 +35,8 @@ HydroTransmission::~HydroTransmission()
 void HydroTransmission::preStep(state_vector_t &Y, double t)
 {
     M_in = (Y[0] + Y[1]) * k *  pow(omega_in, 2);
+
+    M_out = getHydroTranstCoeff(omega_in, omega_out) * M_in;
 }
 
 //------------------------------------------------------------------------------
@@ -62,4 +66,18 @@ void HydroTransmission::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "T_gt", T_gt);
     cfg.getDouble(secName, "T_gm", T_gm);
     cfg.getDouble(secName, "T_gb", T_gb);
+
+    QString path = custom_config_dir + QDir::separator() + "gdt.csv";
+    gt_char.load(path.toStdString());
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double HydroTransmission::getHydroTranstCoeff(double omega_in, double omega_out)
+{
+    if (qAbs(omega_in) < 0.001)
+        return 0.0;
+
+    return gt_char.getValue(qAbs(omega_out) / qAbs(omega_in));
 }
