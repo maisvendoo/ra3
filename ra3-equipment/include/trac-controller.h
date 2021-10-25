@@ -40,6 +40,8 @@ public:
 
     double getMinBrakeLevel() const { return static_cast<double>(brake_min) / 100.0; }
 
+    float getReversHandlePos() const { return static_cast<float>(revers_pos); }
+
 private:
 
     /// Позиция, определяющая режим управления
@@ -49,6 +51,12 @@ private:
     bool old_traction_key;
 
     bool old_brake_key;
+
+    bool old_fwd_key;
+
+    bool old_bwd_key;
+
+    int revers_pos;
 
     int trac_min;
 

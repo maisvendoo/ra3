@@ -26,7 +26,7 @@ public:
     double getInputTorque() const { return M_in; }
 
     /// Вернуть момент на выходном валу
-    double getOutputTorque() const { return M_out; }    
+    double getOutputTorque() const { return M_out * revers_state; }
 
     /// Сигнал наполнения гидротрансформатора
     void setTractionMode(bool is_fill)
@@ -43,6 +43,10 @@ public:
     double getOmegaInput() const { return omega_in; }
 
     double getOmegaOutput() const { return omega_out; }
+
+    void setRefReversState(int revers_pos);
+
+    int getReversState() const { return revers_state * qAbs(revers_handle); }
 
 private:
 
@@ -80,6 +84,18 @@ private:
 
     double i_max;
 
+    /// Заданное положение реверсивного механизма
+    int revers_pos_ref;
+
+    /// Постоянная времени реверирования
+    double T_revers;
+
+    /// Состояние реверсивного механизма
+    int revers_state;
+
+    /// Состояние переключателя реверса
+    int revers_handle;
+
     /// Характеристика гидротрансформатора
     LinearInterpolation gt_char;
 
@@ -100,6 +116,9 @@ private:
     double getHydroTranstCoeff(double omega_in, double omega_out);
 
     double getHydroCouplingCoeff(double omega_in, double omega_out);
+
+    /// Учет зазора в меранизме реверсирования
+    int gap(double x);
 };
 
 #endif // HYDRO_TRANSMISSION_H

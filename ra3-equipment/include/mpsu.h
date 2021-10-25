@@ -88,6 +88,9 @@ private:
 
     /// Задатчик оборотов дизеля в тяге
     double getTracRefDiselFreq(double trac_level);
+
+    /// Проверка состояния реверсирования
+    void check_revers();
 };
 
 #endif // MPSU_H

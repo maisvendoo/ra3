@@ -7,9 +7,9 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 {
     analogSignal[MFDU_DISPLAY_ON] = static_cast<float>(mpsu->getOutputData().is_display_ON);
 
-    analogSignal[MFDU_REVERS_FWD] = static_cast<float>(mpsu->getOutputData().revers_fwd);
-    analogSignal[MFDU_REVERS_BWD] = static_cast<float>(mpsu->getOutputData().revers_bwd);
-    analogSignal[MFDU_REVERS_NEUTRAL] = static_cast<float>(mpsu->getOutputData().revers_neutral);
+    analogSignal[MFDU_REVERS_FWD] = static_cast<float>(!mpsu->getOutputData().revers_fwd);
+    analogSignal[MFDU_REVERS_BWD] = static_cast<float>(!mpsu->getOutputData().revers_bwd);
+    analogSignal[MFDU_REVERS_NEUTRAL] = static_cast<float>(!mpsu->getOutputData().revers_neutral);
 
     analogSignal[MFDU_PRESSURE_PM] = static_cast<float>(main_res->getPressure());
 
@@ -46,7 +46,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
-    analogSignal[MFDU_REVERS] = 1.0f;
+    analogSignal[MFDU_REVERS] = static_cast<float>(mpsu->getOutputData().revers_finish);
 
     // Статус запрета движения (ВРЕМЕННО)
     analogSignal[MFDU_ATTENTION] = 1.0f;

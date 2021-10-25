@@ -13,7 +13,9 @@
 
 		<i_min>0.87</i_min>
 
-		<i_max>0.93</i_max>			
+		<i_max>0.93</i_max>
+
+		<T_revers>1.0</T_revers>			
 
 	</Device>
 </Config>

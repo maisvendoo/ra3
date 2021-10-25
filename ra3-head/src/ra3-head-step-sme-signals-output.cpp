@@ -61,4 +61,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_HYDRO_TRANS_FILL] = static_cast<float>(km->isTraction());
 
     backward_outputs[SME_DISEL_FREQ] = static_cast<float>(mpsu->getOutputData().n_ref);
+
+    backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
+
+    forward_outputs[SME_REVERS_STATE] = hydro_trans->getReversState();
 }

@@ -19,6 +19,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.brake_min = km->getMinBrakeLevel();
     mpsu_input.trac_level = km->getTractionLevel();
     mpsu_input.brake_level = km->getBrakeLevel();
+    mpsu_input.revers_state1 = hydro_trans->getReversState();
+    mpsu_input.revers_state2 = static_cast<int>(backward_inputs[SME_REVERS_STATE]);
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    

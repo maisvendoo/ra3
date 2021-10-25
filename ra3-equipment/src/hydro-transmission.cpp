@@ -21,8 +21,12 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
   , u_gb(0.0)
   , i_min(0.8)
   , i_max(0.9)
+  , revers_pos_ref(1)
+  , T_revers(1.0)
+  , revers_state(1)
+  , revers_handle(0)
 {
-
+    setY(3, revers_pos_ref);
 }
 
 //------------------------------------------------------------------------------
@@ -31,6 +35,44 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
 HydroTransmission::~HydroTransmission()
 {
 
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void HydroTransmission::setRefReversState(int revers_pos)
+{
+    revers_handle = revers_pos;
+
+    // Реверсирование запрещено при движении
+    if (qAbs(omega_out) >= 0.01)
+        return;
+
+    if (revers_pos < 0)
+        revers_pos_ref = -1;
+    else
+        revers_pos_ref = 1;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+int HydroTransmission::gap(double x)
+{
+    if ( (x > -1.0) && (x < 1.0) )
+    {
+        return 0;
+    }
+    else
+    {
+        if (x >= 1.0)
+            return 1;
+
+        if (x <= -1.0)
+            return -1;
+    }
+
+    return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -45,8 +87,10 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
     if (omega_in >= 0.001)
         i_gp = omega_out / omega_in;
 
-    u_gt = static_cast<double>(switch_relay.getState(i_gp));
-    u_gm = 1.0 - u_gt;
+    revers_state = gap(Y[3]);
+
+    u_gt = static_cast<double>(switch_relay.getState(i_gp)) * qAbs(revers_state * revers_handle);
+    u_gm = (1.0 - u_gt) * qAbs(revers_state * revers_handle);
 
     M_in = u_torque * k *  pow(omega_in, 2);
 
@@ -70,6 +114,8 @@ void HydroTransmission::ode_system(const state_vector_t &Y,
     dYdt[1] = (u_gm - Y[1]) / T_gm;
 
     dYdt[2] = (u_gb - Y[2]) / T_gt;
+
+    dYdt[3] = (1.05 * revers_pos_ref - Y[3]) / T_revers;
 }
 
 //------------------------------------------------------------------------------
@@ -93,6 +139,8 @@ void HydroTransmission::load_config(CfgReader &cfg)
 
     path = custom_config_dir + QDir::separator() + "gdm.csv";
     gm_char.load(path.toStdString());
+
+    cfg.getDouble(secName, "T_revers", T_revers);
 }
 
 //------------------------------------------------------------------------------

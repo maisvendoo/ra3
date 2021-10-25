@@ -41,6 +41,12 @@ struct mpsu_input_t
 
     double brake_min;
 
+    /// Реверсирование ведущей секции
+    int revers_state1;
+
+    /// Реверсирование ведомой секции
+    int revers_state2;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
@@ -55,6 +61,8 @@ struct mpsu_input_t
         , brake_level(0.0)
         , trac_min(0.17)
         , brake_min(0.26)
+        , revers_state1(0)
+        , revers_state2(0)
     {
 
     }
@@ -124,6 +132,8 @@ struct mpsu_output_t
     /// Заданные обороты дизеля
     double n_ref;
 
+    bool revers_finish;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -135,9 +145,9 @@ struct mpsu_output_t
         , is_disel2_started(false)
         , is_fuel_valve1_open(false)
         , is_fuel_valve2_open(false)
-        , revers_fwd(true)
-        , revers_bwd(true)
-        , revers_neutral(false)
+        , revers_fwd(false)
+        , revers_bwd(false)
+        , revers_neutral(true)
         , mfdu_oil_press_level(1)
         , mfdu_oil_press_level1(1)
         , mfdu_oil_press_level2(1)
@@ -147,6 +157,7 @@ struct mpsu_output_t
         , mfdu_disel_state_level1(2)
         , mfdu_disel_state_level2(2)
         , n_ref(800)
+        , revers_finish(true)
     {
 
     }

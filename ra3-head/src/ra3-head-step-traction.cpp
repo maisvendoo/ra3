@@ -9,6 +9,11 @@ void RA3HeadMotor::stepTraction(double t, double dt)
 
     hydro_trans->setTractionMode(km->isTraction() || static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
 
+    if (is_active)
+        hydro_trans->setRefReversState(km->getReversHandlePos());
+    else
+        hydro_trans->setRefReversState(static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));
+
     hydro_trans->setOmegaInput(disel->getOmega());
     hydro_trans->setOmegaOutput(ip * wheel_omega[0]);
     hydro_trans->step(t, dt);

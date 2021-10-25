@@ -208,6 +208,43 @@ double MPSU::getTracRefDiselFreq(double trac_level)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::check_revers()
+{
+    if (mpsu_input.revers_state1 != mpsu_input.revers_state2)
+        return;
+
+    switch (mpsu_input.revers_state1)
+    {
+    case 1:
+
+        mpsu_output.revers_fwd = true;
+        mpsu_output.revers_bwd = false;
+        mpsu_output.revers_neutral = false;
+        break;
+
+    case 0:
+
+        mpsu_output.revers_fwd = false;
+        mpsu_output.revers_bwd = false;
+        mpsu_output.revers_neutral = true;
+        break;
+
+    case -1:
+
+        mpsu_output.revers_fwd = false;
+        mpsu_output.revers_bwd = true;
+        mpsu_output.revers_neutral = false;
+        break;
+
+    default:
+
+        break;
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -269,6 +306,8 @@ void MPSU::main_loop_step(double t, double dt)
     check_alarm_level();
 
     mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level);
+
+    check_revers();
 }
 
 //------------------------------------------------------------------------------
