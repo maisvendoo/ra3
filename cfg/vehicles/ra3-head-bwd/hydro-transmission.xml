@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Device>
+		<Order>1</Order>
+
+		<k>0.062</k>
+
+		<T_gt>0.5</T_gt>
+
+		<T_gm>0.5</T_gm>
+
+		<T_gb>0.5</T_gb>		
+
+	</Device>
+</Config>

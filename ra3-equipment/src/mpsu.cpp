@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 MPSU::MPSU(QObject *parent) : Device(parent)
   , is_reseted(false)
+  , old_start_state(false)
+  , n_min(800)
+  , n_max(1800)
 {
 
 }
@@ -81,6 +84,11 @@ void MPSU::ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t)
 void MPSU::load_config(CfgReader &cfg)
 {
     Q_UNUSED(cfg)
+
+    QString secName = "Device";
+
+    cfg.getDouble(secName, "n_min", n_min);
+    cfg.getDouble(secName, "n_max", n_max);
 }
 
 //------------------------------------------------------------------------------
@@ -190,6 +198,16 @@ void MPSU::check_alarm_level()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+double MPSU::getTracRefDiselFreq(double trac_level)
+{
+    double n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) / (1.0 - mpsu_input.trac_min);
+
+    return cut(n_ref, n_min, n_max);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -249,6 +267,8 @@ void MPSU::main_loop_step(double t, double dt)
                                              mpsu_output.mfdu_disel_state_level2);
 
     check_alarm_level();
+
+    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level);
 }
 
 //------------------------------------------------------------------------------

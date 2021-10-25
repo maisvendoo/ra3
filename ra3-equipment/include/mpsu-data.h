@@ -31,6 +31,16 @@ struct mpsu_input_t
     /// Обороты дизеля 2
     double disel2_shaft_freq;
 
+    /// Уровень тяги от контроллера машиниста
+    double trac_level;
+
+    /// Уровень тормозного усилия от контроллера машиниста
+    double brake_level;
+
+    double trac_min;
+
+    double brake_min;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
@@ -41,6 +51,10 @@ struct mpsu_input_t
         , fuel_press2(0.0)
         , disel1_shaft_freq(0.0)
         , disel2_shaft_freq(0.0)
+        , trac_level(0.0)
+        , brake_level(0.0)
+        , trac_min(0.17)
+        , brake_min(0.26)
     {
 
     }
@@ -107,6 +121,9 @@ struct mpsu_output_t
     int mfdu_disel_state_level1;
     int mfdu_disel_state_level2;
 
+    /// Заданные обороты дизеля
+    double n_ref;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -129,6 +146,7 @@ struct mpsu_output_t
         , mfdu_disel_state_level(2)
         , mfdu_disel_state_level1(2)
         , mfdu_disel_state_level2(2)
+        , n_ref(800)
     {
 
     }

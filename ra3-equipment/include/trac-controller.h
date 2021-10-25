@@ -36,6 +36,10 @@ public:
         return static_cast<double>(brake_min * nf(mode_pos) + brake_level) / 100.0;
     }
 
+    double getMinTracLevel() const { return static_cast<double>(trac_min) / 100.0; }
+
+    double getMinBrakeLevel() const { return static_cast<double>(brake_min) / 100.0; }
+
 private:
 
     /// Позиция, определяющая режим управления

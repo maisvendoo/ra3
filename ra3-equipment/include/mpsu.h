@@ -30,6 +30,12 @@ private:
     /// Предыдущее состояние кнопки "СТАРТ"
     bool old_start_state;
 
+    /// Уставка минимальных оборотов дизеля
+    double n_min;
+
+    /// Уставка максимальных оборотов дизеля
+    double n_max;
+
     /// Входные сигналы
     mpsu_input_t    mpsu_input;
 
@@ -77,7 +83,11 @@ private:
 
     /// Диагностика дизелей
     int check_disels(int mfdu_oil_press_level);
+
     void check_alarm_level();
+
+    /// Задатчик оборотов дизеля в тяге
+    double getTracRefDiselFreq(double trac_level);
 };
 
 #endif // MPSU_H

@@ -59,4 +59,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
 
     backward_outputs[SME_HYDRO_TRANS_FILL] = static_cast<float>(km->isTraction());
+
+    backward_outputs[SME_DISEL_FREQ] = static_cast<float>(mpsu->getOutputData().n_ref);
 }

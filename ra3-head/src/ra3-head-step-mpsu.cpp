@@ -15,6 +15,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.oil_press2 = static_cast<double>(backward_inputs[SME_BWD_OIL_PRESS]);
     mpsu_input.disel1_shaft_freq = disel->getShaftFreq();
     mpsu_input.disel2_shaft_freq = static_cast<double>(backward_inputs[SME_BWD_OMEGA]);
+    mpsu_input.trac_min = km->getMinTracLevel();
+    mpsu_input.brake_min = km->getMinBrakeLevel();
+    mpsu_input.trac_level = km->getTractionLevel();
+    mpsu_input.brake_level = km->getBrakeLevel();
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    
