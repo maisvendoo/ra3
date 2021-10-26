@@ -48,6 +48,10 @@ void HydroTransmission::setRefReversState(int revers_pos)
     if (qAbs(omega_out) >= 0.01)
         return;
 
+    // Реверсирование запрещено при тяге и торможении
+    if (is_traction || is_brake)
+        return;
+
     if (revers_pos < 0)
         revers_pos_ref = -1;
     else
