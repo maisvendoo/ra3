@@ -40,4 +40,9 @@ void RA3HeadMotor::initSounds()
 
     connect(epk, &AutoTrainStop::soundStop,
             this, &RA3HeadMotor::soundStop);
+
+    tumbler[SWITCH_PARKING_BRAKE].setOnSoundName("Switcher");
+    tumbler[SWITCH_PARKING_BRAKE].setOffSoundName("Switcher");
+    connect(&tumbler[SWITCH_PARKING_BRAKE], &Trigger::soundPlay,
+            this, &RA3HeadMotor::soundPlay);
 }

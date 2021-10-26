@@ -165,5 +165,15 @@
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
 	</Sound>
+
+	<Sound>
+		<Name>Switcher</Name>
+		<Path>switcher.wav</Path>
+		<InitVolume>100</InitVolume>
+		<MaxVolume>100</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
 	
 </Config>
