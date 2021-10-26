@@ -44,6 +44,11 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_DEC_OZ_MOTOR] = 2.0f;
     analogSignal[MFDU_ACTIVE_CHARGE] = 3.0f;
 
+    analogSignal[MFDU_CAN_RIGHT] = 1.0f;
+
+    analogSignal[MFDU_BRAKES_LEFT] = 1.0f;
+    analogSignal[MFDU_BRAKES_RIGHT] = 1.0f;
+
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
     analogSignal[MFDU_REVERS] = static_cast<float>(mpsu->getOutputData().revers_finish);
@@ -57,7 +62,13 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Экстренное и стояночный тормоз
     analogSignal[MFDU_XREN1] = 1.0f;
-    analogSignal[MFDU_XREN2] = 1.0f;
+
+    // СПТ
+    bool is_parking_braked = brake_module->isParkingBraked() &&
+            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
+
+    analogSignal[MFDU_XREN2] = static_cast<float>(!is_parking_braked);
+
     analogSignal[MFDU_XREN3] = 1.0f;
 
     // Статус топливоподкачивающего насоса
@@ -78,4 +89,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_I_AKB_110] = static_cast<float>(Icc);
 
     analogSignal[MFDU_PRESSURE_TM] = static_cast<float>(pTM);
+
+    analogSignal[MFDU_S_SPEED_LIMIT] = static_cast<float>(blok->getCurrentSpeedLimit());
+    analogSignal[MFDU_S_SPEED] = static_cast<float>(velocity * Physics::kmh);
 }
