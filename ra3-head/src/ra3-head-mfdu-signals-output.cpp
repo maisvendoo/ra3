@@ -51,7 +51,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
-    analogSignal[MFDU_REVERS] = static_cast<float>(mpsu->getOutputData().revers_finish);
+    analogSignal[MFDU_REVERS] = static_cast<float>(km->getReversHandlePos() == hydro_trans->getReversState());
 
     // Статус запрета движения (ВРЕМЕННО)
     analogSignal[MFDU_ATTENTION] = 1.0f;

@@ -210,7 +210,9 @@ double MPSU::getTracRefDiselFreq(double trac_level)
 //------------------------------------------------------------------------------
 void MPSU::check_revers()
 {
-    if (mpsu_input.revers_state1 != mpsu_input.revers_state2)
+    mpsu_output.revers_finish = mpsu_input.revers_state1 == mpsu_input.revers_state2;
+
+    if (!mpsu_output.revers_finish)
         return;
 
     switch (mpsu_input.revers_state1)
