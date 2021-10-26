@@ -132,7 +132,11 @@ struct mpsu_output_t
     /// Заданные обороты дизеля
     double n_ref;
 
+    /// Признак завершения реверсирования ГДП
     bool revers_finish;
+
+    /// Запрет движения
+    bool motion_disable;
 
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
@@ -158,6 +162,7 @@ struct mpsu_output_t
         , mfdu_disel_state_level2(2)
         , n_ref(800)
         , revers_finish(true)
+        , motion_disable(true)
     {
 
     }

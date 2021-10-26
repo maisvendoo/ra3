@@ -7,8 +7,8 @@ MfduDispOff::MfduDispOff(QLabel *parent)
 {
     QPixmap pic;
     this->setFrameShape(QLabel::NoFrame);
-    if (!pic.load(":/mfdu/mfdu-disp-off")) { return; }
-    this->setFixedSize(pic.size());
-    this->setPixmap(pic);
+    this->setAutoFillBackground(true);
+    this->setPalette(QPalette(QColor(0, 0, 0)));
+    this->move(0, 0);
     this->resize(800, 588);
 }

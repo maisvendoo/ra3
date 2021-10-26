@@ -29,6 +29,7 @@ void MPSU::step(double t, double dt)
     if (!mpsu_input.is_power_on)
     {
         is_reseted = false;
+        mpsu_output = mpsu_output_t();
         return;
     }
 
@@ -242,6 +243,14 @@ void MPSU::check_revers()
 
         break;
     }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::check_moition_disable()
+{
+
 }
 
 //------------------------------------------------------------------------------

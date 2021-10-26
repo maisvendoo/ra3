@@ -91,6 +91,9 @@ private:
 
     /// Проверка состояния реверсирования
     void check_revers();
+
+    /// Проверка на запрет движения
+    void check_moition_disable();
 };
 
 #endif // MPSU_H

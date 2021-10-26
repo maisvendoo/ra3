@@ -70,15 +70,11 @@ void MfduDisplay::init()
     labelCurDate_->move(650, 32);
     labelCurDate_->setAlignment(Qt::AlignCenter);
 
-
-
-
     // "Выключить" окно.
     mfduDispOff_ = new MfduDispOff(background_);
 
     // Элементы основного экрана. Основной экран
     mfduMainDisp_ = new MfduMainDisp(background_);
-
 
     input_signals[MFDU_DISPLAY_ON] = 0;
     // UPDATE ДАННЫХ ОСНОВНОГО ЭКРАНА
@@ -146,16 +142,9 @@ void MfduDisplay::init()
 
     //mfduMainDisp_->updateData(input_signals);
 
-
-
-
-
     this->layout()->addWidget(background_);
 
-
-    AbstractDisplay::init();
-
-    mfduDispOff_->raise();
+    AbstractDisplay::init();    
 }
 
 
@@ -170,6 +159,7 @@ void MfduDisplay::slotUpdateTimer()
 
     //
     mfduDispOff_->setVisible(!static_cast<bool>(input_signals[MFDU_DISPLAY_ON]));
+    mfduDispOff_->raise();
 }
 
 
