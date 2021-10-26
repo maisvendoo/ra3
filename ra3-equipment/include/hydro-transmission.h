@@ -48,6 +48,10 @@ public:
 
     int getReversState() const { return revers_state * qAbs(revers_handle); }
 
+    double getTractionLevel() const { return cut(getY(0) + getY(1), 0.0, 1.0); }
+
+    double getHydroBrakeLevel() const { return getY(2); }
+
 private:
 
     bool is_traction;
