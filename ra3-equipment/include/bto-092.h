@@ -106,6 +106,8 @@ private:
 
     int state_ept;
 
+    bool pb_brake_play;
+
     enum
     {
         NUM_COEFFS = 10

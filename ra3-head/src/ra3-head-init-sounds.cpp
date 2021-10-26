@@ -49,4 +49,6 @@ void RA3HeadMotor::initSounds()
     km->setMainHandleSoundName("KM_main");
     km->setReversHandleSoundName("KM_revers");
     connect(km, &TracController::soundPlay, this, &RA3HeadMotor::soundPlay);
+
+    connect(brake_module, &BTO092::soundPlay, this, &RA3HeadMotor::soundPlay);
 }

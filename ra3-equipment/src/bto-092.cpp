@@ -27,6 +27,7 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , ept_eps(0.01)
   , p_min(0.1)
   , state_ept(0)
+  , pb_brake_play(false)
 {
     std::fill(K.begin(), K.end(), 0.0);
 }
@@ -87,6 +88,19 @@ void BTO092::stepParkingBrake()
     // Расход воздуха в цилиндры СТ
     Q_pb = K[2] * (pAS - p_pb) * v2 * hs_n(p_pb - pPB_max) -
             K[1] * p_pb * v1;
+
+    if (static_cast<bool>(v1))
+    {
+        if (!pb_brake_play)
+        {
+            emit soundPlay("PB_brake");
+            pb_brake_play = true;
+        }
+    }
+    else
+    {
+        pb_brake_play = false;
+    }
 }
 
 //------------------------------------------------------------------------------
