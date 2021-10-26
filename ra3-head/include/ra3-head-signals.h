@@ -77,6 +77,7 @@ enum
     MFDU_T_LEFT,                //
     MFDU_T_RIGHT = 61,          //
 
+    BLOK_DISPLAY_ON = 99, // Включение дисплея
     BLOK_TM_PRESS = 100,
     BLOK_UR_PRESS = 101,
     BLOK_TC_PRESS = 102,

@@ -41,6 +41,8 @@ void BlokDisplay::init()
 
     initTopBlock();
 
+    off_screen = new BlokOffScreen(this);
+
     AbstractDisplay::init();
 }
 
@@ -119,6 +121,9 @@ void BlokDisplay::slotUpdateTimer()
 
     topBlock->setCurSpeed(structsBLOK.other_val.curSpeed);
     topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
+
+    off_screen->setVisible(!static_cast<bool>(input_signals[BLOK_DISPLAY_ON]));
+    off_screen->raise();
 }
 
 GET_DISPLAY(BlokDisplay)

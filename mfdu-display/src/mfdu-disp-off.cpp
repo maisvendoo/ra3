@@ -5,7 +5,6 @@
 MfduDispOff::MfduDispOff(QLabel *parent)
     : QLabel(parent)
 {
-    QPixmap pic;
     this->setFrameShape(QLabel::NoFrame);
     this->setAutoFillBackground(true);
     this->setPalette(QPalette(QColor(0, 0, 0)));

@@ -65,7 +65,13 @@ public:
 
    double getNextSpeedLimit() const { return 120.0; }
 
+   bool isDisplayON() const { return is_dislplay_ON; }
+
+   void setVoltage(double U_pow) { this->U_pow = U_pow; }
+
 private:
+
+   double U_pow;
 
    int code_alsn;
 
@@ -80,6 +86,8 @@ private:
    double v_kmh;
 
    bool key_epk;
+
+   bool is_dislplay_ON;
 
    enum
    {

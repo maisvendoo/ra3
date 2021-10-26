@@ -9,6 +9,7 @@
 #include    <QLabel>
 
 #include    "TopBlock.h"
+#include    "blok-off-screen.h"
 
 //------------------------------------------------------------------------------
 //
@@ -29,6 +30,8 @@ private:
     QTimer          *updateTimer;
 
     TopBlock        *topBlock;
+
+    BlokOffScreen   *off_screen;
 
     structs_BLOK_t  structsBLOK;
 

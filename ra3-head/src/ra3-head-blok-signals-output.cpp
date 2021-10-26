@@ -11,4 +11,6 @@ void RA3HeadMotor::blokSignalsOutput(double t, double dt)
     analogSignal[BLOK_VELOCITY] = static_cast<float>(qAbs(velocity * Physics::kmh));
     analogSignal[BLOK_VELOCITY_CURRENT_LIMIT] = blok->getCurrentSpeedLimit();
     analogSignal[BLOK_VELOCITY_NEXT_LIMIT] = blok->getNextSpeedLimit();
+
+    analogSignal[BLOK_DISPLAY_ON] = static_cast<float>(blok->isDisplayON());
 }

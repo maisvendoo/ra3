@@ -11,6 +11,7 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , state_EPK(false)
   , v_kmh(0.0)
   , key_epk(false)
+  , is_dislplay_ON(false)
   , safety_timer(new Timer(45.0, false))
 {
     epk_state.reset();
@@ -42,6 +43,15 @@ void BLOK::preStep(state_vector_t &Y, double t)
 {
     // Очищаем состояние ламп
     std::fill(lamps.begin(), lamps.end(), 0.0f);
+
+    // Ничего не делаем при выключенном питании
+    if (hs_n(U_pow - 100.0))
+    {
+        is_dislplay_ON = false;
+        return;
+    }
+
+    is_dislplay_ON = true;
 
     // Ничего не делаем при выключенном ЭПК
     if (!key_epk)
