@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/mfdu">
-    	<file alias="mfdu-disp-off">img/mfdu-disp-off.png</file>
-        <file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
+    	<file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
         <file alias="none">img/none.png</file>
         <file alias="none35">img/none35.png</file>
         <file alias="main_110380_380">img/main-disp/110380_380.png</file>
