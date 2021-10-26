@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 TracController::TracController(QObject *parent) : Device(parent)
   , mode_pos(0)
+  , mode_pos_old(mode_pos)
   , old_traction_key(false)
   , old_brake_key(false)
   , old_fwd_key(false)
@@ -19,6 +20,8 @@ TracController::TracController(QObject *parent) : Device(parent)
   , dir(0)
   , brakeTimer(new Timer)
   , tracTimer(new Timer)
+  , mainHandleSoundName("KM_main")
+  , reversSoundName("KM_revers")
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
@@ -47,7 +50,11 @@ float TracController::getHandlePosition() const
 //------------------------------------------------------------------------------
 void TracController::preStep(state_vector_t &Y, double t)
 {
-
+    if (mode_pos != mode_pos_old)
+    {
+        emit soundPlay(mainHandleSoundName);
+        mode_pos_old = mode_pos;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -142,8 +149,9 @@ void TracController::stepKeysControl(double t, double dt)
 
         if (getKeyState(KEY_A))
         {
-            if (traction.getState())
+            if (traction.getState())            
                 dir = 1;
+
         }
         else
         {
@@ -159,11 +167,13 @@ void TracController::stepKeysControl(double t, double dt)
     if (getKeyState(KEY_W) && !old_fwd_key)
     {
         revers_pos++;
+        emit soundPlay(reversSoundName);
     }
 
     if (getKeyState(KEY_S) && !old_bwd_key)
     {
         revers_pos--;
+        emit soundPlay(reversSoundName);
     }
 
     revers_pos = cut(revers_pos, -1, 1);
@@ -187,7 +197,7 @@ void TracController::processDiscretePositions(bool key_state, bool old_key_state
     if ( (key_state) && (!old_key_state) )
     {
         mode_pos += dir;
-        mode_pos = cut(mode_pos, -1, 1);
+        mode_pos = cut(mode_pos, -1, 1);        
     }
 }
 

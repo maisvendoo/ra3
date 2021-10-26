@@ -42,11 +42,17 @@ public:
 
     float getReversHandlePos() const { return static_cast<float>(revers_pos); }
 
+    void setMainHandleSoundName(QString name) { mainHandleSoundName = name; }
+
+    void setReversHandleSoundName(QString name) { reversSoundName = name; }
+
 private:
 
     /// Позиция, определяющая режим управления
     /// (0 - выбег, 1 - ход, -1 - торможение)
     int mode_pos;
+
+    int mode_pos_old;
 
     bool old_traction_key;
 
@@ -76,11 +82,16 @@ private:
 
     Timer *tracTimer;
 
+    QString mainHandleSoundName;
+
+    QString reversSoundName;
+
     /// Блок-контакт "ХОД"
     Trigger traction;
 
     /// Блок-контакт "ТОРМОЖЕНИЕ"
     Trigger brake;
+
 
     void preStep(state_vector_t &Y, double t) override;
 

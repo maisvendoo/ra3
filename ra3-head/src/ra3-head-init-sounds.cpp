@@ -45,4 +45,8 @@ void RA3HeadMotor::initSounds()
     tumbler[SWITCH_PARKING_BRAKE].setOffSoundName("Switcher");
     connect(&tumbler[SWITCH_PARKING_BRAKE], &Trigger::soundPlay,
             this, &RA3HeadMotor::soundPlay);
+
+    km->setMainHandleSoundName("KM_main");
+    km->setReversHandleSoundName("KM_revers");
+    connect(km, &TracController::soundPlay, this, &RA3HeadMotor::soundPlay);
 }

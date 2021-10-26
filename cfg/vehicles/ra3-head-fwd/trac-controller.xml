@@ -4,8 +4,8 @@
 		
 		<omega_handle>5</omega_handle>
 
-		<trac_min>17</trac_min>
-		<brake_min>26</brake_min>
+		<trac_min>10</trac_min>
+		<brake_min>10</brake_min>
 
 	</Device>
 </Config>
