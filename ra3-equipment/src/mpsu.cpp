@@ -254,7 +254,9 @@ void MPSU::check_moition_disable()
 {
     // Запрет движения если
 
-    mpsu_output.motion_disable = (!mpsu_input.is_autostop_ON);
+    mpsu_output.motion_disable = (!mpsu_input.is_autostop_ON) ||
+            (mpsu_input.revers_handle == 0) ||
+            (mpsu_input.is_parking_braked);
 }
 
 //------------------------------------------------------------------------------
