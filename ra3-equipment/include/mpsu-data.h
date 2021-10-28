@@ -1,6 +1,18 @@
 #ifndef     MPSU_DATA_H
 #define     MPSU_DATA_H
 
+#include    <array>
+
+enum
+{
+    ERRORS_NUM = 100,
+    ERROR_NONE = 0,
+    ERROR_ST1 = 1,
+    ERROR_ST2 = 2,
+    ERROR_REVERS_0 = 3,
+    ERROR_EPK = 4
+};
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -53,8 +65,11 @@ struct mpsu_input_t
     /// Состояние реверсивной рукоятки
     int revers_handle;
 
-    /// Состояние СПТ
-    bool is_parking_braked;
+    /// Состояние СПТ на 1 вагоне
+    bool is_parking_braked1;
+
+    /// Сщстояние СПТ на 2 вагоне
+    bool is_parking_braked2;
 
     /// Скорость поезда (км/ч)
     double v_kmh;
@@ -63,7 +78,9 @@ struct mpsu_input_t
     bool is_KM_zero;
 
     /// Максимальное давление в ТЦ от БТО
-    double pBC_max;
+    double pBC_max;    
+
+    std::array<bool, ERRORS_NUM> errors;
 
     mpsu_input_t()
         : is_power_on(false)
@@ -83,12 +100,13 @@ struct mpsu_input_t
         , revers_state2(0)
         , is_autostop_ON(false)
         , revers_handle(0)
-        , is_parking_braked(true)
+        , is_parking_braked1(false)
+        , is_parking_braked2(false)
         , v_kmh(0)
         , is_KM_zero(true)
         , pBC_max(0.38)
     {
-
+        std::fill(errors.begin(), errors.end(), false);
     }
 };
 
@@ -169,6 +187,12 @@ struct mpsu_output_t
     /// Признак наботы удерживающего тормоза
     bool is_holding_braked;
 
+    /// Состояние стояночного тормоза
+    bool is_parking_braked;
+
+    /// Код ошибки
+    int error_code;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -196,6 +220,8 @@ struct mpsu_output_t
         , motion_disable(true)
         , holding_brake_level(0.0)
         , is_holding_braked(false)
+        , is_parking_braked(false)
+        , error_code(ERROR_NONE)
     {
 
     }

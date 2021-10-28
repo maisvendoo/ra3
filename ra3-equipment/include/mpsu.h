@@ -61,6 +61,9 @@ private:
     /// Тригеры открытия топливных клапанов
     std::array<Trigger, NUM_DISELS> trig_fuel_valve;
 
+    /// Тригер фиксации сообщения об ошибке
+    Trigger error_fixed;
+
     void preStep(state_vector_t &Y, double t) override;
 
     void ode_system(const state_vector_t &Y,
@@ -103,6 +106,9 @@ private:
 
     /// Алгоритм работы удерживающего тормоза
     void holding_brake_step();
+
+    /// Обработка ошибок
+    void check_error_msg();
 };
 
 #endif // MPSU_H

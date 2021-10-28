@@ -89,5 +89,11 @@
         <file alias="main_can">img/main-disp/can.png</file>
         <file alias="mk_frame_on">img/main-disp/motor-compressor-frame_on.png</file>
         <file alias="mk_frame_off">img/main-disp/motor-compressor-frame_off.png</file>
+		
+		<file alias="error_none">img/errors/error_none.png</file>
+		<file alias="error_ST1">img/errors/error_ST1.png</file>
+		<file alias="error_ST2">img/errors/error_ST2.png</file>
+		<file alias="error_revers_0">img/errors/error_revers_0.png</file>
+		<file alias="error_epk_off">img/errors/error_epk_off.png</file>
     </qresource>
 </RCC>

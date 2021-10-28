@@ -76,6 +76,7 @@ enum
     MFDU_CAN_RIGHT,             // Отсутствие свзи с вагоном
     MFDU_T_LEFT,                //
     MFDU_T_RIGHT = 61,          //
+    MFDU_ERROR_CODE = 62,
 
     BLOK_DISPLAY_ON = 99, // Включение дисплея
     BLOK_TM_PRESS = 100,

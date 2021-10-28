@@ -260,7 +260,7 @@ void MPSU::check_moition_disable()
 
     mpsu_output.motion_disable = (!mpsu_input.is_autostop_ON) ||
             (mpsu_input.revers_handle == 0) ||
-            (mpsu_input.is_parking_braked);
+            (mpsu_input.is_parking_braked1);
 }
 
 //------------------------------------------------------------------------------
@@ -292,6 +292,43 @@ void MPSU::holding_brake_step()
     {
         mpsu_output.holding_brake_level = 0.0;
         mpsu_output.is_holding_braked = false;
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::check_error_msg()
+{
+
+    if (mpsu_input.is_KM_zero)
+    {
+        return;
+    }
+
+    size_t i = 1;
+
+    for (; i < mpsu_input.errors.size(); ++i)
+    {
+        if (mpsu_input.errors[i])
+        {
+            mpsu_output.error_code = i;
+            error_fixed.set();
+            break;
+        }
+    }
+
+    if (!error_fixed.getState())
+    {
+        mpsu_output.error_code = ERROR_NONE;
+    }
+    else
+    {
+        if (i == mpsu_input.errors.size())
+        {
+            error_fixed.reset();
+            mpsu_output.error_code = ERROR_NONE;
+        }
     }
 }
 
@@ -367,6 +404,12 @@ void MPSU::main_loop_step(double t, double dt)
 
     // Управление удерживающим тормозом
     holding_brake_step();
+
+    // Обработка ошибок
+    check_error_msg();
+
+    mpsu_output.is_parking_braked = mpsu_input.is_parking_braked1 &&
+                                    mpsu_input.is_parking_braked2;
 }
 
 //------------------------------------------------------------------------------

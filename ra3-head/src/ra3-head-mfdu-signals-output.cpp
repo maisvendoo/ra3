@@ -80,8 +80,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_XREN1] = 1.0f;
 
     // СПТ
-    bool is_parking_braked = brake_module->isParkingBraked() &&
-            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
+    bool is_parking_braked = mpsu->getOutputData().is_parking_braked;
 
     analogSignal[MFDU_XREN2] = static_cast<float>(!is_parking_braked);
 
@@ -111,4 +110,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_S_SPEED] = static_cast<float>(blok->getVelocityKmh());
 
     analogSignal[MFDU_TRACTION_BRAKING] = static_cast<float>(100.0 * km->getTractionLevel() * hydro_trans->getTractionLevel());
+
+    analogSignal[MFDU_ERROR_CODE] = static_cast<float>(mpsu->getOutputData().error_code);
 }

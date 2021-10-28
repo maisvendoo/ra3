@@ -35,7 +35,8 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
     // блок иконок сверху от спидометра
     setBlockIcon_topSpeedometer_(parent);
 
-
+    // Сообщения об ошибках
+    setErrosMsgBox_(parent);
 }
 
 
@@ -117,6 +118,7 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     labT_left_->setText(QString::number(input_signals[MFDU_T_LEFT], 'f', 1));
     labT_right_->setText(QString::number(input_signals[MFDU_T_RIGHT], 'f', 1));
 
+    setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);
 }
 
 
@@ -863,6 +865,44 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labFoo->setPixmap(pixmap);
     labBrakes_right_.push_back(labFoo);
 
+}
+
+void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
+{
+    int fooX = 230;
+    int fooY = 413;
+
+    QPixmap pixmap;
+
+    if (!pixmap.load(":/mfdu/error_none")) { return; }
+    QLabel *labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST1")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST2")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_revers_0")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_epk_off")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
 }
 
 void MfduMainDisp::fooNoneAdd_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)

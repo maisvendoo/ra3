@@ -56,7 +56,7 @@ void BlokDisplay::initMainWindow()
     int     sizeWindow_X = 1024;
     int     sizeWindow_Y = 768;
     bool    hideCursor = true;
-    int     timeInterval = 500;
+    int     timeInterval = 1000;
 
     if (cfg.load(config_dir + getConfigPath("main.xml")))
     {

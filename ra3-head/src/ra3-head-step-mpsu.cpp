@@ -23,10 +23,11 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.revers_state2 = static_cast<int>(backward_inputs[SME_REVERS_STATE]);
     mpsu_input.is_autostop_ON = epk->getStateKey();
     mpsu_input.revers_handle = static_cast<int>(km->getReversHandlePos());
-    mpsu_input.is_parking_braked = brake_module->isParkingBraked();
+    mpsu_input.is_parking_braked1 = brake_module->isParkingBraked();
+    mpsu_input.is_parking_braked2 = static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
     mpsu_input.v_kmh = blok->getVelocityKmh();
     mpsu_input.is_KM_zero = km->isZero();
-    mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
+    mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();    
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    
