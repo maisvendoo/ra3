@@ -47,6 +47,9 @@ struct mpsu_input_t
     /// Реверсирование ведомой секции
     int revers_state2;
 
+    /// Состояние блок-контакта ЭПК
+    bool is_autostop_ON;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
@@ -63,6 +66,7 @@ struct mpsu_input_t
         , brake_min(0.26)
         , revers_state1(0)
         , revers_state2(0)
+        , is_autostop_ON(false)
     {
 
     }

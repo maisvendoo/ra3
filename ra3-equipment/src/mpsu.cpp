@@ -201,7 +201,9 @@ void MPSU::check_alarm_level()
 //------------------------------------------------------------------------------
 double MPSU::getTracRefDiselFreq(double trac_level)
 {
-    double n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) / (1.0 - mpsu_input.trac_min);
+    double motion_allow = static_cast<double>(!mpsu_output.motion_disable);
+
+    double n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
 
     return cut(n_ref, n_min, n_max);
 }
@@ -250,7 +252,9 @@ void MPSU::check_revers()
 //------------------------------------------------------------------------------
 void MPSU::check_moition_disable()
 {
+    // Запрет движения если
 
+    mpsu_output.motion_disable = (!mpsu_input.is_autostop_ON);
 }
 
 //------------------------------------------------------------------------------
@@ -319,6 +323,9 @@ void MPSU::main_loop_step(double t, double dt)
     mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level);
 
     check_revers();
+
+    // Проверка запрета движения
+    check_moition_disable();
 }
 
 //------------------------------------------------------------------------------

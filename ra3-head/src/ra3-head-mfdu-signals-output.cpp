@@ -54,8 +54,24 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_REVERS] = static_cast<float>(km->getReversHandlePos() == hydro_trans->getReversState());
 
     // Статус запрета движения (ВРЕМЕННО)
-    analogSignal[MFDU_ATTENTION] = 1.0f;
-    analogSignal[MFDU_STOP] = 1.0f;
+    if (mpsu->getOutputData().motion_disable)
+    {
+        if (!km->isTraction())
+        {
+            analogSignal[MFDU_ATTENTION] = 0.0f;
+            analogSignal[MFDU_STOP] = 1.0f;
+        }
+        else
+        {
+            analogSignal[MFDU_ATTENTION] = 0.0f;
+            analogSignal[MFDU_STOP] = 0.0f;
+        }
+    }
+    else
+    {
+        analogSignal[MFDU_ATTENTION] = 1.0f;
+        analogSignal[MFDU_STOP] = 1.0f;
+    }
 
     // ЭПК
     analogSignal[MFDU_EPK] = static_cast<float>(!epk->getStateKey());

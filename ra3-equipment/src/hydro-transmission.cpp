@@ -93,8 +93,8 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
 
     revers_state = gap(Y[3]);
 
-    u_gt = static_cast<double>(switch_relay.getState(i_gp)) * qAbs(revers_state * revers_handle);
-    u_gm = (1.0 - u_gt) * qAbs(revers_state * revers_handle);
+    u_gt = static_cast<double>(switch_relay.getState(i_gp)) * qAbs(revers_state * revers_handle) * u_torque;
+    u_gm = (1.0 - u_gt) * qAbs(revers_state * revers_handle) * u_torque;
 
     M_in = u_torque * k *  pow(omega_in, 2);
 

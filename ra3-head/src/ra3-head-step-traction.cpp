@@ -7,7 +7,10 @@ void RA3HeadMotor::stepTraction(double t, double dt)
 {
     double ip = 3.32;
 
-    hydro_trans->setTractionMode(km->isTraction() || static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
+    bool is_traction = (!mpsu->getOutputData().motion_disable) &&
+            (km->isTraction() || static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
+
+    hydro_trans->setTractionMode(is_traction);
 
     if (is_active)
         hydro_trans->setRefReversState(km->getReversHandlePos());
