@@ -290,7 +290,8 @@ void MPSU::holding_brake_step()
     }
     else
     {
-        mpsu_output.holding_brake_level = false;
+        mpsu_output.holding_brake_level = 0.0;
+        mpsu_output.is_holding_braked = false;
     }
 }
 

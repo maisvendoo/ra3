@@ -85,6 +85,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_XREN2] = static_cast<float>(!is_parking_braked);
 
+    // Удерживающий тормоз
     analogSignal[MFDU_XREN3] = static_cast<float>(!mpsu->getOutputData().is_holding_braked);
 
     // Статус топливоподкачивающего насоса
