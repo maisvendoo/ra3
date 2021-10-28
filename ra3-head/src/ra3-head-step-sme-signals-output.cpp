@@ -64,5 +64,5 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
 
-    forward_outputs[SME_REVERS_STATE] = hydro_trans->getReversState();
+    forward_outputs[SME_REVERS_STATE] = hydro_trans->getReversState();    
 }

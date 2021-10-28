@@ -39,6 +39,8 @@ public:
 
     void setRefPressureLevel(double p_ref) { this->p_ref = p_ref * pBC_max; }
 
+    double getMaxBrakeCylinderPressure() const { return pBC_max; }
+
 private:
 
     /// Давление в магистрали стояночного тормоза

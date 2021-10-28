@@ -85,7 +85,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_XREN2] = static_cast<float>(!is_parking_braked);
 
-    analogSignal[MFDU_XREN3] = 1.0f;
+    analogSignal[MFDU_XREN3] = static_cast<float>(!mpsu->getOutputData().is_holding_braked);
 
     // Статус топливоподкачивающего насоса
     bool is_fuel_pump_active = fuel_pump->isStarted() ||
@@ -107,7 +107,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_PRESSURE_TM] = static_cast<float>(pTM);
 
     analogSignal[MFDU_S_SPEED_LIMIT] = static_cast<float>(blok->getCurrentSpeedLimit());
-    analogSignal[MFDU_S_SPEED] = static_cast<float>(velocity * Physics::kmh);
+    analogSignal[MFDU_S_SPEED] = static_cast<float>(blok->getVelocityKmh());
 
     analogSignal[MFDU_TRACTION_BRAKING] = static_cast<float>(100.0 * km->getTractionLevel() * hydro_trans->getTractionLevel());
 }

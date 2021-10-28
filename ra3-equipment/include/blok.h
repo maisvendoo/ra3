@@ -69,6 +69,8 @@ public:
 
    void setVoltage(double U_pow) { this->U_pow = U_pow; }
 
+   double getVelocityKmh() const { return qAbs(v_kmh); }
+
 private:
 
    double U_pow;

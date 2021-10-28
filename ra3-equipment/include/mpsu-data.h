@@ -56,6 +56,15 @@ struct mpsu_input_t
     /// Состояние СПТ
     bool is_parking_braked;
 
+    /// Скорость поезда (км/ч)
+    double v_kmh;
+
+    /// Признак нулевого положения КМ
+    bool is_KM_zero;
+
+    /// Максимальное давление в ТЦ от БТО
+    double pBC_max;
+
     mpsu_input_t()
         : is_power_on(false)
         , start_disel(false)
@@ -75,6 +84,9 @@ struct mpsu_input_t
         , is_autostop_ON(false)
         , revers_handle(0)
         , is_parking_braked(true)
+        , v_kmh(0)
+        , is_KM_zero(true)
+        , pBC_max(0.38)
     {
 
     }
@@ -150,6 +162,13 @@ struct mpsu_output_t
     /// Запрет движения
     bool motion_disable;
 
+    /// Заданный уровень давления в тормозных цилиндрах
+    /// при работе удерживающего тормоза
+    double holding_brake_level;
+
+    /// Признак наботы удерживающего тормоза
+    bool is_holding_braked;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -175,6 +194,8 @@ struct mpsu_output_t
         , n_ref(800)
         , revers_finish(true)
         , motion_disable(true)
+        , holding_brake_level(0.0)
+        , is_holding_braked(false)
     {
 
     }

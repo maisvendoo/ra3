@@ -9,7 +9,8 @@ void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
             static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
     brake_module->setRefPressureLevel(km->getBrakeLevel() +
-                                      forward_inputs[SME_BRAKE_LEVEL]);
+                                      forward_inputs[SME_BRAKE_LEVEL] +
+                                      mpsu->getOutputData().holding_brake_level);
 
     //brake_module->releaseBrakes(true); //Временно, до реализации ГДТ
     brake_module->setVoltage(Ucc);

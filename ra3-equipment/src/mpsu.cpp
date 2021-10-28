@@ -8,6 +8,8 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , old_start_state(false)
   , n_min(800)
   , n_max(1800)
+  , v_HB(1.0)
+  , p_HB(0.15)
 {
 
 }
@@ -90,6 +92,8 @@ void MPSU::load_config(CfgReader &cfg)
 
     cfg.getDouble(secName, "n_min", n_min);
     cfg.getDouble(secName, "n_max", n_max);
+    cfg.getDouble(secName, "v_HB", v_HB);
+    cfg.getDouble(secName, "p_HB", p_HB);
 }
 
 //------------------------------------------------------------------------------
@@ -262,6 +266,37 @@ void MPSU::check_moition_disable()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::holding_brake_step()
+{
+    if (mpsu_output.motion_disable)
+    {
+        mpsu_output.holding_brake_level = p_HB / mpsu_input.pBC_max;
+        mpsu_output.is_holding_braked = true;
+        return;
+    }
+
+    if (mpsu_input.is_KM_zero)
+    {
+        if (mpsu_input.v_kmh < v_HB)
+        {
+            mpsu_output.holding_brake_level = p_HB / mpsu_input.pBC_max;
+            mpsu_output.is_holding_braked = true;
+        }
+        else
+        {
+            mpsu_output.holding_brake_level = 0.0;
+            mpsu_output.is_holding_braked = false;
+        }
+    }
+    else
+    {
+        mpsu_output.holding_brake_level = false;
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -328,6 +363,9 @@ void MPSU::main_loop_step(double t, double dt)
 
     // Проверка запрета движения
     check_moition_disable();
+
+    // Управление удерживающим тормозом
+    holding_brake_step();
 }
 
 //------------------------------------------------------------------------------
