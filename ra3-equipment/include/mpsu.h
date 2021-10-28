@@ -64,6 +64,9 @@ private:
     /// Тригер фиксации сообщения об ошибке
     Trigger error_fixed;
 
+    /// Ячейки текущих запретов
+    std::array<bool, ERRORS_NUM> errors;
+
     void preStep(state_vector_t &Y, double t) override;
 
     void ode_system(const state_vector_t &Y,
@@ -108,7 +111,7 @@ private:
     void holding_brake_step();
 
     /// Обработка ошибок
-    void check_error_msg();
+    void output_error_msg();
 };
 
 #endif // MPSU_H

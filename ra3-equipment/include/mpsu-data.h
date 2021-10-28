@@ -10,7 +10,7 @@ enum
     ERROR_ST1 = 1,
     ERROR_ST2 = 2,
     ERROR_REVERS_0 = 3,
-    ERROR_EPK = 4
+    ERROR_EPK_OFF = 4
 };
 
 //------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ struct mpsu_input_t
     /// Максимальное давление в ТЦ от БТО
     double pBC_max;    
 
-    std::array<bool, ERRORS_NUM> errors;
+
 
     mpsu_input_t()
         : is_power_on(false)
@@ -106,7 +106,7 @@ struct mpsu_input_t
         , is_KM_zero(true)
         , pBC_max(0.38)
     {
-        std::fill(errors.begin(), errors.end(), false);
+
     }
 };
 

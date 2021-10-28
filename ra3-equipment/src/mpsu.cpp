@@ -111,6 +111,8 @@ void MPSU::reset()
         trig_disel_start[i].reset();
 
     is_reseted = true;
+
+    std::fill(errors.begin(), errors.end(), false);
 }
 
 //------------------------------------------------------------------------------
@@ -256,11 +258,17 @@ void MPSU::check_revers()
 //------------------------------------------------------------------------------
 void MPSU::check_moition_disable()
 {
-    // Запрет движения если
+    errors[ERROR_ST1] = mpsu_input.is_parking_braked1;
+    errors[ERROR_ST2] = mpsu_input.is_parking_braked2;
+    errors[ERROR_REVERS_0] = mpsu_input.revers_handle == 0;
+    errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON;
 
-    mpsu_output.motion_disable = (!mpsu_input.is_autostop_ON) ||
-            (mpsu_input.revers_handle == 0) ||
-            (mpsu_input.is_parking_braked1);
+    mpsu_output.motion_disable = false;
+
+    for (bool error : errors)
+    {
+        mpsu_output.motion_disable |= error;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -298,36 +306,30 @@ void MPSU::holding_brake_step()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void MPSU::check_error_msg()
+void MPSU::output_error_msg()
 {
-
+    // Если КМ в нуле
     if (mpsu_input.is_KM_zero)
     {
+        // Проверяем последнюю ошибку - если исправлена
+        // то гасим транспарант
+        if (!errors[mpsu_output.error_code])
+        {
+            mpsu_output.error_code = ERROR_NONE;
+        }
+
+        // и пока ничего не проверяем
         return;
     }
 
-    size_t i = 1;
-
-    for (; i < mpsu_input.errors.size(); ++i)
+    // Проверяем все флаги ошибок
+    for (size_t i = 0; i < errors.size(); ++i)
     {
-        if (mpsu_input.errors[i])
+        // Выводим транспарант
+        if (errors[i])
         {
             mpsu_output.error_code = i;
-            error_fixed.set();
             break;
-        }
-    }
-
-    if (!error_fixed.getState())
-    {
-        mpsu_output.error_code = ERROR_NONE;
-    }
-    else
-    {
-        if (i == mpsu_input.errors.size())
-        {
-            error_fixed.reset();
-            mpsu_output.error_code = ERROR_NONE;
         }
     }
 }
@@ -406,7 +408,7 @@ void MPSU::main_loop_step(double t, double dt)
     holding_brake_step();
 
     // Обработка ошибок
-    check_error_msg();
+    output_error_msg();
 
     mpsu_output.is_parking_braked = mpsu_input.is_parking_braked1 &&
                                     mpsu_input.is_parking_braked2;
