@@ -6,6 +6,7 @@
 //
 //------------------------------------------------------------------------------
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
+  , reg(Q_NULLPTR)
   , charge_press(0.5)
   , main_res_leak(0.0)
   , is_active(false)
@@ -138,6 +139,9 @@ void RA3HeadMotor::step(double t, double dt)
     // Обрабока линий СМЕ
     stepVehiclesConnect();
 
+    // Регистрация параметров движения
+    stepRegistrator(t, dt);
+
     // Отладочный вывод по F1
     debugOutput(t, dt);
 }
@@ -170,6 +174,15 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
         cfg.getBool(secName, "IsActive", is_active);
 
         cfg.getDouble(secName, "MainResLeak", main_res_leak);
+
+        QString log_name;
+        if (cfg.getString(secName, "LogName", log_name))
+        {
+            double timeout = 0.1;
+            cfg.getDouble(secName, "LogTimeout", timeout);
+
+            reg = new Registrator(log_name, timeout);
+        }
     }
 }
 

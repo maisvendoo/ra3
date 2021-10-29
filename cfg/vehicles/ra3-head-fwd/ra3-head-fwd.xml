@@ -27,6 +27,9 @@
 
 
 		<DriverPos>0.55 9.85 3.0</DriverPos> 
+
+        <!--<LogName>ra3-head-fwd.log</LogName>
+        <LogTimeout>0.1</LogTimeout>-->
 		
     </Vehicle>
 </Config>

@@ -22,6 +22,7 @@
 #include    "trac-controller.h"
 #include    "blok.h"
 #include    "hydro-transmission.h"
+#include    "registrator.h"
 
 #include    "ra3-head-signals.h"
 
@@ -37,6 +38,9 @@ public:
     ~RA3HeadMotor() override;    
 
 private:
+
+    /// Регистратор параметров движения
+    Registrator *reg;
 
     /// Зарядное давление ТМ
     double charge_press;
@@ -266,6 +270,9 @@ private:
 
     /// Вывод сигналов СМЕ
     void stepSMESignalsOutput(double t, double dt);
+
+    /// Регистрация параметров движения
+    void stepRegistrator(double t, double dt);
 
     /// Вывод сигналов на дисплей БЛОК-М
     void blokSignalsOutput(double t, double dt);
