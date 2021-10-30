@@ -110,7 +110,7 @@ void BlokDisplay::slotUpdateTimer()
     topBlock->set_ip2Val(&structsBLOK.ip2_val);
 
     structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
-    structsBLOK.ip_val.acceleration = 0.0;
+    structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
     strcpy(structsBLOK.ip_val.station, "Ростов Гл.");
 
     topBlock->set_ipVal(&structsBLOK.ip_val);

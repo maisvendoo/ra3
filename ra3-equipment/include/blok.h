@@ -106,6 +106,10 @@ private:
    /// Шаг дифференцирования скорости
    double delta_t;
 
+   size_t v_count;
+
+   double t_diff;
+
    double acceleration;
 
    bool key_epk;

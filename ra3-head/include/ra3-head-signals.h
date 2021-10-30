@@ -78,6 +78,7 @@ enum
     MFDU_T_RIGHT = 61,          //
     MFDU_ERROR_CODE = 62,
 
+    BLOK_ACCELERATION = 97, // Ускорение
     BLOK_VIGILANCE = 98, // Проверка бдительности
     BLOK_DISPLAY_ON = 99, // Включение дисплея
     BLOK_TM_PRESS = 100,
