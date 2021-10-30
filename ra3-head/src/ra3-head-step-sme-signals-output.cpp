@@ -50,7 +50,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_PARKING_BRAKE_STATE] = static_cast<float>(brake_module->isParkingBraked());
 
     // Заданный уровень торможения ЭПТ на ведомую секцию
-    backward_outputs[SME_BRAKE_LEVEL] = km->getBrakeLevel();
+    backward_outputs[SME_REF_BRAKE_LEVEL] = km->getBrakeLevel();
 
     // Сигнал отпуска тормозов (КЭБ) на ведомую секцию
     backward_outputs[SME_BRAKE_RELEASE] = static_cast<float>(false);
@@ -68,4 +68,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     forward_outputs[SME_BWD_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
     forward_outputs[SME_BWD_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    forward_outputs[SME_BWD_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
+
+    backward_outputs[SME_IS_KM_BRAKE] = static_cast<float>(km->isBrake());
 }

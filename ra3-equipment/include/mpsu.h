@@ -115,6 +115,9 @@ private:
 
     /// Определение уровня тормозного усилия от ПТ/ЭПТ
     void calc_brake_level_PB();
+
+    /// Управление гидродинамическим торможением
+    void hydro_brake_control();
 };
 
 #endif // MPSU_H

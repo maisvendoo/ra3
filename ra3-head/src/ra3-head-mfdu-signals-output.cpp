@@ -115,4 +115,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_PRESSURE_TC_MIN] = mpsu->getOutputData().pBC_min;
     analogSignal[MFDU_PRESSURE_TC_MAX] = mpsu->getOutputData().pBC_max;
+
+    analogSignal[MFDU_BRAKES_LEFT] = mpsu->getOutputData().brake_type1;
+    analogSignal[MFDU_BRAKES_RIGHT] = mpsu->getOutputData().brake_type1;
 }

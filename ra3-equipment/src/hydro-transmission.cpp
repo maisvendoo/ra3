@@ -127,13 +127,9 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
 
     double k_gm = getHydroCouplingCoeff(omega_in, omega_out);
 
-    delta_level = brake_level_ref - brake_level;
+    double M_gb = k_gb * brake_level_ref * Y[2] * pow(omega_out, 2);
 
-    Y[4] = cut(Y[4], 0.0, 1.0);
-
-    double u = cut(Kp * delta_level + Ki * Y[4], 0.0, 1.0);
-
-    double M_gb = k_gb * u * Y[2] * pow(omega_out, 2);
+    M_gb = cut(M_gb, 0.0, brakeTorqueLimit(omega_out) * brake_level_ref);
 
     brake_level = M_gb / brakeTorqueLimit(omega_out);
 

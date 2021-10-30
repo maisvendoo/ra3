@@ -361,6 +361,32 @@ void MPSU::calc_brake_level_PB()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::hydro_brake_control()
+{
+    // При скорости ниже 30 км/ч отключаем ГДТ безусловно и замещаем его
+    if (mpsu_input.v_kmh < 30)
+    {
+        mpsu_output.release_PB1 = mpsu_output.release_PB2 = false;
+        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
+        return;
+    }
+
+    // Пытаемся включить ГДТ
+    mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = mpsu_input.is_KM_brake;
+
+    // Замещение ГДТ
+    mpsu_output.release_PB1 = (mpsu_input.brake_level_GB1 >= 0.05);
+    //mpsu_output.release_PB2 = (mpsu_input.brake_level_GB2 >= 0.05);
+
+    if (mpsu_output.release_PB1)
+        mpsu_output.brake_type1 = 0;
+    else
+        mpsu_output.brake_type1 = 2;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -438,6 +464,8 @@ void MPSU::main_loop_step(double t, double dt)
                                     mpsu_input.is_parking_braked2;
 
     calc_brake_level_PB();
+
+    hydro_brake_control();
 }
 
 //------------------------------------------------------------------------------

@@ -26,9 +26,13 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.is_parking_braked1 = brake_module->isParkingBraked();
     mpsu_input.is_parking_braked2 = static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
     mpsu_input.v_kmh = blok->getVelocityKmh();
+
     mpsu_input.is_KM_zero = km->isZero();
+    mpsu_input.is_KM_brake = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_BRAKE]);
+
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
-    mpsu_input.brake_level_GB = hydro_trans->getBrakeLevel();
+    mpsu_input.brake_level_GB1 = hydro_trans->getBrakeLevel();
+    mpsu_input.brake_level_GB2 = backward_inputs[SME_BWD_BRAKE_LEVEL];
 
     mpsu_input.pBC[0] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
     mpsu_input.pBC[1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();

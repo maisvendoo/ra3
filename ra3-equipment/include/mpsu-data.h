@@ -83,8 +83,11 @@ struct mpsu_input_t
     /// Признак тормозного положения КМ
     bool is_KM_brake;
 
-    /// Фактический уровень тормозного усилия от ГДТ
-    double brake_level_GB;
+    /// Фактический уровень тормозного усилия от ГДТ на вагоне 1
+    double brake_level_GB1;
+
+    /// Фактический уровень тормозного усилия от ГДТ на вагоне 2
+    double brake_level_GB2;
 
     enum
     {
@@ -118,7 +121,8 @@ struct mpsu_input_t
         , is_KM_zero(true)
         , pBC_max(0.38)
         , is_KM_brake(false)
-        , brake_level_GB(0)
+        , brake_level_GB1(0)
+        , brake_level_GB2(0)
     {
         std::fill(pBC.begin(), pBC.end(), 0.0);
     }
@@ -207,11 +211,17 @@ struct mpsu_output_t
     /// Код ошибки
     int error_code;
 
-    /// Сигнал наполнения ГДТ
-    bool hydro_brake_ON;
+    /// Сигнал наполнения ГДТ на 1 вагоне
+    bool hydro_brake_ON1;
 
-    /// Сигнал отпуска пневматического тормоза (через КЭБ)
-    bool release_PB;
+    /// Сигнал наполнения ГДТ на 2 вагоне
+    bool hydro_brake_ON2;
+
+    /// Сигнал отпуска пневматического тормоза (через КЭБ) на 1 вагоне
+    bool release_PB1;
+
+    /// Сигнал отпуска пневматического тормоза (через КЭБ) на 2 вагоне
+    bool release_PB2;
 
     /// Максимальное давление в ТЦ
     double pBC_max;
@@ -221,6 +231,12 @@ struct mpsu_output_t
 
     /// Фактический уровень торможения ПТ/ЭПТ
     double brake_level_PB;
+
+    /// Тип активного торможения на первом вагоне
+    int brake_type1;
+
+    /// Тип активного торможения на втором вагоне
+    int brake_type2;
 
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
@@ -251,11 +267,15 @@ struct mpsu_output_t
         , is_holding_braked(false)
         , is_parking_braked(false)
         , error_code(ERROR_NONE)
-        , hydro_brake_ON(false)
-        , release_PB(false)
+        , hydro_brake_ON1(false)
+        , hydro_brake_ON2(false)
+        , release_PB1(false)
+        , release_PB2(false)
         , pBC_max(0)
         , pBC_min(0)
         , brake_level_PB(0)
+        , brake_type1(2)
+        , brake_type2(2)
     {
 
     }
