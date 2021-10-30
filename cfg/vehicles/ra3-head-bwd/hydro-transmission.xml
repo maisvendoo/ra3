@@ -15,7 +15,10 @@
 
 		<i_max>0.93</i_max>	
 
-		<T_revers>1.0</T_revers>	
+		<T_revers>1.0</T_revers>
+
+		<P_gb>300</P_gb>
+		<omega_gb_max>162</omega_gb_max>	
 
 	</Device>
 </Config>

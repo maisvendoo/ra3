@@ -25,6 +25,10 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
   , T_revers(1.0)
   , revers_state(1)
   , revers_handle(0)
+  , P_gb(300)
+  , omega_db_max(162.0)
+  , M_gb_max(0.0)
+  , k_gb(0.0)
 {
     setY(3, revers_pos_ref);
 }
@@ -77,6 +81,19 @@ int HydroTransmission::gap(double x)
     }
 
     return 0;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double HydroTransmission::brakeTorqueLimit(double omega_out)
+{
+    double M_lim = 0;
+
+    if (qAbs(omega_out) >= omega_db_max)
+        M_lim = P_gb * 1000.0 / qAbs(omega_out);
+    else
+        M_lim = M_gb_max;
 }
 
 //------------------------------------------------------------------------------
@@ -145,6 +162,12 @@ void HydroTransmission::load_config(CfgReader &cfg)
     gm_char.load(path.toStdString());
 
     cfg.getDouble(secName, "T_revers", T_revers);
+
+    cfg.getDouble(secName, "P_gb", P_gb);
+    cfg.getDouble(secName, "omega_gb_max", omega_db_max);
+
+    M_gb_max = P_gb * 1000.0 / omega_db_max;
+    k_gb = M_gb_max / omega_db_max / omega_db_max;
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +178,7 @@ double HydroTransmission::getHydroTranstCoeff(double omega_in, double omega_out)
     if (qAbs(omega_in) < 0.001)
         return 0.0;
 
-    return gt_char.getValue(qAbs(omega_out) / qAbs(omega_in));
+    return pf(gt_char.getValue(qAbs(omega_out) / qAbs(omega_in)));
 }
 
 //------------------------------------------------------------------------------
@@ -166,5 +189,5 @@ double HydroTransmission::getHydroCouplingCoeff(double omega_in, double omega_ou
     if (qAbs(omega_in) < 0.001)
         return 0.0;
 
-    return gm_char.getValue(1.0 - qAbs(omega_out) / qAbs(omega_in));
+    return pf(gm_char.getValue(1.0 - qAbs(omega_out) / qAbs(omega_in)));
 }
