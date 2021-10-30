@@ -118,9 +118,11 @@ void BlokDisplay::slotUpdateTimer()
     structsBLOK.other_val.curSpeed = qRound(input_signals[BLOK_VELOCITY]);
     structsBLOK.other_val.curSpeedLimit = qRound(input_signals[BLOK_VELOCITY_CURRENT_LIMIT]);
     structsBLOK.other_val.nextSpeedLimit = qRound(input_signals[BLOK_VELOCITY_NEXT_LIMIT]);
+    structsBLOK.other_val.signalControlLookOut = static_cast<bool>(input_signals[BLOK_VIGILANCE]);
 
     topBlock->setCurSpeed(structsBLOK.other_val.curSpeed);
     topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
+    topBlock->setTriangleYellow(structsBLOK.other_val.signalControlLookOut);
 
     off_screen->setVisible(!static_cast<bool>(input_signals[BLOK_DISPLAY_ON]));
     off_screen->raise();

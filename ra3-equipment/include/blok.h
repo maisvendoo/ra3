@@ -71,6 +71,9 @@ public:
 
    double getVelocityKmh() const { return qAbs(v_kmh); }
 
+   /// Сигнал "Проверка бдительности"
+   bool isCheckVigilanse() const { return check_vigilance; }
+
 private:
 
    double U_pow;
@@ -81,7 +84,11 @@ private:
 
    bool state_RB;
 
+   bool state_RB_old;
+
    bool state_RBS;
+
+   bool state_RBS_old;
 
    bool state_EPK;
 
@@ -90,6 +97,8 @@ private:
    bool key_epk;
 
    bool is_dislplay_ON;
+
+   bool check_vigilance;
 
    enum
    {
@@ -113,6 +122,9 @@ private:
    void load_config(CfgReader &cfg) override;
 
    void alsn_process(int code_alsn);
+
+   /// Озвучка
+   void sounds_process();
 
 private slots:
 

@@ -7,11 +7,14 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , code_alsn(1)
   , old_code_alsn(1)
   , state_RB(false)
+  , state_RB_old(false)
   , state_RBS(false)
+  , state_RBS_old(false)
   , state_EPK(false)
   , v_kmh(0.0)
   , key_epk(false)
   , is_dislplay_ON(false)
+  , check_vigilance(false)
   , safety_timer(new Timer(45.0, false))
 {
     epk_state.reset();
@@ -99,8 +102,12 @@ void BLOK::preStep(state_vector_t &Y, double t)
     if (state_RB || state_RBS)
     {
         epk_state.set();
-        safety_timer->stop();
+        safety_timer->stop();        
     }
+
+    check_vigilance = !epk_state.getState();
+
+    sounds_process();
 }
 
 //------------------------------------------------------------------------------
@@ -166,7 +173,26 @@ void BLOK::alsn_process(int code_alsn)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void BLOK::sounds_process()
+{
+    if (state_RB && (!state_RB_old))
+    {
+        emit soundPlay("BLOK_RB");
+    }
+
+    if (state_RBS && (!state_RBS_old))
+    {
+        emit soundPlay("BLOK_RB");
+    }
+
+    state_RB_old = state_RB;
+    state_RBS_old = state_RBS;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BLOK::onSafetyTimer()
 {
-    epk_state.reset();
+    epk_state.reset();    
 }
