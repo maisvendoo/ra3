@@ -12,6 +12,9 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , state_RBS_old(false)
   , state_EPK(false)
   , v_kmh(0.0)
+  , v(0.0)
+  , delta_t(0.1)
+  , acceleration(0.0)
   , key_epk(false)
   , is_dislplay_ON(false)
   , check_vigilance(false)
@@ -36,6 +39,9 @@ BLOK::~BLOK()
 void BLOK::step(double t, double dt)
 {
     safety_timer->step(t, dt);
+
+    calc_acceleration(t, dt);
+
     Device::step(t, dt);
 }
 
@@ -175,18 +181,28 @@ void BLOK::alsn_process(int code_alsn)
 //------------------------------------------------------------------------------
 void BLOK::sounds_process()
 {
-    if (state_RB && (!state_RB_old))
+    if ( (state_RB && (!state_RB_old)) ||
+         (state_RB_old && (!state_RB)) )
     {
         emit soundPlay("BLOK_RB");
     }
 
-    if (state_RBS && (!state_RBS_old))
+    if ( (state_RBS && (!state_RBS_old)) ||
+         (state_RBS_old && (!state_RBS)) )
     {
         emit soundPlay("BLOK_RB");
     }
 
     state_RB_old = state_RB;
     state_RBS_old = state_RBS;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::calc_acceleration(double t, double dt)
+{
+
 }
 
 //------------------------------------------------------------------------------

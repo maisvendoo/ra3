@@ -45,7 +45,11 @@ public:
    void setRBSstate(bool state) { state_RBS = state; };
 
    /// Прием скорости от ДПС
-   void setVelocity(double v) { v_kmh = v * Physics::kmh; }
+   void setVelocity(double v)
+   {
+       this->v = qAbs(v);
+       v_kmh = this->v * Physics::kmh;
+   }
 
    void setKeyEPK(bool key_epk) { this->key_epk = key_epk; }
 
@@ -74,6 +78,9 @@ public:
    /// Сигнал "Проверка бдительности"
    bool isCheckVigilanse() const { return check_vigilance; }
 
+   /// Вернуть ускорение поезда
+   double getAcceleration() const { return acceleration; }
+
 private:
 
    double U_pow;
@@ -94,6 +101,13 @@ private:
 
    double v_kmh;
 
+   double v;
+
+   /// Шаг дифференцирования скорости
+   double delta_t;
+
+   double acceleration;
+
    bool key_epk;
 
    bool is_dislplay_ON;
@@ -113,6 +127,14 @@ private:
 
    Trigger is_red;
 
+   enum
+   {
+       DIFF_NUM = 3
+   };
+
+   /// Мвссив значений скоростей для численного дифференцирования
+   std::array<double, DIFF_NUM> v_i;
+
    void preStep(state_vector_t &Y, double t) override;
 
    void ode_system(const state_vector_t &Y,
@@ -125,6 +147,9 @@ private:
 
    /// Озвучка
    void sounds_process();
+
+   /// Вычисление ускорения
+   void calc_acceleration(double t, double dt);
 
 private slots:
 
