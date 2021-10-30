@@ -337,6 +337,30 @@ void MPSU::output_error_msg()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::calc_brake_level_PB()
+{
+    mpsu_output.pBC_max = 0.0;
+    mpsu_output.pBC_min = mpsu_input.pBC_max;
+
+    for (double pBC : mpsu_input.pBC)
+    {
+        if (pBC > mpsu_output.pBC_max)
+        {
+            mpsu_output.pBC_max = pBC;
+        }
+
+        if (pBC < mpsu_output.pBC_min)
+        {
+            mpsu_output.pBC_min = pBC;
+        }
+    }
+
+    mpsu_output.brake_level_PB = mpsu_output.pBC_min / mpsu_input.pBC_max;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -397,7 +421,7 @@ void MPSU::main_loop_step(double t, double dt)
 
     check_alarm_level();
 
-    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level);
+    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM);
 
     check_revers();
 
@@ -412,6 +436,8 @@ void MPSU::main_loop_step(double t, double dt)
 
     mpsu_output.is_parking_braked = mpsu_input.is_parking_braked1 &&
                                     mpsu_input.is_parking_braked2;
+
+    calc_brake_level_PB();
 }
 
 //------------------------------------------------------------------------------

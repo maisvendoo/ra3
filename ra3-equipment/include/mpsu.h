@@ -112,6 +112,9 @@ private:
 
     /// Обработка ошибок
     void output_error_msg();
+
+    /// Определение уровня тормозного усилия от ПТ/ЭПТ
+    void calc_brake_level_PB();
 };
 
 #endif // MPSU_H

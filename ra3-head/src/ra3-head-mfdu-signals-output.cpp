@@ -112,4 +112,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_TRACTION_BRAKING] = static_cast<float>(100.0 * km->getTractionLevel() * hydro_trans->getTractionLevel());
 
     analogSignal[MFDU_ERROR_CODE] = static_cast<float>(mpsu->getOutputData().error_code);
+
+    analogSignal[MFDU_PRESSURE_TC_MIN] = mpsu->getOutputData().pBC_min;
+    analogSignal[MFDU_PRESSURE_TC_MAX] = mpsu->getOutputData().pBC_max;
 }

@@ -52,6 +52,10 @@ public:
 
     double getHydroBrakeLevel() const { return getY(2); }
 
+    void setRefBrakeLevel(double brake_level) { this->brake_level_ref = brake_level; }
+
+    double getBrakeLevel() const { return brake_level; }
+
 private:
 
     bool is_traction;
@@ -111,6 +115,19 @@ private:
 
     /// Коэффициент сопротивления в тракте гидротормоза
     double k_gb;
+
+    /// Уровень тормозного усилия при ГДТ
+    double brake_level_ref;
+
+    /// Текущий уровень тормозного усилия при ГДТ
+    double brake_level;
+
+    double Kp;
+
+    double Ki;
+
+    /// Ошибка по уровню тормозного усилия ГДТ
+    double delta_level;
 
     /// Характеристика гидротрансформатора
     LinearInterpolation gt_char;

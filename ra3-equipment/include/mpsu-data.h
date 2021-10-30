@@ -44,10 +44,10 @@ struct mpsu_input_t
     double disel2_shaft_freq;
 
     /// Уровень тяги от контроллера машиниста
-    double trac_level;
+    double trac_level_KM;
 
     /// Уровень тормозного усилия от контроллера машиниста
-    double brake_level;
+    double brake_level_KM;
 
     double trac_min;
 
@@ -80,7 +80,19 @@ struct mpsu_input_t
     /// Максимальное давление в ТЦ от БТО
     double pBC_max;    
 
+    /// Признак тормозного положения КМ
+    bool is_KM_brake;
 
+    /// Фактический уровень тормозного усилия от ГДТ
+    double brake_level_GB;
+
+    enum
+    {
+        NUM_AXIS = 4
+    };
+
+    /// Давления в ТЦ по всем тележкам поезда
+    std::array<double, NUM_AXIS> pBC;
 
     mpsu_input_t()
         : is_power_on(false)
@@ -92,8 +104,8 @@ struct mpsu_input_t
         , fuel_press2(0.0)
         , disel1_shaft_freq(0.0)
         , disel2_shaft_freq(0.0)
-        , trac_level(0.0)
-        , brake_level(0.0)
+        , trac_level_KM(0.0)
+        , brake_level_KM(0.0)
         , trac_min(0.17)
         , brake_min(0.26)
         , revers_state1(0)
@@ -105,8 +117,10 @@ struct mpsu_input_t
         , v_kmh(0)
         , is_KM_zero(true)
         , pBC_max(0.38)
+        , is_KM_brake(false)
+        , brake_level_GB(0)
     {
-
+        std::fill(pBC.begin(), pBC.end(), 0.0);
     }
 };
 
@@ -193,6 +207,21 @@ struct mpsu_output_t
     /// Код ошибки
     int error_code;
 
+    /// Сигнал наполнения ГДТ
+    bool hydro_brake_ON;
+
+    /// Сигнал отпуска пневматического тормоза (через КЭБ)
+    bool release_PB;
+
+    /// Максимальное давление в ТЦ
+    double pBC_max;
+
+    /// Минимальное давление в ТЦ
+    double pBC_min;
+
+    /// Фактический уровень торможения ПТ/ЭПТ
+    double brake_level_PB;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -222,6 +251,11 @@ struct mpsu_output_t
         , is_holding_braked(false)
         , is_parking_braked(false)
         , error_code(ERROR_NONE)
+        , hydro_brake_ON(false)
+        , release_PB(false)
+        , pBC_max(0)
+        , pBC_min(0)
+        , brake_level_PB(0)
     {
 
     }

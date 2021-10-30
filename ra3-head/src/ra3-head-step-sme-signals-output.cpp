@@ -64,5 +64,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
 
-    forward_outputs[SME_REVERS_STATE] = hydro_trans->getReversState();    
+    forward_outputs[SME_REVERS_STATE] = hydro_trans->getReversState();
+
+    forward_outputs[SME_BWD_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
+    forward_outputs[SME_BWD_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
 }
