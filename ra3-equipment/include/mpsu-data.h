@@ -92,6 +92,21 @@ struct mpsu_input_t
     /// Фактический уровень тормозного усилия от ГДТ на вагоне 2
     double brake_level_GB2;
 
+    /// Максимальное действительное нажатие на колодку
+    double Kmax;
+
+    /// Диаметр колеса по кругу катания
+    double wheel_diam;
+
+    /// Передаточное число редукторов
+    double ip;
+
+    /// Момент от ГДТ
+    double M_gb;
+
+    /// Максимальный момент от ГДТ
+    double M_gb_max;
+
     enum
     {
         NUM_AXIS = 4
@@ -127,6 +142,11 @@ struct mpsu_input_t
         , is_KM_brake(false)
         , brake_level_GB1(0)
         , brake_level_GB2(0)
+        , Kmax(0)
+        , wheel_diam(0.86)
+        , ip(3.32)
+        , M_gb(0)
+        , M_gb_max(0)
     {
         std::fill(pBC.begin(), pBC.end(), 0.0);
     }
@@ -239,11 +259,17 @@ struct mpsu_output_t
     /// Заданный уровень торможения ЭПТ
     double brake_ref_level_EPB;
 
+    /// Заданные уровень торможения ГДТ
+    double brake_ref_level_GB;
+
     /// Тип активного торможения на первом вагоне
     int brake_type1;
 
     /// Тип активного торможения на втором вагоне
     int brake_type2;
+
+    /// Общий уровен развиваемого тормозного усилия
+    double brake_level;
 
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
@@ -282,8 +308,10 @@ struct mpsu_output_t
         , pBC_min(0)
         , brake_level_PB(0)
         , brake_ref_level_EPB(0)
+        , brake_ref_level_GB(0)
         , brake_type1(2)
         , brake_type2(2)
+        , brake_level(0)
     {
 
     }

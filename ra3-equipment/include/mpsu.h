@@ -118,6 +118,9 @@ private:
 
     /// Управление гидродинамическим торможением
     void hydro_brake_control();
+
+    /// Расчет максимального тормозного усилия ЭПТ при данной скорости
+    double calcMaxBrakeForce(double V);
 };
 
 #endif // MPSU_H

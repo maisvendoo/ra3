@@ -18,6 +18,8 @@ public:
 
     double getParkingBrakePressure() const { return getY(1); }
 
+    double getMaxShoeForce() const { return Kmax; }
+
 private:
 
     /// Объем камеры стояночного тормоза

@@ -28,6 +28,7 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
   , P_gb(300)
   , omega_db_max(162.0)
   , M_gb_max(0.0)
+  , M_gb(0.0)
   , k_gb(0.0)
   , brake_level_ref(0.0)
   , brake_level(0.0)
@@ -98,7 +99,7 @@ double HydroTransmission::brakeTorqueLimit(double omega_out)
     if (qAbs(omega_out) >= omega_db_max)
         M_lim = P_gb * 1000.0 / qAbs(omega_out);
     else
-        M_lim = M_gb_max;
+        M_lim = k_gb * pow(omega_out, 2);
 
     return M_lim;
 }
@@ -127,7 +128,7 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
 
     double k_gm = getHydroCouplingCoeff(omega_in, omega_out);
 
-    double M_gb = k_gb * brake_level_ref * Y[2] * pow(omega_out, 2);
+    M_gb = k_gb * brake_level_ref * Y[2] * pow(omega_out, 2);
 
     M_gb = cut(M_gb, 0.0, brakeTorqueLimit(omega_out) * brake_level_ref);
 

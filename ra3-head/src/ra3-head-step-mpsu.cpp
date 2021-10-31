@@ -42,6 +42,11 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.pBC[2] = backward_inputs[SME_BWD_BC1];
     mpsu_input.pBC[3] = backward_inputs[SME_BWD_BC2];
 
+    mpsu_input.Kmax = brake_mech[FWD_TROLLEY]->getMaxShoeForce();
+    mpsu_input.wheel_diam = wheel_diameter;
+    mpsu_input.M_gb = hydro_trans->getBrakeTorque();
+    mpsu_input.M_gb_max = hydro_trans->getMaxBrakeTorque();
+
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    
 }

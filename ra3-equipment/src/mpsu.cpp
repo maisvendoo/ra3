@@ -366,25 +366,59 @@ void MPSU::calc_brake_level_PB()
 //------------------------------------------------------------------------------
 void MPSU::hydro_brake_control()
 {
+    mpsu_output.brake_level = mpsu_input.brake_level_KM;
+
     // При скорости ниже 30 км/ч отключаем ГДТ безусловно и замещаем его
     if (mpsu_input.v_kmh < 30)
     {
         mpsu_output.release_PB1 = mpsu_output.release_PB2 = false;
         mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
+        mpsu_output.brake_type1 = 2;
         return;
     }
 
     // Пытаемся включить ГДТ
     mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = mpsu_input.is_KM_brake;
 
-    // Замещение ГДТ
-    mpsu_output.release_PB1 = (mpsu_input.brake_level_GB1 >= 0.05);
-    //mpsu_output.release_PB2 = (mpsu_input.brake_level_GB2 >= 0.05);
+    // Расчитываем усилие, обеспечиваемое ГДТ
+    double B_gb = mpsu_input.M_gb_max * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
 
-    if (mpsu_output.release_PB1)
-        mpsu_output.brake_type1 = 0;
+    // Рассчитываем потребное усилие, заданное от КМ
+    double B_ref = mpsu_input.brake_level_KM * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
+
+    mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb, 0.0, 1.0);
+    mpsu_output.brake_ref_level_EPB = pf(B_ref / B_gb - 1.0);
+
+    mpsu_output.release_PB1 = static_cast<bool>(hs_n(B_ref / B_gb - 1.0));
+
+    if ( mpsu_output.hydro_brake_ON1 && (!mpsu_output.release_PB1) )
+    {
+        mpsu_output.brake_type1 = 1;
+    }
     else
-        mpsu_output.brake_type1 = 2;
+    {
+        if (mpsu_output.hydro_brake_ON1)
+            mpsu_output.brake_type1 = 0;
+
+        if (!mpsu_output.release_PB1)
+            mpsu_output.brake_type1 = 2;
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double MPSU::calcMaxBrakeForce(double V)
+{
+    double Bmax = 0;
+
+    int shoes_num = 8;
+
+    double K = mpsu_input.Kmax;
+
+    Bmax = shoes_num * 1000.0 * Physics::g * K * 0.44 * (K + 20) * (V + 150) / (4 * K + 20) / (2 * V + 150);
+
+    return Bmax;
 }
 
 //------------------------------------------------------------------------------

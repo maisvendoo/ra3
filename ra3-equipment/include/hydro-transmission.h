@@ -56,6 +56,10 @@ public:
 
     double getBrakeLevel() const { return brake_level; }
 
+    double getBrakeTorque() const { return M_gb; }
+
+    double getMaxBrakeTorque() { return brakeTorqueLimit(omega_out); }
+
 private:
 
     bool is_traction;
@@ -112,6 +116,9 @@ private:
 
     /// Максимальный момент ГДТ
     double M_gb_max;
+
+    /// Момент от ГДТ
+    double M_gb;
 
     /// Коэффициент сопротивления в тракте гидротормоза
     double k_gb;
