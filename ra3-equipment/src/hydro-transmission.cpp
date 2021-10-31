@@ -99,7 +99,7 @@ double HydroTransmission::brakeTorqueLimit(double omega_out)
     if (qAbs(omega_out) >= omega_db_max)
         M_lim = P_gb * 1000.0 / qAbs(omega_out);
     else
-        M_lim = k_gb * pow(omega_out, 2);
+        M_lim = M_gb_max;
 
     return M_lim;
 }

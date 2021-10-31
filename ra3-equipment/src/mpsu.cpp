@@ -385,16 +385,19 @@ void MPSU::hydro_brake_control()
     // Пытаемся включить ГДТ
     mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = mpsu_input.is_KM_brake;
 
-    // Расчитываем усилие, обеспечиваемое ГДТ
-    double B_gb = mpsu_input.M_gb_max * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
+    // Расчитываем максимальное усилие, обеспечиваемое ГДТ
+    double B_gb_max = mpsu_input.M_gb_max * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
+
+    // Расчитываем фактическое усилие, обеспечиваемое ГДТ
+    double B_gb = mpsu_input.M_gb * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
 
     // Рассчитываем потребное усилие, заданное от КМ
     double B_ref = mpsu_input.brake_level_KM * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
 
-    mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb, 0.0, 1.0);
-    mpsu_output.brake_ref_level_EPB = pf(B_ref / B_gb - 1.0);
+    mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb_max, 0.0, 1.0);
+    mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_input.brake_level_KM);
 
-    mpsu_output.release_PB1 = static_cast<bool>(hs_n(B_ref / B_gb - 1.0));
+    mpsu_output.release_PB1 = !static_cast<bool>(hs_p(B_ref - B_gb));
 
     if ( mpsu_output.hydro_brake_ON1 && (!mpsu_output.release_PB1) )
     {
