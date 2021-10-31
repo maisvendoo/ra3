@@ -31,7 +31,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     mpsu_input.is_KM_zero = km->isZero() || static_cast<bool>(forward_inputs[SME_IS_KM_ZERO]);
     mpsu_input.is_KM_brake = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_BRAKE]);
-    mpsu_input.is_KM_traction = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
+    mpsu_input.is_KM_traction = km->isTraction() || static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
 
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
     mpsu_input.brake_level_GB1 = hydro_trans->getBrakeLevel();

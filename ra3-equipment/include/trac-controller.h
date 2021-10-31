@@ -17,12 +17,12 @@ public:
     /// Признак нулевого положения
     bool isZero()
     {
-        return !(traction.getState() || brake.getState());
+        return mode_pos == 0;
     }
 
-    bool isTraction() { return traction.getState(); }
+    bool isTraction() { return mode_pos == 1; }
 
-    bool isBrake() { return brake.getState(); }
+    bool isBrake() { return mode_pos == -1; }
 
     float getHandlePosition() const;
 
