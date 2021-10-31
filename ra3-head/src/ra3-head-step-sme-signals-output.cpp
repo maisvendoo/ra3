@@ -77,4 +77,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Уровень тяги и торможения с КМ для задней секции
     backward_outputs[SME_KM_BRAKE_LEVEL] = km->getBrakeLevel();
     backward_outputs[SME_KM_TRACTION_LEVEL] = km->getTractionLevel();
+
+    backward_outputs[SME_IS_EMERGENCY_BRAKE] = static_cast<float>(
+                emerg_brake_valve->isEmergencyBrake() ||
+                km->isEmergencyBrake());
 }

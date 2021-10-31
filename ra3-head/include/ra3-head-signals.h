@@ -139,6 +139,8 @@ enum
     LS_G3_1 = 174,
     LS_G4_1 = 175,
 
+    EMERGENCY_STOP_BUTTON = 176,
+
     // Углы поворота колесных пар
     WHEEL_1 = 194,
     WHEEL_2 = 195,
@@ -178,7 +180,8 @@ enum
     SME_IS_KM_BRAKE = 24,
     SME_IS_KM_ZERO = 25,
     SME_KM_TRACTION_LEVEL = 26,
-    SME_KM_BRAKE_LEVEL = 27
+    SME_KM_BRAKE_LEVEL = 27,
+    SME_IS_EMERGENCY_BRAKE = 28
 };
 
 #endif // RA3_HEAD_SIGNALS_H

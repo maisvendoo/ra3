@@ -46,6 +46,8 @@ public:
 
     void setReversHandleSoundName(QString name) { reversSoundName = name; }
 
+    bool isEmergencyBrake() const { return  emerg_brake.getState(); }
+
 private:
 
     /// Позиция, определяющая режим управления
@@ -92,6 +94,8 @@ private:
     /// Блок-контакт "ТОРМОЖЕНИЕ"
     Trigger brake;
 
+    /// Блок-контакт "ЭКСТРЕННОЕ ТОРМОЖЕНИЕ"
+    Trigger emerg_brake;
 
     void preStep(state_vector_t &Y, double t) override;
 

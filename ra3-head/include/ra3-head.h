@@ -23,6 +23,7 @@
 #include    "blok.h"
 #include    "hydro-transmission.h"
 #include    "registrator.h"
+#include    "emergency-brake-valve.h"
 
 #include    "ra3-head-signals.h"
 
@@ -138,6 +139,9 @@ private:
 
     /// Гидропередача
     HydroTransmission *hydro_trans;
+
+    /// Клапан аварийного экстренного торможения
+    EmergencyBrakeValve *emerg_brake_valve;
 
     /// Путь поиска загружаемых модулей оборудования
     QString modules_dir;

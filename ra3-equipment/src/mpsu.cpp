@@ -274,6 +274,8 @@ void MPSU::check_moition_disable()
     {
         mpsu_output.motion_disable |= error;
     }
+
+    mpsu_output.motion_disable |= mpsu_input.is_emergency_brake;
 }
 
 //------------------------------------------------------------------------------
@@ -373,6 +375,13 @@ void MPSU::hydro_brake_control()
 {
     mpsu_output.brake_level = mpsu_input.brake_level_KM;
 
+    // Блокируем питание КЭБ при экстренном торможении
+    if (mpsu_input.is_emergency_brake)
+    {
+        mpsu_output.release_PB1 = false;
+        return;
+    }
+
     // При скорости ниже 30 км/ч отключаем ГДТ безусловно и замещаем его
     if (mpsu_input.v_kmh < 30)
     {
@@ -394,9 +403,11 @@ void MPSU::hydro_brake_control()
     // Рассчитываем потребное усилие, заданное от КМ
     double B_ref = mpsu_input.brake_level_KM * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
 
+    // Определяем задание ГДТ, пытаемся реализовать заданное усили за счет применения ГДТ
     mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb_max, 0.0, 1.0);
+    // Определяем добавку по ЭПТ, если эффективности ГДТ не достаточно
     mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_input.brake_level_KM);
-
+    // Формируем признак "отпуск ЭПТ" при достаточном тормозном усилии от ГДТ
     mpsu_output.release_PB1 = !static_cast<bool>(hs_p(B_ref - B_gb));
 
     if ( mpsu_output.hydro_brake_ON1 && (!mpsu_output.release_PB1) )

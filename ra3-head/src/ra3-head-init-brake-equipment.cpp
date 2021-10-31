@@ -16,4 +16,9 @@ void RA3HeadMotor::initBrakeEquipment()
 
     bc_split = new PneumoSplitter();
     bc_split->read_config("pneumo-splitter");
+
+    emerg_brake_valve = new EmergencyBrakeValve();
+    emerg_brake_valve->read_custom_config(config_dir +
+                                          QDir::separator() +
+                                          "emergency-brake-valve");
 }

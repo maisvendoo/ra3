@@ -107,6 +107,9 @@ struct mpsu_input_t
     /// Максимальный момент от ГДТ
     double M_gb_max;
 
+    /// Признак экстренного торможения
+    bool is_emergency_brake;
+
     enum
     {
         NUM_AXIS = 4
@@ -147,6 +150,7 @@ struct mpsu_input_t
         , ip(3.32)
         , M_gb(0)
         , M_gb_max(0)
+        , is_emergency_brake(false)
     {
         std::fill(pBC.begin(), pBC.end(), 0.0);
     }

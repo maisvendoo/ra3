@@ -24,14 +24,26 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.revers_state1 = hydro_trans->getReversState();
     mpsu_input.revers_state2 = static_cast<int>(backward_inputs[SME_REVERS_STATE]);
     mpsu_input.is_autostop_ON = epk->getStateKey();
-    mpsu_input.revers_handle = static_cast<int>(km->getReversHandlePos());
+
+    mpsu_input.revers_handle = static_cast<int>(km->getReversHandlePos()) +
+            static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
+
     mpsu_input.is_parking_braked1 = brake_module->isParkingBraked();
     mpsu_input.is_parking_braked2 = static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
     mpsu_input.v_kmh = blok->getVelocityKmh();
 
-    mpsu_input.is_KM_zero = km->isZero() || static_cast<bool>(forward_inputs[SME_IS_KM_ZERO]);
-    mpsu_input.is_KM_brake = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_BRAKE]);
-    mpsu_input.is_KM_traction = km->isTraction() || static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
+    if (is_active)
+    {
+        mpsu_input.is_KM_zero = km->isZero();
+        mpsu_input.is_KM_brake = km->isBrake();
+        mpsu_input.is_KM_traction = km->isTraction();
+    }
+    else
+    {
+        mpsu_input.is_KM_zero = static_cast<bool>(forward_inputs[SME_IS_KM_ZERO]);
+        mpsu_input.is_KM_brake = static_cast<bool>(forward_inputs[SME_IS_KM_BRAKE]);
+        mpsu_input.is_KM_traction = static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
+    }
 
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
     mpsu_input.brake_level_GB1 = hydro_trans->getBrakeLevel();
@@ -46,6 +58,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.wheel_diam = wheel_diameter;
     mpsu_input.M_gb = hydro_trans->getBrakeTorque();
     mpsu_input.M_gb_max = hydro_trans->getMaxBrakeTorque();
+
+    mpsu_input.is_emergency_brake = emerg_brake_valve->isEmergencyBrake() ||
+            km->isEmergencyBrake() ||
+            static_cast<float>(forward_inputs[SME_IS_EMERGENCY_BRAKE]);
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    
