@@ -263,6 +263,16 @@ void MPSU::check_revers()
 //------------------------------------------------------------------------------
 void MPSU::check_moition_disable()
 {
+    if (mpsu_input.is_emergency_brake)
+    {
+        motion_lock.set();
+    }
+
+    if (!mpsu_input.is_emergency_brake && mpsu_input.is_KM_zero)
+    {
+        motion_lock.reset();
+    }
+
     errors[ERROR_ST1] = mpsu_input.is_parking_braked1;
     errors[ERROR_ST2] = mpsu_input.is_parking_braked2;
     errors[ERROR_REVERS_0] = mpsu_input.revers_handle == 0;
@@ -275,7 +285,7 @@ void MPSU::check_moition_disable()
         mpsu_output.motion_disable |= error;
     }
 
-    mpsu_output.motion_disable |= mpsu_input.is_emergency_brake;
+    mpsu_output.motion_disable |= motion_lock.getState();
 }
 
 //------------------------------------------------------------------------------
@@ -379,6 +389,7 @@ void MPSU::hydro_brake_control()
     if (mpsu_input.is_emergency_brake)
     {
         mpsu_output.release_PB1 = false;
+        mpsu_output.brake_type1 = 3;
         return;
     }
 

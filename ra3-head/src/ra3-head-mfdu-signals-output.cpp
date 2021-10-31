@@ -76,8 +76,8 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     // ЭПК
     analogSignal[MFDU_EPK] = static_cast<float>(!epk->getStateKey());
 
-    // Экстренное и стояночный тормоз
-    analogSignal[MFDU_XREN1] = 1.0f;
+    // Экстренное
+    analogSignal[MFDU_XREN1] = static_cast<float>(!(km->isEmergencyBrake() || emerg_brake_valve->isEmergencyBrake()));
 
     // СПТ
     bool is_parking_braked = mpsu->getOutputData().is_parking_braked;

@@ -64,6 +64,9 @@ private:
     /// Тригер фиксации сообщения об ошибке
     Trigger error_fixed;
 
+    /// Триггер блокирования движения после ЭТ
+    Trigger motion_lock;
+
     /// Ячейки текущих запретов
     std::array<bool, ERRORS_NUM> errors;
 
