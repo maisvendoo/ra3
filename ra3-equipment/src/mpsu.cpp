@@ -209,7 +209,12 @@ double MPSU::getTracRefDiselFreq(double trac_level)
 {
     double motion_allow = static_cast<double>(!mpsu_output.motion_disable);
 
-    double n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
+    double n_ref = n_min;
+
+    if (!mpsu_output.hydro_brake_ON1)
+        n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
+    else
+        n_ref = 1700.0;
 
     return cut(n_ref, n_min, n_max);
 }
