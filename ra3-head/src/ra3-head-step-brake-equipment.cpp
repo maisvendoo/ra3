@@ -8,17 +8,7 @@ void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
     bool is_parking_braked = tumbler[SWITCH_PARKING_BRAKE].getState() ||
             static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
-    if (is_active)
-    {
-        brake_module->setRefPressureLevel(km->getBrakeLevel() +
-                                          mpsu->getOutputData().holding_brake_level);
-    }
-    else
-    {
-        brake_module->setRefPressureLevel(forward_inputs[SME_REF_BRAKE_LEVEL] +
-                                          mpsu->getOutputData().holding_brake_level);
-    }
-
+    brake_module->setRefPressureLevel(mpsu->getOutputData().brake_ref_level_EPB);
     brake_module->releaseBrakes(mpsu->getOutputData().release_PB1);
 
     brake_module->setVoltage(Ucc);

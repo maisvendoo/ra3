@@ -17,8 +17,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.disel2_shaft_freq = static_cast<double>(backward_inputs[SME_BWD_OMEGA]);
     mpsu_input.trac_min = km->getMinTracLevel();
     mpsu_input.brake_min = km->getMinBrakeLevel();
-    mpsu_input.trac_level_KM = km->getTractionLevel();
-    mpsu_input.brake_level_KM = km->getBrakeLevel();
+
+    mpsu_input.trac_level_KM = km->getTractionLevel() + forward_inputs[SME_KM_TRACTION_LEVEL];
+    mpsu_input.brake_level_KM = km->getBrakeLevel() + forward_inputs[SME_KM_BRAKE_LEVEL];
+
     mpsu_input.revers_state1 = hydro_trans->getReversState();
     mpsu_input.revers_state2 = static_cast<int>(backward_inputs[SME_REVERS_STATE]);
     mpsu_input.is_autostop_ON = epk->getStateKey();
@@ -27,8 +29,9 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.is_parking_braked2 = static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
     mpsu_input.v_kmh = blok->getVelocityKmh();
 
-    mpsu_input.is_KM_zero = km->isZero();
+    mpsu_input.is_KM_zero = km->isZero() || static_cast<bool>(forward_inputs[SME_IS_KM_ZERO]);
     mpsu_input.is_KM_brake = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_BRAKE]);
+    mpsu_input.is_KM_traction = km->isBrake() || static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
 
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
     mpsu_input.brake_level_GB1 = hydro_trans->getBrakeLevel();

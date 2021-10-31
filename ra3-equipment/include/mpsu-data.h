@@ -77,6 +77,9 @@ struct mpsu_input_t
     /// Признак нулевого положения КМ
     bool is_KM_zero;
 
+    /// Признак тягового положения КМ
+    bool is_KM_traction;
+
     /// Максимальное давление в ТЦ от БТО
     double pBC_max;    
 
@@ -118,7 +121,8 @@ struct mpsu_input_t
         , is_parking_braked1(false)
         , is_parking_braked2(false)
         , v_kmh(0)
-        , is_KM_zero(true)
+        , is_KM_zero(false)
+        , is_KM_traction(false)
         , pBC_max(0.38)
         , is_KM_brake(false)
         , brake_level_GB1(0)
@@ -232,6 +236,9 @@ struct mpsu_output_t
     /// Фактический уровень торможения ПТ/ЭПТ
     double brake_level_PB;
 
+    /// Заданный уровень торможения ЭПТ
+    double brake_ref_level_EPB;
+
     /// Тип активного торможения на первом вагоне
     int brake_type1;
 
@@ -274,6 +281,7 @@ struct mpsu_output_t
         , pBC_max(0)
         , pBC_min(0)
         , brake_level_PB(0)
+        , brake_ref_level_EPB(0)
         , brake_type1(2)
         , brake_type2(2)
     {

@@ -58,7 +58,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Питание удерживающей катушки ЭПК
     backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
 
-    backward_outputs[SME_HYDRO_TRANS_FILL] = static_cast<float>(km->isTraction());
 
     backward_outputs[SME_DISEL_FREQ] = static_cast<float>(mpsu->getOutputData().n_ref);
 
@@ -70,5 +69,12 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_BWD_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
     forward_outputs[SME_BWD_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
 
+    // Состояние блок-контактов КМ
+    backward_outputs[SME_IS_KM_ZERO] = static_cast<float>(km->isZero());
+    backward_outputs[SME_IS_KM_TRACTION] = static_cast<float>(km->isTraction());
     backward_outputs[SME_IS_KM_BRAKE] = static_cast<float>(km->isBrake());
+
+    // Уровень тяги и торможения с КМ для задней секции
+    backward_outputs[SME_KM_BRAKE_LEVEL] = km->getBrakeLevel();
+    backward_outputs[SME_KM_TRACTION_LEVEL] = km->getTractionLevel();
 }

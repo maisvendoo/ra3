@@ -16,7 +16,7 @@ void RA3HeadMotor::stepTraction(double t, double dt)
     }
     else
     {
-        hydro_trans->setTractionMode(static_cast<bool>(forward_inputs[SME_HYDRO_TRANS_FILL]));
+        hydro_trans->setTractionMode(static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]));
         hydro_trans->setRefReversState(static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));
         hydro_trans->setRefBrakeLevel(forward_inputs[SME_REF_BRAKE_LEVEL]);
         hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON2);

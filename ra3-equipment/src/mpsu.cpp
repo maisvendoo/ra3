@@ -322,6 +322,9 @@ void MPSU::output_error_msg()
         return;
     }
 
+    if (!mpsu_input.is_KM_traction)
+        return;
+
     // Проверяем все флаги ошибок
     for (size_t i = 0; i < errors.size(); ++i)
     {
@@ -456,6 +459,10 @@ void MPSU::main_loop_step(double t, double dt)
 
     // Управление удерживающим тормозом
     holding_brake_step();
+
+    // Выбор уровня наполнения ТЦ между фактически заданным от КМ и уровнем
+    // удерживающего тормоза
+    mpsu_output.brake_ref_level_EPB = max(mpsu_input.brake_level_KM, mpsu_output.holding_brake_level);
 
     // Обработка ошибок
     output_error_msg();
