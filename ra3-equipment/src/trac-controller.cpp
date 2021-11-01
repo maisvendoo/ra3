@@ -40,7 +40,7 @@ TracController::~TracController()
 //------------------------------------------------------------------------------
 float TracController::getHandlePosition() const
 {
-    double level = mode_pos * 100 + trac_level - brake_level;
+    double level = mode_pos * 100 + trac_level - brake_level - 300 * static_cast<int>(emerg_brake.getState());
 
     return static_cast<float>(level) / 500.0f;
 }
@@ -110,12 +110,24 @@ void TracController::stepKeysControl(double t, double dt)
             {
                 dir = 1;
             }
+
+            if (emerg_brake.getState())
+            {
+                if (!old_traction_key)
+                    emerg_brake.reset();
+            }
         }
 
         if (getKeyState(KEY_D))
         {
             if (brake.getState())
                 dir = -1;
+
+            if (brake_level == 90)
+            {
+                if (!old_brake_key)
+                    emerg_brake.set();
+            }
         }
         else
         {
