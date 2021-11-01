@@ -187,7 +187,7 @@ void Disel::switchDiselSound(double n_ref)
     {
         if ( (dn >= i * 425) && (dn < (i+1) * 425) )
         {
-            pos_count = i + 1;
+            pos_count = i;
             break;
         }
     }
