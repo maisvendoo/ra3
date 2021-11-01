@@ -385,6 +385,14 @@ void MPSU::hydro_brake_control()
 {
     mpsu_output.brake_level = mpsu_input.brake_level_KM;
 
+    // Блокируем питание КЭБ если не собираемся тормозить
+    if (!mpsu_input.is_KM_brake)
+    {
+        mpsu_output.release_PB1 = false;
+        mpsu_output.brake_type1 = 2;
+        return;
+    }
+
     // Блокируем питание КЭБ при экстренном торможении
     if (mpsu_input.is_emergency_brake)
     {
