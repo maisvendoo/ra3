@@ -289,10 +289,10 @@ void MPSU::check_moition_disable()
         motion_lock.reset();
     }
 
-    errors[ERROR_ST1] = mpsu_input.is_parking_braked1;
-    errors[ERROR_ST2] = mpsu_input.is_parking_braked2;
-    errors[ERROR_REVERS_0] = mpsu_input.revers_handle == 0;
-    errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON;
+    errors[ERROR_ST1] = mpsu_input.is_parking_braked1 && mpsu_output.is_disel_started();
+    errors[ERROR_ST2] = mpsu_input.is_parking_braked2 && mpsu_output.is_disel_started();
+    errors[ERROR_REVERS_0] = (mpsu_input.revers_handle == 0) && mpsu_output.is_disel_started();
+    errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON && mpsu_output.is_disel_started();
 
     mpsu_output.motion_disable = false;
 
@@ -579,6 +579,12 @@ void MPSU::main_loop_step(double t, double dt)
 //------------------------------------------------------------------------------
 void MPSU::start_button_process(bool is_start_button)
 {
+    // Блокировка пуска дизеля при ненулевом положении КМ
+    if ( (!mpsu_input.is_KM_zero) && (!mpsu_output.is_disel_started()) )
+    {
+        return;
+    }
+
     // Обработка нажатия исключительно после того, как кнопка была отпущена
     if (is_start_button && (!old_start_state) )
     {
