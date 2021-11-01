@@ -141,6 +141,9 @@ enum
 
     EMERGENCY_STOP_BUTTON = 176,
 
+    RB = 177,
+    RBS = 178,
+
     // Углы поворота колесных пар
     WHEEL_1 = 194,
     WHEEL_2 = 195,
