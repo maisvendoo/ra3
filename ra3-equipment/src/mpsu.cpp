@@ -124,7 +124,7 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 void MPSU::start_disels()
 {
-    if ( (mpsu_output.current_started_disel == 1) &&
+    if ( (mpsu_output.start_press_count == 1) &&
          (!mpsu_output.is_disel_started()) )
     {
         startButtonTimer->stop();
@@ -170,7 +170,7 @@ void MPSU::stop_disels()
     {
         trig_fuel_valve[FWD_DISEL].reset();
         trig_fuel_valve[BWD_DISEL].reset();
-        mpsu_output.current_started_disel = -1;
+        mpsu_output.start_press_count = -1;
     }
 }
 
@@ -580,21 +580,16 @@ void MPSU::start_button_process(bool is_start_button)
     // Обработка нажатия исключительно после того, как кнопка была отпущена
     if (is_start_button && (!old_start_state) )
     {
+        // Засекаем время до второго нажатия
         if (!startButtonTimer->isStarted())
              startButtonTimer->start();
 
-        // Выбираем дизель
-        mpsu_output.current_started_disel++;
-        // "Режем" индекс
-        mpsu_output.current_started_disel = cut(mpsu_output.current_started_disel,
+        // Считаем нажатия
+        mpsu_output.start_press_count++;
+
+        mpsu_output.start_press_count = cut(mpsu_output.start_press_count,
                                                 0,
-                                                static_cast<int>(NUM_DISELS) - 1);        
-
-        // Взводим триггер признака пуска
-        //trig_disel_start[mpsu_output.current_started_disel].set();
-
-        // Взводим триггер топливного клапана
-        //trig_fuel_valve[mpsu_output.current_started_disel].set();
+                                                static_cast<int>(NUM_DISELS) - 1);                
     }
 
     // Запоминаем предыдущее состояние кнопки

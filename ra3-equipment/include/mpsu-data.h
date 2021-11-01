@@ -169,8 +169,8 @@ struct mpsu_output_t
     /// Включение дисплея МПСУ
     bool is_display_ON;
 
-    /// Текущий дизель для запуска
-    int  current_started_disel;
+    /// Счетчик нажатий кнопки "СТАРТ"
+    int  start_press_count;
 
     /// Включение стартера на дизель 1
     bool is_starter1_ON;
@@ -279,7 +279,7 @@ struct mpsu_output_t
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
         , is_display_ON(false)
-        , current_started_disel(-1)
+        , start_press_count(-1)
         , is_starter1_ON(false)
         , is_starter2_ON(false)
         , is_disel1_started(false)
