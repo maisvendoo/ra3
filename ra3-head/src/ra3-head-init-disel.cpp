@@ -10,6 +10,11 @@ void RA3HeadMotor::initDisel()
     disel = new Disel();
     disel->read_custom_config(config_dir + QDir::separator() + "disel");
 
+    if (is_active)
+        disel->setName("d1");
+    else
+        disel->setName("d2");
+
     starter = new Starter();
     starter->read_custom_config(config_dir + QDir::separator() + "starter");
 

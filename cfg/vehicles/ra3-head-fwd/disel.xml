@@ -9,7 +9,7 @@
 		<V_oil>1.5</V_oil>
 		<Mc>300.0</Mc>
 		<ip>3.3</ip>
-		<J_shaft>50.0</J_shaft>
+		<J_shaft>10.0</J_shaft>
 
 		<Qmax>0.166</Qmax>
 

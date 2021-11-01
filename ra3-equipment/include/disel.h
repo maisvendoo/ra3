@@ -69,6 +69,8 @@ public:
     /// Вернуть фактический расход топлива
     double getFuelFlow() const { return Q_fuel; }
 
+    void setName(QString name) { this->name = name; }
+
 private:
 
     enum
@@ -160,7 +162,7 @@ private:
     enum
     {
         MIN_POS = 0,
-        MAX_POS = 7
+        MAX_POS = 4
     };
 
     QString name;
@@ -173,7 +175,7 @@ private:
 
     void load_config(CfgReader &cfg);
 
-    void switchDiselSound(double n_ref_prev, double n_ref);
+    void switchDiselSound(double n_ref);
 
 private:
 

@@ -113,9 +113,9 @@ void Disel::preStep(state_vector_t &Y, double t)
 
     M_d = (M1 + M2) * static_cast<double>(is_fuel_ignition);
 
-    //switchDiselSound(n_ref_prev, n_ref);
+    switchDiselSound(n_ref);
 
-    emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / 800.0));
+    emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / (800 + pos_count * 425)));
     emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 83.8));
 
     if (old_state_mv6)
@@ -177,26 +177,27 @@ void Disel::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void Disel::switchDiselSound(double n_ref_prev, double n_ref)
+void Disel::switchDiselSound(double n_ref)
 {
-    int n0 = static_cast<int>(n_ref_prev);
-    int n1 = static_cast<int>(n_ref);
+    double dn = pf(n_ref - 800);
 
-    if (n0 != n1)
+    int i = 0;
+
+    for (; i < MAX_POS; ++i)
     {
-        if (n1 > n0)
+        if ( (dn >= i * 425) && (dn < (i+1) * 425) )
         {
-            pos_count++;
+            pos_count = i + 1;
+            break;
         }
-        else
-        {
-            pos_count--;
-        }
+    }
 
-        pos_count = cut(pos_count, static_cast<int>(MIN_POS), static_cast<int>(MAX_POS));
+    QString newSoundName = name + QString("-pos%1").arg(i);
 
+    if (newSoundName != soundName)
+    {
         emit soundStop(soundName);
-        soundName = name + QString("-pos%1").arg(pos_count);
+        soundName = newSoundName;
         emit soundPlay(soundName);
     }
 }
@@ -207,6 +208,7 @@ void Disel::switchDiselSound(double n_ref_prev, double n_ref)
 void Disel::slotFuelIgnition()
 {
     is_fuel_ignition = state_mv6 && static_cast<bool>(hs_p(fuel_pressure - 0.1));
+    soundName = name + "-pos0";
     emit soundPlay(soundName);
     timer->stop();
 }
