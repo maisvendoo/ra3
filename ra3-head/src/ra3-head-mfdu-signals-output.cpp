@@ -44,7 +44,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_DEC_OZ_MOTOR] = 2.0f;
     analogSignal[MFDU_ACTIVE_CHARGE] = 3.0f;
 
-    analogSignal[MFDU_CAN_RIGHT] = 1.0f;
+    analogSignal[MFDU_CAN_RIGHT] = backward_inputs[SME_BWD_CAN];
 
     analogSignal[MFDU_BRAKES_LEFT] = 1.0f;
     analogSignal[MFDU_BRAKES_RIGHT] = 1.0f;
@@ -119,4 +119,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_BRAKES_LEFT] = mpsu->getOutputData().brake_type1;
     analogSignal[MFDU_BRAKES_RIGHT] = mpsu->getOutputData().brake_type1;
+
+    analogSignal[MFDU_TEMPERATURE_KAB] = 25.1f;
 }

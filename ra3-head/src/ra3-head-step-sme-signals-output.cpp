@@ -81,4 +81,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_IS_EMERGENCY_BRAKE] = static_cast<float>(
                 emerg_brake_valve->isEmergencyBrake() ||
                 km->isEmergencyBrake());
+
+    // Сигнал наичия связи по как для ведущей секции
+    forward_outputs[SME_BWD_CAN] = 1.0f;
 }
