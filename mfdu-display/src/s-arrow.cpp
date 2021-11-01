@@ -25,7 +25,7 @@ SArrow::SArrow(int otstupSverhu, QWidget *parent)
     labCenter_->setAlignment(Qt::AlignCenter);
     //labCenter_->move(cpX_ - 25, cpY_ - 25);
     labCenter_->setFont(QFont("Arial", 20, 57));
-    //labCenter_->setStyleSheet("color: black");
+    labCenter_->setStyleSheet("color: white");
 //    labCenter_->resize(20, 20);
 //    labCenter_->setPixmap()
 
