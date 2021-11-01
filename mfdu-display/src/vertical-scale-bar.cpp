@@ -39,7 +39,7 @@ void VerticalScaleBar::setVal(int val)
         val = -100;
 
 
-    if (val > 0)
+    if (val >= 0)
     {
         labTraction_->setText(QString::number(val) + "%");
 
@@ -81,7 +81,12 @@ void VerticalScaleBar::draw_(int val)
             << QPoint(this->width(), h_2)
             << QPoint(0, h_2);
     paint.setPen(Qt::transparent);
-    paint.setBrush(QColor("#00ff00"));
+
+    if (val <= 0)
+        paint.setBrush(QColor("#00ff00"));
+    else
+        paint.setBrush(QColor("#ffff00"));
+
     paint.drawPolygon(polygon);
 
     paint.end();

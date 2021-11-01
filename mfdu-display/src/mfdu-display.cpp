@@ -120,7 +120,7 @@ void MfduDisplay::init()
     input_signals[MFDU_XREN2] = 0;          //
     input_signals[MFDU_XREN3] = 0;          //
     // Тяга/торможение
-    input_signals[MFDU_TRACTION_BRAKING] = 30;
+    input_signals[MFDU_TRACTION_BRAKING] = 0;
     // Блок нижних параметров
     input_signals[MFDU_PRESSURE_PM] = 0.0;      // Давление ПМ
     input_signals[MFDU_PRESSURE_TM] = 0.5;      // Давление ТМ
