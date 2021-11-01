@@ -78,8 +78,8 @@
 	<Sound>
 		<Name>Starter1</Name>
 		<Path>disel-start.wav</Path>
-		<InitVolume>5</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<InitVolume>10</InitVolume>
+		<MaxVolume>10</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -88,8 +88,8 @@
 	<Sound>
 		<Name>Starter2</Name>
 		<Path>disel-start.wav</Path>
-		<InitVolume>5</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<InitVolume>10</InitVolume>
+		<MaxVolume>10</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -100,7 +100,7 @@
 		<Name>d1-Disel</Name>
 		<Path>x0.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<MaxVolume>40</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -110,7 +110,7 @@
 		<Name>d2-Disel</Name>
 		<Path>x0.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<MaxVolume>40</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -120,7 +120,7 @@
 		<Name>d1-pos0</Name>
 		<Path>x0.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<MaxVolume>40</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -130,97 +130,17 @@
 		<Name>d2-pos0</Name>
 		<Path>x0.wav</Path>
 		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
+		<MaxVolume>40</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
 	</Sound>
-
-	<Sound>
-		<Name>d1-pos1</Name>
-		<Path>x1.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-pos1</Name>
-		<Path>x1.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>d1-pos2</Name>
-		<Path>x2.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-pos2</Name>
-		<Path>x2.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>d1-pos3</Name>
-		<Path>x3.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-pos3</Name>
-		<Path>x3.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>d1-pos4</Name>
-		<Path>x4.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-pos4</Name>
-		<Path>x4.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>5</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>	
 	
 	<Sound>
 		<Name>d1-stop</Name>
 		<Path>disel-stop.wav</Path>
-		<InitVolume>1</InitVolume>
-		<MaxVolume>1</MaxVolume>
+		<InitVolume>4</InitVolume>
+		<MaxVolume>4</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
@@ -229,8 +149,8 @@
 	<Sound>
 		<Name>d2-stop</Name>
 		<Path>disel-stop.wav</Path>
-		<InitVolume>1</InitVolume>
-		<MaxVolume>1</MaxVolume>
+		<InitVolume>4</InitVolume>
+		<MaxVolume>4</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>

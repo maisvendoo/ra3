@@ -8,6 +8,7 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , old_start_state(false)
   , n_min(800)
   , n_max(1800)
+  , n_min_gb(1700)
   , v_HB(1.0)
   , p_HB(0.15)
   , startButtonTimer(new Timer(5.0, false))
@@ -98,6 +99,7 @@ void MPSU::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "n_max", n_max);
     cfg.getDouble(secName, "v_HB", v_HB);
     cfg.getDouble(secName, "p_HB", p_HB);
+    cfg.getDouble(secName, "n_min_gb", n_min_gb);
 }
 
 //------------------------------------------------------------------------------
@@ -221,7 +223,7 @@ void MPSU::check_alarm_level()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-double MPSU::getTracRefDiselFreq(double trac_level)
+double MPSU::getTracRefDiselFreq(double trac_level, double brake_level)
 {
     double motion_allow = static_cast<double>(!mpsu_output.motion_disable);
 
@@ -230,7 +232,7 @@ double MPSU::getTracRefDiselFreq(double trac_level)
     if (!mpsu_output.hydro_brake_ON1)
         n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
     else    
-        n_ref = 1700.0;
+        n_ref = n_min_gb + (n_max - n_min_gb) * (brake_level - mpsu_input.brake_min) * motion_allow / (1.0 - mpsu_input.brake_min);;
 
     return cut(n_ref, n_min, n_max);
 }
@@ -549,7 +551,7 @@ void MPSU::main_loop_step(double t, double dt)
 
     check_alarm_level();
 
-    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM);
+    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM, mpsu_input.brake_level_KM);
 
     check_revers();
 

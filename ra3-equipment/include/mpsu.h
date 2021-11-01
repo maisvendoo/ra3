@@ -36,6 +36,9 @@ private:
     /// Уставка максимальных оборотов дизеля
     double n_max;
 
+    /// Минимальные обороты дизеля при ГДТ
+    double n_min_gb;
+
     /// Уставка скорости срабатывания удерживающего тормоза
     double v_HB;
 
@@ -105,7 +108,7 @@ private:
     void check_alarm_level();
 
     /// Задатчик оборотов дизеля в тяге
-    double getTracRefDiselFreq(double trac_level);
+    double getTracRefDiselFreq(double trac_level, double brake_level);
 
     /// Проверка состояния реверсирования
     void check_revers();

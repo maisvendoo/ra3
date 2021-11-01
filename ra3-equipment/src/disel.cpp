@@ -113,9 +113,9 @@ void Disel::preStep(state_vector_t &Y, double t)
 
     M_d = (M1 + M2) * static_cast<double>(is_fuel_ignition);
 
-    switchDiselSound(n_ref);
+    //switchDiselSound(n_ref);
 
-    emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / (800 + pos_count * 425)));
+    emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / 800));
     emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 83.8));
 
     if (old_state_mv6)
