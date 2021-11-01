@@ -229,7 +229,7 @@ double MPSU::getTracRefDiselFreq(double trac_level)
 
     if (!mpsu_output.hydro_brake_ON1)
         n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
-    else
+    else    
         n_ref = 1700.0;
 
     return cut(n_ref, n_min, n_max);
@@ -406,6 +406,7 @@ void MPSU::hydro_brake_control()
     {
         mpsu_output.release_PB1 = false;
         mpsu_output.brake_type1 = 2;
+        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
         return;
     }
 
@@ -414,6 +415,7 @@ void MPSU::hydro_brake_control()
     {
         mpsu_output.release_PB1 = false;
         mpsu_output.brake_type1 = 3;
+        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
         return;
     }
 

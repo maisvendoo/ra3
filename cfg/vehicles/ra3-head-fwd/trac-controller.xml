@@ -7,5 +7,7 @@
 		<trac_min>10</trac_min>
 		<brake_min>10</brake_min>
 
+		<K_flow>50.0</K_flow>
+
 	</Device>
 </Config>

@@ -22,9 +22,15 @@ TracController::TracController(QObject *parent) : Device(parent)
   , tracTimer(new Timer)
   , mainHandleSoundName("KM_main")
   , reversSoundName("KM_revers")
+  , K_flow(50.0)
+  , pTM(0.0)
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
+
+    emerg_brake.setOnSoundName("KM_main");
+    emerg_brake.setOffSoundName("KM_main");
+    connect(&emerg_brake, &Trigger::soundPlay, this, &TracController::soundPlay);
 }
 
 //------------------------------------------------------------------------------
@@ -77,6 +83,8 @@ void TracController::load_config(CfgReader &cfg)
     cfg.getInt(secName, "trac_min", trac_min);
     cfg.getInt(secName, "brake_min", brake_min);
     cfg.getDouble(secName, "omega_handle", omega_handle);
+
+    cfg.getDouble(secName, "K_flow", K_flow);
 
     brakeTimer->setTimeout(0.02);
     tracTimer->setTimeout(0.02);

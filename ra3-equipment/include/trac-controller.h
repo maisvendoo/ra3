@@ -48,6 +48,13 @@ public:
 
     bool isEmergencyBrake() const { return  emerg_brake.getState(); }
 
+    void setBrakePipePressure(double pTM) { this->pTM = pTM; }
+
+    double getEmergencyRate() const
+    {
+        return K_flow * pTM * static_cast<double>(emerg_brake.getState());
+    }
+
 private:
 
     /// Позиция, определяющая режим управления
@@ -87,6 +94,12 @@ private:
     QString mainHandleSoundName;
 
     QString reversSoundName;
+
+    /// Коэффициент утечки через клапан ЭТ
+    double K_flow;
+
+    /// Дввление в тормозной магистрали
+    double pTM;
 
     /// Блок-контакт "ХОД"
     Trigger traction;
