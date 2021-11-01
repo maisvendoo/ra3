@@ -48,6 +48,10 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     analogSignal[EPK] = static_cast<float>(epk->getStateKey());
 
+    // Карданы
+    analogSignal[SHAFT_1] = static_cast<float>( 1.2 * dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
+    analogSignal[SHAFT_2] = static_cast<float>(-3.32 * dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
+
     // Колесные пары
     analogSignal[WHEEL_1] = static_cast<float>(dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
     analogSignal[WHEEL_2] = static_cast<float>(dir * wheel_rotation_angle[1] / 2.0 / Physics::PI);
