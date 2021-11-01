@@ -10,8 +10,9 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , n_max(1800)
   , v_HB(1.0)
   , p_HB(0.15)
+  , startButtonTimer(new Timer(5.0, false))
 {
-
+    connect(startButtonTimer, &Timer::process, this, &MPSU::slotStartButtonTimer);
 }
 
 //------------------------------------------------------------------------------
@@ -43,6 +44,9 @@ void MPSU::step(double t, double dt)
     }
 
     main_loop_step(t, dt);
+
+    startButtonTimer->step(t, dt);
+
     Device::step(t, dt);
 }
 
@@ -120,6 +124,18 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 void MPSU::start_disels()
 {
+    if ( (mpsu_output.current_started_disel == 1) &&
+         (!mpsu_output.is_disel_started()) )
+    {
+        startButtonTimer->stop();
+
+        trig_disel_start[FWD_DISEL].set();
+        trig_disel_start[BWD_DISEL].set();
+
+        trig_fuel_valve[FWD_DISEL].set();
+        trig_fuel_valve[BWD_DISEL].set();
+    }
+
     mpsu_output.is_disel1_started = static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0));
     // Признак запуска дизеля 2
     mpsu_output.is_disel2_started = static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0));
@@ -462,6 +478,15 @@ double MPSU::calcMaxBrakeForce(double V)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::slotStartButtonTimer()
+{
+    stop_disels();
+    startButtonTimer->stop();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 int MPSU::check_disels(int mfdu_oil_press_level)
 {
     // Контроль по маслу
@@ -555,18 +580,21 @@ void MPSU::start_button_process(bool is_start_button)
     // Обработка нажатия исключительно после того, как кнопка была отпущена
     if (is_start_button && (!old_start_state) )
     {
+        if (!startButtonTimer->isStarted())
+             startButtonTimer->start();
+
         // Выбираем дизель
         mpsu_output.current_started_disel++;
         // "Режем" индекс
         mpsu_output.current_started_disel = cut(mpsu_output.current_started_disel,
                                                 0,
-                                                static_cast<int>(NUM_DISELS) - 1);
+                                                static_cast<int>(NUM_DISELS) - 1);        
 
         // Взводим триггер признака пуска
-        trig_disel_start[mpsu_output.current_started_disel].set();
+        //trig_disel_start[mpsu_output.current_started_disel].set();
 
         // Взводим триггер топливного клапана
-        trig_fuel_valve[mpsu_output.current_started_disel].set();
+        //trig_fuel_valve[mpsu_output.current_started_disel].set();
     }
 
     // Запоминаем предыдущее состояние кнопки

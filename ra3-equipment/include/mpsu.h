@@ -42,6 +42,9 @@ private:
     /// Уставка давления в ТЦ для удерживающего тормоза
     double p_HB;
 
+    /// Таймер контроля нажатия кнопки "Старт"
+    Timer *startButtonTimer;
+
     /// Входные сигналы
     mpsu_input_t    mpsu_input;
 
@@ -124,6 +127,10 @@ private:
 
     /// Расчет максимального тормозного усилия ЭПТ при данной скорости
     double calcMaxBrakeForce(double V);
+
+private slots:
+
+    void slotStartButtonTimer();
 };
 
 #endif // MPSU_H

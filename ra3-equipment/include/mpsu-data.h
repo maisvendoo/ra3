@@ -322,7 +322,7 @@ struct mpsu_output_t
 
     bool is_disel_started() const
     {
-        return is_disel1_started || is_disel2_started;
+        return is_disel1_started && is_disel2_started;
     }
 
     int getReversorDir() const
