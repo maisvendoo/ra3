@@ -32,7 +32,8 @@ Speedometer::Speedometer(QSize _size, QWidget *parent)
     sArrow_ = new SArrow(0, this);
     //sArrow_->setStyleSheet("border: 2px solid red;");
     //sArrow_->setVal(0.00 + 30.0);
-
+    green_old = 0;
+    white_old = 0;
 }
 
 void Speedometer::setSpeed(float speed)
@@ -47,6 +48,11 @@ void Speedometer::setSpeedLimit(int speedLimit)
 
 void Speedometer::setGreenDigit(int val)
 {
+    if (val == green_old)
+        return;
+
+    green_old = val;
+
     if (val < 0)
         val = 0;
     if (val > 140)
@@ -57,6 +63,11 @@ void Speedometer::setGreenDigit(int val)
 
 void Speedometer::setWhiteDigit(float val)
 {
+    if (qRound(val) == white_old)
+        return;
+
+    white_old = qRound(val);
+
     if (val < 0)
         val = 0;
     if (val > 140)

@@ -23,18 +23,25 @@ SArcLimit::SArcLimit(QWidget *parent)
 
     img_ = QImage(this->size(), QImage::Format_ARGB32_Premultiplied);
 
-    setVal(55);
+    limit_old = 0;
 
+    setVal(0);
 }
 
 
 
 void SArcLimit::setVal(int limit)
 {
+    if (limit == limit_old)
+        return;
+
+
     if (limit < 0)
         limit = 0;
     if (limit > 140)
         limit = 140;
+
+    limit_old = limit;
 
     this->cSL_ = limit;
     aCSL_ = stepSpeedInDegrees_*(sgp_maxSpeedScale_ - cSL_)*16;

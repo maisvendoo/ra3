@@ -25,6 +25,10 @@ private:
 
     QLabel* labSpeedFoo_;
     QLabel* labSpeedFoo2_;
+
+    int green_old;
+
+    int white_old;
 };
 
 #endif // SPEEDOMETER_H

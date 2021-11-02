@@ -29,7 +29,7 @@ private:
     /// Нарисовать дуги ограничений
     void draw_();
 
-
+    int limit_old;
 };
 
 #endif // SARCLIMIT_H

@@ -941,7 +941,13 @@ void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val)
 {
     for (int i = 0, n = vec_lab.size(); i < n; ++i)
     {
-        vec_lab[i]->setVisible(i == val);
+        if (i == val)
+            vec_lab[i]->setVisible(true);
+        else
+        {
+            if (vec_lab[i]-isVisible())
+                vec_lab[i]->setVisible(false);
+        }
     }
 }
 

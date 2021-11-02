@@ -144,6 +144,8 @@ void MfduDisplay::init()
 
     this->layout()->addWidget(background_);
 
+    labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+
     AbstractDisplay::init();    
 }
 
@@ -152,7 +154,7 @@ void MfduDisplay::init()
 void MfduDisplay::slotUpdateTimer()
 {
     labelCurTime_->setText(QTime::currentTime().toString());
-    labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+    //labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
     //
     mfduMainDisp_->updateData(input_signals);
