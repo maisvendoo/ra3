@@ -54,4 +54,22 @@ void RA3HeadMotor::keyProcess()
         tumbler[BUTTON_RBS].set();
     else
         tumbler[BUTTON_RBS].reset();
+
+    // Выбор скорости
+    if (getKeyState((KEY_F)))
+        tumbler[BUTTON_SPEED_SELECTION].set();
+    else
+        tumbler[BUTTON_SPEED_SELECTION].reset();
+
+    // Скорость +
+    if (getKeyState((KEY_Q)))
+        tumbler[BUTTON_SPEED_PLUS].set();
+    else
+        tumbler[BUTTON_SPEED_PLUS].reset();
+
+    // Скорость -
+    if (getKeyState((KEY_E)))
+        tumbler[BUTTON_SPEED_MINUS].set();
+    else
+        tumbler[BUTTON_SPEED_MINUS].reset();
 }

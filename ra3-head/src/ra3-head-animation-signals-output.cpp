@@ -48,6 +48,11 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     analogSignal[EPK] = static_cast<float>(epk->getStateKey());
 
+    analogSignal[SPEED_SELECTION] = static_cast<float>(tumbler[BUTTON_SPEED_SELECTION].getState());
+    analogSignal[SPEED_PLUS] = static_cast<float>(tumbler[BUTTON_SPEED_PLUS].getState());
+    analogSignal[SPEED_MINUS] = static_cast<float>(tumbler[BUTTON_SPEED_MINUS].getState());
+
+
     // Карданы
     analogSignal[SHAFT_1] = static_cast<float>( ip1 * dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);
     analogSignal[SHAFT_2] = static_cast<float>(-ip1 * ip2 * dir * wheel_rotation_angle[0] / 2.0 / Physics::PI);

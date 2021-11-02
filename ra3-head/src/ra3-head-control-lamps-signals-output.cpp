@@ -33,12 +33,21 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     analogSignal[KDL] = 1.0f;
     analogSignal[KDP] = 1.0f;
 
+    analogSignal[LEFT_CLOSE] = 1.0f;
+    analogSignal[RIGHT_CLOSE] = 1.0f;
+
     // Проверка наличия питания "БОРТСЕТЬ"
     bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));
 
     // Активация ламп с учетом наличия питания
     for (size_t i = ACTIVE_COCKPIT; i <= KDP; ++i)
     {
-        analogSignal[i] = analogSignal[i] && is_power_on;
+        analogSignal[i] = analogSignal[i] * static_cast<float>(is_power_on);
+    }
+
+    // Активация ламп в кнопках ПУ-4 с учетом наличия питания
+    for (size_t i = SPEED_HOLD; i <= RIGHT_CLOSE; ++i)
+    {
+        analogSignal[i] = analogSignal[i] * static_cast<float>(is_power_on);
     }
 }

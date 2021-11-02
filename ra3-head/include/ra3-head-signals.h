@@ -145,6 +145,17 @@ enum
     RBS = 178,
     EPK = 179,
 
+    SPEED_SELECTION = 180,
+    SPEED_PLUS = 181,
+    SPEED_MINUS = 182,
+    SPEED_HOLD = 183,
+    LEFT_OPEN = 184,
+    LEFT_CLOSE = 185,
+    STEPS = 186,
+    RIGHT_OPEN = 187,
+    RIGHT_CLOSE = 188,
+
+
     // Угол вращения кардана 1
     SHAFT_1 = 192,
 

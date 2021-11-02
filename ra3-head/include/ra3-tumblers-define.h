@@ -26,7 +26,16 @@ enum
     BUTTON_RB = 5,
 
     /// Рукоятка бдительности специальная (РБС)
-    BUTTON_RBS = 6
+    BUTTON_RBS = 6,
+
+    /// Кнопка "Выбор скорости"
+    BUTTON_SPEED_SELECTION = 7,
+
+    /// Кнопка "Скорость +"
+    BUTTON_SPEED_PLUS = 8,
+
+    /// Кнопка "Скорость -"
+    BUTTON_SPEED_MINUS = 9
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H
