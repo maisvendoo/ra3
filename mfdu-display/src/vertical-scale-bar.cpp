@@ -27,12 +27,17 @@ VerticalScaleBar::VerticalScaleBar(QSize _size, QWidget *parent)
     labBrakingForce_->setStyleSheet("border: none;"
                                     "color: yellow;");
 
-
-    setVal(20);
+    val_old = 0;
+    setVal(0);
 }
 
 void VerticalScaleBar::setVal(int val)
 {
+    if (val == val_old)
+        return;
+
+    val_old = val;
+
     if (val > 100)
         val = 100;
     if (val < -100)

@@ -30,7 +30,8 @@ SArrow::SArrow(int otstupSverhu, QWidget *parent)
 //    labCenter_->setPixmap()
 
 
-    draw_(5);
+    val_old = 0;
+    draw_(0);
 
 }
 
@@ -38,12 +39,17 @@ SArrow::SArrow(int otstupSverhu, QWidget *parent)
 
 void SArrow::setVal(float val)
 {
+    if (qRound(val) == val_old)
+        return;
+
+    val_old = qRound(val);
+
     if (val < 0) val = 0;
     if (val > maxVal_) val = maxVal_;
 
     draw_(val);
 
-    labCenter_->setText(QString::number(static_cast<int>(val)));
+    labCenter_->setText(QString::number(qRound(val)));
 }
 
 

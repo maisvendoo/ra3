@@ -20,8 +20,9 @@ private:
     QLabel* labTraction_;
     QLabel* labBrakingForce_;
 
-    void draw_(int val);
+    int val_old;
 
+    void draw_(int val);
 };
 
 #endif // VERTICALSCALEBAR_H

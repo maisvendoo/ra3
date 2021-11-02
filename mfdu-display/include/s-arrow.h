@@ -25,7 +25,7 @@ private:
 
     QLabel* labCenter_;
 
-
+    int val_old;
 
     void draw_(double _val);
 
