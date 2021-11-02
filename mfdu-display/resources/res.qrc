@@ -95,5 +95,7 @@
 		<file alias="error_ST2">img/errors/error_ST2.png</file>
 		<file alias="error_revers_0">img/errors/error_revers_0.png</file>
 		<file alias="error_epk_off">img/errors/error_epk_off.png</file>
+        <file alias="error_hold_speed_trac">img/errors/error_hold_speed_trac.png</file>
+        <file alias="error_hold_speed_brake">img/errors/error_hold_speed_brake.png</file>
     </qresource>
 </RCC>

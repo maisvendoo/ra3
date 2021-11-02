@@ -73,8 +73,6 @@ void RA3HeadMotor::keyProcess()
     else
         tumbler[BUTTON_SPEED_MINUS].reset();
 
-    if (getKeyState(KEY_G))
-    {
-
-    }
+    // Кнопка "Поддержание скорости"
+    button_speed_hold.setState(getKeyState(KEY_G));
 }

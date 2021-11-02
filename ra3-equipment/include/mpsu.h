@@ -48,6 +48,18 @@ private:
     /// Таймер контроля нажатия кнопки "Старт"
     Timer *startButtonTimer;
 
+    /// Старое состояние кнопки "Выбор скорости"
+    bool button_select_old;
+
+    /// Старое состояние кнопки "Скорость +"
+    bool button_speed_plus_old;
+
+    /// Старое состояние кнопки "Скорость -"
+    bool button_speed_minus_old;
+
+    /// Запрет режима поддержания заданной скорости
+    bool is_speed_hold_disable;
+
     /// Входные сигналы
     mpsu_input_t    mpsu_input;
 
@@ -133,6 +145,9 @@ private:
 
     /// Контроль давления масла дизелей
     void check_disels_oil_pressure();
+
+    /// Обработка кнопок ПУ-4 по режиму "Поддержание скорости"
+    void hold_speed_buttons_process();
     
 private slots:
 

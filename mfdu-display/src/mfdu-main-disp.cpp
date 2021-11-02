@@ -903,6 +903,18 @@ void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_hold_speed_trac")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_hold_speed_brake")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
 }
 
 void MfduMainDisp::fooNoneAdd_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)

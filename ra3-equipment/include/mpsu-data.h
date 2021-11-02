@@ -10,7 +10,9 @@ enum
     ERROR_ST1 = 1,
     ERROR_ST2 = 2,
     ERROR_REVERS_0 = 3,
-    ERROR_EPK_OFF = 4
+    ERROR_EPK_OFF = 4,
+    ERROR_HOLD_SPEED_TRAC = 5,
+    ERROR_HOLD_SPEED_BRAKE = 6
 };
 
 //------------------------------------------------------------------------------
@@ -294,6 +296,15 @@ struct mpsu_output_t
     /// Заданная для поддержания скорость (км/ч)
     int v_ref_kmh;
 
+    /// Заданна тяга от регулятора скорости
+    double auto_trac_level;
+
+    /// Заданное тормозное усилие от регулятора скорости
+    double auto_brake_level;
+
+    /// Признак включения режима поддержания скорости
+    bool is_speed_hold_ON;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -336,6 +347,9 @@ struct mpsu_output_t
         , brake_type2(2)
         , brake_level(0)
         , v_ref_kmh(0)
+        , auto_trac_level(0)
+        , auto_brake_level(0)
+        , is_speed_hold_ON(false)
     {
 
     }

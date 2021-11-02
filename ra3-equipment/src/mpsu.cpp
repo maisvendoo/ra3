@@ -12,6 +12,11 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , v_HB(1.0)
   , p_HB(0.15)
   , startButtonTimer(new Timer(5.0, false))
+  , button_select_old(false)
+  , button_speed_plus_old(false)
+  , button_speed_minus_old(false)  
+  , is_speed_hold_disable(false)
+
 {
     connect(startButtonTimer, &Timer::process, this, &MPSU::slotStartButtonTimer);
 }
@@ -56,7 +61,11 @@ void MPSU::step(double t, double dt)
 //------------------------------------------------------------------------------
 void MPSU::setInputData(const mpsu_input_t &mpsu_input)
 {
-    this->mpsu_input = mpsu_input;
+    // Принимаем данные извне ТОЛЬКО при включенном питании
+    if (mpsu_input.is_power_on)
+        this->mpsu_input = mpsu_input;
+    else
+        this->mpsu_input = mpsu_input_t();
 }
 
 //------------------------------------------------------------------------------
@@ -298,12 +307,16 @@ void MPSU::check_moition_disable()
 
     mpsu_output.motion_disable = false;
 
-    for (bool error : errors)
+    for (size_t i = ERROR_ST1; i <= ERROR_EPK_OFF; ++i)
     {
-        mpsu_output.motion_disable |= error;
+        mpsu_output.motion_disable |= errors[i];
     }
 
     mpsu_output.motion_disable |= motion_lock.getState();
+
+    // Обработка прочих ошибок
+    errors[ERROR_HOLD_SPEED_TRAC] = is_speed_hold_disable && mpsu_input.is_KM_traction;
+    errors[ERROR_HOLD_SPEED_BRAKE] = is_speed_hold_disable && mpsu_input.is_KM_brake;
 }
 
 //------------------------------------------------------------------------------
@@ -540,6 +553,71 @@ void MPSU::check_disels_oil_pressure()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::hold_speed_buttons_process()
+{
+    // Если не нажата кнопка влючения режима - нечего и делать
+    if (!mpsu_input.button_speed_hold)
+    {
+        mpsu_output.is_speed_hold_ON = false;
+        is_speed_hold_disable = false;
+        mpsu_output.v_ref_kmh = 0;
+        return;
+    }
+
+    // Обрабатываем возможность включения режима
+
+    // Если контроллер машиниста в нуле
+    if ( (mpsu_input.is_KM_zero) && (qRound(mpsu_input.v_kmh) >= 1) )
+    {
+        mpsu_output.is_speed_hold_ON = true;
+        is_speed_hold_disable = false;
+    }
+    else
+    {
+        // Невозможно включить режим, отменяем его включение
+        mpsu_output.is_speed_hold_ON = false;
+        is_speed_hold_disable = true;
+        return;
+    }
+
+    // Не обрабатываем кнопри при выключенном режиме
+    if (!mpsu_output.is_speed_hold_ON)
+    {
+        button_select_old = false;
+        button_speed_plus_old = false;
+        button_speed_minus_old = false;
+        return;
+    }
+
+    // Фиксация заданной скорости
+    if ( (mpsu_input.button_speed_select) && (!button_select_old) )
+    {
+        if (qRound(mpsu_input.v_kmh) >= 1)
+            mpsu_output.v_ref_kmh = mpsu_input.v_kmh;
+    }
+
+    // Увеличение заданной скорости
+    if ( (mpsu_input.button_speed_plus) && (!button_speed_plus_old) )
+    {
+        mpsu_output.v_ref_kmh++;
+    }
+
+    // Уменьшение заданной скорости
+    if ( (mpsu_input.button_speed_minus) && (!button_speed_minus_old) )
+    {
+        mpsu_output.v_ref_kmh--;
+    }
+
+    mpsu_output.v_ref_kmh = cut(mpsu_output.v_ref_kmh, 0, 120);
+
+    button_select_old = mpsu_input.button_speed_select;
+    button_speed_plus_old = mpsu_input.button_speed_plus;
+    button_speed_minus_old = mpsu_input.button_speed_minus;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
     // Включение дисплея
@@ -583,8 +661,11 @@ void MPSU::main_loop_step(double t, double dt)
     // Анализ давлений в тормозных цилиндрах
     calc_brake_level_PB();
 
-    // Управление гибродинамическим торможением
+    // Управление гидродинамическим торможением
     hydro_brake_control();
+
+    // Обработка кнопок ПУ-4 по режиму поддержания скорости
+    hold_speed_buttons_process();
 }
 
 //------------------------------------------------------------------------------

@@ -24,6 +24,7 @@
 #include    "hydro-transmission.h"
 #include    "registrator.h"
 #include    "emergency-brake-valve.h"
+#include    "key-trigger.h"
 
 #include    "ra3-head-signals.h"
 
@@ -176,6 +177,9 @@ private:
 
     /// Выключатели в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
+
+    /// Кнопка "Поддержание скорости"
+    KeyTrigger  button_speed_hold;
 
     void initialization() override;
 

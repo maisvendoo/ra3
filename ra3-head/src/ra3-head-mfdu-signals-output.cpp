@@ -121,4 +121,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_BRAKES_RIGHT] = mpsu->getOutputData().brake_type1;
 
     analogSignal[MFDU_TEMPERATURE_KAB] = 25.1f;
+
+    analogSignal[MFDU_S_GREEN_DIGIT] = mpsu->getOutputData().v_ref_kmh;
 }

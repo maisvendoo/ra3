@@ -33,8 +33,10 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     analogSignal[KDL] = 1.0f;
     analogSignal[KDP] = 1.0f;
 
+    // Лампы кнопок панели ПУ-4
     analogSignal[LEFT_CLOSE] = 1.0f;
     analogSignal[RIGHT_CLOSE] = 1.0f;
+    analogSignal[SPEED_HOLD] = static_cast<float>(mpsu->getOutputData().is_speed_hold_ON);
 
     // Проверка наличия питания "БОРТСЕТЬ"
     bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));

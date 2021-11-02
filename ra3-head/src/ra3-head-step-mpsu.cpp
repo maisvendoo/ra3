@@ -63,6 +63,12 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             km->isEmergencyBrake() ||
             static_cast<float>(forward_inputs[SME_IS_EMERGENCY_BRAKE]);
 
+    // Обеспечение режима поддержания заданной скорости
+    mpsu_input.button_speed_hold = button_speed_hold.getState();
+    mpsu_input.button_speed_select = tumbler[BUTTON_SPEED_SELECTION].getState();
+    mpsu_input.button_speed_plus = tumbler[BUTTON_SPEED_PLUS].getState();
+    mpsu_input.button_speed_minus = tumbler[BUTTON_SPEED_MINUS].getState();
+
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);    
 }
