@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepTraction(double t, double dt)
 {
-    double ip = 3.32;
+    double ip = ip1 * ip2;
 
     if (is_active)
     {

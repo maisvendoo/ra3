@@ -6,6 +6,8 @@
 //
 //------------------------------------------------------------------------------
 RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
+  , ip1(1.2)
+  , ip2(2.78)
   , reg(Q_NULLPTR)
   , charge_press(0.5)
   , main_res_leak(0.0)
@@ -183,6 +185,9 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
 
             reg = new Registrator(log_name, timeout);
         }
+
+        cfg.getDouble(secName, "ip1", ip1);
+        cfg.getDouble(secName, "ip2", ip2);
     }
 }
 

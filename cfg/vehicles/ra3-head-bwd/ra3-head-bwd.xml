@@ -12,6 +12,10 @@
 
         <MainResLeak>4e-5</MainResLeak>	
 
+        <!-- Передаточные числа тяговых редукторов -->
+        <ip1>1.2</ip1>
+        <ip2>2.78</ip2>
+
         <!--<ExtTexturesDir>ra3/rzd</ExtTexturesDir>-->		
 		
 		<FuelCapacity>350</FuelCapacity>
