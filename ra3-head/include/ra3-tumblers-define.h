@@ -35,7 +35,10 @@ enum
     BUTTON_SPEED_PLUS = 8,
 
     /// Кнопка "Скорость -"
-    BUTTON_SPEED_MINUS = 9
+    BUTTON_SPEED_MINUS = 9,
+
+    /// Кнопка "Поддержание скорости"
+    BUTTON_SPEED_HOLD = 10
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

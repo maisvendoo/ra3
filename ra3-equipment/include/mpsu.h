@@ -131,6 +131,9 @@ private:
     /// Расчет максимального тормозного усилия ЭПТ при данной скорости
     double calcMaxBrakeForce(double V);
 
+    /// Контроль давления масла дизелей
+    void check_disels_oil_pressure();
+    
 private slots:
 
     void slotStartButtonTimer();

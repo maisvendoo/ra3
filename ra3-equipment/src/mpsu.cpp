@@ -521,6 +521,25 @@ int MPSU::check_disels(int mfdu_oil_press_level)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::check_disels_oil_pressure()
+{
+    mpsu_output.mfdu_oil_press_level1 = check_disels_oil_pressure(mpsu_input.oil_press1);
+    mpsu_output.mfdu_oil_press_level2 = check_disels_oil_pressure(mpsu_input.oil_press2);
+
+    double p_oil = min(mpsu_input.oil_press1, mpsu_input.oil_press2);
+    mpsu_output.mfdu_oil_press_level = check_disels_oil_pressure(p_oil);
+
+    // Контроль дизелей по всем параметрам
+    mpsu_output.mfdu_disel_state_level1 = check_disels(mpsu_output.mfdu_oil_press_level1);
+    mpsu_output.mfdu_disel_state_level2 = check_disels(mpsu_output.mfdu_oil_press_level2);
+
+    mpsu_output.mfdu_disel_state_level = max(mpsu_output.mfdu_disel_state_level1,
+                                             mpsu_output.mfdu_disel_state_level2);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
     // Включение дисплея
@@ -536,19 +555,9 @@ void MPSU::main_loop_step(double t, double dt)
     stop_disels();
 
     // Контроль давления масла дизелей
-    mpsu_output.mfdu_oil_press_level1 = check_disels_oil_pressure(mpsu_input.oil_press1);
-    mpsu_output.mfdu_oil_press_level2 = check_disels_oil_pressure(mpsu_input.oil_press2);
+    check_disels_oil_pressure();
 
-    double p_oil = min(mpsu_input.oil_press1, mpsu_input.oil_press2);
-    mpsu_output.mfdu_oil_press_level = check_disels_oil_pressure(p_oil);
-
-    // Контроль дизелей по всем параметрам
-    mpsu_output.mfdu_disel_state_level1 = check_disels(mpsu_output.mfdu_oil_press_level1);
-    mpsu_output.mfdu_disel_state_level2 = check_disels(mpsu_output.mfdu_oil_press_level2);
-
-    mpsu_output.mfdu_disel_state_level = max(mpsu_output.mfdu_disel_state_level1,
-                                             mpsu_output.mfdu_disel_state_level2);
-
+    // Контроль сигналов "ТРЕВОГА"
     check_alarm_level();
 
     mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM, mpsu_input.brake_level_KM);
@@ -571,8 +580,10 @@ void MPSU::main_loop_step(double t, double dt)
     mpsu_output.is_parking_braked = mpsu_input.is_parking_braked1 &&
                                     mpsu_input.is_parking_braked2;
 
+    // Анализ давлений в тормозных цилиндрах
     calc_brake_level_PB();
 
+    // Управление гибродинамическим торможением
     hydro_brake_control();
 }
 

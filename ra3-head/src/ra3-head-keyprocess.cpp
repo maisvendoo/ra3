@@ -72,4 +72,9 @@ void RA3HeadMotor::keyProcess()
         tumbler[BUTTON_SPEED_MINUS].set();
     else
         tumbler[BUTTON_SPEED_MINUS].reset();
+
+    if (getKeyState(KEY_G))
+    {
+
+    }
 }

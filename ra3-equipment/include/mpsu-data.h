@@ -110,6 +110,18 @@ struct mpsu_input_t
     /// Признак экстренного торможения
     bool is_emergency_brake;
 
+    /// Состояние кнопки "Поддержание скорости"
+    bool button_speed_hold;
+
+    /// Состояние кнопки "Выбор скорости"
+    bool button_speed_select;
+
+    /// Состояние кнопки "Скорость +"
+    bool button_speed_plus;
+
+    /// Состояние кнопки "Скорость -"
+    bool button_speed_minus;
+
     enum
     {
         NUM_AXIS = 4
@@ -151,6 +163,10 @@ struct mpsu_input_t
         , M_gb(0)
         , M_gb_max(0)
         , is_emergency_brake(false)
+        , button_speed_hold(false)
+        , button_speed_select(false)
+        , button_speed_plus(false)
+        , button_speed_minus(false)
     {
         std::fill(pBC.begin(), pBC.end(), 0.0);
     }
@@ -275,6 +291,9 @@ struct mpsu_output_t
     /// Общий уровен развиваемого тормозного усилия
     double brake_level;
 
+    /// Заданная для поддержания скорость (км/ч)
+    int v_ref_kmh;
+
     mpsu_output_t()
         : is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
@@ -316,6 +335,7 @@ struct mpsu_output_t
         , brake_type1(2)
         , brake_type2(2)
         , brake_level(0)
+        , v_ref_kmh(0)
     {
 
     }
