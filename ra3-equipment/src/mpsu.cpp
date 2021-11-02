@@ -16,6 +16,11 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , button_speed_plus_old(false)
   , button_speed_minus_old(false)  
   , is_speed_hold_disable(false)
+  , Kp(1.0)
+  , Ki(0.0)
+  , dv(0.0)
+  , u(0.0)
+  , T(0.5)
 
 {
     connect(startButtonTimer, &Timer::process, this, &MPSU::slotStartButtonTimer);
@@ -83,6 +88,11 @@ void MPSU::preStep(state_vector_t &Y, double t)
 {
     Q_UNUSED(Y)
     Q_UNUSED(t)
+
+    if (!mpsu_output.is_speed_hold_ON)
+        Y[0] = 0;
+
+    Y[0] = cut(Y[0], -1.0, 1.0);
 }
 
 //------------------------------------------------------------------------------
@@ -93,6 +103,9 @@ void MPSU::ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t)
     Q_UNUSED(Y)
     Q_UNUSED(dYdt)
     Q_UNUSED(t)
+
+    dYdt[0] = Ki * dv;
+    dYdt[1] = (u - Y[1]) / T;
 }
 
 //------------------------------------------------------------------------------
@@ -414,10 +427,10 @@ void MPSU::calc_brake_level_PB()
 //------------------------------------------------------------------------------
 void MPSU::hydro_brake_control()
 {
-    mpsu_output.brake_level = mpsu_input.brake_level_KM;
+    mpsu_output.brake_level = mpsu_input.brake_level_KM + mpsu_output.auto_brake_level;
 
     // Блокируем питание КЭБ если не собираемся тормозить
-    if (!mpsu_input.is_KM_brake)
+    if ( (!mpsu_input.is_KM_brake) && (!mpsu_output.is_speed_hold_ON) )
     {
         mpsu_output.release_PB1 = false;
         mpsu_output.brake_type1 = 2;
@@ -444,7 +457,7 @@ void MPSU::hydro_brake_control()
     }
 
     // Пытаемся включить ГДТ
-    mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = mpsu_input.is_KM_brake;
+    mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = (mpsu_input.is_KM_brake) || (mpsu_output.auto_brake_level >= 0.01);
 
     // Расчитываем максимальное усилие, обеспечиваемое ГДТ
     double B_gb_max = mpsu_input.M_gb_max * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
@@ -452,13 +465,13 @@ void MPSU::hydro_brake_control()
     // Расчитываем фактическое усилие, обеспечиваемое ГДТ
     double B_gb = mpsu_input.M_gb * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
 
-    // Рассчитываем потребное усилие, заданное от КМ
-    double B_ref = mpsu_input.brake_level_KM * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
+    // Рассчитываем потребное усилие, заданное от КМ или регулятора скорости
+    double B_ref = (mpsu_input.brake_level_KM + mpsu_output.auto_brake_level) * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
 
     // Определяем задание ГДТ, пытаемся реализовать заданное усили за счет применения ГДТ
     mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb_max, 0.0, 1.0);
     // Определяем добавку по ЭПТ, если эффективности ГДТ не достаточно
-    mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_input.brake_level_KM);
+    mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_output.brake_level);
     // Формируем признак "отпуск ЭПТ" при достаточном тормозном усилии от ГДТ
     mpsu_output.release_PB1 = !static_cast<bool>(hs_p(B_ref - B_gb));
 
@@ -618,6 +631,29 @@ void MPSU::hold_speed_buttons_process()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::speed_regulator()
+{
+    // Если не включен режим поддержания скорости - выдаем нулевое задание
+    // Если задана нулевая скорость - действуем аналогично
+    if ( (!mpsu_output.is_speed_hold_ON) || (mpsu_output.v_ref_kmh == 0) )
+    {
+        mpsu_output.auto_trac_level = mpsu_output.auto_brake_level = 0;
+        return;
+    }
+
+    // Вычисляем ошибку по скорости
+    dv = static_cast<double>(mpsu_output.v_ref_kmh) - mpsu_input.v_kmh;
+
+    // Формируем управление
+    u = cut(Kp * dv + getY(0), -1.0, 1.0);
+
+    mpsu_output.auto_trac_level = pf(getY(1));
+    mpsu_output.auto_brake_level = nf(getY(1));
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
     // Включение дисплея
@@ -638,7 +674,8 @@ void MPSU::main_loop_step(double t, double dt)
     // Контроль сигналов "ТРЕВОГА"
     check_alarm_level();
 
-    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM, mpsu_input.brake_level_KM);
+    mpsu_output.n_ref = getTracRefDiselFreq(mpsu_input.trac_level_KM + mpsu_output.auto_trac_level,
+                                            mpsu_input.brake_level_KM + mpsu_output.auto_brake_level);
 
     check_revers();
 
@@ -666,6 +703,9 @@ void MPSU::main_loop_step(double t, double dt)
 
     // Обработка кнопок ПУ-4 по режиму поддержания скорости
     hold_speed_buttons_process();
+
+    // Регулятор скорости
+    speed_regulator();
 }
 
 //------------------------------------------------------------------------------
