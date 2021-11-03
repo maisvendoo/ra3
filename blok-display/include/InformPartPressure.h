@@ -36,6 +36,8 @@ private:
     QImage img_;
     QPixmap pm;
 
+    int press_old;
+
     void drawLabel(QString val, int posY);
 
 };

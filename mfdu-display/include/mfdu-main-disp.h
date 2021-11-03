@@ -4,6 +4,7 @@
 #include    <QLabel>
 
 #include    "display-types.h"
+#include    "trigger-label.h"
 
 class Speedometer;
 class VerticalScaleBar;
@@ -68,15 +69,15 @@ private:
 
     // блок нижних параметров
     void setBlockDownParameters_(QLabel* parent);
-    void drawLabel_(QLabel* parent, QLabel* &lab, QPoint pos, QString color = "00ffff",
+    void drawLabel_(QLabel* parent, TriggerLabel* &lab, QPoint pos, QString color = "00ffff",
                     Qt::Alignment align = Qt::AlignCenter);
-    QLabel* labPpm_;
-    QLabel* labPtm_;
-    QLabel* labPtc_max_;
-    QLabel* labPtc_min_;
-    QLabel* labTkab_;
-    QLabel* labIakb24_;
-    QLabel* labIakb110_;
+    TriggerLabel* labPpm_;
+    TriggerLabel* labPtm_;
+    TriggerLabel* labPtc_max_;
+    TriggerLabel* labPtc_min_;
+    TriggerLabel* labTkab_;
+    TriggerLabel* labIakb24_;
+    TriggerLabel* labIakb110_;
 
     // блок иконок сверху от спидометра
     void setBlockIcon_topSpeedometer_(QLabel* parent);

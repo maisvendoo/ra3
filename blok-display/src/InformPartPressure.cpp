@@ -95,6 +95,7 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     label_MPa->setFont(QFont("Arial", 16));
     label_MPa->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
+    press_old = 0;
 }
 
 
@@ -104,6 +105,11 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
 //-----------------------------------------------------------------------------
 void InformPartPressure::setValPressure(double val)
 {
+    if (qRound(100 * val) == press_old)
+        return;
+
+    press_old = qRound(100 * val);
+
     labelPressureVal_->setText(QString("%1").arg(val, 4, 'f', 2).replace('.', ','));
 
     img_.fill(Qt::transparent);

@@ -21,7 +21,7 @@ using namespace std;
 
 const	QString		SPEEDOMETER_CFG = "../cfg/BLOK/Speedometer.xml";
 //const	QString		STRIANGLE_CFG   = "../cfg/BLOK/STriangle.xml";
-const   double      EPS             = 0.0001;
+const   double      EPS             = 1.0;
 
 //-----------------------------------------------------------------------------
 //

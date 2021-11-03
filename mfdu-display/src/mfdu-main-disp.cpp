@@ -713,9 +713,9 @@ void MfduMainDisp::setBlockDownParameters_(QLabel *parent)
 
 
 
-void MfduMainDisp::drawLabel_(QLabel *parent, QLabel *&lab, QPoint pos, QString color, Qt::Alignment align)
+void MfduMainDisp::drawLabel_(QLabel *parent, TriggerLabel *&lab, QPoint pos, QString color, Qt::Alignment align)
 {
-    lab = new QLabel("0", parent);
+    lab = new TriggerLabel("0", parent);
     lab->move(pos);
     lab->resize(66, 20);
     lab->setAlignment(Qt::AlignCenter);
