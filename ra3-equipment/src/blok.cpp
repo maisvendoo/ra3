@@ -27,6 +27,11 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , beep_interval(0.5)
   , rail_coord(0.0)
   , train_length(0.0)
+  , v_max(300.0)
+  , current_limit(300.0)
+  , next_limit(300.0)
+  , dir(1)
+  , limit_dist(0)
 {
     epk_state.reset();
 
@@ -332,14 +337,14 @@ void BLOK::calc_speed_limits()
     {
         double a = 0.7;
         limit_dist = pf(next_lim.coord - rail_coord);
-        v_lim = sqrt( pow(cur_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
+        v_lim = sqrt( pow(next_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
     }
     else
     {
         v_lim = v_max;
     }
 
-    current_limit = min(v_lim, cur_lim.value + 1);
+    current_limit = min(v_lim + 1, cur_lim.value + 1);
     next_limit = next_lim.value + 1;
 }
 
