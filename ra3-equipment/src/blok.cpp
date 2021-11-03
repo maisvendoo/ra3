@@ -1,5 +1,7 @@
 #include    "blok.h"
 
+#include    <QTextStream>
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -21,8 +23,8 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , is_dislplay_ON(false)
   , check_vigilance(false)
   , safety_timer(new Timer(45.0, false))
-  , beepTimer(new Timer(0.5, true))
-  , beep_interval(0.5)
+  , beepTimer(new Timer(1.0, true))
+  , beep_interval(1.0)
   , rail_coord(0.0)
   , train_length(0.0)
 {
@@ -46,10 +48,46 @@ BLOK::~BLOK()
 void BLOK::step(double t, double dt)
 {
     safety_timer->step(t, dt);
+    beepTimer->step(t, dt);
 
     calc_acceleration(t, dt);
 
     Device::step(t, dt);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::loadSpeedsMap(QString path)
+{
+    QFile map_file(path);
+
+    if (map_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        while (!map_file.atEnd())
+        {
+            QByteArray line;
+            line = map_file.readLine();
+
+            QTextStream ss(&line);
+
+            speed_limit_t limit;
+            ss >> limit.coord >> limit.value;
+
+            limits.push_back(limit);
+        }
+
+        if (dir < 0)
+            std::reverse(limits.begin(), limits.end());
+
+        for (size_t i = 0; i < limits.size() - 1; ++i)
+        {
+            if (limits[i+1].value > limits[i].value)
+            {
+                limits[i+1].coord += dir * train_length;
+            }
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -68,6 +106,8 @@ void BLOK::preStep(state_vector_t &Y, double t)
     }
 
     is_dislplay_ON = true;
+
+    speed_control();
 
     // Ничего не делаем при выключенном ЭПК
     if (!key_epk)
@@ -120,7 +160,7 @@ void BLOK::preStep(state_vector_t &Y, double t)
 
     check_vigilance = !epk_state.getState();
 
-    sounds_process();
+    sounds_process();    
 }
 
 //------------------------------------------------------------------------------
@@ -146,9 +186,9 @@ void BLOK::load_config(CfgReader &cfg)
 
     safety_timer->setTimeout(safety_check_interval);
 
-    cfg.getDouble(secName, "BeepInterval", beep_interval);
+    //cfg.getDouble(secName, "BeepInterval", beep_interval);
 
-    beepTimer->setTimeout(beep_interval);
+    //beepTimer->setTimeout(beep_interval);
 }
 
 //------------------------------------------------------------------------------
@@ -244,7 +284,102 @@ void BLOK::calc_acceleration(double t, double dt)
 //------------------------------------------------------------------------------
 void BLOK::speed_control()
 {
+    calc_speed_limits();
 
+    int V_kmh = qRound(v_kmh);
+
+    if (V_kmh < current_limit - 3)
+    {
+        beepTimer->stop();
+    }
+    else
+    {
+        if (!beepTimer->isStarted())
+            beepTimer->start();
+    }
+
+    if (V_kmh >= current_limit + 1)
+    {
+        epk_state.reset();
+    }
+    else
+    {
+        if (key_epk)
+            epk_state.set();
+        else
+            epk_state.reset();
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::calc_speed_limits()
+{
+    if (!key_epk)
+    {
+        current_limit = next_limit = 300.0;
+        return;
+    }
+
+    if (limits.empty())
+    {
+        current_limit = next_limit = v_max;
+        return;
+    }
+
+    speed_limit_t cur_lim;
+    speed_limit_t next_lim;
+
+    findLimits(cur_lim, next_lim);
+
+    double v_lim = 0;
+
+    if (cur_lim.value > next_lim.value)
+    {
+        double a = 0.7;
+        double dist = qAbs(next_lim.coord - cur_lim.coord);
+        v_lim = sqrt( pow(cur_lim.value, 2) + 2 * a *dist);
+    }
+    else
+    {
+        v_lim = v_max;
+    }
+
+    current_limit = min(v_lim, cur_lim.value + 1);
+    next_limit = next_lim.value + 1;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
+{
+    if (limits.empty())
+        return;
+
+    size_t left_idx = 0;
+    size_t right_idx = limits.size() - 1;
+    size_t idx = (left_idx + right_idx) / 2;
+
+    while (idx != left_idx)
+    {
+        speed_limit_t limit = limits[idx];
+
+        if (rail_coord <= limit.coord)
+            right_idx = idx;
+        else
+            left_idx = idx;
+
+        idx = (left_idx + right_idx) / 2;
+    }
+
+    cur_limit = limits[idx];
+
+    if (idx < limits.size() - 1)
+        next_limit = limits[idx + 1];
+    else
+        next_limit = speed_limit_t();
 }
 
 //------------------------------------------------------------------------------

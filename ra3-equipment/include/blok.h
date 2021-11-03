@@ -2,6 +2,7 @@
 #define     BLOK_H
 
 #include    "device.h"
+#include    "blok-speed-limits.h"
 
 //------------------------------------------------------------------------------
 //
@@ -65,9 +66,9 @@ public:
         return 0.0f;
    }
 
-   double getCurrentSpeedLimit() const { return 120.0; }
+   double getCurrentSpeedLimit() const { return current_limit; }
 
-   double getNextSpeedLimit() const { return 120.0; }
+   double getNextSpeedLimit() const { return next_limit; }
 
    bool isDisplayON() const { return is_dislplay_ON; }
 
@@ -86,6 +87,14 @@ public:
 
    /// Задать длину поезда
    void setTrainLength(double train_length) { this->train_length = train_length; }
+
+   /// Задать конструкционную скорость
+   void setMaxVelocity(double v_max) { this->v_max = v_max; }
+
+   /// Загрузка ЭК
+   void loadSpeedsMap(QString path);
+
+   void setDirection(int dir) { this->dir = dir; }
 
 private:
 
@@ -139,6 +148,20 @@ private:
 
    double train_length;
 
+   /// Конструкционная скорость
+   double v_max;
+
+   /// Текущее ограничение скорости
+   double current_limit;
+
+   /// Следующее ограничение скорости
+   double next_limit;
+
+   int dir;
+
+   /// База ограничений скорости
+   std::vector<speed_limit_t> limits;
+
    std::array<float, NUM_LAMPS> lamps;
 
    Trigger epk_state;
@@ -171,6 +194,12 @@ private:
 
    /// Работа с ограничениями скорости
    void speed_control();
+
+   /// Расчет ограничений
+   void calc_speed_limits();
+
+   /// Поиск текущего и следующего ограничения в базе
+   void findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit);
 
 private slots:
 

@@ -30,7 +30,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     mpsu_input.is_parking_braked1 = brake_module->isParkingBraked();
     mpsu_input.is_parking_braked2 = static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]);
-    mpsu_input.v_kmh = blok->getVelocityKmh();
+    mpsu_input.v_kmh = qAbs(wheel_omega[0] * wheel_diameter * Physics::kmh / 2.0);
 
     if (is_active)
     {
