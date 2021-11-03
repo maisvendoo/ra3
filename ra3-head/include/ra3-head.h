@@ -25,6 +25,7 @@
 #include    "registrator.h"
 #include    "emergency-brake-valve.h"
 #include    "key-trigger.h"
+#include    "epk151d.h"
 
 #include    "ra3-head-signals.h"
 
@@ -142,7 +143,7 @@ private:
     BLOK    *blok;
 
     /// ЭПК
-    AutoTrainStop *epk;
+    AutoTrainStopEPK151D *epk;
 
     /// Гидропередача
     HydroTransmission *hydro_trans;

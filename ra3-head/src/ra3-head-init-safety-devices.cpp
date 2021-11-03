@@ -29,9 +29,7 @@ void RA3HeadMotor::initSafetyDevices()
     blok->setDirection(dir);
     blok->loadSpeedsMap(path);
 
-    epk = loadAutoTrainStop(modules_dir +
-                            QDir::separator() +
-                            "epk150");
+    epk = new AutoTrainStopEPK151D();
     epk->read_custom_config(config_dir +
                             QDir::separator() +
                             "epk");

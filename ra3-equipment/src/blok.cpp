@@ -23,8 +23,8 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , is_dislplay_ON(false)
   , check_vigilance(false)
   , safety_timer(new Timer(45.0, false))
-  , beepTimer(new Timer(1.0, true))
-  , beep_interval(1.0)
+  , beepTimer(new Timer(0.5, true))
+  , beep_interval(0.5)
   , rail_coord(0.0)
   , train_length(0.0)
 {
@@ -301,14 +301,7 @@ void BLOK::speed_control()
     if (V_kmh >= current_limit + 1)
     {
         epk_state.reset();
-    }
-    else
-    {
-        if (key_epk)
-            epk_state.set();
-        else
-            epk_state.reset();
-    }
+    }    
 }
 
 //------------------------------------------------------------------------------
