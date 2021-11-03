@@ -331,8 +331,8 @@ void BLOK::calc_speed_limits()
     if (cur_lim.value > next_lim.value)
     {
         double a = 0.7;
-        double dist = qAbs(next_lim.coord - cur_lim.coord);
-        v_lim = sqrt( pow(cur_lim.value, 2) + 2 * a *dist);
+        limit_dist = pf(next_lim.coord - rail_coord);
+        v_lim = sqrt( pow(cur_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
     }
     else
     {

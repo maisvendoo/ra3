@@ -96,6 +96,8 @@ public:
 
    void setDirection(int dir) { this->dir = dir; }
 
+   double getLimitDistance() const { return limit_dist; }
+
 private:
 
    double U_pow;
@@ -158,6 +160,9 @@ private:
    double next_limit;
 
    int dir;
+
+   /// Дистанция до ограничения
+   double limit_dist;
 
    /// База ограничений скорости
    std::vector<speed_limit_t> limits;
