@@ -81,6 +81,12 @@ public:
    /// Вернуть ускорение поезда
    double getAcceleration() const { return acceleration; }
 
+   /// Задать координату
+   void setRailCoord(double rail_coord) { this->rail_coord = rail_coord; }
+
+   /// Задать длину поезда
+   void setTrainLength(double train_length) { this->train_length = train_length; }
+
 private:
 
    double U_pow;
@@ -125,6 +131,14 @@ private:
 
    Timer *safety_timer;
 
+   Timer *beepTimer;
+
+   double beep_interval;
+
+   double rail_coord;
+
+   double train_length;
+
    std::array<float, NUM_LAMPS> lamps;
 
    Trigger epk_state;
@@ -155,9 +169,14 @@ private:
    /// Вычисление ускорения
    void calc_acceleration(double t, double dt);
 
+   /// Работа с ограничениями скорости
+   void speed_control();
+
 private slots:
 
    void onSafetyTimer();
+
+   void onBeepTimer();
 };
 
 #endif // BLOK_H

@@ -21,10 +21,15 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , is_dislplay_ON(false)
   , check_vigilance(false)
   , safety_timer(new Timer(45.0, false))
+  , beepTimer(new Timer(0.5, true))
+  , beep_interval(0.5)
+  , rail_coord(0.0)
+  , train_length(0.0)
 {
     epk_state.reset();
 
     connect(safety_timer, &Timer::process, this, &BLOK::onSafetyTimer);
+    connect(beepTimer, &Timer::process, this, &BLOK::onBeepTimer);
 }
 
 //------------------------------------------------------------------------------
@@ -140,6 +145,10 @@ void BLOK::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "SafetyCheckInterval", safety_check_interval);
 
     safety_timer->setTimeout(safety_check_interval);
+
+    cfg.getDouble(secName, "BeepInterval", beep_interval);
+
+    beepTimer->setTimeout(beep_interval);
 }
 
 //------------------------------------------------------------------------------
@@ -233,7 +242,23 @@ void BLOK::calc_acceleration(double t, double dt)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void BLOK::speed_control()
+{
+
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BLOK::onSafetyTimer()
 {
-    epk_state.reset();    
+    epk_state.reset();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::onBeepTimer()
+{
+    emit soundPlay("BLOK_RB");
 }
