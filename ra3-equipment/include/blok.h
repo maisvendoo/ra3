@@ -98,6 +98,8 @@ public:
 
    double getLimitDistance() const { return limit_dist; }
 
+   double getRailCoord() const { return rail_coord / 1000.0; }
+
 private:
 
    double U_pow;
