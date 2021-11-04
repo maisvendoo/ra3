@@ -35,9 +35,13 @@ private:
 
     structs_BLOK_t  structsBLOK;
 
+    std::vector<QString>    stations;
+
     void initMainWindow();
 
     void initTopBlock();
+
+    void loadStations();
 
 private slots:
 

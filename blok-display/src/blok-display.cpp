@@ -5,6 +5,7 @@
 
 #include    <QVBoxLayout>
 #include    <QDir>
+#include    <QTextStream>
 
 //------------------------------------------------------------------------------
 //
@@ -37,6 +38,8 @@ BlokDisplay::~BlokDisplay()
 //------------------------------------------------------------------------------
 void BlokDisplay::init()
 {
+    loadStations();
+
     initMainWindow();
 
     initTopBlock();
@@ -100,6 +103,32 @@ void BlokDisplay::initTopBlock()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void BlokDisplay::loadStations()
+{
+    QString path = QDir::toNativeSeparators(route_dir) +
+            QDir::separator() +
+            "stations.conf";
+
+    QFile stations_file(path);
+
+    if (stations_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        while (!stations_file.atEnd())
+        {
+            QByteArray line = stations_file.readLine();
+            QStringList tokens = QString(line).remove('\n').split(';');
+
+            if (tokens.size() < 3)
+                continue;
+
+            stations.push_back(tokens[2]);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BlokDisplay::slotUpdateTimer()
 {
     structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_TM_PRESS]);
@@ -111,7 +140,19 @@ void BlokDisplay::slotUpdateTimer()
 
     structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
     structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
-    strcpy(structsBLOK.ip_val.station, "Ростов Гл.");
+
+    if (!stations.empty())
+    {
+        int i = static_cast<int>(input_signals[BLOK_STATION_INDEX]);
+        if (i >= 0)
+            strcpy(structsBLOK.ip_val.station, stations[i].toStdString().c_str());
+        else
+            strcpy(structsBLOK.ip_val.station, " ");
+    }
+    else
+    {
+        strcpy(structsBLOK.ip_val.station, " ");
+    }
 
     topBlock->set_ipVal(&structsBLOK.ip_val);
 

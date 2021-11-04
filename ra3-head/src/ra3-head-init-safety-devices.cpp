@@ -29,6 +29,12 @@ void RA3HeadMotor::initSafetyDevices()
     blok->setDirection(dir);
     blok->loadSpeedsMap(path);
 
+    // Загрузка станций в БЛОК
+    path = QDir::toNativeSeparators(route_dir) +
+            QDir::separator() + "stations.conf";
+
+    blok->loadStationsMap(path);
+
     epk = new AutoTrainStopEPK151D();
     epk->read_custom_config(config_dir +
                             QDir::separator() +

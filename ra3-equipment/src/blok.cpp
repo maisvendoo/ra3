@@ -32,6 +32,8 @@ BLOK::BLOK(QObject *parent) : Device(parent)
   , next_limit(300.0)
   , dir(1)
   , limit_dist(0)
+  , station_idx(-1)
+  , begin_station_finded(false)
 {
     epk_state.reset();
 
@@ -98,6 +100,34 @@ void BLOK::loadSpeedsMap(QString path)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void BLOK::loadStationsMap(QString path)
+{
+    QFile stations_file(path);
+
+    if (stations_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        while (!stations_file.atEnd())
+        {
+            QByteArray line = stations_file.readLine();
+            QStringList tokens = QString(line).remove('\n').split(';');
+
+            if (tokens.size() < 3)
+                continue;
+
+            station_t station;
+            qSetRealNumberPrecision(2);
+            station.begin_coord = pf(tokens[0].toDouble() - 3000.0);
+            station.end_coord = pf(tokens[1].toDouble() + 3000.0);
+            station.name = tokens[2];
+
+            stations.push_back(station);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BLOK::preStep(state_vector_t &Y, double t)
 {
     // Очищаем состояние ламп
@@ -125,6 +155,8 @@ void BLOK::preStep(state_vector_t &Y, double t)
         epk_state.reset();
 
     alsn_process(code_alsn);
+
+    stations_process();
 
     if (code_alsn == 1)
     {
@@ -378,6 +410,40 @@ void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
         next_limit = limits[idx + 1];
     else
         next_limit = speed_limit_t();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::stations_process()
+{
+    if (stations.empty())
+        return;
+
+    find_begin_station();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::find_begin_station()
+{
+    if (begin_station_finded)
+        return;
+
+    for (size_t i = 0; i < stations.size(); ++i)
+    {
+        if ( (rail_coord >= stations[i].begin_coord) &&
+             (rail_coord <= stations[i].end_coord) )
+        {
+             station_idx = i;
+             break;
+        }
+        else
+        {
+            station_idx = -1;
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

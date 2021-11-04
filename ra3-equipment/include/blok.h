@@ -3,6 +3,7 @@
 
 #include    "device.h"
 #include    "blok-speed-limits.h"
+#include    "blok-stations.h"
 
 //------------------------------------------------------------------------------
 //
@@ -91,14 +92,19 @@ public:
    /// Задать конструкционную скорость
    void setMaxVelocity(double v_max) { this->v_max = v_max; }
 
-   /// Загрузка ЭК
+   /// Загрузка скоростей из ЭК
    void loadSpeedsMap(QString path);
+
+   /// Загрузка станций из ЭК
+   void loadStationsMap(QString path);
 
    void setDirection(int dir) { this->dir = dir; }
 
    double getLimitDistance() const { return limit_dist; }
 
    double getRailCoord() const { return rail_coord / 1000.0; }
+
+   int getStationIndex() const { return station_idx; }
 
 private:
 
@@ -166,8 +172,17 @@ private:
    /// Дистанция до ограничения
    double limit_dist;
 
+   /// Индекс станции из ЭК
+   int station_idx;
+
+   /// Флаг окончания поиска начальной станции
+   bool begin_station_finded;
+
    /// База ограничений скорости
    std::vector<speed_limit_t> limits;
+
+   /// База станций
+    std::vector<station_t> stations;
 
    std::array<float, NUM_LAMPS> lamps;
 
@@ -207,6 +222,12 @@ private:
 
    /// Поиск текущего и следующего ограничения в базе
    void findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit);
+
+   /// Определение текущей станции
+   void stations_process();
+
+   /// Поиск начальной станции
+   void find_begin_station();
 
 private slots:
 
