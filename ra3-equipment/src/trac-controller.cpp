@@ -24,6 +24,7 @@ TracController::TracController(QObject *parent) : Device(parent)
   , reversSoundName("KM_revers")
   , K_flow(50.0)
   , pTM(0.0)
+  , emergencyRate(0.0)
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
@@ -61,6 +62,10 @@ void TracController::preStep(state_vector_t &Y, double t)
         emit soundPlay(mainHandleSoundName);
         mode_pos_old = mode_pos;
     }
+
+    emergencyRate = K_flow * pTM * static_cast<double>(emerg_brake.getState());
+
+    emit soundSetVolume("KM_vipusk", qRound(10.0 * emergencyRate));
 }
 
 //------------------------------------------------------------------------------

@@ -216,5 +216,25 @@
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
 	</Sound>
+
+	<Sound>
+		<Name>EB_vipusk</Name>
+		<Path>395_vypusk.wav</Path>
+		<InitVolume>0</InitVolume>
+		<MaxVolume>100</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
+
+	<Sound>
+		<Name>KM_vipusk</Name>
+		<Path>395_vypusk.wav</Path>
+		<InitVolume>0</InitVolume>
+		<MaxVolume>100</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+	</Sound>
 	
 </Config>

@@ -28,6 +28,8 @@ private:
 
     double K_flow;
 
+    double Kv;
+
     Trigger brake;
 
     void preStep(state_vector_t &Y, double t) override;

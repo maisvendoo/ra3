@@ -7,6 +7,7 @@ EmergencyBrakeValve::EmergencyBrakeValve(QObject *parent) : Device(parent)
   , emergencyRate(0.0)
   , pTM(0.0)
   , K_flow(50.0)
+  , Kv(4.0)
 {
 
 }
@@ -27,6 +28,8 @@ void EmergencyBrakeValve::preStep(state_vector_t &Y, double t)
     double u = static_cast<double>(brake.getState());
 
     emergencyRate = K_flow * pTM * u;
+
+    emit soundSetVolume("EB_vipusk", qRound(emergencyRate * Kv));
 }
 
 //------------------------------------------------------------------------------
@@ -47,6 +50,7 @@ void EmergencyBrakeValve::load_config(CfgReader &cfg)
     QString secName = "Device";
 
     cfg.getDouble(secName, "K_flow", K_flow);
+    cfg.getDouble(secName, "Kv", Kv);
 }
 
 //------------------------------------------------------------------------------
@@ -58,7 +62,7 @@ void EmergencyBrakeValve::stepKeysControl(double t, double dt)
     {
         if (isShift())
         {
-            brake.reset();
+            brake.reset();            
         }
         else
         {

@@ -53,4 +53,22 @@ void RA3HeadMotor::initSounds()
     connect(brake_module, &BTO092::soundPlay, this, &RA3HeadMotor::soundPlay);
 
     connect(blok, &BLOK::soundPlay, this, &RA3HeadMotor::soundPlay);
+
+    connect(emerg_brake_valve, &EmergencyBrakeValve::soundPlay,
+            this, &RA3HeadMotor::soundPlay);
+
+    connect(emerg_brake_valve, &EmergencyBrakeValve::soundStop,
+            this, &RA3HeadMotor::soundStop);
+
+    connect(emerg_brake_valve, &EmergencyBrakeValve::soundSetVolume,
+            this, &RA3HeadMotor::soundSetVolume);
+
+    connect(km, &TracController::soundPlay,
+            this, &RA3HeadMotor::soundPlay);
+
+    connect(km, &TracController::soundStop,
+            this, &RA3HeadMotor::soundStop);
+
+    connect(km, &TracController::soundSetVolume,
+            this, &RA3HeadMotor::soundSetVolume);
 }

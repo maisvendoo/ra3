@@ -52,7 +52,7 @@ public:
 
     double getEmergencyRate() const
     {
-        return K_flow * pTM * static_cast<double>(emerg_brake.getState());
+        return emergencyRate;
     }
 
 private:
@@ -100,6 +100,9 @@ private:
 
     /// Дввление в тормозной магистрали
     double pTM;
+
+    /// Тем экстренного торможения
+    double emergencyRate;
 
     /// Блок-контакт "ХОД"
     Trigger traction;

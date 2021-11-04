@@ -30,10 +30,11 @@ void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
     bc_split->step(t, dt);
 
     if (is_active)
+    {
         emerg_brake_valve->setControl(keys);
-
-    emerg_brake_valve->setBrakePipePressure(pTM);
-    emerg_brake_valve->step(t, dt);
+        emerg_brake_valve->setBrakePipePressure(pTM);
+        emerg_brake_valve->step(t, dt);
+    }
 
     auxRate = epk->getEmergencyBrakeRate() +
             emerg_brake_valve->getEmergencyRate() +
