@@ -71,4 +71,7 @@ void RA3HeadMotor::initSounds()
 
     connect(km, &TracController::soundSetVolume,
             this, &RA3HeadMotor::soundSetVolume);
+
+    connect(kru, &KRU091::soundSetVolume,
+            this, &RA3HeadMotor::soundSetVolume);
 }

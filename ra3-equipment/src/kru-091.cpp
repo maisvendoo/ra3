@@ -21,6 +21,7 @@ KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
   , A(1.0)
   , u1(0.0)
   , u2(0.0)
+  , Q_bp(0.0)
 {
     std::fill(K.begin(), K.end(), 0.0);
 
@@ -127,6 +128,9 @@ void KRU091::preStep(state_vector_t &Y, double t)
     u1 = cut(nf(A * dp), 0.0, 1.0); // Разрядка ТМ
     u2 = cut(pf(A * dp), 0.0, 1.0); // Зарядка ТМ
 
+    emit soundSetVolume("KRU-091_brake", qRound(2e5 * nf(Q_bp)));
+    emit soundSetVolume("KRU-091_release", qRound(2e6 * pf(Q_bp)));
+
     DebugMsg = QString(" RD: %1").arg(reducer->getOutPressure(), 4, 'f', 2);
 }
 
@@ -138,7 +142,7 @@ void KRU091::ode_system(const state_vector_t &Y,
                         double t)
 {
     // Расход воздуха из ТМ
-    double Q_bp = - K[3] * Y[BP_PRESSURE] * u1 + K[4] * (pFL - Y[BP_PRESSURE]) * u2;
+    Q_bp = - K[3] * Y[BP_PRESSURE] * u1 + K[4] * (pFL - Y[BP_PRESSURE]) * u2;
 
     dYdt[BP_PRESSURE] = Q_bp / V_bp;
 }

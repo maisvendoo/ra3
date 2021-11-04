@@ -73,6 +73,8 @@ private:
     /// Зарядный клапан РД
     double u2;
 
+    double Q_bp;
+
     enum
     {
         NUM_COEFFS = 10
