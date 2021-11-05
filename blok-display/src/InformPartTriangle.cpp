@@ -24,6 +24,7 @@ InformPartTriangle::InformPartTriangle(QPoint pos, int size, QColor color,
                                         QWidget *parent) : QLabel(parent)
 {
     colorTriangle_ = color;
+    oldColorTriangle_ = color;
 
     // устанавливаем геометрию класса
     this->setGeometry(pos.x(), pos.y(), size, size*0.8);

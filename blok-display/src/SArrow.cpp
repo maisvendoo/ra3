@@ -35,6 +35,7 @@ SArrow::SArrow(QWidget *parent, QString config_dir) : QLabel(parent)
     img_ = QImage( this->size(),
                    QImage::Format_ARGB32_Premultiplied );
 
+    angle_old = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -50,6 +51,11 @@ SArrow::~SArrow()
 //-----------------------------------------------------------------------------
 void SArrow::setValSpeed(double angle)
 {
+    if (angle_old == qRound(angle))
+        return;
+
+    angle_old = qRound(angle);
+
     img_.fill(Qt::transparent);
 
     QPainter paint(&img_);

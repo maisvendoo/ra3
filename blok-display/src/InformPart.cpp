@@ -52,7 +52,7 @@ InformPart::InformPart(QRect geo, QString strHead, QString strText,
 
 
     // 2. Текст внутри прямоугольника
-    labelText_ = new QLabel("", this);
+    labelText_ = new TriggerLabel("", this);
     QFont font = labelText_->font();
     font.setStyleStrategy(QFont::NoAntialias);
     labelText_->setFont(font);
@@ -103,7 +103,7 @@ void InformPart::setTextOverHead(QString headText, QRect geo)
 {
     this->setGeometry(geo);
 
-    labelTextOverHead_ = new QLabel("", this);
+    labelTextOverHead_ = new TriggerLabel("", this);
     // задаем шрифт и размер
     labelTextOverHead_->setFont(QFont("Arial", fontSize_));
     // задаем цвет заголовка текста

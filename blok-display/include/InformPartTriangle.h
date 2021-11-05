@@ -50,13 +50,22 @@ public:
     void setTriangle(int angle, bool isBrush,
                      bool drawCircle = false, bool drawStr = false);
 
-    void setColor(const QColor &color) { colorTriangle_ = color; }
+    void setColor(const QColor &color)
+    {
+        if (oldColorTriangle_ == color)
+            return;
+
+        oldColorTriangle_ = color;
+
+        colorTriangle_ = color;
+    }
 
 private:
 
     //QLabel* labelTriangle_; ///< виджет для отображения треугольника
     QImage imgTriangle_; ///< картинка для треугольника
     QColor colorTriangle_; ///< цвет треугольника
+    QColor oldColorTriangle_;
 
 
     /*!

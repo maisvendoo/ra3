@@ -64,6 +64,9 @@ private:
     int arcSplitAngle_; ///< угол центра разрыва дуги
     int arcSplitPoint_; ///< длина дуги-разрыва
 
+    int old_limit;
+    int old_next_limit;
+
     /// Чтение конфигураций
     bool loadSArcLimitCfg(QString cfg_path);
 

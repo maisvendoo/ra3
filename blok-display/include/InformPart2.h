@@ -20,7 +20,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QImage>
-
+#include "trigger-label.h"
 
 /*!
  * \class InformPart
@@ -45,12 +45,12 @@ public:
 
 private:
 
-    QLabel* labelVal_; ///< виджет для отображения значения элемента
-    QLabel* labelBar_; ///< виджет для отображения прогресс бара
+    TriggerLabel* labelVal_; ///< виджет для отображения значения элемента
+    TriggerLabel* labelBar_; ///< виджет для отображения прогресс бара
     QImage imgBar_;    ///< картинка для прогресс бара
 
     /// Установить виджет для отображения текста
-    void setTextLabel_(QLabel* label, QRect geo, QColor color, QString str );
+    void setTextLabel_(TriggerLabel *label, QRect geo, QColor color, QString str );
 
     /// Нарисовать тело элемента
     void drawBodyLabel_();

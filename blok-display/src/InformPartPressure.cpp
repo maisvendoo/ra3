@@ -77,7 +77,7 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
 
 
     // --- НИЖНЯЯ ЧАСТЬ ЭЛЕМЕНТА --- //
-    QLabel* labelBottom = new  QLabel(this);
+    QLabel* labelBottom = new  TriggerLabel(this);
     labelBottom->setGeometry(0, labelTop->height(),
                              this->width(), this->height()*0.2);
     labelBottom->setFont(QFont("Arial", 16));
@@ -85,12 +85,12 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     labelBottom->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     labelBottom->setText(strHead);
 
-    labelPressureVal_ = new QLabel("0,0", this);
+    labelPressureVal_ = new TriggerLabel("0,0", this);
     labelPressureVal_->setGeometry(labelBottom->geometry());
     labelPressureVal_->setFont(QFont("Arial", 16));
     labelPressureVal_->setAlignment(Qt::AlignCenter);
 
-    QLabel* label_MPa = new QLabel("МПа", this);
+    QLabel* label_MPa = new TriggerLabel("МПа", this);
     label_MPa->setGeometry(labelBottom->geometry());
     label_MPa->setFont(QFont("Arial", 16));
     label_MPa->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);

@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QImage>
 #include "ImageLabel.h"
+#include "trigger-label.h"
 
 class InformPartPressure : public ImageLabel
 {
@@ -31,7 +32,7 @@ public:
 
 private:
     ImageLabel* labelPressureBar_;
-    QLabel* labelPressureVal_;
+    TriggerLabel* labelPressureVal_;
 
     QImage img_;
     QPixmap pm;

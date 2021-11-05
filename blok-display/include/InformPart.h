@@ -22,6 +22,7 @@
 #include <QImage>
 
 #include "ImageLabel.h"
+#include "trigger-label.h"
 
 /*!
  * \class InformPart
@@ -61,8 +62,8 @@ public:
 
 private:
 
-    QLabel* labelText_; ///< виждет для отображения текста элемента
-    QLabel* labelTextOverHead_; ///< перекрывающий текст заголовка
+    TriggerLabel* labelText_; ///< виждет для отображения текста элемента
+    TriggerLabel* labelTextOverHead_; ///< перекрывающий текст заголовка
     int fooWidth_;
 
     void drawX(); ///< Нарисовать крестик

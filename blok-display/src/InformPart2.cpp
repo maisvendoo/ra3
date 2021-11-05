@@ -24,13 +24,13 @@ InformPart2::InformPart2( QRect geo, QString strHead,
     this->setGeometry(geo);
 
     // 1. Текст-заголовок
-    setTextLabel_( new QLabel("", this),
+    setTextLabel_( new TriggerLabel("", this),
                    QRect(0,5,this->width(),this->height()/3),
                    QColor(255,255,0),
                    strHead );
 
     // 2. Рисуем рамку
-    QLabel* label = new QLabel("", this);
+    QLabel* label = new TriggerLabel("", this);
     label->setStyleSheet("border: 3px solid "+ QColor(255,255,0).name());
     label->setGeometry( 0,
                         this->height()/3,
@@ -81,7 +81,7 @@ void InformPart2::setVal(double val)
 //-----------------------------------------------------------------------------
 //  Установить label
 //-----------------------------------------------------------------------------
-void InformPart2::setTextLabel_(QLabel* label, QRect geo, QColor color, QString str)
+void InformPart2::setTextLabel_(TriggerLabel* label, QRect geo, QColor color, QString str)
 {
     // задаем шрифт и размер
     label->setFont(QFont("Arial", 14));
@@ -102,7 +102,7 @@ void InformPart2::setTextLabel_(QLabel* label, QRect geo, QColor color, QString 
 void InformPart2::drawBodyLabel_()
 {
     // 1 - прогресс бар
-    labelBar_ = new QLabel("", this);
+    labelBar_ = new TriggerLabel("", this);
     labelBar_->setStyleSheet("border: 2px solid white;");
     labelBar_->setGeometry( 10,
                             this->height()*2/3 + 4,
@@ -112,33 +112,33 @@ void InformPart2::drawBodyLabel_()
 
     QLabel* label;
     // 1.1 - элемент "|" слева
-    label = new QLabel("", this);
+    label = new TriggerLabel("", this);
     label->setStyleSheet("border: 2px solid white;");
     label->setGeometry( labelBar_->x(),
                         labelBar_->y() - labelBar_->height() +4,
                         2,
                         labelBar_->height() );
     // 1.2 - элемент "0"
-    setTextLabel_( new QLabel("", this),
+    setTextLabel_( new TriggerLabel("", this),
                    QRect(labelBar_->x(), this->height()/2, 20, 25),
                    QColor(255,255,255),
                    "0" );
 
     // 1.3 - элемент "|" справа
-    label = new QLabel("", this);
+    label = new TriggerLabel("", this);
     label->setStyleSheet("border: 2px solid white;");
     label->setGeometry( labelBar_->x() + labelBar_->width() - 2,
                         labelBar_->y() - labelBar_->height() +4,
                         2,
                         labelBar_->height() );
     // 1.4 - элемент "1"
-    setTextLabel_( new QLabel("", this),
+    setTextLabel_( new TriggerLabel("", this),
                    QRect(labelBar_->x() + labelBar_->width() - 20, this->height()/2, 20, 25),
                    QColor(255,255,255),
                    "1" );
 
     // 2 - численное значение прогрес-бара
-    labelVal_ = new QLabel("", this);
+    labelVal_ = new TriggerLabel("", this);
     setTextLabel_( labelVal_,
                    QRect(0, this->height()/3+2, this->width(), this->height()/4),
                    QColor(0,150,255),

@@ -43,6 +43,7 @@ SArcLimit::SArcLimit( int valVMax, int arcSplitAngle, int arcSplitPoint,
     img_ = QImage( this->size(),
                    QImage::Format_ARGB32_Premultiplied );
 
+    old_limit = old_next_limit = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -57,7 +58,14 @@ SArcLimit::~SArcLimit()
 //  Нарисовать дугу ограничения скорости
 //-----------------------------------------------------------------------------
 void SArcLimit::setValSpeedLimit(double curSpeedLimit, double nextSpeedLimit)
-{ // Богос. Требуется рефакторинг.
+{
+    if ( (old_limit == qRound(curSpeedLimit)) && (old_next_limit == qRound(nextSpeedLimit))  )
+        return;
+
+    old_limit = qRound(curSpeedLimit);
+    old_next_limit = qRound(nextSpeedLimit);
+
+    // Богос. Требуется рефакторинг.
     curSpeedLimit += 2;
 
     img_.fill(Qt::transparent);
