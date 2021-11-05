@@ -168,6 +168,9 @@ private:
     QString colorTriangle_Red_;  ///< цвет треугольника
     // --------------------- //
 
+    QLabel *background;
+    QPixmap pic;
+
     /// Чтение конфигураций
     bool loadIPTriangleCfg(QString cfg_path);
 

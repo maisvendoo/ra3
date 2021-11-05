@@ -13,6 +13,8 @@ DESTDIR = $$(RRS_DEV_ROOT)/modules/ra3-head
 LIBS += -L$$(RRS_DEV_ROOT)/bin -ldisplay
 LIBS += -L$$(RRS_DEV_ROOT)/bin -lCfgReader
 
+#CONFIG += force_debug_info
+
 INCLUDEPATH += ./include
 INCLUDEPATH += $$(RRS_DEV_ROOT)/sdk/include
 INCLUDEPATH += ../ra3-head/include

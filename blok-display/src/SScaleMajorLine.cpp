@@ -65,7 +65,7 @@ void SScaleMajorLine::drawMajorLine()
     paint.setRenderHint(QPainter::Antialiasing, true);
 
 
-    for (int i = 0; i <= lineCount_; i++)
+    /*for (int i = 0; i <= lineCount_; i++)
     {
         double angle = i*angleStep_ - aZeroPoint_;
         angle = qDegreesToRadians(angle);
@@ -87,7 +87,7 @@ void SScaleMajorLine::drawMajorLine()
                         w_2_ + (w_2_ + r2)*cos(angle),
                         h_2_ + (h_2_ + r2)*sin(angle) );
 
-    }
+    }*/
 
 
     paint.end();

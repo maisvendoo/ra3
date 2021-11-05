@@ -23,8 +23,11 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     : ImageLabel(parent)
 {
     this->setGeometry(0, 0, 70, 550);
-    this->setStyleSheet("border: 2px solid yellow;"
+    /*this->setStyleSheet("border: 2px solid yellow;"
                         "color: white;"
+                        "font-weight: bold;");*/
+
+    this->setStyleSheet("color: white;"
                         "font-weight: bold;");
 
     // --- ВЕРХНЯЯ ЧАСТЬ ЭЛЕМЕНТА --- //
@@ -32,7 +35,7 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     labelTop->setGeometry(0, 0,
                           this->width(), static_cast<int>(this->height() * 0.8));
 
-    int deltaY = (labelTop->height() - 20)/5;
+    /*int deltaY = (labelTop->height() - 20)/5;
     drawLabel("1.00", 3);
     drawLabel("0.80", deltaY);
     drawLabel("0.60", deltaY * 2);
@@ -62,7 +65,7 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     }
 
     paint.end();
-    labelTop->setPixmap(QPixmap::fromImage(img));
+    labelTop->setPixmap(QPixmap::fromImage(img));*/
 
     //
     labelPressureBar_ = new ImageLabel(this);
@@ -80,20 +83,20 @@ InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     QLabel* labelBottom = new  TriggerLabel(this);
     labelBottom->setGeometry(0, labelTop->height(),
                              this->width(), this->height()*0.2);
-    labelBottom->setFont(QFont("Arial", 16));
+    /*labelBottom->setFont(QFont("Arial", 16));
     labelBottom->setStyleSheet("color: yellow");
     labelBottom->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    labelBottom->setText(strHead);
+    labelBottom->setText(strHead);*/
 
     labelPressureVal_ = new TriggerLabel("0,0", this);
     labelPressureVal_->setGeometry(labelBottom->geometry());
     labelPressureVal_->setFont(QFont("Arial", 16));
     labelPressureVal_->setAlignment(Qt::AlignCenter);
 
-    QLabel* label_MPa = new TriggerLabel("МПа", this);
+    /*QLabel* label_MPa = new TriggerLabel("МПа", this);
     label_MPa->setGeometry(labelBottom->geometry());
     label_MPa->setFont(QFont("Arial", 16));
-    label_MPa->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+    label_MPa->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);*/
 
     press_old = 0;
 }

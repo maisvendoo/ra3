@@ -48,7 +48,7 @@ InformPart::InformPart(QRect geo, QString strHead, QString strText,
     // выравниваем по центру
     label_->setAlignment(Qt::AlignCenter);
     // сам текст
-    label_->setText(strHead);
+    //label_->setText(strHead);
 
 
     // 2. Текст внутри прямоугольника
@@ -59,9 +59,13 @@ InformPart::InformPart(QRect geo, QString strHead, QString strText,
     // задаем шрифт и размер
     labelText_->setFont(QFont("Arial", fontSize_));
     // задаем цвет текста
-    labelText_->setStyleSheet("color: "+ colorText_ + ";" +
+    /*labelText_->setStyleSheet("color: "+ colorText_ + ";" +
                               "font-weight: bold;" +
-                              "border: 2px solid "+ colorBorder_ +";");
+                              "border: 2px solid "+ colorBorder_ +";");*/
+
+    labelText_->setStyleSheet("color: "+ colorText_ + ";" +
+                              "font-weight: bold;");
+
     // задаем геометрию
     labelText_->setGeometry( 0,
                              label_->height(),

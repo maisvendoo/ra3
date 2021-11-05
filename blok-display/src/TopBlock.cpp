@@ -29,6 +29,14 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
     this->setGeometry(geo);
     this->setAutoFillBackground(true);
     this->setPalette(QPalette(QColor(0,0,0)));
+
+    background = new QLabel(this);
+    background->setFrameShape(QLabel::NoFrame);
+    if (!pic.load(":/cassete/blok-background")) { return; }
+    background->setFixedSize(pic.size());
+    background->setPixmap(pic);
+    background->move(-10, -10);
+
 //    this->setStyleSheet("border: 2px solid green");
 
     // загружаем параметры с конфига
@@ -83,7 +91,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
     informPartMap_.insert(ip_->acceleration, informPart_);
     geoIP = QRect(15,250, 150,fooH_ip);
     informPart_ = new InformPart(geoIP, "", "1477м", alignCenter, this, config_dir);
-    informPart_->setTextOverHead("РАССТ. ДО ЦЕЛИ САУТ", QRect(15,250, 250,fooH_ip));  // РАССТ. ДО ЦЕЛИ САУТ
+    //informPart_->setTextOverHead("РАССТ. ДО ЦЕЛИ САУТ", QRect(15,250, 250,fooH_ip));  // РАССТ. ДО ЦЕЛИ САУТ
     informPartMap_.insert(ip_->distanceTargetSAUT, informPart_);
     geoIP = QRect(15,330, 150,fooH_ip);
     informPart_ = new InformPart(geoIP, "КОЭФ. ТОРМ.", "0.47", alignCenter, this, config_dir);
@@ -150,6 +158,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
                                           40,
                                           QColor(0,0,0),
                                           this );    
+
 }
 
 //-----------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/cassete">
         <file alias="img-cassete">img/img-cassete.png</file>
+        <file alias="blok-background">img/blok-background.png</file>
     </qresource>
 </RCC>

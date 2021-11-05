@@ -99,9 +99,9 @@ void SScale::drawSScale_()
     if (points_isDraw_)
         drawPoints_();
     // рисуем значения скоростей
-    drawValV_();
+    //drawValV_();
     // рисуем основную дугу шкалы спидометра
-    drawArcMain_();
+    //drawArcMain_();
     // рисуем центральный круг спидометра
     drawCircleCener_();
 
