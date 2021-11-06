@@ -167,7 +167,6 @@ void BlokDisplay::slotUpdateTimer()
     topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
     topBlock->setTriangleYellow(structsBLOK.other_val.signalControlLookOut);
 
-    //off_screen->setVisible(false);
     off_screen->setVisible(!static_cast<bool>(input_signals[BLOK_DISPLAY_ON]));
     off_screen->raise();
 }

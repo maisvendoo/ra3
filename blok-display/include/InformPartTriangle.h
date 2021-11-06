@@ -88,7 +88,7 @@ private:
      */
     void drawText(QPainter &paint, QString str);
 
-
+    bool isBrush_old;
 };
 
 #endif // INFORMPARTTRIANGLE_H

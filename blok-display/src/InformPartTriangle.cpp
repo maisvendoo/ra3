@@ -41,7 +41,9 @@ InformPartTriangle::InformPartTriangle(QPoint pos, int size, QColor color,
     imgTriangle_ = QImage( this->size(),
                            QImage::Format_ARGB32_Premultiplied );
 
+
     setTriangle(0, false, false);
+    isBrush_old = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -58,6 +60,11 @@ InformPartTriangle::~InformPartTriangle()
 void InformPartTriangle::setTriangle(int angle, bool isBrush,
                                      bool drawCircle, bool drawStr)
 {
+    if (isBrush == isBrush_old)
+        return;
+
+    isBrush_old = isBrush;
+
     imgTriangle_.fill(Qt::transparent);
 
     QPainter paint(&imgTriangle_);

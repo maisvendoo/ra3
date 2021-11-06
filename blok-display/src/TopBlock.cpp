@@ -223,7 +223,7 @@ void TopBlock::set_ip2Val(ip2_val_t *val)
 //-----------------------------------------------------------------------------
 void TopBlock::setTriangleYellow(bool isSignal)
 {
-    ipTriangleYellow_->setTriangle(0,isSignal,true);
+    ipTriangleYellow_->setTriangle(0,isSignal,false);
 }
 
 //-----------------------------------------------------------------------------
