@@ -32,7 +32,7 @@ void RA3HeadMotor::slotAutostart()
     else
         tumbler[autostart_prog[count_step].id].reset();
 
-    //autostart_timer->setTimeout(autostart_prog[count_step].timeout);
+    autostart_timer->setTimeout(autostart_prog[count_step].timeout);
 
     count_step++;
 }

@@ -10,7 +10,7 @@ void RA3HeadMotor::initAutostart()
     if (!is_autostart)
         return;
 
-    autostart_timer = new Timer(1.0, false);
+    autostart_timer = new Timer(0.1, false);
 
     CfgReader cfg;
 

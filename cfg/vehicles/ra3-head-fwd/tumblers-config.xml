@@ -7,4 +7,9 @@
 		<State>1</State>
 	</Tumbler>
 
+	<Tumbler>
+		<ID>1</ID>
+		<State>1</State>
+	</Tumbler>
+
 </Config>
