@@ -29,6 +29,8 @@
 
 #include    "ra3-head-signals.h"
 
+#include    "ra3-head-autostart-step.h"
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -99,6 +101,15 @@ private:
 
     /// Стартер
     Starter *starter;
+
+    /// Таймер автозапуска
+    Timer   *autostart_timer;
+
+    /// Счетчик шагов автозапуска
+    size_t count_step;
+
+    /// Признак автозапуска
+    bool is_autostart;
 
     /// Реле стартера
     Relay *starter_relay;
@@ -181,6 +192,9 @@ private:
 
     /// Кнопка "Поддержание скорости"
     KeyTrigger  button_speed_hold;    
+
+    /// Программа автозапуска
+    std::vector<autostart_step_t>   autostart_prog;    
 
     void initialization() override;
 
@@ -269,6 +283,9 @@ private:
     /// Работа прочего оборудования
     void stepOtherEquipment(double t, double dt);
 
+    /// Работа автозапуска
+    void stepAutostart(double t, double dt);
+
     /// Связывание сигналов СМЕ
     void stepVehiclesConnect();
 
@@ -297,6 +314,10 @@ private:
 
     /// Вывод сигналов на анимации модели поезда
     void animationSignalsOutput(double t, double dt);
+
+private slots:
+
+    void slotAutostart();
 };
 
 #endif // RA3_HEAD_H

@@ -23,6 +23,9 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , horn(Q_NULLPTR)
   , disel(Q_NULLPTR)
   , starter(Q_NULLPTR)
+  , autostart_timer(Q_NULLPTR)
+  , count_step(0)
+  , is_autostart(false)
 {
 
 }
@@ -147,6 +150,9 @@ void RA3HeadMotor::step(double t, double dt)
     // Регистрация параметров движения
     stepRegistrator(t, dt);
 
+    // Автозапуск
+    stepAutostart(t, dt);
+
     // Отладочный вывод по F1
     debugOutput(t, dt);
 }
@@ -191,6 +197,8 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
 
         cfg.getDouble(secName, "ip1", ip1);
         cfg.getDouble(secName, "ip2", ip2);
+
+        cfg.getBool(secName, "Autostart", is_autostart);
     }
 }
 

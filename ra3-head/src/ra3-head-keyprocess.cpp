@@ -8,6 +8,9 @@ void RA3HeadMotor::keyProcess()
     if (!is_active)
         return;
 
+    if (is_autostart)
+        return;
+
     // БОРТСЕТЬ ВКЛ.
     if (getKeyState(KEY_U))
         tumbler[BUTTON_PWR_ON].set();
