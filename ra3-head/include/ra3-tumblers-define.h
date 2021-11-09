@@ -38,7 +38,10 @@ enum
     BUTTON_SPEED_MINUS = 9,
 
     /// Кнопка "Поддержание скорости"
-    BUTTON_SPEED_HOLD = 10
+    BUTTON_SPEED_HOLD = 10,
+
+    /// Ключ ЭПК
+    KEY_EPK = 11
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

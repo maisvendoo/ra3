@@ -75,4 +75,13 @@ void RA3HeadMotor::keyProcess()
 
     // Кнопка "Поддержание скорости"
     button_speed_hold.setState(getKeyState(KEY_G));
+
+    // ЭПК
+    if (getKeyState(KEY_N))
+    {
+        if (isShift())
+            tumbler[KEY_EPK].set();
+        else
+            tumbler[KEY_EPK].reset();
+    }
 }
