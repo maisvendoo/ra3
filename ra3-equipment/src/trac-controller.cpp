@@ -8,7 +8,9 @@ TracController::TracController(QObject *parent) : Device(parent)
   , mode_pos_old(mode_pos)
   , old_traction_key(false)
   , old_brake_key(false)
+  , fwd_key(false)
   , old_fwd_key(false)
+  , bwd_key(false)
   , old_bwd_key(false)
   , revers_pos(0)
   , trac_min(17)
@@ -189,13 +191,13 @@ void TracController::stepKeysControl(double t, double dt)
     old_traction_key = getKeyState(KEY_A);
     old_brake_key = getKeyState(KEY_D);
 
-    if (getKeyState(KEY_W) && !old_fwd_key)
+    if (fwd_key && !old_fwd_key)
     {
         revers_pos++;
         emit soundPlay(reversSoundName);
     }
 
-    if (getKeyState(KEY_S) && !old_bwd_key)
+    if (bwd_key && !old_bwd_key)
     {
         revers_pos--;
         emit soundPlay(reversSoundName);
@@ -203,8 +205,8 @@ void TracController::stepKeysControl(double t, double dt)
 
     revers_pos = cut(revers_pos, -1, 1);
 
-    old_fwd_key = getKeyState(KEY_W);
-    old_bwd_key = getKeyState(KEY_S);
+    old_fwd_key = fwd_key;
+    old_bwd_key = bwd_key;
 }
 
 //------------------------------------------------------------------------------

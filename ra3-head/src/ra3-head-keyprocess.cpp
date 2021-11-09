@@ -84,4 +84,15 @@ void RA3HeadMotor::keyProcess()
         else
             tumbler[KEY_EPK].reset();
     }
+
+    // Реверсивный переключатель
+    if (getKeyState(KEY_W))
+        tumbler[SWITCH_REVERS_FWD].set();
+    else
+        tumbler[SWITCH_REVERS_FWD].reset();
+
+    if (getKeyState(KEY_S))
+        tumbler[SWITCH_REVERS_BWD].set();
+    else
+        tumbler[SWITCH_REVERS_BWD].reset();
 }

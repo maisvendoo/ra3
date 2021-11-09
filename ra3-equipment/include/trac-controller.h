@@ -55,6 +55,10 @@ public:
         return emergencyRate;
     }
 
+    void setFwdKey(bool key_state) { fwd_key = key_state; }
+
+    void setBwdKey(bool key_state) { bwd_key = key_state; }
+
 private:
 
     /// Позиция, определяющая режим управления
@@ -67,7 +71,11 @@ private:
 
     bool old_brake_key;
 
+    bool fwd_key;
+
     bool old_fwd_key;
+
+    bool bwd_key;
 
     bool old_bwd_key;
 

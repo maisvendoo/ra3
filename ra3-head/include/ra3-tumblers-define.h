@@ -41,7 +41,13 @@ enum
     BUTTON_SPEED_HOLD = 10,
 
     /// Ключ ЭПК
-    KEY_EPK = 11
+    KEY_EPK = 11,
+
+    /// Реверс вперед
+    SWITCH_REVERS_FWD = 12,
+
+    /// Реверс назад
+    SWITCH_REVERS_BWD = 13
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

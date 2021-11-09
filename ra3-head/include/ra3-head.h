@@ -180,7 +180,7 @@ private:
     std::array<Trigger, TUMBLERS_NUM> tumbler;
 
     /// Кнопка "Поддержание скорости"
-    KeyTrigger  button_speed_hold;
+    KeyTrigger  button_speed_hold;    
 
     void initialization() override;
 
@@ -224,6 +224,9 @@ private:
 
     /// Инициализация звуков
     void initSounds();
+
+    /// Инициализация последовательности автозапуска
+    void initAutostart();
 
     void step(double t, double dt) override;
 
