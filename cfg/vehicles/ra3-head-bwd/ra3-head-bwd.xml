@@ -24,10 +24,10 @@
 		<IsActive>0</IsActive>
 
         <ExtModelName>ra3/RA3-head-bwd.osgt</ExtModelName>
-        <ModelShift>0.0 -0.25 0.05</ModelShift>
+        <ModelShift>0.0 -1.4 0.05</ModelShift>
 
         <CabineModel>ra3/RA3-cabview-bwd.osgt</CabineModel>
-        <CabineShift>0.0 -0.25a 0.05</CabineShift>
+        <CabineShift>0.0 -0.25 0.05</CabineShift>
 		
     </Vehicle>
 </Config>
