@@ -5,8 +5,6 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepDisel(double t, double dt)
 {
-    double U_bat24 = bat24->getVoltage();
-
     if (is_active)
         disel->setRefFreq(mpsu->getOutputData().n_ref);
     else
@@ -21,13 +19,13 @@ void RA3HeadMotor::stepDisel(double t, double dt)
     disel->setGenTorque(hydro_trans->getInputTorque());
     disel->step(t, dt);
 
-    starter->setVoltage(U_bat24 * static_cast<double>(starter_relay->getContactState(1)));
+    starter->setVoltage(Ucc_24 * static_cast<double>(starter_relay->getContactState(1)));
     starter->setOmega(disel->getStarterOmega() * static_cast<double>(starter_relay->getContactState(0)));
     starter->step(t, dt);
 
     bool is_starter_ralay_ON = mpsu->getOutputData().is_starter1_ON ||
             static_cast<bool>(forward_inputs[SME_BWD_STARTER_ON]);
 
-    starter_relay->setVoltage(U_bat24 * static_cast<double>(is_starter_ralay_ON));
+    starter_relay->setVoltage(Ucc_24 * static_cast<double>(is_starter_ralay_ON));
     starter_relay->step(t, dt);
 }

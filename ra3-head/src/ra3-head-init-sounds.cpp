@@ -5,8 +5,8 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initSounds()
 {
-    connect(KM_bat_110, &Relay::soundPlay, this, &RA3HeadMotor::soundPlay);
-    KM_bat_110->setSoundName("Relay");
+    connect(KM_power, &Relay::soundPlay, this, &RA3HeadMotor::soundPlay);
+    KM_power->setSoundName("Relay");
 
     connect(horn, &TrainHorn::soundPlay, this, &RA3HeadMotor::soundPlay);
     connect(horn, &TrainHorn::soundStop, this, &RA3HeadMotor::soundStop);

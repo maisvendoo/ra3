@@ -5,7 +5,7 @@
 
 		<Emax>24.0</Emax>
 		<Emin>21.0</Emin>
-		<r>0.03</r>
+		<r>0.003</r>
 		<Rd>0.4</Rd>
 		<Capacity>200</Capacity>		
 

@@ -9,7 +9,7 @@ void RA3HeadMotor::stepSafetyDevices(double t, double dt)
     if (!is_active)
         return;
 
-    blok->setVoltage(Ucc);
+    blok->setVoltage(Ucc_110);
     blok->setAlsnCode(alsn_info.code_alsn);
     blok->setRBstate(tumbler[BUTTON_RB].getState());
     blok->setRBSstate(tumbler[BUTTON_RBS].getState());

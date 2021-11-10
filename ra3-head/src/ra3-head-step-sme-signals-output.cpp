@@ -11,7 +11,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     Q_UNUSED(dt)
 
     // Сигнал включения контактора "Бортсеть" на ведомую секцию
-    backward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_bat_110->getContactState(2));
+    backward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
     // Сигнал включения топливного насоса на ведомом дизеле
     backward_outputs[SME_BWD_FUEL_PUMP] = static_cast<float>(mpsu->getOutputData().is_fuel_pump2_ON);

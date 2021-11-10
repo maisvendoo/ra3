@@ -39,7 +39,7 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     analogSignal[SPEED_HOLD] = static_cast<float>(mpsu->getOutputData().is_speed_hold_ON);
 
     // Проверка наличия питания "БОРТСЕТЬ"
-    bool is_power_on = static_cast<bool>(hs_p(Ucc - 99.0));
+    bool is_power_on = static_cast<bool>(hs_p(Ucc_110 - 99.0));
 
     // Активация ламп с учетом наличия питания
     for (size_t i = ACTIVE_COCKPIT; i <= KDP; ++i)

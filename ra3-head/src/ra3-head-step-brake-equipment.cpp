@@ -11,7 +11,7 @@ void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
     brake_module->setRefPressureLevel(mpsu->getOutputData().brake_ref_level_EPB);
     brake_module->releaseBrakes(mpsu->getOutputData().release_PB1);
 
-    brake_module->setVoltage(Ucc);
+    brake_module->setVoltage(Ucc_110);
     brake_module->setParkingBrakeState(is_parking_braked);
     brake_module->setBrakeCylinderPressure(bc_split->getP_in());
     brake_module->setBrakepipePressure(pTM);
