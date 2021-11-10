@@ -51,6 +51,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[SPEED_SELECTION] = static_cast<float>(tumbler[BUTTON_SPEED_SELECTION].getState());
     analogSignal[SPEED_PLUS] = static_cast<float>(tumbler[BUTTON_SPEED_PLUS].getState());
     analogSignal[SPEED_MINUS] = static_cast<float>(tumbler[BUTTON_SPEED_MINUS].getState());
+    analogSignal[HOLD_SPEED] = static_cast<float>(button_speed_hold.getState());
 
 
     // Карданы

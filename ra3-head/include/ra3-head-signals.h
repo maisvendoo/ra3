@@ -155,6 +155,7 @@ enum
     STEPS = 186,
     RIGHT_OPEN = 187,
     RIGHT_CLOSE = 188,
+    HOLD_SPEED = 189,
 
 
     // Угол вращения кардана 1
