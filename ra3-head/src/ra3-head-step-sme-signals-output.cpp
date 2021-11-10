@@ -84,4 +84,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
 
     // Сигнал наичия связи по как для ведущей секции
     forward_outputs[SME_BWD_CAN] = 1.0f;
+
+    backward_outputs[SME_NO_ACTIVE] = 1.0f;
 }

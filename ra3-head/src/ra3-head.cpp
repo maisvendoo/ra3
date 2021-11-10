@@ -12,6 +12,7 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , charge_press(0.5)
   , main_res_leak(0.0)
   , is_active(false)
+  , is_active_ref(false)
   , bat110(Q_NULLPTR)
   , bat24(Q_NULLPTR)
   , U_bat_110(0.0)
@@ -182,7 +183,7 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
             fuel_tank[i]->setFuelLevel(fuel_level);
         }
 
-        cfg.getBool(secName, "IsActive", is_active);
+        cfg.getBool(secName, "IsActive", is_active_ref);
 
         cfg.getDouble(secName, "MainResLeak", main_res_leak);
 

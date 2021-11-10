@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepCabineControls(double t, double dt)
 {
+    is_active = is_active_ref && (!static_cast<bool>(forward_inputs[SME_NO_ACTIVE]));
+
     if (is_active)
     {
         km->setControl(keys);
