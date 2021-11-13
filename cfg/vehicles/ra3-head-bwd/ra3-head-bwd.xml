@@ -3,7 +3,7 @@
     <Vehicle>
         <EmptyMass>50500</EmptyMass>
         <PayloadMass>0</PayloadMass> 
-        <Length>23.780</Length>
+        <Length>24.24</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
         <NumAxis>4</NumAxis>
@@ -24,10 +24,10 @@
 		<IsActive>0</IsActive>
 
         <ExtModelName>ra3/RA3-head-bwd.osgt</ExtModelName>
-        <ModelShift>0.0 -1.4 0.05</ModelShift>
+        <ModelShift>0.0 0.0 0.05</ModelShift>
 
         <CabineModel>ra3/RA3-cabview-bwd.osgt</CabineModel>
-        <CabineShift>0.0 -0.25 0.05</CabineShift>
+        <CabineShift>0.0 0.0 0.05</CabineShift>
 		
     </Vehicle>
 </Config>

@@ -3,7 +3,7 @@
     <Vehicle>
         <EmptyMass>39400</EmptyMass>
         <PayloadMass>0</PayloadMass> 
-        <Length>23.780</Length>
+        <Length>24.7</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
         <NumAxis>4</NumAxis>
@@ -16,7 +16,7 @@
         <MainResLeak>4e-5</MainResLeak>        
 
         <ExtModelName>ra3/RA3-middle.osgt</ExtModelName>
-        <ModelShift>0.0 0.25 0.05</ModelShift>
+        <ModelShift>0.0 0.0 0.05</ModelShift>
 
 		<DriverPos>0.56 9.95 2.9</DriverPos>        
 		
