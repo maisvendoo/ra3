@@ -41,6 +41,15 @@ private:
     /// Контактор включения батареи 110 В
     Relay   *KM_power;
 
+    /// Главный резервуар
+    Reservoir *main_res;
+
+    /// Запасный резервуар
+    Reservoir *aux_res;
+
+    /// Коэффициент утечки из ГР
+    double main_res_leak;
+
     /// Блок тормозного оборудования (БТО-092)
     BTO092 *brake_module;
 
@@ -57,6 +66,8 @@ private:
 
     void initControlCircuit();
 
+    void initPneumoSystem();
+
     void initBrakeMech();
 
     void initBrakeEquipment();
@@ -64,6 +75,8 @@ private:
     void step(double t, double dt) override;
 
     void stepControlCircuit(double t, double dt);
+
+    void stepPneumoSystem(double t, double dt);
 
     void stepBrakeMech(double t, double dt);
 
@@ -74,6 +87,8 @@ private:
     void stepVehiclesConnect();
 
     void debugOutput(double t, double dt);
+
+    void loadConfig(QString cfg_path) override;
 };
 
 #endif // RA3_MIDDLE_H
