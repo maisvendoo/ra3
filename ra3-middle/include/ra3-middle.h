@@ -23,6 +23,8 @@ private:
     void step(double t, double dt) override;
 
     void stepSignalsOutput(double t, double dt);
+
+    void stepVehiclesConnect();
 };
 
 #endif // RA3_MIDDLE_H

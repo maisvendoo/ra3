@@ -5,7 +5,7 @@
 		<Duration>10.0</Duration>
 		<Precision>0.01</Precision>
 		<Infinity>1</Infinity>
-		<Axis>-1.0 0.0 0.0</Axis>
+		<Axis>1.0 0.0 0.0</Axis>
 	</AnalogRotation>
 
 	<KeyPoint>

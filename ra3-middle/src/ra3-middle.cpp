@@ -30,6 +30,8 @@ void RA3Middle::initialization()
 void RA3Middle::step(double t, double dt)
 {
     stepSignalsOutput(t, dt);
+
+    stepVehiclesConnect();
 }
 
 //------------------------------------------------------------------------------
