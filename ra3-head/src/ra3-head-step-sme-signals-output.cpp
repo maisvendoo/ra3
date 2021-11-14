@@ -52,8 +52,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Заданный уровень торможения ЭПТ на ведомую секцию
     backward_outputs[SME_REF_BRAKE_LEVEL] = km->getBrakeLevel();
 
-    // Сигнал отпуска тормозов (КЭБ) на ведомую секцию
-    backward_outputs[SME_BRAKE_RELEASE] = static_cast<float>(false);
+    // Сигнал отпуска тормозов (КЭБ) на ведомую секцию или промежуточный вагон
+    backward_outputs[SME_BRAKE_RELEASE] = static_cast<float>(mpsu->getOutputData().release_PB1);
+
+    backward_outputs[SME_REF_BRAKE_LEVEL_EPB] = static_cast<float>(mpsu->getOutputData().brake_ref_level_EPB);
 
     // Питание удерживающей катушки ЭПК
     backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
@@ -82,7 +84,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
                 emerg_brake_valve->isEmergencyBrake() ||
                 km->isEmergencyBrake());
 
-    // Сигнал наичия связи по как для ведущей секции
+    // Сигнал наличия связи по как для ведущей секции
     forward_outputs[SME_BWD_CAN] = 1.0f;
 
     backward_outputs[SME_NO_ACTIVE] = 1.0f;
