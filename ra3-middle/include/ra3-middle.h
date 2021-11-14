@@ -5,6 +5,10 @@
 
 #include    "ra3-middle-signals.h"
 
+#include    "battery.h"
+#include    "ra3-brake-mech.h"
+#include    "bto-092.h"
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -18,9 +22,52 @@ public:
 
 private:
 
+    enum
+    {
+        NUM_TROLLEY = 2,
+        FWD_TROLLEY = 0,
+        BWD_TROLLEY = 1
+    };
+
+    /// Напряжение от батареи 110 В
+    double U_bat_110;
+
+    /// Напряжение питания цепей управления 110 В
+    double Ucc_110;
+
+    /// Батарея 110 В
+    Battery *bat110;
+
+    /// Контактор включения батареи 110 В
+    Relay   *KM_power;
+
+    /// Блок тормозного оборудования (БТО-092)
+    BTO092 *brake_module;
+
+    /// Разветвитель на стояночный тормоз
+    PneumoSplitter *pb_split;
+
+    /// Разветвитель на магистраль ТЦ
+    PneumoSplitter *bc_split;
+
+    /// Тормозные механизмы тележек
+    std::array<RA3BrakeMech *, NUM_TROLLEY> brake_mech;
+
     void initialization() override;
 
+    void initControlCircuit();
+
+    void initBrakeMech();
+
+    void initBrakeEquipment();
+
     void step(double t, double dt) override;
+
+    void stepControlCircuit(double t, double dt);
+
+    void stepBrakeMech(double t, double dt);
+
+    void stepBrakeEquipment(double t, double dt);
 
     void stepSignalsOutput(double t, double dt);
 
