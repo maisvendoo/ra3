@@ -49,6 +49,8 @@ void RA3Middle::step(double t, double dt)
     stepSignalsOutput(t, dt);
 
     stepVehiclesConnect();
+
+    debugOutput(t, dt);
 }
 
 //------------------------------------------------------------------------------

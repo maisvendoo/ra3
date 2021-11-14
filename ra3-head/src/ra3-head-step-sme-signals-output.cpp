@@ -86,4 +86,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_BWD_CAN] = 1.0f;
 
     backward_outputs[SME_NO_ACTIVE] = 1.0f;
+
+    // Напряжение зарядки АКБ на промежуточный вагон
+    backward_outputs[SME_FWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
+    forward_outputs[SME_BWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
 }

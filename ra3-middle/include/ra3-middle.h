@@ -72,6 +72,8 @@ private:
     void stepSignalsOutput(double t, double dt);
 
     void stepVehiclesConnect();
+
+    void debugOutput(double t, double dt);
 };
 
 #endif // RA3_MIDDLE_H
