@@ -192,12 +192,12 @@ void BLOK::preStep(state_vector_t &Y, double t)
     if (state_RB || state_RBS)
     {
         epk_state.set();
-        safety_timer->stop();        
+        safety_timer->stop();
     }
 
     check_vigilance = !epk_state.getState();
 
-    sounds_process();    
+    sounds_process();
 }
 
 //------------------------------------------------------------------------------
@@ -338,7 +338,7 @@ void BLOK::speed_control()
     if (V_kmh >= current_limit + 1)
     {
         epk_state.reset();
-    }    
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -363,17 +363,18 @@ void BLOK::calc_speed_limits()
 
     findLimits(cur_lim, next_lim);
 
-    double v_lim = 0;
+    if (cur_lim.value > v_max)
+    {
+        cur_lim.value = v_max;
+    }
+
+    double v_lim = v_max;
 
     if (cur_lim.value > next_lim.value)
     {
         double a = 0.7;
         limit_dist = pf(next_lim.coord - rail_coord);
         v_lim = sqrt( pow(next_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
-    }
-    else
-    {
-        v_lim = v_max;
     }
 
     current_limit = min(v_lim + 1, cur_lim.value + 1);
