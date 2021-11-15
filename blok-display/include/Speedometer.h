@@ -92,6 +92,7 @@ private:
     int     speedCurOld_i_;     ///< предыдущая текущая скорость
     double  speedCurOld_d_;     ///< предыдущая текущая скорость
     int     speedLimitOld_;     ///< предыдущее ограничение скорости
+    int     nextSpeedLimitOld_; ///< предыдущее след. ограничение скорости
 //    int     speedRefOld_;       ///< предыдущая заданная скорость с рукоятки
 //    int     zzzOld_;            ///< предыдущая zzzzzzzzzz
 //    int speedLimit_; ///< текущее значение ограничения скорости
