@@ -169,9 +169,11 @@ void Speedometer::setSpeedCur(double speed)
 void Speedometer::setSpeedLimits(int speedLimit, int nextSpeedLimit)
 {
     // чтобы не перерисовывать, если значение не изменилось
-    if ( abs(speedLimitOld_ - speedLimit) <= 1 )
+    if (  ( abs(speedLimitOld_ - speedLimit) <= 1 )
+       && ( abs(nextSpeedLimitOld_ - nextSpeedLimit) <= 1 ) )
         return;
     speedLimitOld_ = speedLimit;
+    nextSpeedLimitOld_ = nextSpeedLimit;
 
     // рисуем значение ограничения скорости в центре спидометра
     labelSpeedLimit_->setText( parsSpeedCur_(setSpeedRange_(speedLimit)) );
