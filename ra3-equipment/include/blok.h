@@ -37,7 +37,7 @@ public:
    void setAlsnCode(int code_alsn)
    {
        old_code_alsn = this->code_alsn;
-       this->code_alsn = code_alsn - 1;
+       this->code_alsn = code_alsn;
    };
 
    /// Прием состояния РБ

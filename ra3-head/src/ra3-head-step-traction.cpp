@@ -30,7 +30,7 @@ void RA3HeadMotor::stepTraction(double t, double dt)
 
     hydro_trans->setRefBrakeLevel(mpsu->getOutputData().brake_ref_level_GB);
     hydro_trans->setOmegaInput(disel->getOmega());
-    hydro_trans->setOmegaOutput(ip * wheel_omega[0]);    
+    hydro_trans->setOmegaOutput(ip * wheel_omega[0]);
     hydro_trans->step(t, dt);
 
     if (is_active)
