@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+ 
+    <Common>
+        <CouplingModule>ef-coupling</CouplingModule>
+        <CabineInVehicle>0</CabineInVehicle>
+        <ChargingPressure>0.5</ChargingPressure>
+        <InitMainResPressure>0.8</InitMainResPressure>
+        <NoAir>0</NoAir>
+        <Title>РА3-028 (двухвагонный) РЖД</Title>
+        <Description>Дизель-поезд РА3-028. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур), Александр Мищенко (перекраска РЖД)</Description>            
+    </Common>
+ 
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-028-head-fwd</ModuleConfig>
+         <Count>1</Count>
+         <PayloadCoeff>1</PayloadCoeff>    
+    </Vehicle>
+    
+	<Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-028-head-bwd</ModuleConfig>
+         <Count>1</Count>
+         <PayloadCoeff>1</PayloadCoeff>    
+    </Vehicle>
+ 
+</Config>
