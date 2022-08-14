@@ -67,6 +67,8 @@ void BLOK::step(double t, double dt)
 //------------------------------------------------------------------------------
 void BLOK::loadSpeedsMap(QString path)
 {
+//    DebugMsg = QString(" | %1 ")
+//            .arg(path);
     QFile map_file(path);
 
     if (map_file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -355,6 +357,7 @@ void BLOK::calc_speed_limits()
     if (limits.empty())
     {
         current_limit = next_limit = v_max;
+//        DebugMsg = QString(" | empty ");
         return;
     }
 
@@ -373,9 +376,14 @@ void BLOK::calc_speed_limits()
     if (cur_lim.value > next_lim.value)
     {
         double a = 0.7;
-        limit_dist = pf(next_lim.coord - rail_coord);
+        limit_dist = pf(dir * (next_lim.coord - rail_coord));
         v_lim = sqrt( pow(next_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
     }
+
+//    DebugMsg += QString(" | %1 %2 %3    ")
+//            .arg(cur_lim.value)
+//            .arg(next_lim.value);
+//            .arg(v_lim);
 
     current_limit = min(v_lim + 1, cur_lim.value + 1);
     next_limit = next_lim.value + 1;
@@ -397,7 +405,7 @@ void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
     {
         speed_limit_t limit = limits[idx];
 
-        if (rail_coord <= limit.coord)
+        if ((dir * (rail_coord - limit.coord)) < 0)
             right_idx = idx;
         else
             left_idx = idx;
@@ -411,6 +419,14 @@ void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
         next_limit = limits[idx + 1];
     else
         next_limit = speed_limit_t();
+
+//    DebugMsg = QString(" | %1: %2 m %3 km/h | %4: %5 m %6 km/h")
+//            .arg(idx)
+//            .arg(cur_limit.coord)
+//            .arg(cur_limit.value)
+//            .arg(idx + 1)
+//            .arg(next_limit.coord)
+//            .arg(next_limit.value);
 }
 
 //------------------------------------------------------------------------------
