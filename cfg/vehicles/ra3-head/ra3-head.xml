@@ -10,24 +10,26 @@
         <SoundDir>ra3</SoundDir>
         <WheelInertia>2.0</WheelInertia>
 
-        <MainResLeak>4e-5</MainResLeak>	
+        <FuelCapacity>350</FuelCapacity>
+        <FuelLevel>1.0</FuelLevel>
+
+        <MainResLeak>4e-5</MainResLeak>
 
         <!-- Передаточные числа тяговых редукторов -->
         <ip1>1.2</ip1>
         <ip2>2.78</ip2>
 
-        <!--<ExtTexturesDir>ra3/rzd</ExtTexturesDir>-->		
-		
-		<FuelCapacity>350</FuelCapacity>
-		<FuelLevel>1.0</FuelLevel>
-		
-		<IsActive>0</IsActive>
+        <IsActive>0</IsActive>
 
-        <ExtModelName>ra3/RA3-head-bwd.osgt</ExtModelName>
+        <ExtModelName>ra3/RA3-head-fwd.osgt</ExtModelName>
         <ModelShift>0.0 0.025 0.05</ModelShift>
 
-        <CabineModel>ra3/RA3-cabview-bwd.osgt</CabineModel>
+        <CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
         <CabineShift>0.0 -0.075 0.05</CabineShift>
-		
+
+        <!--<ExtTexturesDir>ra3/images</ExtTexturesDir>-->
+
+        <DriverPos>0.56 9.95 2.9</DriverPos>
+
     </Vehicle>
 </Config>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
- 
+
     <Common>
         <CouplingModule>ef-coupling</CouplingModule>
         <CabineInVehicle>0</CabineInVehicle>
@@ -10,19 +10,21 @@
         <Title>РА3 (двухвагонный)</Title>
         <Description>Дизель-поезд РА3-040. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур)</Description>            
     </Common>
- 
+
     <Vehicle>
          <Module>ra3-head</Module>
-         <ModuleConfig>ra3-head-fwd</ModuleConfig>
+         <ModuleConfig>ra3-head-active</ModuleConfig>
+         <IsOrientationForward>true</IsOrientationForward>
          <Count>1</Count>
-         <PayloadCoeff>1</PayloadCoeff>    
+         <PayloadCoeff>1</PayloadCoeff>
     </Vehicle>
-    
-	<Vehicle>
+
+    <Vehicle>
          <Module>ra3-head</Module>
-         <ModuleConfig>ra3-head-bwd</ModuleConfig>
+         <ModuleConfig>ra3-head</ModuleConfig>
+         <IsOrientationForward>false</IsOrientationForward>
          <Count>1</Count>
-         <PayloadCoeff>1</PayloadCoeff>    
+         <PayloadCoeff>1</PayloadCoeff>
     </Vehicle>
- 
+
 </Config>
