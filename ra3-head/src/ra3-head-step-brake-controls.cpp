@@ -14,4 +14,6 @@ void RA3HeadMotor::stepBrakeControls(double t, double dt)
 
         p0 = kru->getBrakePipeInitPressure();
     }
+    else
+        p0 = charge_press;
 }
