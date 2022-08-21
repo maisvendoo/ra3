@@ -22,14 +22,19 @@
         <IsActive>0</IsActive>
 
         <ExtModelName>ra3/RA3-head-fwd.osgt</ExtModelName>
-        <ModelShift>0.0 0.025 0.05</ModelShift>
+        <ModelShift>0.0 -0.025 0.05</ModelShift>
 
         <CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
-        <CabineShift>0.0 -0.075 0.05</CabineShift>
+        <CabineShift>0.0 0.075 0.05</CabineShift>
 
-        <!--<ExtTexturesDir>ra3/images</ExtTexturesDir>-->
+        <!-- <ExtTexturesDir>ra3/images</ExtTexturesDir> -->
 
         <DriverPos>0.56 9.95 2.9</DriverPos>
 
+        <!--<LogName>ra3-head-fwd.log</LogName>
+        <LogTimeout>0.1</LogTimeout>-->
+
+        <!--<Autostart>1</Autostart>-->
+		
     </Vehicle>
 </Config>

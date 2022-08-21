@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 	<AnalogRotation>
-		<SignalID>194</SignalID>
-		<Duration>10.0</Duration>
-		<Precision>0.01</Precision>
-		<Infinity>1</Infinity>
-		<Axis>-1.0 0.0 0.0</Axis>
+		<SignalID>179</SignalID>
+		<Duration>20.0</Duration>
+		<Axis>0.0 1.0 0.0</Axis>
 	</AnalogRotation>
 
 	<KeyPoint>
@@ -15,8 +13,7 @@
 
 	<KeyPoint>
 		<Param>1.0</Param>
-		<Value>360.0</Value>
+		<Value>90.0</Value>
 	</KeyPoint>
-
 
 </Config>

@@ -14,7 +14,7 @@
     <Vehicle>
          <Module>ra3-head</Module>
          <ModuleConfig>ra3-head-active</ModuleConfig>
-         <IsOrientationForward>true</IsOrientationForward>
+         <IsOrientationForward>1</IsOrientationForward>
          <Count>1</Count>
          <PayloadCoeff>1</PayloadCoeff>
     </Vehicle>
@@ -22,7 +22,7 @@
     <Vehicle>
          <Module>ra3-head</Module>
          <ModuleConfig>ra3-head</ModuleConfig>
-         <IsOrientationForward>false</IsOrientationForward>
+         <IsOrientationForward>0</IsOrientationForward>
          <Count>1</Count>
          <PayloadCoeff>1</PayloadCoeff>
     </Vehicle>

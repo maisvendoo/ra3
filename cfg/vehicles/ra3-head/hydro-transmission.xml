@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 	<Device>
-		<Order>4</Order>
+		<Order>5</Order>
 
 		<k>0.033</k>
 
@@ -13,7 +13,7 @@
 
 		<i_min>0.87</i_min>
 
-		<i_max>0.93</i_max>	
+		<i_max>0.93</i_max>
 
 		<T_revers>1.0</T_revers>
 

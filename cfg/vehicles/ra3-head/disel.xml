@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 	<Device>
-	
-		<Name>d2</Name>
 
+		<Name>d2</Name>
+	
 		<Order>4</Order>
 
 		<V_oil>1.5</V_oil>
