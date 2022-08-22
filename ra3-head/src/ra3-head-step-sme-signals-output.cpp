@@ -10,6 +10,16 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     Q_UNUSED(t)
     Q_UNUSED(dt)
 
+    // КОСТЫЛЬ под нынешнюю реализацию brakepipe.
+    // Если активная кабина не в начале,
+    // то передаем давление от тормозного крана в сигналы СМЕ,
+    // чтобы установить давление в начале тормозной магистрали.
+    if (is_active && (idx > 0))
+    {
+        backward_outputs[SME_P0] = kru->getBrakePipeInitPressure();
+        forward_outputs[SME_P0] = kru->getBrakePipeInitPressure();
+    }
+
     // Напряжение зарядки АКБ на промежуточный вагон
     backward_outputs[SME_FWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
     forward_outputs[SME_BWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
