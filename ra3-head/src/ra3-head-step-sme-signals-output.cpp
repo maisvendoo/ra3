@@ -25,8 +25,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
         // Сигнал позиции реверсора на ведомые секции
-        backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
-        forward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
+        backward_outputs[SME_REVERS_HANDLE] = orient * km->getReversHandlePos();
+        forward_outputs[SME_REVERS_HANDLE] = orient * km->getReversHandlePos();
 
         // Сигналы блок-контактов КМ на ведомые секции
         backward_outputs[SME_IS_KM_ZERO] = static_cast<float>(km->isZero());
@@ -49,8 +49,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_KM_BRAKE_LEVEL] = km->getBrakeLevel();
 
         // Заданный уровень торможения ЭПТ на ведомые секции
-        backward_outputs[SME_REF_BRAKE_LEVEL] = km->getBrakeLevel();
-        forward_outputs[SME_REF_BRAKE_LEVEL] = km->getBrakeLevel();
         backward_outputs[SME_REF_BRAKE_LEVEL_EPB] = static_cast<float>(mpsu->getOutputData().brake_ref_level_EPB);
         forward_outputs[SME_REF_BRAKE_LEVEL_EPB] = static_cast<float>(mpsu->getOutputData().brake_ref_level_EPB);
 

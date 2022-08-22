@@ -26,7 +26,8 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     // Включение контактора "Бортсеть"
     bool is_KM_bat_110 = tumbler[BUTTON_PWR_ON].getState() ||
             (tumbler[BUTTON_PWR_OFF].getState() && KM_power->getContactState(0)) ||
-           static_cast<bool>(forward_inputs[SME_BWD_POWER_ON]);
+            static_cast<bool>(backward_inputs[SME_BWD_POWER_ON]) ||
+            static_cast<bool>(forward_inputs[SME_BWD_POWER_ON]);
 
     KM_power->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_power->step(t, dt);
@@ -37,6 +38,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
 
     // ПСН
     aux_conv->setPowerON(mpsu->getOutputData().is_disel1_started ||
+                         static_cast<bool>(backward_inputs[SME_BWD_DISEL_STARTED])||
                          static_cast<bool>(forward_inputs[SME_BWD_DISEL_STARTED]));
 
     aux_conv->setBatteryVoltage(Ucc_110);

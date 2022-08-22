@@ -7,7 +7,7 @@
         <ChargingPressure>0.5</ChargingPressure>
         <InitMainResPressure>0.8</InitMainResPressure>
         <NoAir>0</NoAir>
-        <Title>РА3 (сдвоенный)</Title>
+        <Title>РА3 (двухвагонный сдвоенный)</Title>
         <Description>Дизель-поезд РА3-040. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур)</Description>            
     </Common>
 

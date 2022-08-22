@@ -13,18 +13,20 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_PRESSURE_PM] = static_cast<float>(main_res->getPressure());
 
-    bool is_compressor_on = motor_compr->isPowered() ||
-            static_cast<bool>(backward_inputs[SME_BWD_COMPRESSOR]);
-
+    // Статус компрессора
+    bool is_compressor2_on =
+            !static_cast<bool>(backward_inputs[SME_BWD_COMPRESSOR]) ||
+            !static_cast<bool>(forward_inputs[SME_BWD_COMPRESSOR]);
+    bool is_compressor_on = motor_compr->isPowered() || is_compressor2_on;
     analogSignal[MFDU_COMPRESSOR] = static_cast<float>(!is_compressor_on);
     analogSignal[MFDU_COMPRESSOR_1] = static_cast<float>(!motor_compr->isPowered());
-    analogSignal[MFDU_COMPRESSOR_2] = static_cast<float>(!static_cast<bool>(backward_inputs[SME_BWD_COMPRESSOR]));
+    analogSignal[MFDU_COMPRESSOR_2] = static_cast<float>(!is_compressor2_on);
+
 
     // Статус генератора
     bool is_generator_active = generator->isActive() ||
-            static_cast<bool>(backward_inputs[SME_BWD_GENERATOR]);
-
-
+            static_cast<bool>(backward_inputs[SME_BWD_GENERATOR]) ||
+            static_cast<bool>(forward_inputs[SME_BWD_GENERATOR]);
     analogSignal[MFDU_GENERATOR] = static_cast<float>(!is_generator_active);
 
     // Неактивные подсистемы
@@ -44,14 +46,17 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_DEC_OZ_MOTOR] = 2.0f;
     analogSignal[MFDU_ACTIVE_CHARGE] = 3.0f;
 
-    analogSignal[MFDU_CAN_RIGHT] = backward_inputs[SME_BWD_CAN];
+    analogSignal[MFDU_CAN_RIGHT] = static_cast<float>(
+                 static_cast<bool>(backward_inputs[SME_BWD_CAN]) ||
+                 static_cast<bool>(forward_inputs[SME_BWD_CAN]));
 
     analogSignal[MFDU_BRAKES_LEFT] = 1.0f;
     analogSignal[MFDU_BRAKES_RIGHT] = 1.0f;
 
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
-    analogSignal[MFDU_REVERS] = static_cast<float>(km->getReversHandlePos() == hydro_trans->getReversState());
+    analogSignal[MFDU_REVERS] = static_cast<float>(
+                static_cast<int>(km->getReversHandlePos()) == hydro_trans->getReversState());
 
     // Статус запрета движения (ВРЕМЕННО)
     if (mpsu->getOutputData().motion_disable)
@@ -81,7 +86,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // СПТ
     bool is_parking_braked = mpsu->getOutputData().is_parking_braked;
-
     analogSignal[MFDU_XREN2] = static_cast<float>(!is_parking_braked);
 
     // Удерживающий тормоз
@@ -89,8 +93,8 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Статус топливоподкачивающего насоса
     bool is_fuel_pump_active = fuel_pump->isStarted() ||
-            static_cast<bool>(backward_inputs[SME_BWD_FUEL_PUMP_ON]);
-
+            static_cast<bool>(backward_inputs[SME_BWD_FUEL_PUMP_ON]) ||
+            static_cast<bool>(forward_inputs[SME_BWD_FUEL_PUMP_ON]);
     analogSignal[MFDU_TPN] = static_cast<float>(!is_fuel_pump_active);
 
     // Статус давления масла в дизеле
