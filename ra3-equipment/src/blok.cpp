@@ -83,14 +83,6 @@ void BLOK::loadSpeedsMap(QString path)
 
             limits.push_back(limit);
         }
-
-        for (size_t i = 0; i < limits.size() - 1; ++i)
-        {
-            if (limits[i+1].value > limits[i].value)
-            {
-                limits[i+1].coord += dir * train_length;
-            }
-        }
     }
 }
 
@@ -118,6 +110,21 @@ void BLOK::loadStationsMap(QString path)
             station.name = tokens[2];
 
             stations.push_back(station);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BLOK::setTrainLength(double train_length)
+{
+    this->train_length = train_length;
+    for (size_t i = 0 + hs_n(dir); i < limits.size() - hs_p(dir); ++i)
+    {
+        if (limits[i + dir].value > limits[i].value)
+        {
+            limits[i + hs_p(dir)].coord += dir * train_length;
         }
     }
 }

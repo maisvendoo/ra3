@@ -87,7 +87,7 @@ public:
    void setRailCoord(double rail_coord) { this->rail_coord = rail_coord; }
 
    /// Задать длину поезда
-   void setTrainLength(double train_length) { this->train_length = train_length; }
+   void setTrainLength(double train_length);
 
    /// Задать конструкционную скорость
    void setMaxVelocity(double v_max) { this->v_max = v_max; }
