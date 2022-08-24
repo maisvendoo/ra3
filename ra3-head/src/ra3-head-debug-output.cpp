@@ -19,9 +19,4 @@ void RA3HeadMotor::debugOutput(double t, double dt)
             .arg(brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure(), 4, 'f', 2)
             .arg(km->getBrakeLevel(), 4, 'f', 2)
             .arg(hydro_trans->getBrakeLevel(), 4, 'f', 2);
-
-//    DebugMsg = QString("t: %1 s | x: %2 m")
-//            .arg(t, 6, 'f', 1)
-//            .arg(railway_coord, 10, 'f', 1);
-//    DebugMsg += blok->getDebugMsg();
 }
