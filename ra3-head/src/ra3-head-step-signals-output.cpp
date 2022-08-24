@@ -17,7 +17,7 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     // Отображение данных на дисплей МФДУ
     mdfuSignalsOutput(t, dt);
 
-    // Вывод согналов на контрольные лампы
+    // Вывод сигналов на контрольные лампы
     controlLampsSignalsOutput(t, dt);
 
     // Вывод сигналов СМЕ

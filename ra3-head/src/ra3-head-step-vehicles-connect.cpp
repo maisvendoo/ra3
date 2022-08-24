@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepVehiclesConnect()
 {
-    for (size_t i = 0; i < forward_inputs.size(); ++i)
+    for (size_t i = 1; i < forward_inputs.size(); ++i)
     {
         // Соединяемся с предыдущим вагоном
         if (prev_vehicle != Q_NULLPTR)
