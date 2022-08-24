@@ -40,7 +40,7 @@ public:
 
     RA3HeadMotor(QObject *parent = Q_NULLPTR);
 
-    ~RA3HeadMotor() override;    
+    ~RA3HeadMotor() override;
 
 private:
 
@@ -133,7 +133,7 @@ private:
     AuxiliaryConverter  *aux_conv;
 
     /// Насос гидростатического привода
-    HydroPump   *hydro_pump;    
+    HydroPump   *hydro_pump;
 
     /// Главный резервуар
     Reservoir   *main_res;
@@ -203,10 +203,10 @@ private:
     std::array<Trigger, TUMBLERS_NUM> tumbler;
 
     /// Кнопка "Поддержание скорости"
-    KeyTrigger  button_speed_hold;    
+    KeyTrigger  button_speed_hold;
 
     /// Программа автозапуска
-    std::vector<autostart_step_t>   autostart_prog;    
+    std::vector<autostart_step_t>   autostart_prog;
 
     void initialization() override;
 
@@ -314,6 +314,9 @@ private:
 
     /// Вывод сигналов на панель контрольных ламп
     void controlLampsSignalsOutput(double t, double dt);
+
+    /// Работа сигналов СМЕ для определения конфигурации поезда
+    void stepSMETrainConfig(double t, double dt);
 
     /// Вывод сигналов СМЕ
     void stepSMESignalsOutput(double t, double dt);

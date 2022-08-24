@@ -84,6 +84,9 @@ private:
 
     void stepSignalsOutput(double t, double dt);
 
+    /// Работа сигналов СМЕ для определения конфигурации поезда
+    void stepSMETrainConfig(double t, double dt);
+
     void stepVehiclesConnect();
 
     void debugOutput(double t, double dt);

@@ -120,6 +120,9 @@ void BLOK::loadStationsMap(QString path)
 void BLOK::setTrainLength(double train_length)
 {
     this->train_length = train_length;
+    if (limits.empty())
+        return;
+
     for (size_t i = 0 + hs_n(dir); i < limits.size() - hs_p(dir); ++i)
     {
         if (limits[i + dir].value > limits[i].value)
