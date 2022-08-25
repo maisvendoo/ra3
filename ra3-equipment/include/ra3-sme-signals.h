@@ -48,8 +48,7 @@ enum
     SME_BRAKE_RELEASE = 19,
     SME_PARKING_BRAKE_ON = 20,
     SME_IS_EMERGENCY_BRAKE = 21,
-    SME_EPK_STATE = 22,
-    SME_NO_ACTIVE = 23,
+    SME_NO_ACTIVE = 22,
 
     // Сигналы с ведущей секции к ведомой секции
     SME_BWD_FUEL_PUMP = 40,

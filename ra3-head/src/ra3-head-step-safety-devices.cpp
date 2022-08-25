@@ -21,8 +21,6 @@ void RA3HeadMotor::stepSafetyDevices(double t, double dt)
     epk->setFeedlinePressure(main_res->getPressure());
     epk->setBrakepipePressure(pTM);
     epk->setKeyState(tumbler[KEY_EPK].getState());
-    epk->powerOn(blok->getEPKstate() ||
-                static_cast<bool>(backward_inputs[SME_EPK_STATE]) ||
-                static_cast<bool>(forward_inputs[SME_EPK_STATE]));
+    epk->powerOn(blok->getEPKstate());
     epk->step(t, dt);
 }

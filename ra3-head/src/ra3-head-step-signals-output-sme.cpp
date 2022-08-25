@@ -76,10 +76,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
                     emerg_brake_valve->isEmergencyBrake() ||
                     km->isEmergencyBrake());
 
-        // Сигнал наличия питания на удерживающей катушке ЭПК
-        backward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
-        forward_outputs[SME_EPK_STATE] = static_cast<float>(blok->getEPKstate());
-
         // Сигнал запрета включать другие кабины
         backward_outputs[SME_NO_ACTIVE] = 1.0f;
         forward_outputs[SME_NO_ACTIVE] = 1.0f;
