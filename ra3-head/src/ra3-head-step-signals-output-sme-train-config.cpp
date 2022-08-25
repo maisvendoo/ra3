@@ -7,6 +7,9 @@ void RA3HeadMotor::stepSMETrainConfig(double t, double dt)
 {
     Q_UNUSED(t)
     Q_UNUSED(dt)
+    backward_outputs[SME_TRAIN_CONFIG] = 0.0f;
+    forward_outputs[SME_TRAIN_CONFIG] = 0.0f;
+
     if (is_active)
     {
         // Отправляем в обе стороны отрицательный сигнал с ориентацией кабины

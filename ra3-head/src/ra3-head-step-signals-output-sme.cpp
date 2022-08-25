@@ -103,6 +103,13 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     }
     else
     {
+        // Пропускаем насквозь все сигналы из активной кабины
+        for (size_t i = 10; i < 40; ++i)
+        {
+            forward_outputs[i] = backward_inputs[i];
+            backward_outputs[i] = forward_inputs[i];
+        }
+
         // Передаем давление масла в ведущую секцию
         backward_outputs[SME_BWD_OIL_PRESS] = static_cast<float>(disel->getOilPressure());
         forward_outputs[SME_BWD_OIL_PRESS] = static_cast<float>(disel->getOilPressure());

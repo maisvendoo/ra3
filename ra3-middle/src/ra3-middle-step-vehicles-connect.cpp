@@ -17,7 +17,7 @@ void RA3Middle::stepVehiclesConnect()
         backward_inputs[SME_TRAIN_CONFIG] = next_vehicle->getFwdOutput(SME_TRAIN_CONFIG);
     }
 
-    // Отправляем все остальные сигналы
+    // Пропускаем насквозь все остальные сигналы
     for (size_t i = 1; i < forward_inputs.size(); ++i)
     {
         forward_outputs[i] = backward_inputs[i];

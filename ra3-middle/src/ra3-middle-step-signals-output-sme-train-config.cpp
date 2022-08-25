@@ -7,6 +7,9 @@ void RA3Middle::stepSMETrainConfig(double t, double dt)
 {
     Q_UNUSED(t)
     Q_UNUSED(dt)
+    backward_outputs[SME_TRAIN_CONFIG] = 0.0f;
+    forward_outputs[SME_TRAIN_CONFIG] = 0.0f;
+
     // Определяем, с какой стороны пришёл отрицательный сигнал от активной кабины
     if (forward_inputs[SME_TRAIN_CONFIG] < 0)
     {
