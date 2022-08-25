@@ -36,7 +36,7 @@ enum
     SME_BWD_PM_PRESSURE = 5,
 
     // Общие сигналы с ведущей секции
-    SME_BWD_POWER_ON = 10,
+    SME_POWER_ON = 10,
     SME_REVERS_HANDLE = 11,
     SME_IS_KM_ZERO = 12,
     SME_IS_KM_TRACTION = 13,

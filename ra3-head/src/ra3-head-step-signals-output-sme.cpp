@@ -29,8 +29,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     if (is_active)
     {
         // Сигнал включения контактора "Бортсеть" на ведомые секции
-        backward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
-        forward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
+        backward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
+        forward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
         // Сигнал позиции реверсора на ведомые секции
         backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();

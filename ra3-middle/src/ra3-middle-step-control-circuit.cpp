@@ -17,6 +17,8 @@ void RA3Middle::stepControlCircuit(double t, double dt)
     bat110->setChargeVoltage(U_charge_110);
     bat110->step(t, dt);
 
-    KM_power->setVoltage(U_bat_110 * static_cast<double>(forward_inputs[SME_BWD_POWER_ON]));
+    KM_power->setVoltage(U_bat_110 *
+                         (static_cast<double>(backward_inputs[SME_POWER_ON]) ||
+                         static_cast<double>(forward_inputs[SME_POWER_ON])));
     KM_power->step(t, dt);
 }
