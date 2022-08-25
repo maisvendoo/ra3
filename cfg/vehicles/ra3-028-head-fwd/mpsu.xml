@@ -12,7 +12,10 @@
 
 		<Kp>0.01</Kp>
 		<Ki>0.001</Ki>
-		<T>1.0</T>	
+		<T>1.0</T>
+
+		<lengthHead>24.24</lengthHead>
+		<lengthMiddle>24.7</lengthMiddle>
 
 	</Device>
 </Config>

@@ -21,6 +21,8 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , dv(0.0)
   , u(0.0)
   , T(0.5)
+  , lengthHead(24.24)
+  , lengthMiddle(24.7)
 
 {
     connect(startButtonTimer, &Timer::process, this, &MPSU::slotStartButtonTimer);
@@ -122,6 +124,9 @@ void MPSU::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "v_HB", v_HB);
     cfg.getDouble(secName, "p_HB", p_HB);
     cfg.getDouble(secName, "n_min_gb", n_min_gb);
+
+    cfg.getDouble(secName, "lengthHead", lengthHead);
+    cfg.getDouble(secName, "lengthMiddle", lengthMiddle);
 }
 
 //------------------------------------------------------------------------------
@@ -148,6 +153,8 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 void MPSU::train_config_process()
 {
+    // Если с любой стороны получен отрицательный сигнал от активной кабины,
+    // то сраниваем ориентацию с ней и отправляем обратно соответствующей сигнал
     mpsu_output.sme_train_config = 0.0f;
     int sme_input = min(mpsu_input.sme_train_config_fwd, mpsu_input.sme_train_config_bwd);
     if (sme_input < -0.5f)
@@ -164,9 +171,52 @@ void MPSU::train_config_process()
             mpsu_output.sme_train_config = static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
         }
     }
+    // Иначе считаем эту кабину активной, обрабатываем полученную конфигурацию
     else
     {
+        mpsu_output.train_size = 1;
+        mpsu_output.train_length = lengthHead;
+        if (mpsu_input.orient > 0)
+            train_config_parsing(static_cast<int>(mpsu_input.sme_train_config_bwd));
+        else
+            train_config_parsing(static_cast<int>(mpsu_input.sme_train_config_fwd));
+    }
+}
 
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::train_config_parsing(int tc)
+{
+    mpsu_output.train_config = static_cast<float>(tc * 4 + 1);
+    while (tc > 0)
+    {
+        switch (tc % 4)
+        {
+            case 1:
+            {
+                mpsu_output.train_length += lengthHead;
+                mpsu_output.train_size++;
+                break;
+            }
+            case 2:
+            {
+                mpsu_output.train_length += lengthHead;
+                mpsu_output.train_size++;
+                break;
+            }
+            case 3:
+            {
+                mpsu_output.train_length += lengthMiddle;
+                mpsu_output.train_size++;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        tc = tc / 4;
     }
 }
 

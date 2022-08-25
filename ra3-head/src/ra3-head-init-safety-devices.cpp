@@ -27,7 +27,7 @@ void RA3HeadMotor::initSafetyDevices()
 
     blok->loadSpeedsMap(path);
     blok->setDirection(dir);
-    blok->setTrainLength(50.0);
+    blok->setTrainLength(mpsu->getOutputData().train_length);
 
     // Загрузка станций в БЛОК
     path = QDir::toNativeSeparators(route_dir) +

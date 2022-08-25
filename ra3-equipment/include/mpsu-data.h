@@ -199,6 +199,9 @@ struct mpsu_output_t
     /// Количество вагонов в конфигурации СМЕ
     int train_size;
 
+    /// Длина поезда для БЛОК
+    double train_length;
+
     /// Конфигурация поезда для МФДУ
     float train_config;
 
@@ -329,7 +332,12 @@ struct mpsu_output_t
     bool is_speed_hold_ON;
 
     mpsu_output_t()
-        : is_fuel_pump1_ON(false)
+        : sme_train_config(0.0f)
+        , is_orient_same(false)
+        , train_size(2)
+        , train_length(48.48)
+        , train_config(9.0f)
+        , is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
         , is_display_ON(false)
         , start_press_count(-1)

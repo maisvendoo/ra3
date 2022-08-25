@@ -76,6 +76,12 @@ private:
     /// Постоянная времени задатчика усилия
     double T;
 
+    /// Длина головного вагона
+    double lengthHead;
+
+    /// Длина промежуточного вагона
+    double lengthMiddle;
+
     /// Входные сигналы
     mpsu_input_t    mpsu_input;
 
@@ -120,6 +126,9 @@ private:
 
     /// Обработка опроса конфигурации СМЕ
     void train_config_process();
+
+    /// Разбор конфигурации СМЕ
+    void train_config_parsing(int tc);
 
     /// Обработка кнопки старт
     void start_button_process(bool is_start_button);
