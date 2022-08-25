@@ -4,6 +4,7 @@
 #include    "device.h"
 
 #include    "mpsu-data.h"
+#include    "ra3-sme-signals.h"
 
 //------------------------------------------------------------------------------
 //
@@ -117,6 +118,9 @@ private:
     /// Главный цикл управления
     void main_loop_step(double t, double dt);
 
+    /// Обработка опроса конфигурации СМЕ
+    void train_config_process();
+
     /// Обработка кнопки старт
     void start_button_process(bool is_start_button);
 
@@ -166,7 +170,7 @@ private:
 
     /// Регулятор скорости
     void speed_regulator();
-    
+
 private slots:
 
     void slotStartButtonTimer();

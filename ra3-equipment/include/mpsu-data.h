@@ -23,6 +23,14 @@ struct mpsu_input_t
     /// Признак подачи питания на МПСУ
     bool is_power_on;
 
+    /// Ориентация вагона относительно маршрута
+    int orient;
+
+    /// Сигнал опроса конфигурации СМЕ спереди
+    float sme_train_config_fwd;
+    /// Сигнал опроса конфигурации СМЕ сзади
+    float sme_train_config_bwd;
+
     /// Состояние кнопки "ПУСК"
     bool start_disel;
     /// Состояние кнопки "СТОП"
@@ -83,7 +91,7 @@ struct mpsu_input_t
     bool is_KM_traction;
 
     /// Максимальное давление в ТЦ от БТО
-    double pBC_max;    
+    double pBC_max;
 
     /// Признак тормозного положения КМ
     bool is_KM_brake;
@@ -134,6 +142,9 @@ struct mpsu_input_t
 
     mpsu_input_t()
         : is_power_on(false)
+        , orient(1)
+        , sme_train_config_fwd(0.0f)
+        , sme_train_config_bwd(0.0f)
         , start_disel(false)
         , stop_disel(false)
         , oil_press1(0.0)
@@ -179,6 +190,18 @@ struct mpsu_input_t
 //------------------------------------------------------------------------------
 struct mpsu_output_t
 {
+    /// Ответ на сигнал опроса конфигурации СМЕ
+    float sme_train_config;
+
+    /// Признак ориентации вагона относительно активной кабины
+    bool is_orient_same;
+
+    /// Количество вагонов в конфигурации СМЕ
+    int train_size;
+
+    /// Конфигурация поезда для МФДУ
+    float train_config;
+
     /// Включение контактора топливного насоса в ведущей секции
     bool is_fuel_pump1_ON;
     /// Включение контактора топливного насоса в ведомой секции

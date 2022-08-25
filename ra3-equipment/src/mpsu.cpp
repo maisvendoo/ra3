@@ -14,7 +14,7 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , startButtonTimer(new Timer(5.0, false))
   , button_select_old(false)
   , button_speed_plus_old(false)
-  , button_speed_minus_old(false)  
+  , button_speed_minus_old(false)
   , is_speed_hold_disable(false)
   , Kp(1.0)
   , Ki(0.0)
@@ -146,6 +146,33 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::train_config_process()
+{
+    mpsu_output.sme_train_config = 0.0f;
+    int sme_input = min(mpsu_input.sme_train_config_fwd, mpsu_input.sme_train_config_bwd);
+    if (sme_input < -0.5f)
+    {
+        if (((mpsu_input.orient > 0) && (sme_input > -1.5f )) ||
+            ((mpsu_input.orient < 0) && (sme_input < -1.5f )))
+        {
+            mpsu_output.is_orient_same = true;
+            mpsu_output.sme_train_config = static_cast<float>(SME_HEAD_ORIENT_SAME);
+        }
+        else
+        {
+            mpsu_output.is_orient_same = false;
+            mpsu_output.sme_train_config = static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
+        }
+    }
+    else
+    {
+
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::start_disels()
 {
     if ( (mpsu_output.start_press_count == 1) &&
@@ -253,7 +280,7 @@ double MPSU::getTracRefDiselFreq(double trac_level, double brake_level)
 
     if (!mpsu_output.hydro_brake_ON1)
         n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
-    else    
+    else
         n_ref = n_min_gb + (n_max - n_min_gb) * (brake_level - mpsu_input.brake_min) * motion_allow / (1.0 - mpsu_input.brake_min);;
 
     return cut(n_ref, n_min, n_max);
@@ -659,6 +686,9 @@ void MPSU::main_loop_step(double t, double dt)
     // Включение дисплея
     mpsu_output.is_display_ON = true;
 
+    // Обработка конфигурации СМЕ
+    train_config_process();
+
     // Обработка кнопки "СТАРТ"
     start_button_process(mpsu_input.start_disel);
 
@@ -731,7 +761,7 @@ void MPSU::start_button_process(bool is_start_button)
 
         mpsu_output.start_press_count = cut(mpsu_output.start_press_count,
                                                 0,
-                                                static_cast<int>(NUM_DISELS) - 1);                
+                                                static_cast<int>(NUM_DISELS) - 1);
     }
 
     // Запоминаем предыдущее состояние кнопки

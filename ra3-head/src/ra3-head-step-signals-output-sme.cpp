@@ -33,8 +33,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_BWD_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
         // Сигнал позиции реверсора на ведомые секции
-        backward_outputs[SME_REVERS_HANDLE] = orient * km->getReversHandlePos();
-        forward_outputs[SME_REVERS_HANDLE] = orient * km->getReversHandlePos();
+        backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
+        forward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
 
         // Сигналы блок-контактов КМ на ведомые секции
         backward_outputs[SME_IS_KM_ZERO] = static_cast<float>(km->isZero());

@@ -20,12 +20,16 @@ void RA3HeadMotor::debugOutput(double t, double dt)
             .arg(km->getBrakeLevel(), 4, 'f', 2)
             .arg(hydro_trans->getBrakeLevel(), 4, 'f', 2);
 */
-    DebugMsg = QString("t: %1 | 1f: %2 1b: %3 | 2f: %4 2b: %5 | 3f: %6 3b: %7")
+    DebugMsg = QString("t: %1 | 1f: %2 1b: %3 | 2f: %4 2b: %5 | 3f: %6 3b: %7 | 4f: %8 4b: %9 | 5f: %10 5b: %11                    ")
             .arg(t, 10, 'f', 1)
             .arg(static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % 4)
             .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % 4)
             .arg(static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) / 4 % 4)
             .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) / 4 % 4)
             .arg(static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 % 4)
-            .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 % 4);
+            .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 % 4)
+            .arg(static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 / 4 % 4)
+            .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 / 4 % 4)
+            .arg(static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 / 4 / 4 % 4)
+            .arg(static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) / 4 / 4 / 4 / 4 % 4);
 }

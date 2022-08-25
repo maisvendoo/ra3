@@ -23,6 +23,7 @@ void RA3HeadMotor::stepSMETrainConfig(double t, double dt)
     }
     else
     {
+        // Определяем, с какой стороны пришёл отрицательный сигнал от активной кабины
         if (forward_inputs[SME_TRAIN_CONFIG] < 0)
         {
             // Отправляем сигнал к следующим вагонам
@@ -31,7 +32,7 @@ void RA3HeadMotor::stepSMETrainConfig(double t, double dt)
             // Обратно отправляем сигнал от данного и следующих вагонов
             forward_outputs[SME_TRAIN_CONFIG] =
                     4 * backward_inputs[SME_TRAIN_CONFIG] +
-                    static_cast<float>(SME_HEAD_ORIENT_SAME);
+                    mpsu->getOutputData().sme_train_config;
         }
 
         if (backward_inputs[SME_TRAIN_CONFIG] < 0)
@@ -42,7 +43,7 @@ void RA3HeadMotor::stepSMETrainConfig(double t, double dt)
             // Обратно отправляем сигнал от данного и следующих вагонов
             backward_outputs[SME_TRAIN_CONFIG] =
                     4 * forward_inputs[SME_TRAIN_CONFIG] +
-                    static_cast<float>(SME_HEAD_ORIENT_SAME);
+                    mpsu->getOutputData().sme_train_config;
         }
     }
 }

@@ -7,6 +7,9 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 {
     mpsu_input_t mpsu_input;
     mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
+    mpsu_input.orient = orient;
+    mpsu_input.sme_train_config_fwd = forward_inputs[SME_TRAIN_CONFIG];
+    mpsu_input.sme_train_config_bwd = backward_inputs[SME_TRAIN_CONFIG];
     mpsu_input.start_disel = tumbler[BUTTON_START].getState();
     mpsu_input.stop_disel = tumbler[BUTTON_STOP].getState();
     mpsu_input.fuel_press1 = fuel_pump->getFuelPressure();
@@ -23,13 +26,6 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             static_cast<double>(forward_inputs[SME_BWD_OMEGA]);
     mpsu_input.trac_min = km->getMinTracLevel();
     mpsu_input.brake_min = km->getMinBrakeLevel();
-
-    mpsu_input.trac_level_KM = km->getTractionLevel() +
-            static_cast<double>(forward_inputs[SME_KM_TRACTION_LEVEL]) +
-            static_cast<double>(backward_inputs[SME_KM_TRACTION_LEVEL]);
-    mpsu_input.brake_level_KM = km->getBrakeLevel() +
-            static_cast<double>(forward_inputs[SME_KM_BRAKE_LEVEL]) +
-            static_cast<double>(backward_inputs[SME_KM_BRAKE_LEVEL]);
 
     mpsu_input.revers_state1 = hydro_trans->getReversState();
     mpsu_input.revers_state2 =
@@ -49,12 +45,17 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.is_KM_zero = km->isZero();
         mpsu_input.is_KM_brake = km->isBrake();
         mpsu_input.is_KM_traction = km->isTraction();
+        mpsu_input.trac_level_KM = km->getTractionLevel();
+        mpsu_input.brake_level_KM = km->getBrakeLevel();
+
     }
     else
     {
         mpsu_input.revers_handle =
-                orient * static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
-                orient * static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
+                static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
+                static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
+        if (!mpsu->getOutputData().is_orient_same)
+            mpsu_input.revers_handle = -1 * mpsu_input.revers_handle;
         mpsu_input.is_KM_zero =
                 static_cast<bool>(backward_inputs[SME_IS_KM_ZERO]) ||
                 static_cast<bool>(forward_inputs[SME_IS_KM_ZERO]);
@@ -64,6 +65,13 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.is_KM_traction =
                 static_cast<bool>(backward_inputs[SME_IS_KM_TRACTION]) ||
                 static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]);
+        mpsu_input.trac_level_KM =
+                static_cast<double>(forward_inputs[SME_KM_TRACTION_LEVEL]) +
+                static_cast<double>(backward_inputs[SME_KM_TRACTION_LEVEL]);
+        mpsu_input.brake_level_KM =
+                static_cast<double>(forward_inputs[SME_KM_BRAKE_LEVEL]) +
+                static_cast<double>(backward_inputs[SME_KM_BRAKE_LEVEL]);
+
     }
 
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
