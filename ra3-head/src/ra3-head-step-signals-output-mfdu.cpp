@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 {
+    Q_UNUSED(t);
+    Q_UNUSED(dt);
+
     analogSignal[MFDU_DISPLAY_ON] = static_cast<float>(mpsu->getOutputData().is_display_ON);
 
     analogSignal[MFDU_REVERS_FWD] = static_cast<float>(!mpsu->getOutputData().revers_fwd);
@@ -45,13 +48,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_OIL_MOTOR] = 2.0f;
     analogSignal[MFDU_DEC_OZ_MOTOR] = 2.0f;
     analogSignal[MFDU_ACTIVE_CHARGE] = 3.0f;
-
-    analogSignal[MFDU_CAN_RIGHT] = static_cast<float>(
-                 static_cast<bool>(backward_inputs[SME_BWD_CAN]) ||
-                 static_cast<bool>(forward_inputs[SME_BWD_CAN]));
-
-    analogSignal[MFDU_BRAKES_LEFT] = 1.0f;
-    analogSignal[MFDU_BRAKES_RIGHT] = 1.0f;
 
     // Состояние трансмиссии (ВРЕМЕННО)
     analogSignal[MFDU_TRANSMISSION] = 1.0f;
@@ -103,9 +99,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     // Общий статус дизеля
     analogSignal[MFDU_MOTOR] = mpsu->getOutputData().mfdu_disel_state_level;
 
-    analogSignal[MFDU_PZD_MINI_LEFT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level1);
-    analogSignal[MFDU_PZD_MINI_RIGHT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level2);
-
     analogSignal[MFDU_I_AKB_110] = static_cast<float>(Icc_110);
     analogSignal[MFDU_I_AKB_24] = static_cast<float>(Icc_24);
 
@@ -121,11 +114,30 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     analogSignal[MFDU_PRESSURE_TC_MIN] = mpsu->getOutputData().pBC_min;
     analogSignal[MFDU_PRESSURE_TC_MAX] = mpsu->getOutputData().pBC_max;
+/*
+    analogSignal[MFDU_CAN_RIGHT] = static_cast<float>(
+                 static_cast<bool>(backward_inputs[SME_BWD_CAN]) ||
+                 static_cast<bool>(forward_inputs[SME_BWD_CAN]));
+
+    analogSignal[MFDU_PZD_MINI_LEFT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level1);
+    analogSignal[MFDU_PZD_MINI_RIGHT] = static_cast<float>(!mpsu->getOutputData().mfdu_disel_state_level2);
 
     analogSignal[MFDU_BRAKES_LEFT] = mpsu->getOutputData().brake_type1;
     analogSignal[MFDU_BRAKES_RIGHT] = mpsu->getOutputData().brake_type1;
-
+*/
     analogSignal[MFDU_TEMPERATURE_KAB] = 25.1f;
 
     analogSignal[MFDU_S_GREEN_DIGIT] = mpsu->getOutputData().v_ref_kmh;
+
+    analogSignal[MFDU_TRAIN_SIZE] = static_cast<float>(mpsu->getOutputData().train_size);
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+    {
+        analogSignal[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] =
+                static_cast<float>(mpsu->getOutputData().train_config[i]);
+        analogSignal[MFDU_TRAIN_UNIT_NO + i * MFDU_UNIT_SIGNALS_SIZE] =
+                static_cast<float>(00202); // TODO
+        analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
+                25.1f;
+        // TODO
+    }
 }

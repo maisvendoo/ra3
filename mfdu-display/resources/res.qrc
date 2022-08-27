@@ -78,6 +78,10 @@
         <file alias="main_xren1">img/main-disp/xren1.png</file>
         <file alias="main_xren2">img/main-disp/xren2.png</file>
         <file alias="main_xren3">img/main-disp/xren3.png</file>
+        <file alias="main_trainUnit_empty">img/main-disp/trainUnit_empty.png</file>
+        <file alias="main_trainUnit_head_fwd">img/main-disp/trainUnit_head_fwd.png</file>
+        <file alias="main_trainUnit_head_bwd">img/main-disp/trainUnit_head_bwd.png</file>
+        <file alias="main_trainUnit_middle">img/main-disp/trainUnit_middle.png</file>
         <file alias="main_vagonEquipment_work">img/main-disp/vagonEquipment_work.png</file>
         <file alias="main_vagonEquipment_warn">img/main-disp/vagonEquipment_warn.png</file>
         <file alias="main_vagonEquipment_error">img/main-disp/vagonEquipment_error.png</file>

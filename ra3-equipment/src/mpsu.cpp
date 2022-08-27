@@ -73,6 +73,7 @@ void MPSU::setInputData(const mpsu_input_t &mpsu_input)
         this->mpsu_input = mpsu_input;
     else
         this->mpsu_input = mpsu_input_t();
+
 }
 
 //------------------------------------------------------------------------------
@@ -176,6 +177,7 @@ void MPSU::train_config_process()
     {
         mpsu_output.train_size = 1;
         mpsu_output.train_length = lengthHead;
+        mpsu_output.train_config[0] = 1;
         if (mpsu_input.orient > 0)
             train_config_parsing(static_cast<int>(mpsu_input.sme_train_config_bwd));
         else
@@ -188,31 +190,34 @@ void MPSU::train_config_process()
 //------------------------------------------------------------------------------
 void MPSU::train_config_parsing(int tc)
 {
-    mpsu_output.train_config = static_cast<float>(tc * 4 + 1);
-    while (tc > 0)
+    for (size_t i = 1; i < MAX_TRAIN_SIZE; i++)
     {
         switch (tc % 4)
         {
             case 1:
             {
-                mpsu_output.train_length += lengthHead;
                 mpsu_output.train_size++;
+                mpsu_output.train_length += lengthHead;
+                mpsu_output.train_config[i] = 1;
                 break;
             }
             case 2:
             {
-                mpsu_output.train_length += lengthHead;
                 mpsu_output.train_size++;
+                mpsu_output.train_length += lengthHead;
+                mpsu_output.train_config[i] = 2;
                 break;
             }
             case 3:
             {
-                mpsu_output.train_length += lengthMiddle;
                 mpsu_output.train_size++;
+                mpsu_output.train_length += lengthMiddle;
+                mpsu_output.train_config[i] = 3;
                 break;
             }
             default:
             {
+                mpsu_output.train_config[i] = 0;
                 break;
             }
         }

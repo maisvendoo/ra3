@@ -3,6 +3,8 @@
 
 #include    <array>
 
+#include    <ra3-sme-signals.h>
+
 enum
 {
     ERRORS_NUM = 100,
@@ -203,7 +205,7 @@ struct mpsu_output_t
     double train_length;
 
     /// Конфигурация поезда для МФДУ
-    float train_config;
+    std::array<int, MAX_TRAIN_SIZE> train_config;
 
     /// Включение контактора топливного насоса в ведущей секции
     bool is_fuel_pump1_ON;
@@ -336,7 +338,7 @@ struct mpsu_output_t
         , is_orient_same(false)
         , train_size(2)
         , train_length(48.48)
-        , train_config(9.0f)
+        , train_config({1, 2, 0, 0, 0, 0})
         , is_fuel_pump1_ON(false)
         , is_fuel_pump2_ON(false)
         , is_display_ON(false)

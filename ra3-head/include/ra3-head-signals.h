@@ -69,16 +69,15 @@ enum
     MFDU_TEMPERATURE_KAB,   // Температура кабины
     MFDU_I_AKB_24,          // Ток акб 24
     MFDU_I_AKB_110,         // Ток акб 110
-    MFDU_VAGON_EQUIPMENT_LEFT,  // Вагонное оборудование
-    MFDU_VAGON_EQUIPMENT_RIGHT, // Вагонное оборудование
-    MFDU_PZD_MINI_LEFT,         // ПЖД
-    MFDU_PZD_MINI_RIGHT,        // ПЖД
-    MFDU_BRAKES_LEFT,           // Тормоза
-    MFDU_BRAKES_RIGHT,          // Тормоза
-    MFDU_CAN_RIGHT,             // Отсутствие свзи с вагоном
-    MFDU_T_LEFT,                //
-    MFDU_T_RIGHT = 61,          //
-    MFDU_ERROR_CODE = 62,
+    MFDU_ERROR_CODE,
+    MFDU_TRAIN_SIZE = 55,   // Количество вагонов
+    // Сигналы 56..91 - состояние вагонов, 6 сигналов на каждый вагон
+    MFDU_TRAIN_UNIT,        // Тип вагона
+    MFDU_TRAIN_UNIT_NO,     // Номер вагона или отсутствие связи CAN
+    MFDU_TRAIN_UNIT_T,      // Температура в вагоне
+    MFDU_TRAIN_UNIT_EQUIPMENT,  // Состояние вагонного оборудования
+    MFDU_TRAIN_UNIT_PZD,    // ПЖД ??
+    MFDU_TRAIN_UNIT_BRAKES, // Состояние тормоза
 
     BLOK_STATION_INDEX = 96,// Номер станции в списке
     BLOK_ACCELERATION = 97, // Ускорение
@@ -158,7 +157,6 @@ enum
     RIGHT_OPEN = 187,
     RIGHT_CLOSE = 188,
     HOLD_SPEED = 189,
-
 
     // Угол вращения кардана 1
     SHAFT_1 = 192,

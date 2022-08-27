@@ -129,24 +129,25 @@ void MfduDisplay::init()
     input_signals[MFDU_TEMPERATURE_KAB] = 0;    // Температура кабины
     input_signals[MFDU_I_AKB_24] = -103.7;      // Ток акб 24
     input_signals[MFDU_I_AKB_110] = -103.7;     // Ток акб 110
+    input_signals[MFDU_ERROR_CODE] = 0;     // Ток акб 110
     // Блок иконок сверху от спидометра
-    input_signals[MFDU_VAGON_EQUIPMENT_LEFT] = 0;   // Вагонное оборудование
-    input_signals[MFDU_VAGON_EQUIPMENT_RIGHT] = 0;  // Вагонное оборудование
-    input_signals[MFDU_PZD_MINI_LEFT] = 0;          // ПЖД
-    input_signals[MFDU_PZD_MINI_RIGHT] = 0;         // ПЖД
-    input_signals[MFDU_BRAKES_LEFT] = 0;            // Тормоза
-    input_signals[MFDU_BRAKES_RIGHT] = 0;           // Тормоза
-    input_signals[MFDU_CAN_RIGHT] = 0;              // Отсутствие свзи с вагоном
-    input_signals[MFDU_T_LEFT] = 0;                 //
-    input_signals[MFDU_T_RIGHT] = 0;                //
-
+    input_signals[MFDU_TRAIN_SIZE] = 0;             // Количество вагонов
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+    {
+        input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] = 0;             // Тип вагона
+        input_signals[MFDU_TRAIN_UNIT_NO + i * MFDU_UNIT_SIGNALS_SIZE] = 0;          // Номер вагона или отсутствие связи CAN
+        input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] = 0;           // Температура в вагоне
+        input_signals[MFDU_TRAIN_UNIT_EQUIPMENT + i * MFDU_UNIT_SIGNALS_SIZE] = 0;   // Состояние вагонного оборудования
+        input_signals[MFDU_TRAIN_UNIT_PZD + i * MFDU_UNIT_SIGNALS_SIZE] = 0;         // ПЖД
+        input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE] = 0;      // Состояние тормоза
+    }
     //mfduMainDisp_->updateData(input_signals);
 
     this->layout()->addWidget(background_);
 
     labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
-    AbstractDisplay::init();    
+    AbstractDisplay::init();
 }
 
 
