@@ -41,7 +41,7 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
 
 
 //-----------------------------------------------------------------------------
-// Обновление данных на экране: "Основнй экран"
+// Обновление данных на экране: "Основной экран"
 //-----------------------------------------------------------------------------
 void MfduMainDisp::updateData(display_signals_t input_signals)
 {
@@ -109,31 +109,54 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
 
     // блок иконок сверху от спидометра
     labNoHead_->setText(QString("%1")
-                        .arg(static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NO]), 5, 10, QChar('0')));
-    int x = 402 - 66 * input_signals[MFDU_TRAIN_SIZE];
-    int y = 66;
-    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+        .arg(static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM]), 5, 10, QChar('0')));
+    int size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
+    if (size > MAX_TRAIN_SIZE)
+        size = MAX_TRAIN_SIZE;
+    int x = 402 - 66 * size;
+    int y = 62;
+    for (int i = 0; i < size; i++)
     {
         setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-        setNeededIcon_(labCAN_[i], input_signals[MFDU_TRAIN_UNIT_NO + i * MFDU_UNIT_SIGNALS_SIZE], x + 20, y + 2);
-        setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIPMENT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-        setNeededIcon_(labPzdMini_[i], input_signals[MFDU_TRAIN_UNIT_PZD + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-        setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-        labNo1_[i]->setText(QString("%1")
-                            .arg(static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NO]) / 100, 3, 10, QChar('0')));
-        labNo1_[i]->move(x + 15, y + 1);
-        labNo2_[i]->setText(QString("%1")
-                            .arg(static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NO]) % 100, 2, 10, QChar('0')));
-        labNo2_[i]->move(x + 15, y + 15);
+        int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
+        if (num > 100)
+        {
+            setNeededIcon_(labCAN_[i], -1);
+            labNo1_[i]->setText(QString("%1").arg(num / 100, 3, 10, QChar('0')));
+            labNo1_[i]->move(x + 15, y + 1);
+            labNo2_[i]->setText(QString("%1").arg(num % 100, 2, 10, QChar('0')));
+            labNo2_[i]->move(x + 15, y + 15);
+        }
+        else
+        {
+            setNeededIcon_(labCAN_[i], 0, x + 20, y + 2);
+            labNo1_[i]->setText(QString(""));
+            labNo2_[i]->setText(QString(""));
+        }
         labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE], 'f', 1) + QString("°C"));
         labT_[i]->move(x + 60, y + 8);
+        setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 12, y + 42);
+        setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 42);
+        setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 82, y + 42);
         x += 132;
     }
+
+    if (size < MAX_TRAIN_SIZE)
+        for (int i = size; i < MAX_TRAIN_SIZE; i++)
+        {
+            setNeededIcon_(labTrainUnit_[i], -1);
+            setNeededIcon_(labCAN_[i], -1);
+            labNo1_[i]->setText(QString(""));
+            labNo2_[i]->setText(QString(""));
+            labT_[i]->setText(QString(""));
+            setNeededIcon_(labVagonEquipment_[i], -1);
+            setNeededIcon_(labDiesel_[i], -1);
+            setNeededIcon_(labBrakes_[i], -1);
+        }
 
     // сообщение об ошибке
     setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);
 }
-
 
 void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 {
@@ -748,31 +771,24 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     labNoHead_->setStyleSheet("color: grey;");
     labNoHead_->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
-    int fooX = 0;
-    int fooY = 0;
-
     QPixmap pixmap;
 
     QLabel* labFoo = Q_NULLPTR;
 
     for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
-        fooNoneAdd2_(pixmap, parent, labTrainUnit_[i], fooX, fooY);
         if (!pixmap.load(":/mfdu/main_trainUnit_empty")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labTrainUnit_[i].push_back(labFoo);
-        fooNoneAdd2_(pixmap, parent, labTrainUnit_[i], fooX, fooY);
         if (!pixmap.load(":/mfdu/main_trainUnit_head_fwd")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labTrainUnit_[i].push_back(labFoo);
-        fooNoneAdd2_(pixmap, parent, labTrainUnit_[i], fooX, fooY);
         if (!pixmap.load(":/mfdu/main_trainUnit_head_bwd")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labTrainUnit_[i].push_back(labFoo);
-        fooNoneAdd2_(pixmap, parent, labTrainUnit_[i], fooX, fooY);
         if (!pixmap.load(":/mfdu/main_trainUnit_middle")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
@@ -796,113 +812,66 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labT_[i]->setStyleSheet("color: white;");
         labT_[i]->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
-
-        fooNoneAdd2_(pixmap, parent, labCAN_[i], fooX, fooY);
         if (!pixmap.load(":/mfdu/main_can")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labCAN_[i].push_back(labFoo);
 
-/*
-        fooNoneAdd2_(pixmap, parent, labVagonEquipment_left_, fooX, fooY);
+        if (!pixmap.load(":/mfdu/main_vagonEquipment_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labVagonEquipment_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_vagonEquipment_work")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labVagonEquipment_left_.push_back(labFoo);
+        labVagonEquipment_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_vagonEquipment_warn")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labVagonEquipment_left_.push_back(labFoo);
+        labVagonEquipment_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_vagonEquipment_error")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labVagonEquipment_left_.push_back(labFoo);
+        labVagonEquipment_[i].push_back(labFoo);
 
-
-        fooNoneAdd2_(pixmap, parent, labVagonEquipment_right_, fooX + fooDelta12, fooY);
-        if (!pixmap.load(":/mfdu/main_vagonEquipment_work")) { return; }
+        if (!pixmap.load(":/mfdu/main_brakes_no_active")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
         labFoo->setPixmap(pixmap);
-        labVagonEquipment_right_.push_back(labFoo);
-        if (!pixmap.load(":/mfdu/main_vagonEquipment_warn")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
-        labFoo->setPixmap(pixmap);
-        labVagonEquipment_right_.push_back(labFoo);
-        if (!pixmap.load(":/mfdu/main_vagonEquipment_error")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
-        labFoo->setPixmap(pixmap);
-        labVagonEquipment_right_.push_back(labFoo);
-
-
-        fooX += 36;
-        fooNoneAdd2_(pixmap, parent, labPzdMini_left_, fooX, fooY);
-        if (!pixmap.load(":/mfdu/main_pzdMini")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
-        labFoo->setPixmap(pixmap);
-        labPzdMini_left_.push_back(labFoo);
-
-
-        fooNoneAdd2_(pixmap, parent, labPzdMini_right_, fooX + fooDelta12, fooY);
-        if (!pixmap.load(":/mfdu/main_pzdMini")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
-        labFoo->setPixmap(pixmap);
-        labPzdMini_right_.push_back(labFoo);
-
-
-        fooX += 36;
-        fooNoneAdd2_(pixmap, parent, labBrakes_left_, fooX, fooY);
+        labBrakes_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_brakes_gidro")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labBrakes_left_.push_back(labFoo);
+        labBrakes_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_brakes_mix")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labBrakes_left_.push_back(labFoo);
+        labBrakes_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_brakes_ept")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labBrakes_left_.push_back(labFoo);
+        labBrakes_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_brakes_parking")) { return; }
         labFoo = new QLabel(parent);
-        labFoo->move(fooX,fooY);
         labFoo->setPixmap(pixmap);
-        labBrakes_left_.push_back(labFoo);
+        labBrakes_[i].push_back(labFoo);
 
+        if (!pixmap.load(":/mfdu/main_diesel_none")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDiesel_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_diesel_work")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDiesel_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_diesel_warn")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDiesel_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_diesel_error")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDiesel_[i].push_back(labFoo);
 
-        fooNoneAdd2_(pixmap, parent, labBrakes_right_, fooX + fooDelta12, fooY);
-        if (!pixmap.load(":/mfdu/main_brakes_gidro")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
-        labFoo->setPixmap(pixmap);
-        labBrakes_right_.push_back(labFoo);
-        if (!pixmap.load(":/mfdu/main_brakes_mix")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
-        labFoo->setPixmap(pixmap);
-        labBrakes_right_.push_back(labFoo);
-        if (!pixmap.load(":/mfdu/main_brakes_ept")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
-        labFoo->setPixmap(pixmap);
-        labBrakes_right_.push_back(labFoo);
-        if (!pixmap.load(":/mfdu/main_brakes_parking")) { return; }
-        labFoo = new QLabel(parent);
-        labFoo->move(fooX + fooDelta12,fooY);
-        labFoo->setPixmap(pixmap);
-        labBrakes_right_.push_back(labFoo);
-*/
     }
 }
 
@@ -926,6 +895,30 @@ void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
     labErros_.push_back(labFoo);
 
     if (!pixmap.load(":/mfdu/error_ST2")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST3")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST4")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST5")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_ST6")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);

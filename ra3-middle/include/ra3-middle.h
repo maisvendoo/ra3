@@ -29,6 +29,9 @@ private:
         BWD_TROLLEY = 1
     };
 
+    /// Ориентация относительно активной кабины
+    bool is_orient_same;
+
     /// Напряжение от батареи 110 В
     double U_bat_110;
 
@@ -84,8 +87,8 @@ private:
 
     void stepSignalsOutput(double t, double dt);
 
-    /// Работа сигналов СМЕ для определения конфигурации поезда
-    void stepSMETrainConfig(double t, double dt);
+    /// Работа сигналов СМЕ
+    void stepSMESignalsOutput(double t, double dt);
 
     void stepVehiclesConnect();
 

@@ -89,7 +89,7 @@ private:
     std::array<QLabel*, MAX_TRAIN_SIZE> labNo2_;
     std::array<QLabel*, MAX_TRAIN_SIZE> labT_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labVagonEquipment_;
-    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labPzdMini_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDiesel_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labBrakes_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
 

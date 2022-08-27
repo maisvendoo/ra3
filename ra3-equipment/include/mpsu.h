@@ -88,18 +88,11 @@ private:
     /// Выходные сигналы
     mpsu_output_t   mpsu_output;
 
-    enum
-    {
-        NUM_DISELS = 2,
-        FWD_DISEL = 0,
-        BWD_DISEL = 1
-    };
+    /// Триггер активации запуска дизеля
+    Trigger trig_disel_start;
 
-    /// Тригер активации запуска дизеля
-    std::array<Trigger, NUM_DISELS> trig_disel_start;
-
-    /// Тригеры открытия топливных клапанов
-    std::array<Trigger, NUM_DISELS> trig_fuel_valve;
+    /// Триггер открытия топливных клапанов
+    Trigger trig_fuel_valve;
 
     /// Тригер фиксации сообщения об ошибке
     Trigger error_fixed;
@@ -167,6 +160,9 @@ private:
 
     /// Управление гидродинамическим торможением
     void hydro_brake_control();
+
+    /// Определение типа торможения
+    void unit_brakes_sheck();
 
     /// Расчет максимального тормозного усилия ЭПТ при данной скорости
     double calcMaxBrakeForce(double V);

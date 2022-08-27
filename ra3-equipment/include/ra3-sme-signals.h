@@ -6,6 +6,8 @@
 //------------------------------------------------------------------------------
 enum
 {
+    /// наибольшее число вагонов в СМЕ
+    MAX_TRAIN_SIZE = 6,
     /// активная кабина, ориентация вперёд (относительно маршрута)
     SME_HEAD_ORIENT_FWD = -1,
     /// активная кабина, ориентация назад (относительно маршрута)
@@ -16,9 +18,17 @@ enum
     SME_HEAD_ORIENT_OPPOSITE = 2,
     /// промежуточный вагон любой ориентации
     SME_MIDDLE = 3,
-    /// наибольшее число вагонов в СМЕ
-    MAX_TRAIN_SIZE = 6,
-    /// количество сигналов для вывода состояния каждого вагона на дисплей МФДУ
+    /// начало массива сигналов СМЕ от активной кабины
+    SME_ACTIVE_BEGIN = 10,
+    /// размер массива сигналов СМЕ от активной кабины
+    SME_ACTIVE_SIZE = 15,
+    /// начало массива сигналов СМЕ от вагонов
+    SME_UNIT_STATE_BEGIN = 25,
+    /// размер массива сигналов СМЕ от вагонов
+    SME_UNIT_STATE_SIZE = 15,
+    /// начало массива сигналов для передачи состояния вагона на дисплей МФДУ
+    MFDU_UNIT_SIGNALS_BEGIN = 56,
+    /// размер массива сигналов для передачи состояния вагона на дисплей МФДУ
     MFDU_UNIT_SIGNALS_SIZE = 6
 };
 
@@ -40,40 +50,33 @@ enum
     SME_BWD_PM_PRESSURE = 5,
 
     // Общие сигналы с ведущей секции
-    SME_POWER_ON = 10,
-    SME_REVERS_HANDLE = 11,
-    SME_IS_KM_ZERO = 12,
-    SME_IS_KM_TRACTION = 13,
-    SME_IS_KM_BRAKE = 14,
-    SME_KM_TRACTION_LEVEL = 15,
-    SME_DISEL_FREQ = 16,
-    SME_KM_BRAKE_LEVEL = 17,
-    SME_REF_BRAKE_LEVEL_EPB = 18,
-    SME_BRAKE_RELEASE = 19,
-    SME_PARKING_BRAKE_ON = 20,
-    SME_IS_EMERGENCY_BRAKE = 21,
-    SME_NO_ACTIVE = 22,
+    SME_POWER_ON = SME_ACTIVE_BEGIN,
+    SME_NO_ACTIVE,
+    SME_DISEL_START,
+    SME_DISEL_STOP,
+    SME_IS_AUTOSTOP_ON,
+    SME_REVERS_HANDLE,
+    SME_KM_STATE,
+    SME_KM_TRACTION_LEVEL,
+    SME_KM_BRAKE_LEVEL,
+    SME_REF_BRAKE_LEVEL_EPB,
+    SME_BRAKE_RELEASE,
+    SME_PARKING_BRAKE_ON,
+    SME_IS_EMERGENCY_BRAKE,
 
-    // Сигналы с ведущей секции к ведомой секции
-    SME_BWD_FUEL_PUMP = 40,
-    SME_BWD_FUEL_VALVE_OPEN = 41,
-    SME_BWD_STARTER_ON = 42,
-    SME_BWD_DISEL_STARTED = 43,
-
-    // Сигналы с ведомой секции к ведущей секции
-    SME_BWD_OIL_PRESS = 45,
-    SME_BWD_FUEL_PRESS = 46,
-    SME_BWD_FUEL_PUMP_ON = 47,
-    SME_BWD_OMEGA = 48,
-    SME_BWD_GENERATOR = 49,
-    SME_BWD_COMPRESSOR = 50,
-    SME_REVERS_STATE = 51,
-    SME_BWD_BRAKE_LEVEL = 52,
-    SME_BWD_BC1 = 53,
-    SME_BWD_BC2 = 54,
-    SME_PARKING_BRAKE_STATE = 55,
-    SME_BWD_CAN = 56
-
+    // Сигналы с вагонов к ведущей секции
+    SME_UNIT_NUM = SME_UNIT_STATE_BEGIN,
+    SME_UNIT_T,
+    SME_UNIT_EQUIP,
+    SME_UNIT_DIESEL,
+    SME_UNIT_FUEL_PUMP,
+    SME_UNIT_GENERATOR,
+    SME_UNIT_COMPRESSOR,
+    SME_UNIT_GDT_REVERS_STATE,
+    SME_UNIT_GDT_BRAKE_LEVEL,
+    SME_UNIT_BC1,
+    SME_UNIT_BC2,
+    SME_UNIT_SPT_STATE,
 };
 
 #endif // RA3_SME_SIGNALS_H

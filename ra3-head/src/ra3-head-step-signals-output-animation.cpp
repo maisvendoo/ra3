@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 {
+    Q_UNUSED(t);
+    Q_UNUSED(dt);
+
     // Кнопки "БОРТСЕТЬ"
     analogSignal[SIG_BUTTON_ON] = static_cast<float>(tumbler[BUTTON_PWR_ON].getState());
     analogSignal[SIG_BUTTON_OFF] = static_cast<float>(!tumbler[BUTTON_PWR_OFF].getState());

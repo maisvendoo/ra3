@@ -4,6 +4,7 @@
 //
 //------------------------------------------------------------------------------
 RA3Middle::RA3Middle(QObject *parent) : Vehicle(parent)
+  , is_orient_same(true)
   , U_bat_110(0.0)
   , Ucc_110(0.0)
   , bat110(Q_NULLPTR)
@@ -55,7 +56,7 @@ void RA3Middle::step(double t, double dt)
 
     stepSignalsOutput(t, dt);
 
-    stepSMETrainConfig(t, dt);
+    stepSMESignalsOutput(t, dt);
 
     stepVehiclesConnect();
 

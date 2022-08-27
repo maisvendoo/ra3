@@ -20,9 +20,6 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
     // Вывод сигналов на контрольные лампы
     controlLampsSignalsOutput(t, dt);
 
-    // Определение конфигурации поезда
-    stepSMETrainConfig(t, dt);
-
     // Вывод сигналов СМЕ
     stepSMESignalsOutput(t, dt);
 }

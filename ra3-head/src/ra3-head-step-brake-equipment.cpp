@@ -11,7 +11,7 @@ void RA3HeadMotor::stepBrakeEquipment(double t, double dt)
             static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
     brake_module->setRefPressureLevel(mpsu->getOutputData().brake_ref_level_EPB);
-    brake_module->releaseBrakes(mpsu->getOutputData().release_PB1);
+    brake_module->releaseBrakes(mpsu->getOutputData().release_PB);
 
     brake_module->setVoltage(Ucc_110);
     brake_module->setParkingBrakeState(is_parking_braked);

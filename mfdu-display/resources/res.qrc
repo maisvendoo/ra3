@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/mfdu">
-    	<file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
+        <file alias="mfdu-main-disp">img/mfdu-main-disp.png</file>
         <file alias="none">img/none.png</file>
         <file alias="none35">img/none35.png</file>
         <file alias="main_110380_380">img/main-disp/110380_380.png</file>
@@ -82,10 +82,15 @@
         <file alias="main_trainUnit_head_fwd">img/main-disp/trainUnit_head_fwd.png</file>
         <file alias="main_trainUnit_head_bwd">img/main-disp/trainUnit_head_bwd.png</file>
         <file alias="main_trainUnit_middle">img/main-disp/trainUnit_middle.png</file>
+        <file alias="main_vagonEquipment_no_active">img/main-disp/vagonEquipment_no_active.png</file>
         <file alias="main_vagonEquipment_work">img/main-disp/vagonEquipment_work.png</file>
         <file alias="main_vagonEquipment_warn">img/main-disp/vagonEquipment_warn.png</file>
         <file alias="main_vagonEquipment_error">img/main-disp/vagonEquipment_error.png</file>
-        <file alias="main_pzdMini">img/main-disp/pzdMini.png</file>
+        <file alias="main_diesel_none">img/main-disp/diesel_none.png</file>
+        <file alias="main_diesel_work">img/main-disp/diesel_work.png</file>
+        <file alias="main_diesel_warn">img/main-disp/diesel_warn.png</file>
+        <file alias="main_diesel_error">img/main-disp/diesel_error.png</file>
+        <file alias="main_brakes_no_active">img/main-disp/brakes_no_active.png</file>
         <file alias="main_brakes_gidro">img/main-disp/brakes_gidro.png</file>
         <file alias="main_brakes_mix">img/main-disp/brakes_mix.png</file>
         <file alias="main_brakes_ept">img/main-disp/brakes_ept.png</file>
@@ -93,12 +98,16 @@
         <file alias="main_can">img/main-disp/can.png</file>
         <file alias="mk_frame_on">img/main-disp/motor-compressor-frame_on.png</file>
         <file alias="mk_frame_off">img/main-disp/motor-compressor-frame_off.png</file>
-		
-		<file alias="error_none">img/errors/error_none.png</file>
-		<file alias="error_ST1">img/errors/error_ST1.png</file>
-		<file alias="error_ST2">img/errors/error_ST2.png</file>
-		<file alias="error_revers_0">img/errors/error_revers_0.png</file>
-		<file alias="error_epk_off">img/errors/error_epk_off.png</file>
+
+        <file alias="error_none">img/errors/error_none.png</file>
+        <file alias="error_ST1">img/errors/error_ST1.png</file>
+        <file alias="error_ST2">img/errors/error_ST2.png</file>
+        <file alias="error_ST3">img/errors/error_ST3.png</file>
+        <file alias="error_ST4">img/errors/error_ST4.png</file>
+        <file alias="error_ST5">img/errors/error_ST5.png</file>
+        <file alias="error_ST6">img/errors/error_ST6.png</file>
+        <file alias="error_revers_0">img/errors/error_revers_0.png</file>
+        <file alias="error_epk_off">img/errors/error_epk_off.png</file>
         <file alias="error_hold_speed_trac">img/errors/error_hold_speed_trac.png</file>
         <file alias="error_hold_speed_brake">img/errors/error_hold_speed_brake.png</file>
     </qresource>

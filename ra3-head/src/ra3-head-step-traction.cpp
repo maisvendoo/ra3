@@ -15,20 +15,22 @@ void RA3HeadMotor::stepTraction(double t, double dt)
         hydro_trans->setTractionMode( (km->isTraction() || is_auto_traction) &&
                                       (!mpsu->getOutputData().motion_disable) &&
                                       epk->isTractionAllowed());
-        hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON1);
+        hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON);
     }
     else
     {
-        hydro_trans->setRefReversState(orient * (
+        if (mpsu->getOutputData().is_orient_same)
+            hydro_trans->setRefReversState(
+                    static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
+                    static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));
+        else
+            hydro_trans->setRefReversState(-1 * (
                     static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
                     static_cast<int>(forward_inputs[SME_REVERS_HANDLE])));
         hydro_trans->setTractionMode(
-                    ( static_cast<bool>(backward_inputs[SME_IS_KM_TRACTION]) ||
-                      static_cast<bool>(forward_inputs[SME_IS_KM_TRACTION]) ||
-                      is_auto_traction) &&
-                    (!mpsu->getOutputData().motion_disable) &&
-                    epk->isTractionAllowed());
-        hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON2);
+                    static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == 1.0f) ||
+                    is_auto_traction);
+        hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON);
     }
 
     hydro_trans->setRefBrakeLevel(mpsu->getOutputData().brake_ref_level_GB);

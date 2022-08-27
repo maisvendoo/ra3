@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
 {
+    Q_UNUSED(t);
+    Q_UNUSED(dt);
+
     // "АКТИВНАЯ КАБИНА"
     analogSignal[ACTIVE_COCKPIT] = static_cast<float>(is_active);
 
@@ -15,25 +18,13 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     analogSignal[ANXIETY] = static_cast<float>(mpsu->getOutputData().is_yellow_alarm);
 
     // Сигнализация стояночного тормоза
-    bool is_parking_braked =
-            brake_module->isParkingBraked() ||
-            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_STATE]) ||
-            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_STATE]);
+    analogSignal[PARKING_BRAKE] = static_cast<float>(mpsu->getOutputData().spt_state);
 
-    analogSignal[PARKING_BRAKE] = static_cast<float>(is_parking_braked);
-
-    // Сигнализация отпуска тележек всех вагонов, кроме последней телеги
-    // хвостового вагона
-    analogSignal[SOT] =
-            (brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure() < 0.04) &&
-            (brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure() < 0.04) &&
-            (backward_inputs[SME_BWD_BC2] < 0.04) &&
-            (forward_inputs[SME_BWD_BC2] < 0.04);
-
+    // Сигнализация отпуска тележек всех вагонов,
+    // кроме последней телеги хвостового вагона
+    analogSignal[SOT] = static_cast<float>(mpsu->getOutputData().sot);
     // Сигнализация отпуска последней тележки хвостового вагона
-    analogSignal[SOTH] =
-            (backward_inputs[SME_BWD_BC1] < 0.04) &&
-            (forward_inputs[SME_BWD_BC1] < 0.04);
+    analogSignal[SOTH] = static_cast<float>(mpsu->getOutputData().soth);
 
     // Лампы контроля закрытия дверей
     analogSignal[KDL] = 1.0f;
