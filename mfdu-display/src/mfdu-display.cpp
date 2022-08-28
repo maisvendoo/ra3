@@ -57,7 +57,7 @@ void MfduDisplay::init()
     labelCurTime_ = new QLabel(background_);
     labelCurTime_->setFont(QFont("Arial", 14, 63));
     labelCurTime_->setText(QTime::currentTime().toString());
-    labelCurTime_->setStyleSheet("color: white;");
+    labelCurTime_->setStyleSheet("color: grey;");
     labelCurTime_->resize(140,20);
     labelCurTime_->move(650, 5);
     labelCurTime_->setAlignment(Qt::AlignCenter);
@@ -65,7 +65,7 @@ void MfduDisplay::init()
     labelCurDate_ = new QLabel(background_);
     labelCurDate_->setFont(QFont("Arial", 14, 63));
     labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
-    labelCurDate_->setStyleSheet("color: white;");
+    labelCurDate_->setStyleSheet("color: grey;");
     labelCurDate_->resize(140,20);
     labelCurDate_->move(650, 32);
     labelCurDate_->setAlignment(Qt::AlignCenter);

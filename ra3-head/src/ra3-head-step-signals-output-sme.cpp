@@ -184,20 +184,31 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         backward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
         forward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
 
-        // Передаем давление в тормозных цилиндрах в ведущую секцию
         if (is_orient_same)
         {
+            // Передаем давление в тормозных цилиндрах в ведущую секцию
             backward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
             forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
             backward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
             forward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+            // Передаем состояние дверей в ведущую секцию
+            backward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_R_state);
+            forward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_R_state);
+            backward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_L_state);
+            forward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_L_state);
         }
         else
         {
+            // Передаем давление в тормозных цилиндрах в ведущую секцию
             backward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
             forward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
             backward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
             forward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
+            // Передаем состояние дверей в ведущую секцию
+            backward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_L_state);
+            forward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_L_state);
+            backward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_R_state);
+            forward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_R_state);
         }
 
         // Передаем состояние стояночного пружинного тормоза в ведущую секцию

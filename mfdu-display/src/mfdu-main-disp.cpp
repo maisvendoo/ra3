@@ -121,6 +121,8 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
         if (i < size)
         {
             setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
+            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y - 2);
+            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 77);
             int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
             if ((num > 100) && (num < 100000))
             {
@@ -146,6 +148,8 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
         else
         {
             setNeededIcon_(labTrainUnit_[i], -1);
+            setNeededIcon_(labDoorR_[i], -1);
+            setNeededIcon_(labDoorL_[i], -1);
             setNeededIcon_(labCAN_[i], -1);
             labNo1_[i]->setText(QString(""));
             labNo2_[i]->setText(QString(""));
@@ -796,6 +800,32 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labFoo->setPixmap(pixmap);
         labTrainUnit_[i].push_back(labFoo);
 
+        if (!pixmap.load(":/mfdu/main_unit_door_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_closed")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR_[i].push_back(labFoo);
+
+        if (!pixmap.load(":/mfdu/main_unit_door_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_closed")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL_[i].push_back(labFoo);
+
         labNo1_[i] = new QLabel("001", parent);
         labNo1_[i]->resize(40, 20);
         labNo1_[i]->setFont(QFont("Arial", 12, 63));
@@ -1003,21 +1033,5 @@ void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val, int x
         }
     }
 }
-
-
-QString MfduMainDisp::trainUnitNumber (int val, bool two_lines)
-{
-    if (val == 0)
-        return QString("");
-    else
-    {
-        // TODO
-        if (two_lines)
-            return QString("001/n01");
-        else
-            return QString("00101");
-    }
-}
-
 
 

@@ -96,6 +96,9 @@
         <file alias="main_brakes_ept">img/main-disp/brakes_ept.png</file>
         <file alias="main_brakes_parking">img/main-disp/brakes_parking.png</file>
         <file alias="main_can">img/main-disp/can.png</file>
+        <file alias="main_unit_door_no_active">img/main-disp/unit_door_no_active.png</file>
+        <file alias="main_unit_door_closed">img/main-disp/unit_door_closed.png</file>
+        <file alias="main_unit_door_opened">img/main-disp/unit_door_opened.png</file>
         <file alias="mk_frame_on">img/main-disp/motor-compressor-frame_on.png</file>
         <file alias="mk_frame_off">img/main-disp/motor-compressor-frame_off.png</file>
 

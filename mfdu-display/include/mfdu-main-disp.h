@@ -85,13 +85,15 @@ private:
     QLabel* labNoHead_;
     void setBlockIcon_topSpeedometer_(QLabel* parent);
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labTrainUnit_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorR_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorL_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
     std::array<QLabel*, MAX_TRAIN_SIZE> labNo1_;
     std::array<QLabel*, MAX_TRAIN_SIZE> labNo2_;
     std::array<QLabel*, MAX_TRAIN_SIZE> labT_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labVagonEquipment_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDiesel_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labBrakes_;
-    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
 
     // Сообщения об ошибках
     void setErrosMsgBox_(QLabel *parent);
@@ -102,7 +104,6 @@ private:
 
     void setNeededIcon_(std::vector<QLabel*> &vec_lab, int val);
     void setNeededIcon_(std::vector<QLabel*> &vec_lab, int val, int x, int y);
-    QString trainUnitNumber (int val, bool two_lines = true);
 };
 
 #endif // MFDUMAINDISP_H

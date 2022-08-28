@@ -140,6 +140,10 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
         {
             analogSignal[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] =
                     forward_inputs[SME_UNIT_NUM + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_DOOR_R + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_DOOR_L + (pos - i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
                     forward_inputs[SME_UNIT_T + (pos - i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] =
@@ -150,6 +154,8 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     // Состояние данного вагона
     analogSignal[MFDU_TRAIN_UNIT_NUM + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(num);
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_R + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(door_R_state);
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_L + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(door_L_state);
     analogSignal[MFDU_TRAIN_UNIT_T + pos * MFDU_UNIT_SIGNALS_SIZE] = 25.1f;
     analogSignal[MFDU_TRAIN_UNIT_EQUIP + pos * MFDU_UNIT_SIGNALS_SIZE] = 1.0f;
     analogSignal[MFDU_TRAIN_UNIT_DIESEL + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
@@ -160,6 +166,10 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
         {
             analogSignal[MFDU_TRAIN_UNIT_NUM + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
                     backward_inputs[SME_UNIT_NUM + (i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_DOOR_R + (i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_DOOR_L + (i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_T + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
                     backward_inputs[SME_UNIT_T + (i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_EQUIP + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =

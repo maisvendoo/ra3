@@ -29,7 +29,7 @@ enum
     /// начало массива сигналов для передачи состояния вагона на дисплей МФДУ
     MFDU_UNIT_SIGNALS_BEGIN = 56,
     /// размер массива сигналов для передачи состояния вагона на дисплей МФДУ
-    MFDU_UNIT_SIGNALS_SIZE = 6
+    MFDU_UNIT_SIGNALS_SIZE = 8
 };
 
 //------------------------------------------------------------------------------
@@ -67,6 +67,8 @@ enum
     // Сигналы с вагонов к ведущей секции
     SME_UNIT_NUM = SME_UNIT_STATE_BEGIN,
     SME_UNIT_T,
+    SME_UNIT_DOOR_R,
+    SME_UNIT_DOOR_L,
     SME_UNIT_EQUIP,
     SME_UNIT_DIESEL,
     SME_UNIT_FUEL_PUMP,

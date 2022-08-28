@@ -73,13 +73,15 @@ enum
 
     MFDU_TRAIN_SIZE = 54,   // Количество вагонов
     MFDU_POS_IN_TRAIN = 55,   // Количество вагонов
-    // Сигналы 56..91 - состояние вагонов, 6 сигналов на каждый вагон
+    // Сигналы 56..103 - состояние вагонов, 8 сигналов на каждый вагон
     MFDU_TRAIN_UNIT = MFDU_UNIT_SIGNALS_BEGIN,  // Тип вагона
     MFDU_TRAIN_UNIT_NUM,    // Номер вагона или отсутствие связи CAN
     MFDU_TRAIN_UNIT_T,      // Температура в вагоне
     MFDU_TRAIN_UNIT_EQUIP,  // Состояние вагонного оборудования
     MFDU_TRAIN_UNIT_DIESEL, // Состояние дизеля
     MFDU_TRAIN_UNIT_BRAKES, // Состояние тормоза
+    MFDU_TRAIN_UNIT_DOOR_R, // Состояние дверей правых
+    MFDU_TRAIN_UNIT_DOOR_L, // Состояние дверей левых
 
     STRELKA_VOLTMETER110 = 108,
     STRELKA_VOLTMETER24 = 109,
