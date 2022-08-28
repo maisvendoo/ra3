@@ -29,6 +29,9 @@ private:
         BWD_TROLLEY = 1
     };
 
+    /// Серийный номер вагона
+    int num;
+
     /// Ориентация относительно активной кабины
     bool is_orient_same;
 

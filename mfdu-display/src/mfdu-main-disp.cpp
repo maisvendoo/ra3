@@ -108,41 +108,42 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     labIakb110_->setText(QString::number(input_signals[MFDU_I_AKB_110], 'f', 1));
 
     // блок иконок сверху от спидометра
+    int size = MFDU_TRAIN_UNIT_NUM + (static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1) * MFDU_UNIT_SIGNALS_SIZE;
     labNoHead_->setText(QString("%1")
-        .arg(static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM]), 5, 10, QChar('0')));
-    int size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
+        .arg(static_cast<int>(input_signals[size]), 5, 10, QChar('0')));
+    size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
     if (size > MAX_TRAIN_SIZE)
         size = MAX_TRAIN_SIZE;
     int x = 402 - 66 * size;
     int y = 62;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < MAX_TRAIN_SIZE; i++)
     {
-        setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-        int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
-        if (num > 100)
+        if (i < size)
         {
-            setNeededIcon_(labCAN_[i], -1);
-            labNo1_[i]->setText(QString("%1").arg(num / 100, 3, 10, QChar('0')));
-            labNo1_[i]->move(x + 15, y + 1);
-            labNo2_[i]->setText(QString("%1").arg(num % 100, 2, 10, QChar('0')));
-            labNo2_[i]->move(x + 15, y + 15);
+            setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
+            int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
+            if ((num > 100) && (num < 100000))
+            {
+                setNeededIcon_(labCAN_[i], -1);
+                labNo1_[i]->setText(QString("%1").arg(num / 100, 3, 10, QChar('0')));
+                labNo1_[i]->move(x + 15, y + 1);
+                labNo2_[i]->setText(QString("%1").arg(num % 100, 2, 10, QChar('0')));
+                labNo2_[i]->move(x + 15, y + 15);
+            }
+            else
+            {
+                setNeededIcon_(labCAN_[i], 0, x + 20, y + 2);
+                labNo1_[i]->setText(QString(""));
+                labNo2_[i]->setText(QString(""));
+            }
+            labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE], 'f', 1) + QString("°C"));
+            labT_[i]->move(x + 60, y + 8);
+            setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 12, y + 42);
+            setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 42);
+            setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 82, y + 42);
+            x += 132;
         }
         else
-        {
-            setNeededIcon_(labCAN_[i], 0, x + 20, y + 2);
-            labNo1_[i]->setText(QString(""));
-            labNo2_[i]->setText(QString(""));
-        }
-        labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE], 'f', 1) + QString("°C"));
-        labT_[i]->move(x + 60, y + 8);
-        setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 12, y + 42);
-        setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 42);
-        setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 82, y + 42);
-        x += 132;
-    }
-
-    if (size < MAX_TRAIN_SIZE)
-        for (int i = size; i < MAX_TRAIN_SIZE; i++)
         {
             setNeededIcon_(labTrainUnit_[i], -1);
             setNeededIcon_(labCAN_[i], -1);
@@ -153,6 +154,7 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             setNeededIcon_(labDiesel_[i], -1);
             setNeededIcon_(labBrakes_[i], -1);
         }
+    }
 
     // сообщение об ошибке
     setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);

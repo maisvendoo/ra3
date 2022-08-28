@@ -7,7 +7,7 @@ void RA3HeadMotor::debugOutput(double t, double dt)
 {
     Q_UNUSED(dt)
 
-    DebugMsg = QString("t %1|ГР %2 3P %3|P1 %4 P2 %5| TM %6 TC1 %7 TC2 %8|T %9 TL %10|B %11 BL %12|M %13|%14|%15|%16|%17|  ")
+    DebugMsg = QString("t %1|ГР %2 3P %3|P1 %4 P2 %5| TM %6 TC1 %7 TC2 %8|T %9 TL %10|B %11 BL %12|M %13|  ")
             .arg(t, 10, 'f', 1)
             .arg(main_res->getPressure(), 4, 'f', 2)
             .arg(aux_res->getPressure(), 4, 'f', 2)

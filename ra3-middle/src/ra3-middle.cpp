@@ -4,6 +4,7 @@
 //
 //------------------------------------------------------------------------------
 RA3Middle::RA3Middle(QObject *parent) : Vehicle(parent)
+  , num(4003)
   , is_orient_same(true)
   , U_bat_110(0.0)
   , Ucc_110(0.0)
@@ -75,6 +76,7 @@ void RA3Middle::loadConfig(QString cfg_path)
         QString secName = "Vehicle";
 
         cfg.getDouble(secName, "MainResLeak", main_res_leak);
+        cfg.getInt(secName, "Number", num);
     }
 }
 

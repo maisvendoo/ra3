@@ -29,9 +29,6 @@ struct mpsu_input_t
     /// Признак подачи питания на МПСУ
     bool is_power_on;
 
-    /// Ориентация вагона относительно маршрута
-    int orient;
-
     /// Сигнал опроса конфигурации СМЕ спереди
     float sme_train_config_fwd;
     /// Сигнал опроса конфигурации СМЕ сзади
@@ -134,7 +131,6 @@ struct mpsu_input_t
 
     mpsu_input_t()
         : is_power_on(false)
-        , orient(1)
         , sme_train_config_fwd(0.0f)
         , sme_train_config_bwd(0.0f)
         , start_disel(false)
@@ -177,11 +173,8 @@ struct mpsu_input_t
 //------------------------------------------------------------------------------
 struct mpsu_output_t
 {
-    /// Ответ на сигнал опроса конфигурации СМЕ
-    float sme_train_config;
-
-    /// Признак ориентации вагона относительно активной кабины
-    bool is_orient_same;
+    /// Номер по порядку данного вагона в поезде
+    int pos_in_train;
 
     /// Количество вагонов в конфигурации СМЕ
     int train_size;
@@ -304,8 +297,7 @@ struct mpsu_output_t
     bool is_speed_hold_ON;
 
     mpsu_output_t()
-        : sme_train_config(0.0f)
-        , is_orient_same(false)
+        : pos_in_train(1)
         , train_size(2)
         , train_length(48.48)
         , train_config({1, 2, 0, 0, 0, 0})

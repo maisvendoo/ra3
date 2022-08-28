@@ -71,7 +71,8 @@ enum
     MFDU_I_AKB_110,         // Ток акб 110
     MFDU_ERROR_CODE,
 
-    MFDU_TRAIN_SIZE = 55,   // Количество вагонов
+    MFDU_TRAIN_SIZE = 54,   // Количество вагонов
+    MFDU_POS_IN_TRAIN = 55,   // Количество вагонов
     // Сигналы 56..91 - состояние вагонов, 6 сигналов на каждый вагон
     MFDU_TRAIN_UNIT = MFDU_UNIT_SIGNALS_BEGIN,  // Тип вагона
     MFDU_TRAIN_UNIT_NUM,    // Номер вагона или отсутствие связи CAN

@@ -154,73 +154,78 @@ void MPSU::reset()
 void MPSU::train_config_process()
 {
     // Если с любой стороны получен отрицательный сигнал от активной кабины,
-    // то сраниваем ориентацию с ней и отправляем обратно соответствующей сигнал
-    mpsu_output.sme_train_config = 0.0f;
-    int sme_input = min(mpsu_input.sme_train_config_fwd, mpsu_input.sme_train_config_bwd);
-    if (sme_input < -0.5f)
+    // то считаем эту кабину неактивной
+    if ((mpsu_input.sme_train_config_fwd < 0.0f) || (mpsu_input.sme_train_config_bwd < 0.0f))
     {
-        if (((mpsu_input.orient > 0) && (sme_input > -1.5f )) ||
-            ((mpsu_input.orient < 0) && (sme_input < -1.5f )))
-        {
-            mpsu_output.is_orient_same = true;
-            mpsu_output.sme_train_config = static_cast<float>(SME_HEAD_ORIENT_SAME);
-        }
-        else
-        {
-            mpsu_output.is_orient_same = false;
-            mpsu_output.sme_train_config = static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
-        }
+        return;
     }
     // Иначе считаем эту кабину активной, обрабатываем полученную конфигурацию
     else
     {
-        mpsu_output.train_size = 1;
-        mpsu_output.train_length = lengthHead;
-        mpsu_output.train_config[0] = 1;
-        if (mpsu_input.orient > 0)
-            train_config_parsing(static_cast<int>(mpsu_input.sme_train_config_bwd));
-        else
-            train_config_parsing(static_cast<int>(mpsu_input.sme_train_config_fwd));
+        // Обнуляем длину поезда
+        mpsu_output.train_size = 0;
+        mpsu_output.train_length = 0.0;
+        // Обрабатываем сигналы от вагонов спереди
+        int tc = static_cast<int>(mpsu_input.sme_train_config_fwd);
+        if (tc > 0)
+            for (int i = 0; i < MAX_TRAIN_SIZE - 1; i++)
+            {
+                mpsu_output.train_config[0] = train_config_parsing(tc % 4);
+                tc = tc / 4;
+                if (tc == 0)
+                    break;
+                else
+                    for (int j = i + 1; j > 0; j--)
+                        mpsu_output.train_config[j] = mpsu_output.train_config[j - 1];
+            }
+        // Добавляем в поезд данный вагон
+        mpsu_output.train_size++;
+        mpsu_output.pos_in_train = mpsu_output.train_size;
+        mpsu_output.train_length += lengthHead;
+        mpsu_output.train_config[mpsu_output.pos_in_train - 1] = 1;
+        // Обрабатываем сигналы от вагонов сзади
+        if (mpsu_output.train_size >= MAX_TRAIN_SIZE)
+            return;
+        tc = static_cast<int>(mpsu_input.sme_train_config_bwd);
+        for (int i = mpsu_output.train_size; i < MAX_TRAIN_SIZE; i++)
+        {
+            mpsu_output.train_config[i] = train_config_parsing(tc % 4);
+            tc = tc / 4;
+            if (tc == 0)
+                break;
+        }
     }
 }
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void MPSU::train_config_parsing(int tc)
+int MPSU::train_config_parsing(int unit)
 {
-    for (size_t i = 1; i < MAX_TRAIN_SIZE; i++)
+    switch (unit)
     {
-        switch (tc % 4)
+        case 1:
         {
-            case 1:
-            {
-                mpsu_output.train_size++;
-                mpsu_output.train_length += lengthHead;
-                mpsu_output.train_config[i] = 1;
-                break;
-            }
-            case 2:
-            {
-                mpsu_output.train_size++;
-                mpsu_output.train_length += lengthHead;
-                mpsu_output.train_config[i] = 2;
-                break;
-            }
-            case 3:
-            {
-                mpsu_output.train_size++;
-                mpsu_output.train_length += lengthMiddle;
-                mpsu_output.train_config[i] = 3;
-                break;
-            }
-            default:
-            {
-                mpsu_output.train_config[i] = 0;
-                break;
-            }
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthHead;
+            return 1;
         }
-        tc = tc / 4;
+        case 2:
+        {
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthHead;
+            return 2;
+        }
+        case 3:
+        {
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthMiddle;
+            return 3;
+        }
+        default:
+        {
+            return 0;
+        }
     }
 }
 

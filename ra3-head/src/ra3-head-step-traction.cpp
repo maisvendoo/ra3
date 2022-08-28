@@ -19,7 +19,7 @@ void RA3HeadMotor::stepTraction(double t, double dt)
     }
     else
     {
-        if (mpsu->getOutputData().is_orient_same)
+        if (is_orient_same)
             hydro_trans->setRefReversState(
                     static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
                     static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));

@@ -6,10 +6,10 @@
 void RA3HeadMotor::stepMPSU(double t, double dt)
 {
     mpsu_input_t mpsu_input;
-    mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
-    mpsu_input.orient = orient;
     mpsu_input.sme_train_config_fwd = forward_inputs[SME_TRAIN_CONFIG];
     mpsu_input.sme_train_config_bwd = backward_inputs[SME_TRAIN_CONFIG];
+
+    mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
 
     mpsu_input.start_disel = tumbler[BUTTON_START].getState();
     mpsu_input.stop_disel = tumbler[BUTTON_STOP].getState();
@@ -45,7 +45,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     }
     else
     {
-        if (mpsu->getOutputData().is_orient_same)
+        if (is_orient_same)
             mpsu_input.revers_handle =
                 static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
                 static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
@@ -78,26 +78,33 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.button_speed_minus = tumbler[BUTTON_SPEED_MINUS].getState();
 
     mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
-    mpsu_input.unit_level_GDB[0] = hydro_trans->getBrakeLevel();
-    mpsu_input.unit_pBC[0] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    mpsu_input.unit_pBC[1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-    mpsu_input.unit_spt_state[0] = brake_module->isParkingBraked();
 
-    for (size_t i = 1; i < MAX_TRAIN_SIZE; i++)
-    {
-        mpsu_input.unit_level_GDB[i] =
-                static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (i - 1) * SME_UNIT_STATE_SIZE]) +
-                static_cast<double>(backward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (i - 1) * SME_UNIT_STATE_SIZE]);
-        mpsu_input.unit_pBC[i * 2] =
-                static_cast<double>(forward_inputs[SME_UNIT_BC1 + (i - 1) * SME_UNIT_STATE_SIZE]) +
-                static_cast<double>(backward_inputs[SME_UNIT_BC1 + (i - 1) * SME_UNIT_STATE_SIZE]);
-        mpsu_input.unit_pBC[i * 2 + 1] =
-                static_cast<double>(forward_inputs[SME_UNIT_BC2 + (i - 1) * SME_UNIT_STATE_SIZE]) +
-                static_cast<double>(backward_inputs[SME_UNIT_BC2 + (i - 1) * SME_UNIT_STATE_SIZE]);
-        mpsu_input.unit_spt_state[i] =
-                static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + (i - 1) * SME_UNIT_STATE_SIZE]) ||
-                static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + (i - 1) * SME_UNIT_STATE_SIZE]);
-    }
+    int pos = mpsu->getOutputData().pos_in_train - 1;
+    // Состояние тормозов вагонов спереди
+    if (pos > 0)
+        for (int i = 0; i < pos; i++)
+        {
+            mpsu_input.unit_level_GDB[i] = static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_spt_state[i] = static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+        }
+
+    // Состояние тормозов данного вагона
+    mpsu_input.unit_level_GDB[pos] = hydro_trans->getBrakeLevel();
+    mpsu_input.unit_pBC[pos * 2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
+    mpsu_input.unit_pBC[pos * 2 + 1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    mpsu_input.unit_spt_state[pos] = brake_module->isParkingBraked();
+
+    // Состояние тормозов вагонов сзади
+    if (pos < MAX_TRAIN_SIZE)
+        for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
+        {
+            mpsu_input.unit_level_GDB[pos + i] = static_cast<double>(backward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[(pos + i) * 2] = static_cast<double>(backward_inputs[SME_UNIT_BC1 + (i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[(pos + i) * 2 + 1] = static_cast<double>(backward_inputs[SME_UNIT_BC2 + (i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + (i - 1) * SME_UNIT_STATE_SIZE]);
+        }
 
     mpsu_input.Kmax = brake_mech[FWD_TROLLEY]->getMaxShoeForce();
     mpsu_input.wheel_diam = wheel_diameter;

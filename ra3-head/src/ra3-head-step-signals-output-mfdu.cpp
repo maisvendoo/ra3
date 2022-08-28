@@ -122,32 +122,49 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_S_GREEN_DIGIT] = mpsu->getOutputData().v_ref_kmh;
 
     analogSignal[MFDU_TRAIN_SIZE] = static_cast<float>(mpsu->getOutputData().train_size);
+    analogSignal[MFDU_POS_IN_TRAIN] = static_cast<float>(mpsu->getOutputData().pos_in_train);
 
-    // Состояние данного вагона
-    analogSignal[MFDU_TRAIN_UNIT] = 1.0f;
-    analogSignal[MFDU_TRAIN_UNIT_NUM] = 4001.0f;
-    analogSignal[MFDU_TRAIN_UNIT_T] = 25.1f;
-    analogSignal[MFDU_TRAIN_UNIT_EQUIP] = 1.0f;
-    analogSignal[MFDU_TRAIN_UNIT_DIESEL] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
-    analogSignal[MFDU_TRAIN_UNIT_BRAKES] = static_cast<float>(mpsu->getOutputData().unit_brakes[0]);
-
-    for (size_t i = 1; i < MAX_TRAIN_SIZE; i++)
+    // Конфигурация поезда и состояние тормозов из МПСУ
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
         analogSignal[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] =
                 static_cast<float>(mpsu->getOutputData().train_config[i]);
-        analogSignal[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] =
-                backward_inputs[SME_UNIT_NUM + (i - 1) * SME_UNIT_STATE_SIZE] +
-                forward_inputs[SME_UNIT_NUM + (i - 1) * SME_UNIT_STATE_SIZE];
-        analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
-                backward_inputs[SME_UNIT_T + (i - 1) * SME_UNIT_STATE_SIZE] +
-                forward_inputs[SME_UNIT_T + (i - 1) * SME_UNIT_STATE_SIZE];
-        analogSignal[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] =
-                backward_inputs[SME_UNIT_EQUIP + (i - 1) * SME_UNIT_STATE_SIZE] +
-                forward_inputs[SME_UNIT_EQUIP + (i - 1) * SME_UNIT_STATE_SIZE];
-        analogSignal[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] =
-                backward_inputs[SME_UNIT_DIESEL + (i - 1) * SME_UNIT_STATE_SIZE] +
-                forward_inputs[SME_UNIT_DIESEL + (i - 1) * SME_UNIT_STATE_SIZE];
         analogSignal[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE] =
                 static_cast<float>(mpsu->getOutputData().unit_brakes[i]);
     }
+
+    int pos = mpsu->getOutputData().pos_in_train - 1;
+    // Состояние вагонов спереди
+    if (pos > 0)
+        for (int i = 0; i < pos; i++)
+        {
+            analogSignal[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_NUM + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_T + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_EQUIP + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_DIESEL + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+        }
+
+    // Состояние данного вагона
+    analogSignal[MFDU_TRAIN_UNIT_NUM + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(num);
+    analogSignal[MFDU_TRAIN_UNIT_T + pos * MFDU_UNIT_SIGNALS_SIZE] = 25.1f;
+    analogSignal[MFDU_TRAIN_UNIT_EQUIP + pos * MFDU_UNIT_SIGNALS_SIZE] = 1.0f;
+    analogSignal[MFDU_TRAIN_UNIT_DIESEL + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
+
+    // Состояние вагонов сзади
+    if (pos < MAX_TRAIN_SIZE)
+        for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
+        {
+            analogSignal[MFDU_TRAIN_UNIT_NUM + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_NUM + (i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_T + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_T + (i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_EQUIP + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_EQUIP + (i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DIESEL + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
+                    backward_inputs[SME_UNIT_DIESEL + (i - 1) * SME_UNIT_STATE_SIZE];
+        }
 }

@@ -12,17 +12,13 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_TRAIN_CONFIG] = 0.0f;
     forward_outputs[SME_TRAIN_CONFIG] = 0.0f;
 
-    // Ориентация вагона
-    float sme_input = min(forward_inputs[SME_TRAIN_CONFIG], forward_inputs[SME_TRAIN_CONFIG]);
-    if ((sme_input < 0) && (((orient > 0) && (sme_input > -1.5f )) ||
-                            ((orient < 0) && (sme_input < -1.5f ))))
-        is_orient_same = true;
-    else
-        is_orient_same = false;
-
     // Определяем, с какой стороны пришёл отрицательный сигнал от активной кабины
     if (forward_inputs[SME_TRAIN_CONFIG] < 0)
     {
+        // Если спереди получен отрицательный сигнал от активной кабины,
+        // отправляемый назад, то ориентация совпадает
+        is_orient_same = (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_BWD);
+
         // Отправляем сигнал к следующим вагонам
         backward_outputs[SME_TRAIN_CONFIG] = forward_inputs[SME_TRAIN_CONFIG];
 
@@ -34,6 +30,10 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
 
     if (backward_inputs[SME_TRAIN_CONFIG] < 0)
     {
+        // Если сзади получен отрицательный сигнал от активной кабины,
+        // отправляемый вперёд, то ориентация совпадает
+        is_orient_same = (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_FWD);
+
         // Отправляем сигнал к следующим вагонам
         forward_outputs[SME_TRAIN_CONFIG] = backward_inputs[SME_TRAIN_CONFIG];
 
@@ -43,6 +43,7 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
                 static_cast<float>(SME_MIDDLE);
     }
 
+    // Пропускаем сигналы состояния вагонов
     for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < backward_outputs.size(); i++)
     {
         backward_outputs[i] = forward_inputs[i - SME_UNIT_STATE_SIZE];
@@ -61,8 +62,8 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_P0] = backward_inputs[SME_P0];
 
     // Сигнал номера вагона или отсутствия связи CAN в ведущую секцию
-    backward_outputs[SME_UNIT_NUM] = 4003.0f;
-    forward_outputs[SME_UNIT_NUM] = 4003.0f;
+    backward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
+    forward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
 
     // Сигнал температуры в салоне вагона в ведущую секцию
     backward_outputs[SME_UNIT_T] = 25.1f;

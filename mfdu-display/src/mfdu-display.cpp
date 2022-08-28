@@ -132,11 +132,12 @@ void MfduDisplay::init()
     input_signals[MFDU_ERROR_CODE] = 0;     // Ток акб 110
     // Блок иконок сверху от спидометра
     input_signals[MFDU_TRAIN_SIZE] = 0;             // Количество вагонов
+    input_signals[MFDU_POS_IN_TRAIN] = 1;           // Порядковый номер вагона в поезде
     for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
         input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] = 0;        // Тип вагона
         input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] = 0;    // Номер вагона или отсутствие связи CAN
-        input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] = 0;      // Температура в вагоне
+        input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] = 0.0;      // Температура в вагоне
         input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] = 0;  // Состояние вагонного оборудования
         input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] = 0; // Состояние дизеля
         input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE] = 0; // Состояние тормоза

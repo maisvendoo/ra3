@@ -24,17 +24,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     if (is_active)
     {
         // Опрос конфигурации СМЕ
-        // Отправляем в обе стороны отрицательный сигнал с ориентацией кабины
-        if (orient > 0)
-        {
-            backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_ORIENT_FWD);
-            forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_ORIENT_FWD);
-        }
-        else
-        {
-            backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_ORIENT_BWD);
-            forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_ORIENT_BWD);
-        }
+        // Отправляем назад отрицательный сигнал -1
+        backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_BWD);
+        // Отправляем вперёд отрицательный сигнал -2
+        forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_FWD);
 
         // КОСТЫЛЬ под нынешнюю реализацию brakepipe.
         // Если активная кабина не в начале,
@@ -104,31 +97,44 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     }
     else
     {
-        // Определяем, с какой стороны пришёл отрицательный сигнал от активной кабины
         if (forward_inputs[SME_TRAIN_CONFIG] < 0)
         {
+            // Если спереди получен отрицательный сигнал от активной кабины,
+            // отправляемый назад, то ориентация совпадает
+            is_orient_same = (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_BWD);
+
             // Отправляем сигнал к следующим вагонам
             backward_outputs[SME_TRAIN_CONFIG] = forward_inputs[SME_TRAIN_CONFIG];
 
             // Обратно отправляем сигнал от данного и следующих вагонов
-            forward_outputs[SME_TRAIN_CONFIG] =
-                    4 * backward_inputs[SME_TRAIN_CONFIG] +
-                    mpsu->getOutputData().sme_train_config;
+            forward_outputs[SME_TRAIN_CONFIG] = 4 * backward_inputs[SME_TRAIN_CONFIG];
+            if (is_orient_same)
+                forward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_SAME);
+            else
+                forward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
 
+            // Обратно отправляем сигналы состояния следующих вагонов
             for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < forward_outputs.size(); i++)
                 forward_outputs[i] = backward_inputs[i - SME_UNIT_STATE_SIZE];
         }
 
         if (backward_inputs[SME_TRAIN_CONFIG] < 0)
         {
+            // Если сзади получен отрицательный сигнал от активной кабины,
+            // отправляемый вперёд, то ориентация совпадает
+            is_orient_same = (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_FWD);
+
             // Отправляем сигнал к следующим вагонам
             forward_outputs[SME_TRAIN_CONFIG] = backward_inputs[SME_TRAIN_CONFIG];
 
             // Обратно отправляем сигнал от данного и следующих вагонов
-            backward_outputs[SME_TRAIN_CONFIG] =
-                    4 * forward_inputs[SME_TRAIN_CONFIG] +
-                    mpsu->getOutputData().sme_train_config;
+            backward_outputs[SME_TRAIN_CONFIG] = 4 * forward_inputs[SME_TRAIN_CONFIG];
+            if (is_orient_same)
+                backward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_SAME);
+            else
+                backward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
 
+            // Обратно отправляем сигналы состояния следующих вагонов
             for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < backward_outputs.size(); i++)
                 backward_outputs[i] = forward_inputs[i - SME_UNIT_STATE_SIZE];
         }
@@ -145,8 +151,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_P0] = backward_inputs[SME_P0];
 
         // Сигнал номера вагона или отсутствия связи CAN в ведущую секцию
-        backward_outputs[SME_UNIT_NUM] = 4002.2f;
-        forward_outputs[SME_UNIT_NUM] = 4002.2f;
+        backward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
+        forward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
 
         // Сигнал температуры в салоне вагона в ведущую секцию
         backward_outputs[SME_UNIT_T] = 25.1f;
@@ -179,7 +185,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
 
         // Передаем давление в тормозных цилиндрах в ведущую секцию
-        if (mpsu->getOutputData().is_orient_same)
+        if (is_orient_same)
         {
             backward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
             forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();

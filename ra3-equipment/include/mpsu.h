@@ -121,7 +121,7 @@ private:
     void train_config_process();
 
     /// Разбор конфигурации СМЕ
-    void train_config_parsing(int tc);
+    int train_config_parsing(int tc);
 
     /// Обработка кнопки старт
     void start_button_process(bool is_start_button);
