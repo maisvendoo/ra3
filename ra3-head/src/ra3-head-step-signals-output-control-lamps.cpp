@@ -39,8 +39,8 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
                 kdl &= (forward_inputs[SME_UNIT_DOOR_L + (pos - i - 1) * SME_UNIT_STATE_SIZE] == 1.0f);
             }
         // Проверяем состояние дверей вагонов сзади
-        if (pos < MAX_TRAIN_SIZE)
-            for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
+        if (pos < mpsu->getOutputData().train_size)
+            for (int i = 1; i < (mpsu->getOutputData().train_size - pos); i++)
             {
                 kdp &= (backward_inputs[SME_UNIT_DOOR_R + (i - 1) * SME_UNIT_STATE_SIZE] == 1.0f);
                 kdl &= (backward_inputs[SME_UNIT_DOOR_L + (i - 1) * SME_UNIT_STATE_SIZE] == 1.0f);
