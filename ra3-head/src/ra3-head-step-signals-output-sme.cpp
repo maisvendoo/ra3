@@ -9,26 +9,26 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     Q_UNUSED(dt)
 
     // Напряжение зарядки АКБ на промежуточный вагон
-    backward_outputs[SME_FWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
-    forward_outputs[SME_BWD_CHARGE_VOLTAGE] = aux_conv->getU_110();
+    backward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
+    forward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
 
     // Давление в ПМ для промежуточного вагона
-    backward_outputs[SME_FWD_PM_PRESSURE] = main_res->getPressure();
-    forward_outputs[SME_BWD_PM_PRESSURE] = main_res->getPressure();
+    backward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
+    forward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
 
-    // Обнуляем опрос конфигурации СМЕ
-    backward_outputs[SME_TRAIN_CONFIG] = 0.0f;
-    forward_outputs[SME_TRAIN_CONFIG] = 0.0f;
+    // Опрос конфигурации СМЕ
+    // Отправляем сигнал назад от данного
+    // и не более чем 4 предыдущих вагонов
+    backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+            SME_MULTIPLIER * (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_BWD);
+    // Отправляем сигнал вперёд от данного
+    // и не более чем 4 следующих вагонов
+    forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+            SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_FWD);
 
     // Сигналы из активной кабины
     if (is_active)
     {
-        // Опрос конфигурации СМЕ
-        // Отправляем назад отрицательный сигнал -1
-        backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_BWD);
-        // Отправляем вперёд отрицательный сигнал -2
-        forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(SME_HEAD_FWD);
-
         // КОСТЫЛЬ под нынешнюю реализацию brakepipe.
         // Если активная кабина не в начале,
         // то передаем давление от тормозного крана в сигналы СМЕ,
@@ -44,8 +44,11 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
         // Сигнал запрета включать другие кабины
-        backward_outputs[SME_NO_ACTIVE] = 1.0f;
-        forward_outputs[SME_NO_ACTIVE] = 1.0f;
+        // Отправляем вперёд и назад разные занчения,
+        // чтобы остальные вагоны могли определить
+        // свою ориентацию относительно активной кабины
+        backward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE_BWD);
+        forward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE_FWD);
 
         // Сигнал запуска дизеля на ведомые секции
         backward_outputs[SME_DISEL_START] = static_cast<float>(mpsu->getOutputData().start_press_count == 1);
@@ -95,49 +98,25 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
                     emerg_brake_valve->isEmergencyBrake() ||
                     km->isEmergencyBrake());
     }
+    // Обработка сигналов неактивной кабиной
     else
     {
-        if (forward_inputs[SME_TRAIN_CONFIG] < 0)
+        // Определяем ориентацию относительно активной кабины
+        if (forward_inputs[SME_NO_ACTIVE] < 0)
         {
-            // Если спереди получен отрицательный сигнал от активной кабины,
+            // Если спереди получен сигнал от активной кабины,
             // отправляемый назад, то ориентация совпадает
-            is_orient_same = (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_BWD);
-
-            // Отправляем сигнал к следующим вагонам
-            backward_outputs[SME_TRAIN_CONFIG] = forward_inputs[SME_TRAIN_CONFIG];
-
-            // Обратно отправляем сигнал от данного и следующих вагонов
-            forward_outputs[SME_TRAIN_CONFIG] = 4 * backward_inputs[SME_TRAIN_CONFIG];
-            if (is_orient_same)
-                forward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_SAME);
-            else
-                forward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
-
-            // Обратно отправляем сигналы состояния следующих вагонов
-            for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < forward_outputs.size(); i++)
-                forward_outputs[i] = backward_inputs[i - SME_UNIT_STATE_SIZE];
+            is_orient_same = (static_cast<int>(forward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_BWD);
         }
-
-        if (backward_inputs[SME_TRAIN_CONFIG] < 0)
+        if (backward_inputs[SME_NO_ACTIVE] < 0)
         {
-            // Если сзади получен отрицательный сигнал от активной кабины,
+            // Если сзади получен сигнал от активной кабины,
             // отправляемый вперёд, то ориентация совпадает
-            is_orient_same = (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) == SME_HEAD_FWD);
-
-            // Отправляем сигнал к следующим вагонам
-            forward_outputs[SME_TRAIN_CONFIG] = backward_inputs[SME_TRAIN_CONFIG];
-
-            // Обратно отправляем сигнал от данного и следующих вагонов
-            backward_outputs[SME_TRAIN_CONFIG] = 4 * forward_inputs[SME_TRAIN_CONFIG];
-            if (is_orient_same)
-                backward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_SAME);
-            else
-                backward_outputs[SME_TRAIN_CONFIG] += static_cast<float>(SME_HEAD_ORIENT_OPPOSITE);
-
-            // Обратно отправляем сигналы состояния следующих вагонов
-            for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < backward_outputs.size(); i++)
-                backward_outputs[i] = forward_inputs[i - SME_UNIT_STATE_SIZE];
+            is_orient_same = (static_cast<int>(backward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_FWD);
         }
+        // Отправляем сигнал дальше
+        backward_outputs[SME_NO_ACTIVE] = forward_inputs[SME_NO_ACTIVE];
+        forward_outputs[SME_NO_ACTIVE] = backward_inputs[SME_NO_ACTIVE];
 
         // Пропускаем дальше все сигналы из активной кабины
         for (size_t i = SME_ACTIVE_BEGIN; i < SME_ACTIVE_BEGIN + SME_ACTIVE_SIZE; ++i)
@@ -145,74 +124,71 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
             backward_outputs[i] = forward_inputs[i];
             forward_outputs[i] = backward_inputs[i];
         }
-
         // Пропускаем дальше сигнал-костыль p0
         backward_outputs[SME_P0] = forward_inputs[SME_P0];
         forward_outputs[SME_P0] = backward_inputs[SME_P0];
-
-        // Сигнал номера вагона или отсутствия связи CAN в ведущую секцию
-        backward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
-        forward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
-
-        // Сигнал температуры в салоне вагона в ведущую секцию
-        backward_outputs[SME_UNIT_T] = 25.1f;
-        forward_outputs[SME_UNIT_T] = 25.1f;
-
-        // Сигнал состояния вагонного оборудования в ведущую секцию
-        backward_outputs[SME_UNIT_EQUIP] = 1.0f;
-        forward_outputs[SME_UNIT_EQUIP] = 1.0f;
-
-        // Сигнал состояния дизеля в ведущую секцию
-        backward_outputs[SME_UNIT_DIESEL] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
-        forward_outputs[SME_UNIT_DIESEL] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
-
-        // Передаем состояние топливного насоса в ведущую секцию
-        backward_outputs[SME_UNIT_FUEL_PUMP] = static_cast<float>(fuel_pump->isStarted());
-        forward_outputs[SME_UNIT_FUEL_PUMP] = static_cast<float>(fuel_pump->isStarted());
-
-        // Передаем состояние генератора в ведущую секцию
-        backward_outputs[SME_UNIT_GENERATOR] = static_cast<float>(generator->isActive());
-        forward_outputs[SME_UNIT_GENERATOR] = static_cast<float>(generator->isActive());
-
-        // Передаем состояние компрессора в ведущую секцию
-        backward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
-        forward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
-
-        // Передаем состояние гидропередачи в ведущую секцию
-        backward_outputs[SME_UNIT_GDT_REVERS_STATE] = hydro_trans->getReversState();
-        forward_outputs[SME_UNIT_GDT_REVERS_STATE] = hydro_trans->getReversState();
-        backward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
-        forward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
-
-        if (is_orient_same)
-        {
-            // Передаем давление в тормозных цилиндрах в ведущую секцию
-            backward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-            forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-            backward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-            forward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-            // Передаем состояние дверей в ведущую секцию
-            backward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_R_state);
-            forward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_R_state);
-            backward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_L_state);
-            forward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_L_state);
-        }
-        else
-        {
-            // Передаем давление в тормозных цилиндрах в ведущую секцию
-            backward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-            forward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-            backward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-            forward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-            // Передаем состояние дверей в ведущую секцию
-            backward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_L_state);
-            forward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_L_state);
-            backward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_R_state);
-            forward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_R_state);
-        }
-
-        // Передаем состояние стояночного пружинного тормоза в ведущую секцию
-        backward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
-        forward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
     }
+
+    // Пропускаем сигналы состояния следующих вагонов со смещением
+    for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < forward_outputs.size(); i++)
+    {
+        forward_outputs[i] = backward_inputs[i - SME_UNIT_STATE_SIZE];
+        backward_outputs[i] = forward_inputs[i - SME_UNIT_STATE_SIZE];
+    }
+
+    // Сигналы состояния данного вагона
+    // Сигнал отсутствия связи CAN или номер вагона (если больше 100)
+    backward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
+    forward_outputs[SME_UNIT_NUM] = static_cast<float>(num);
+
+    // Температура в салоне вагона
+    backward_outputs[SME_UNIT_T] = 25.1f;
+    forward_outputs[SME_UNIT_T] = 25.1f;
+
+    // Сигнал состояния вагонного оборудования
+    backward_outputs[SME_UNIT_EQUIP] = 1.0f;
+    forward_outputs[SME_UNIT_EQUIP] = 1.0f;
+
+    // Сигнал состояния дизеля
+    backward_outputs[SME_UNIT_DIESEL] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
+    forward_outputs[SME_UNIT_DIESEL] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
+
+    // Сигнал состояния топливного насоса
+    backward_outputs[SME_UNIT_FUEL_PUMP] = static_cast<float>(fuel_pump->isStarted());
+    forward_outputs[SME_UNIT_FUEL_PUMP] = static_cast<float>(fuel_pump->isStarted());
+
+    // Сигнал состояния генератора
+    backward_outputs[SME_UNIT_GENERATOR] = static_cast<float>(generator->isActive());
+    forward_outputs[SME_UNIT_GENERATOR] = static_cast<float>(generator->isActive());
+
+    // Сигнал состояния компрессора
+    backward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
+    forward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
+
+    // Сигнал состояния гидропередачи
+    backward_outputs[SME_UNIT_GDT_REVERS_STATE] = hydro_trans->getReversState();
+    forward_outputs[SME_UNIT_GDT_REVERS_STATE] = hydro_trans->getReversState();
+    backward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
+    forward_outputs[SME_UNIT_GDT_BRAKE_LEVEL] = hydro_trans->getBrakeLevel();
+
+    // Давление в тормозных цилиндрах
+    // Назад отправляем в обратном порядке
+    // Вперёд отправляем в правильном порядке
+    backward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    backward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
+    forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
+    forward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+
+    // Состояние дверей
+    // Назад отправляем зеркально
+    // Вперёд отправляем правильно
+    backward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_L_state);
+    backward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_R_state);
+    forward_outputs[SME_UNIT_DOOR_R] = static_cast<float>(door_R_state);
+    forward_outputs[SME_UNIT_DOOR_L] = static_cast<float>(door_L_state);
+
+    // Состояние стояночного пружинного тормоза в ведущую секцию
+    backward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
+    forward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
+
 }

@@ -135,15 +135,16 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
 
     int pos = mpsu->getOutputData().pos_in_train - 1;
     // Состояние вагонов спереди
+    // Состояние дверей спереди принимаем зеркально
     if (pos > 0)
         for (int i = 0; i < pos; i++)
         {
             analogSignal[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] =
                     forward_inputs[SME_UNIT_NUM + (pos - i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_DOOR_R + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE] =
                     forward_inputs[SME_UNIT_DOOR_L + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE] =
+                    forward_inputs[SME_UNIT_DOOR_R + (pos - i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
                     forward_inputs[SME_UNIT_T + (pos - i - 1) * SME_UNIT_STATE_SIZE];
             analogSignal[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] =

@@ -10,7 +10,7 @@ void RA3Middle::stepBrakeEquipment(double t, double dt)
             static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
     brake_module->setRefPressureLevel(
-                backward_inputs[SME_REF_BRAKE_LEVEL_EPB] ||
+                backward_inputs[SME_REF_BRAKE_LEVEL_EPB] +
                 forward_inputs[SME_REF_BRAKE_LEVEL_EPB]);
     brake_module->releaseBrakes(
                 backward_inputs[SME_BRAKE_RELEASE] ||

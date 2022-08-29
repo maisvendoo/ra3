@@ -78,7 +78,7 @@
         <file alias="main_xren1">img/main-disp/xren1.png</file>
         <file alias="main_xren2">img/main-disp/xren2.png</file>
         <file alias="main_xren3">img/main-disp/xren3.png</file>
-        <file alias="main_trainUnit_empty">img/main-disp/trainUnit_empty.png</file>
+        <file alias="main_trainUnit_no_active">img/main-disp/trainUnit_no_active.png</file>
         <file alias="main_trainUnit_head_fwd">img/main-disp/trainUnit_head_fwd.png</file>
         <file alias="main_trainUnit_head_bwd">img/main-disp/trainUnit_head_bwd.png</file>
         <file alias="main_trainUnit_middle">img/main-disp/trainUnit_middle.png</file>
@@ -95,6 +95,7 @@
         <file alias="main_brakes_mix">img/main-disp/brakes_mix.png</file>
         <file alias="main_brakes_ept">img/main-disp/brakes_ept.png</file>
         <file alias="main_brakes_parking">img/main-disp/brakes_parking.png</file>
+        <file alias="main_can_no_active">img/main-disp/can_no_active.png</file>
         <file alias="main_can">img/main-disp/can.png</file>
         <file alias="main_unit_door_no_active">img/main-disp/unit_door_no_active.png</file>
         <file alias="main_unit_door_closed">img/main-disp/unit_door_closed.png</file>

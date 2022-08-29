@@ -81,12 +81,13 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     int pos = mpsu->getOutputData().pos_in_train - 1;
     // Состояние тормозов вагонов спереди
+    // Давление в ТЦ тележек от вагонов спереди принимаем в обратном порядке
     if (pos > 0)
         for (int i = 0; i < pos; i++)
         {
             mpsu_input.unit_level_GDB[i] = static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
             mpsu_input.unit_spt_state[i] = static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
         }
 

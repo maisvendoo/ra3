@@ -26,7 +26,7 @@ void RA3HeadMotor::initSafetyDevices()
             QDir::separator() + speeds_name + ".conf";
 
     blok->loadSpeedsMap(path);
-    blok->setDirection(dir);
+    blok->setDirection(dir * orient);
     blok->setTrainLength(mpsu->getOutputData().train_length);
 
     // Загрузка станций в БЛОК

@@ -153,15 +153,6 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 void MPSU::train_config_process()
 {
-    // Если с любой стороны получен отрицательный сигнал от активной кабины,
-    // то считаем эту кабину неактивной
-    if ((mpsu_input.sme_train_config_fwd < 0.0f) || (mpsu_input.sme_train_config_bwd < 0.0f))
-    {
-        return;
-    }
-    // Иначе считаем эту кабину активной, обрабатываем полученную конфигурацию
-    else
-    {
         // Обнуляем длину поезда
         mpsu_output.train_size = 0;
         mpsu_output.train_length = 0.0;
@@ -170,11 +161,13 @@ void MPSU::train_config_process()
         if (tc > 0)
             for (int i = 0; i < MAX_TRAIN_SIZE - 1; i++)
             {
-                mpsu_output.train_config[0] = train_config_parsing(tc % 4);
-                tc = tc / 4;
+                // Сигнал от головных вагонов сзади разворачиваем (true)
+                mpsu_output.train_config[0] = train_config_parsing(tc % SME_MULTIPLIER, true);
+                tc = tc / SME_MULTIPLIER;
                 if (tc == 0)
                     break;
                 else
+                    // Учитываем, что сигналы спереди пришли в обратном порядке
                     for (int j = i + 1; j > 0; j--)
                         mpsu_output.train_config[j] = mpsu_output.train_config[j - 1];
             }
@@ -189,18 +182,18 @@ void MPSU::train_config_process()
         tc = static_cast<int>(mpsu_input.sme_train_config_bwd);
         for (int i = mpsu_output.train_size; i < MAX_TRAIN_SIZE; i++)
         {
-            mpsu_output.train_config[i] = train_config_parsing(tc % 4);
-            tc = tc / 4;
+            // Сигнал от головных вагонов спереди не меняем (false)
+            mpsu_output.train_config[i] = train_config_parsing(tc % SME_MULTIPLIER, false);
+            tc = tc / SME_MULTIPLIER;
             if (tc == 0)
                 break;
         }
-    }
 }
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-int MPSU::train_config_parsing(int unit)
+int MPSU::train_config_parsing(int unit, bool bias)
 {
     switch (unit)
     {
@@ -208,13 +201,13 @@ int MPSU::train_config_parsing(int unit)
         {
             mpsu_output.train_size++;
             mpsu_output.train_length += lengthHead;
-            return 1;
+            return 1 + bias;
         }
         case 2:
         {
             mpsu_output.train_size++;
             mpsu_output.train_length += lengthHead;
-            return 2;
+            return 2 - bias;
         }
         case 3:
         {

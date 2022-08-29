@@ -114,49 +114,49 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
     if (size > MAX_TRAIN_SIZE)
         size = MAX_TRAIN_SIZE;
-    int x = 402 - 66 * size;
+    int x = 403 - 66 * size;
     int y = 62;
     for (int i = 0; i < MAX_TRAIN_SIZE; i++)
     {
         if (i < size)
         {
             setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y - 2);
-            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 77);
+            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y - 2);
+            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y + 77);
             int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
             if ((num > 100) && (num < 100000))
             {
-                setNeededIcon_(labCAN_[i], -1);
+                setNeededIcon_(labCAN_[i], 0);
                 labNo1_[i]->setText(QString("%1").arg(num / 100, 3, 10, QChar('0')));
-                labNo1_[i]->move(x + 15, y + 1);
+                labNo1_[i]->move(x + 14, y + 1);
                 labNo2_[i]->setText(QString("%1").arg(num % 100, 2, 10, QChar('0')));
-                labNo2_[i]->move(x + 15, y + 15);
+                labNo2_[i]->move(x + 14, y + 15);
             }
             else
             {
-                setNeededIcon_(labCAN_[i], 0, x + 20, y + 2);
                 labNo1_[i]->setText(QString(""));
                 labNo2_[i]->setText(QString(""));
+                setNeededIcon_(labCAN_[i], 1, x + 20, y + 2);
             }
             labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE], 'f', 1) + QString("°C"));
             labT_[i]->move(x + 60, y + 8);
-            setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 12, y + 42);
-            setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 47, y + 42);
-            setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 82, y + 42);
+            setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 11, y + 42);
+            setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y + 42);
+            setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 81, y + 42);
             x += 132;
         }
         else
         {
-            setNeededIcon_(labTrainUnit_[i], -1);
-            setNeededIcon_(labDoorR_[i], -1);
-            setNeededIcon_(labDoorL_[i], -1);
-            setNeededIcon_(labCAN_[i], -1);
+            setNeededIcon_(labTrainUnit_[i], 0);
+            setNeededIcon_(labDoorR_[i], 0);
+            setNeededIcon_(labDoorL_[i], 0);
+            setNeededIcon_(labCAN_[i], 0);
             labNo1_[i]->setText(QString(""));
             labNo2_[i]->setText(QString(""));
             labT_[i]->setText(QString(""));
-            setNeededIcon_(labVagonEquipment_[i], -1);
-            setNeededIcon_(labDiesel_[i], -1);
-            setNeededIcon_(labBrakes_[i], -1);
+            setNeededIcon_(labVagonEquipment_[i], 0);
+            setNeededIcon_(labDiesel_[i], 0);
+            setNeededIcon_(labBrakes_[i], 0);
         }
     }
 
@@ -783,7 +783,7 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
 
     for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
-        if (!pixmap.load(":/mfdu/main_trainUnit_empty")) { return; }
+        if (!pixmap.load(":/mfdu/main_trainUnit_no_active")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labTrainUnit_[i].push_back(labFoo);
@@ -844,6 +844,10 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labT_[i]->setStyleSheet("color: white;");
         labT_[i]->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
+        if (!pixmap.load(":/mfdu/main_can_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labCAN_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_can")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
