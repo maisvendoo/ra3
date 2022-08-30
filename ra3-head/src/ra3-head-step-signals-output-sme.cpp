@@ -16,6 +16,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
     forward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
 
+    // Обнуляем сигнал потока из ПМ соседних вагонов - есть собственный компрессор
+    backward_outputs[SME_PM_Q] = 0.0f;
+    forward_outputs[SME_PM_Q] = 0.0f;
+
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов

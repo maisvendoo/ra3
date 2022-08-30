@@ -41,6 +41,8 @@ public:
 
     double getMaxBrakeCylinderPressure() const { return pBC_max; }
 
+    double getPMFlow() const { return bc_reducer->getQ_in(); };
+
 private:
 
     /// Давление в магистрали стояночного тормоза
@@ -95,7 +97,7 @@ private:
     Relay   *release_valve;
 
     /// Вентиль торможения ЭПТ (ВТ)
-    Relay   *brake_valve;    
+    Relay   *brake_valve;
 
     /// Заданное давление в ТЦ для ЭПТ
     double p_ref;

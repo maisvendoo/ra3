@@ -47,6 +47,19 @@ void RA3Middle::initialization()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void RA3Middle::initBrakeDevices(double p0, double pTM, double pFL)
+{
+    Q_UNUSED (p0);
+
+    main_res->setY(0, pFL);
+    aux_res->setY(0, pFL);
+
+    brake_module->init(pTM, pFL);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void RA3Middle::step(double t, double dt)
 {
     stepControlCircuit(t, dt);

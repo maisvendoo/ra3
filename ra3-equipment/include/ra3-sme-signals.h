@@ -51,9 +51,10 @@ enum
     /// Общие сигналы для межвагонных связей
     SME_CHARGE_VOLTAGE = 2,
     SME_PM_PRESSURE = 3,
+    SME_PM_Q = 4,
 
     /// КОСТЫЛЬ под нынешнюю реализацию brakepipe
-    SME_P0 = 4,
+    SME_P0 = 9,
 
     /// Общие сигналы с ведущей секции
     SME_POWER_ON = SME_ACTIVE_BEGIN,

@@ -22,6 +22,8 @@ public:
 
     double getOutPressure() const { return getY(0); }
 
+    double getQ_in() const { return Q_in; }
+
 private:
 
     /// Уставка давления на выходе редуктора

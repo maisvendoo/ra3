@@ -8,6 +8,14 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     Q_UNUSED(t)
     Q_UNUSED(dt)
 
+    // Обнуляем сигнал давления ПМ - на данном вагоне нет источника сжатого воздуха
+    backward_outputs[SME_PM_PRESSURE] = 0.0f;
+    forward_outputs[SME_PM_PRESSURE] = 0.0f;
+
+    // Отправляем в соседние вагоны перетоки воздуха из их ПМ
+    backward_outputs[SME_PM_Q] = Q_pm_bwd;
+    forward_outputs[SME_PM_Q] = Q_pm_fwd;
+
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов

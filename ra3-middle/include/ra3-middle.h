@@ -62,6 +62,11 @@ private:
     /// Коэффициент утечки из ГР
     double main_res_leak;
 
+    /// Переток воздуха из ПМ заднего вагона
+    double Q_pm_bwd;
+    /// Переток воздуха из ПМ переднего вагона
+    double Q_pm_fwd;
+
     /// Блок тормозного оборудования (БТО-092)
     BTO092 *brake_module;
 
@@ -75,6 +80,8 @@ private:
     std::array<RA3BrakeMech *, NUM_TROLLEY> brake_mech;
 
     void initialization() override;
+
+    void initBrakeDevices(double p0, double pTM, double pFL) override;
 
     void initControlCircuit();
 

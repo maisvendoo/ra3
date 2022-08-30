@@ -11,13 +11,17 @@ void RA3Middle::stepPneumoSystem(double t, double dt)
 
     // Расчитываем переток воздуха из ПМ переднего вагона
     double K_pm_fwd = 0.05;
-    double Q_pm_fwd = K_pm_fwd * pf(forward_inputs[SME_PM_PRESSURE] - main_res->getPressure());
+    Q_pm_fwd = K_pm_fwd * pf(forward_inputs[SME_PM_PRESSURE] - main_res->getPressure());
 
     // Расчитываем переток воздуха из ПМ заднего вагона
     double K_pm_bwd = 0.05;
-    double Q_pm_bwd = K_pm_bwd * pf(backward_inputs[SME_PM_PRESSURE] - main_res->getPressure());
+    Q_pm_bwd = K_pm_bwd * pf(backward_inputs[SME_PM_PRESSURE] - main_res->getPressure());
 
-    main_res->setAirFlow(Q_pm_fwd + Q_pm_bwd - Q_pm_ar);
+    // Задаем главному резервуару приток из ПМ от соседних вагонов,
+    // отток в блок-тормоз и отток в запасный резервуар
+    main_res->setAirFlow(Q_pm_fwd + Q_pm_bwd -
+                         brake_module->getPMFlow() -
+                         Q_pm_ar);
     main_res->setFlowCoeff(main_res_leak);
     main_res->step(t, dt);
 
