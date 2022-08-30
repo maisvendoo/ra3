@@ -79,13 +79,11 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     setNeededIcon_(labTransmission_, input_signals[MFDU_TRANSMISSION]);
     setNeededIcon_(labOilMotor_, input_signals[MFDU_OIL_MOTOR]);
     setNeededIcon_(labPressureOilMotor_, input_signals[MFDU_PRESSURE_OIL_MOTOR]);
-    setNeededIcon_(labMotor_, input_signals[MFDU_MOTOR]);
+    setNeededIcon_(labMotor_, labMotor_state);
 
     // блок иконок слева от спидометра
-    setNeededIcon_(labMkFrame_, input_signals[MFDU_COMPRESSOR]);
-    setNeededIcon_(labMotorCompressor_, input_signals[MFDU_COMPRESSOR]);
-    setNeededIcon_(labMotorCompressor1_, input_signals[MFDU_COMPRESSOR_1]);
-    setNeededIcon_(labMotorCompressor2_, input_signals[MFDU_COMPRESSOR_2]);
+    setNeededIcon_(labMkFrame_, static_cast<int>(labMotorCompressor_state > 0));
+    setNeededIcon_(labMotorCompressor_, labMotorCompressor_state);
     setNeededIcon_(labAttention_, input_signals[MFDU_ATTENTION]);
     setNeededIcon_(labStop_, input_signals[MFDU_STOP]);
     setNeededIcon_(labFwd_, input_signals[MFDU_REVERS_FWD]);
@@ -107,23 +105,32 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     labIakb24_->setText(QString::number(input_signals[MFDU_I_AKB_24], 'f', 1));
     labIakb110_->setText(QString::number(input_signals[MFDU_I_AKB_110], 'f', 1));
 
-    // блок иконок сверху от спидометра
-    int size = MFDU_TRAIN_UNIT_NUM + (static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1) * MFDU_UNIT_SIGNALS_SIZE;
-    labNoHead_->setText(QString("%1")
-        .arg(static_cast<int>(input_signals[size]), 5, 10, QChar('0')));
-    size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
+    // Мнемосхема поезда сверху от спидометра,
+    // а также повагонное состояние компрессоров,
+    // состояние обобщающей иконки дизелей и компрессоров
+    labMotorCompressor_state = 0;
+    labMotor_state = 0;
+    int size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
     if (size > MAX_TRAIN_SIZE)
         size = MAX_TRAIN_SIZE;
     int x = 403 - 66 * size;
     int y = 62;
+    int j = 0;
     for (int i = 0; i < MAX_TRAIN_SIZE; i++)
     {
         if (i < size)
         {
-            setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE], x, y);
-            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y - 2);
-            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y + 77);
-            int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE]);
+            int bias = i * MFDU_UNIT_SIGNALS_SIZE;
+
+            // Тип вагона
+            setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + bias], x, y);
+
+            // Двери
+            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + bias], x + 46, y - 2);
+            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + bias], x + 46, y + 77);
+
+            // Номер вагона или сигнал ошибки CAN
+            int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + bias]);
             if ((num > 100) && (num < 100000))
             {
                 setNeededIcon_(labCAN_[i], 0);
@@ -138,15 +145,36 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
                 labNo2_[i]->setText(QString(""));
                 setNeededIcon_(labCAN_[i], 1, x + 20, y + 2);
             }
-            labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE], 'f', 1) + QString("°C"));
+
+            // Температура в вагонах
+            labT_[i]->setText(QString::number(input_signals[MFDU_TRAIN_UNIT_T + bias], 'f', 1) + QString("°C"));
             labT_[i]->move(x + 60, y + 8);
-            setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE], x + 11, y + 42);
-            setNeededIcon_(labDiesel_[i], input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE], x + 46, y + 42);
-            setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE], x + 81, y + 42);
+
+            // Состояние дизеля
+            num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DIESEL + bias]);
+            labMotor_state = std::max(labMotor_state, num);
+            setNeededIcon_(labDiesel_[i], num, x + 46, y + 42);
+
+            // Состояние компрессора
+            num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_COMPRESSOR + bias]);
+            if (num > 0)
+            {
+                setNeededIcon_(labMotorCompressorOn_[j], num);
+                labMotorCompressorNum_[j]->setText(QString("%1").arg(i + 1));
+                labMotorCompressor_state = std::max(labMotorCompressor_state, num);
+                j++;
+            }
+
+            // Вагонное оборудование
+            setNeededIcon_(labVagonEquipment_[i], input_signals[MFDU_TRAIN_UNIT_EQUIP + bias], x + 11, y + 42);
+            // Тип торможения
+            setNeededIcon_(labBrakes_[i], input_signals[MFDU_TRAIN_UNIT_BRAKES + bias], x + 81, y + 42);
+
             x += 132;
         }
         else
         {
+            // Очищаем лишние вагоны
             setNeededIcon_(labTrainUnit_[i], 0);
             setNeededIcon_(labDoorR_[i], 0);
             setNeededIcon_(labDoorL_[i], 0);
@@ -158,9 +186,21 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             setNeededIcon_(labDiesel_[i], 0);
             setNeededIcon_(labBrakes_[i], 0);
         }
+
+        // Очищаем отключившиеся компрессоры
+        for (size_t i = j; i < MAX_TRAIN_SIZE; i++)
+        {
+            setNeededIcon_(labMotorCompressorOn_[i], 0);
+            labMotorCompressorNum_[i]->setText(QString(""));
+        }
     }
 
-    // сообщение об ошибке
+    // Номер вагона в шапке
+    size = MFDU_TRAIN_UNIT_NUM + (static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1) * MFDU_UNIT_SIGNALS_SIZE;
+    labNoHead_->setText(QString("%1")
+        .arg(static_cast<int>(input_signals[size]), 5, 10, QChar('0')));
+
+    // Сообщение об ошибке
     setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);
 }
 
@@ -590,6 +630,11 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX += fooDeltaX;
     // 55
     fooNoneAdd_(pixmap, parent, labMotor_, fooX, fooY);
+    if (!pixmap.load(":/mfdu/main_motor_off")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labMotor_.push_back(labFoo);
     if (!pixmap.load(":/mfdu/main_motor_work")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -628,50 +673,52 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY = startY;
     QLabel *labFoo = new QLabel(parent);
+    if (!pixmap.load(":/mfdu/mk_frame_off")) { return; }
+    labFoo->move(fooX, fooY);
+    labFoo->setPixmap(pixmap);
+    labMkFrame_.push_back(labFoo);
+    labFoo = new QLabel(parent);
     if (!pixmap.load(":/mfdu/mk_frame_on")) { return; }
     labFoo->move(fooX, fooY);
     labFoo->setPixmap(pixmap);
     labMkFrame_.push_back(labFoo);
 
+    fooX = startX + 4;
+    fooY = startY + 15;
+    if (!pixmap.load(":/mfdu/main_motor_compressor_off")) { return; }
     labFoo = new QLabel(parent);
-    if (!pixmap.load(":/mfdu/mk_frame_off")) { return; }
-    labFoo->move(fooX, fooY);
+    labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
-    labMkFrame_.push_back(labFoo);
-
-    fooX = startX + 15;
-    fooY = startY + 17;
-    if (!pixmap.load(":/mfdu/main_motor-compressor-on")) { return; }
+    labMotorCompressor_.push_back(labFoo);
+    if (!pixmap.load(":/mfdu/main_motor_compressor_on")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);
     labMotorCompressor_.push_back(labFoo);
 
 
-    fooX = startX + 74;
-    if (!pixmap.load(":/mfdu/main_motor_compressor_1_on")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX, startY + 4);
-    labFoo->setPixmap(pixmap);
-    labMotorCompressor1_.push_back(labFoo);
-    if (!pixmap.load(":/mfdu/main_motor_compressor_1_off")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX, startY + 4);
-    labFoo->setPixmap(pixmap);
-    labMotorCompressor1_.push_back(labFoo);
+    fooX = startX + 57;
+    fooY = startY + 4;
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+    {
+        if (!pixmap.load(":/mfdu/main_motor_compressor_n_off")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->move(fooX + (i % 3) * 34, fooY + (i / 3) * 34);
+        labFoo->setPixmap(pixmap);
+        labMotorCompressorOn_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_motor_compressor_n_on")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->move(fooX + (i % 3) * 34, fooY + (i / 3) * 34);
+        labFoo->setPixmap(pixmap);
+        labMotorCompressorOn_[i].push_back(labFoo);
 
-
-    fooX += 38;
-    if (!pixmap.load(":/mfdu/main_motor_compressor_2_on")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX, startY + 4);
-    labFoo->setPixmap(pixmap);
-    labMotorCompressor2_.push_back(labFoo);
-    if (!pixmap.load(":/mfdu/main_motor_compressor_2_off")) { return; }
-    labFoo = new QLabel(parent);
-    labFoo->move(fooX, startY + 4);
-    labFoo->setPixmap(pixmap);
-    labMotorCompressor2_.push_back(labFoo);
+        labMotorCompressorNum_[i] = new TriggerLabel("", parent);
+        labMotorCompressorNum_[i]->resize(32, 32);
+        labMotorCompressorNum_[i]->move(fooX + (i % 3) * 34, fooY + (i / 3) * 34);
+        labMotorCompressorNum_[i]->setFont(QFont("Arial", 18, 63));
+        labMotorCompressorNum_[i]->setStyleSheet("color: black;");
+        labMotorCompressorNum_[i]->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+    }
 
 
     if (!pixmap.load(":/mfdu/main_attention")) { return; }
@@ -770,7 +817,7 @@ void MfduMainDisp::drawLabel_(QLabel *parent, TriggerLabel *&lab, QPoint pos, QS
 
 void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
 {
-    labNoHead_ = new QLabel("00101", parent);
+    labNoHead_ = new TriggerLabel("00101", parent);
     labNoHead_->move(40, 32);
     labNoHead_->resize(80, 20);
     labNoHead_->setFont(QFont("Arial", 16, 63));
@@ -826,19 +873,19 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labFoo->setPixmap(pixmap);
         labDoorL_[i].push_back(labFoo);
 
-        labNo1_[i] = new QLabel("001", parent);
+        labNo1_[i] = new TriggerLabel("001", parent);
         labNo1_[i]->resize(40, 20);
         labNo1_[i]->setFont(QFont("Arial", 12, 63));
         labNo1_[i]->setStyleSheet("color: white;");
         labNo1_[i]->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
-        labNo2_[i] = new QLabel("01", parent);
+        labNo2_[i] = new TriggerLabel("01", parent);
         labNo2_[i]->resize(40, 20);
         labNo2_[i]->setFont(QFont("Arial", 12, 63));
         labNo2_[i]->setStyleSheet("color: white;");
         labNo2_[i]->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
-        labT_[i] = new QLabel("0.0°C", parent);
+        labT_[i] = new TriggerLabel("0.0°C", parent);
         labT_[i]->resize(60, 20);
         labT_[i]->setFont(QFont("Arial", 12, 63));
         labT_[i]->setStyleSheet("color: white;");

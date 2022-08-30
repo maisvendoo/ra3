@@ -17,29 +17,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_PRESSURE_PM] = static_cast<float>(main_res->getPressure());
 
 
-    bool is_compressor2_on = false;
-    bool is_generator_active = generator->isActive();
-    bool is_fuel_pump_active = fuel_pump->isStarted();
-    for (size_t i = 1; i < MAX_TRAIN_SIZE; i++)
-    {
-        is_compressor2_on |= (static_cast<bool>(backward_inputs[SME_UNIT_COMPRESSOR + i * SME_UNIT_STATE_SIZE]) ||
-                                static_cast<bool>(forward_inputs[SME_UNIT_COMPRESSOR + i * SME_UNIT_STATE_SIZE]));
-        is_generator_active |= (static_cast<bool>(backward_inputs[SME_UNIT_GENERATOR + i * SME_UNIT_STATE_SIZE]) ||
-                                static_cast<bool>(forward_inputs[SME_UNIT_GENERATOR + i * SME_UNIT_STATE_SIZE]));
-        is_fuel_pump_active |= (static_cast<bool>(backward_inputs[SME_UNIT_FUEL_PUMP + i * SME_UNIT_STATE_SIZE]) ||
-                                static_cast<bool>(forward_inputs[SME_UNIT_FUEL_PUMP + i * SME_UNIT_STATE_SIZE]));
-    }
-    // Статус компрессора
-    bool is_compressor_on = motor_compr->isPowered() || is_compressor2_on;
-    analogSignal[MFDU_COMPRESSOR] = static_cast<float>(!is_compressor_on);
-    analogSignal[MFDU_COMPRESSOR_1] = static_cast<float>(!motor_compr->isPowered());
-    analogSignal[MFDU_COMPRESSOR_2] = static_cast<float>(!is_compressor2_on);
-    // Статус генератора
-    analogSignal[MFDU_GENERATOR] = static_cast<float>(!is_generator_active);
-    // Статус топливоподкачивающего насоса
-    analogSignal[MFDU_TPN] = static_cast<float>(!is_fuel_pump_active);
-
-
     // Неактивные подсистемы
     analogSignal[MFDU_VIP] = 1.0f;
     analogSignal[MFDU_FIRE] = 1.0f;
@@ -98,9 +75,6 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     // Статус давления масла в дизеле
     analogSignal[MFDU_PRESSURE_OIL_MOTOR] = mpsu->getOutputData().mfdu_oil_press_level;
 
-    // Общий статус дизеля
-    analogSignal[MFDU_MOTOR] = mpsu->getOutputData().mfdu_disel_state_level;
-
     analogSignal[MFDU_I_AKB_110] = static_cast<float>(Icc_110);
     analogSignal[MFDU_I_AKB_24] = static_cast<float>(Icc_24);
 
@@ -134,48 +108,72 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     }
 
     int pos = mpsu->getOutputData().pos_in_train - 1;
+    bool is_generator_active = false;
+    bool is_fuel_pump_active = false;
     // Состояние вагонов спереди
     // Состояние дверей спереди принимаем зеркально
     if (pos > 0)
         for (int i = 0; i < pos; i++)
         {
-            analogSignal[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_NUM + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_DOOR_L + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_DOOR_R + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_T + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_EQUIP + (pos - i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] =
-                    forward_inputs[SME_UNIT_DIESEL + (pos - i - 1) * SME_UNIT_STATE_SIZE];
+            int bias_mfdu = i * MFDU_UNIT_SIGNALS_SIZE;
+            int bias_sme = (pos - i - 1) * SME_UNIT_STATE_SIZE;
+            analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] =
+                    forward_inputs[SME_UNIT_NUM + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] =
+                    forward_inputs[SME_UNIT_DOOR_L + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] =
+                    forward_inputs[SME_UNIT_DOOR_R + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] =
+                    forward_inputs[SME_UNIT_T + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] =
+                    forward_inputs[SME_UNIT_EQUIP + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] =
+                    forward_inputs[SME_UNIT_DIESEL + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] =
+                    forward_inputs[SME_UNIT_COMPRESSOR + bias_sme];
+            is_generator_active |= static_cast<bool>(forward_inputs[SME_UNIT_GENERATOR + bias_sme]);
+            is_fuel_pump_active |= static_cast<bool>(forward_inputs[SME_UNIT_FUEL_PUMP + bias_sme]);
         }
 
     // Состояние данного вагона
-    analogSignal[MFDU_TRAIN_UNIT_NUM + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(num);
-    analogSignal[MFDU_TRAIN_UNIT_DOOR_R + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(door_R_state);
-    analogSignal[MFDU_TRAIN_UNIT_DOOR_L + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(door_L_state);
-    analogSignal[MFDU_TRAIN_UNIT_T + pos * MFDU_UNIT_SIGNALS_SIZE] = 25.1f;
-    analogSignal[MFDU_TRAIN_UNIT_EQUIP + pos * MFDU_UNIT_SIGNALS_SIZE] = 1.0f;
-    analogSignal[MFDU_TRAIN_UNIT_DIESEL + pos * MFDU_UNIT_SIGNALS_SIZE] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
+    int bias_mfdu = pos * MFDU_UNIT_SIGNALS_SIZE;
+    analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] = static_cast<float>(num);
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] = static_cast<float>(door_R_state);
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] = static_cast<float>(door_L_state);
+    analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] = 25.1f;
+    analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] = 1.0f;
+    analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
+    analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] = static_cast<float>(motor_compr->isPowered());
+    is_generator_active |= generator->isActive();
+    is_fuel_pump_active |= fuel_pump->isStarted();
 
     // Состояние вагонов сзади
     if (pos < MAX_TRAIN_SIZE)
         for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
         {
-            analogSignal[MFDU_TRAIN_UNIT_NUM + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_NUM + (i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_DOOR_R + (i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_DOOR_L + (i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_T + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_T + (i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_EQUIP + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_EQUIP + (i - 1) * SME_UNIT_STATE_SIZE];
-            analogSignal[MFDU_TRAIN_UNIT_DIESEL + (pos + i) * MFDU_UNIT_SIGNALS_SIZE] =
-                    backward_inputs[SME_UNIT_DIESEL + (i - 1) * SME_UNIT_STATE_SIZE];
+            int bias_mfdu = (pos + i) * MFDU_UNIT_SIGNALS_SIZE;
+            int bias_sme = (i - 1) * SME_UNIT_STATE_SIZE;
+            analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] =
+                    backward_inputs[SME_UNIT_NUM + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] =
+                    backward_inputs[SME_UNIT_DOOR_R + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] =
+                    backward_inputs[SME_UNIT_DOOR_L + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] =
+                    backward_inputs[SME_UNIT_T + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] =
+                    backward_inputs[SME_UNIT_EQUIP + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] =
+                    backward_inputs[SME_UNIT_DIESEL + bias_sme];
+            analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] =
+                    backward_inputs[SME_UNIT_COMPRESSOR + bias_sme];
+            is_generator_active |= static_cast<bool>(backward_inputs[SME_UNIT_GENERATOR + bias_sme]);
+            is_fuel_pump_active |= static_cast<bool>(backward_inputs[SME_UNIT_FUEL_PUMP + bias_sme]);
         }
+
+    // Статус генератора
+    analogSignal[MFDU_GENERATOR] = static_cast<float>(!is_generator_active);
+    // Статус топливоподкачивающего насоса
+    analogSignal[MFDU_TPN] = static_cast<float>(!is_fuel_pump_active);
+
 }

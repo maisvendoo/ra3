@@ -49,10 +49,6 @@ enum
     MFDU_TRANSMISSION,      // Ошибка трансмиссии
     MFDU_OIL_MOTOR,         // Уровень масла двигателя
     MFDU_PRESSURE_OIL_MOTOR,// Пониженное давление масла двигателя
-    MFDU_MOTOR,             // Двигатель
-    MFDU_COMPRESSOR,    // Компрессор
-    MFDU_COMPRESSOR_1,  // Компрессор 1
-    MFDU_COMPRESSOR_2,  // Компрессор 2
     MFDU_ATTENTION,     // Внимание!
     MFDU_STOP,          // СТОП
     MFDU_REVERS_FWD,    // Реверсор вперед
@@ -71,14 +67,15 @@ enum
     MFDU_I_AKB_110,         // Ток акб 110
     MFDU_ERROR_CODE,
 
-    MFDU_TRAIN_SIZE = 54,   // Количество вагонов
-    MFDU_POS_IN_TRAIN = 55,   // Количество вагонов
-    // Сигналы 56..103 - состояние вагонов, 8 сигналов на каждый вагон
+    MFDU_TRAIN_SIZE = 50,   // Количество вагонов
+    MFDU_POS_IN_TRAIN = 51,   // Количество вагонов
+    // Сигналы 52..105 - состояние вагонов, 9 сигналов на каждый вагон
     MFDU_TRAIN_UNIT = MFDU_UNIT_SIGNALS_BEGIN,  // Тип вагона
     MFDU_TRAIN_UNIT_NUM,    // Номер вагона или отсутствие связи CAN
     MFDU_TRAIN_UNIT_T,      // Температура в вагоне
-    MFDU_TRAIN_UNIT_EQUIP,  // Состояние вагонного оборудования
     MFDU_TRAIN_UNIT_DIESEL, // Состояние дизеля
+    MFDU_TRAIN_UNIT_COMPRESSOR, // Состояние дизеля
+    MFDU_TRAIN_UNIT_EQUIP,  // Состояние вагонного оборудования
     MFDU_TRAIN_UNIT_BRAKES, // Состояние тормоза
     MFDU_TRAIN_UNIT_DOOR_R, // Состояние дверей правых
     MFDU_TRAIN_UNIT_DOOR_L, // Состояние дверей левых

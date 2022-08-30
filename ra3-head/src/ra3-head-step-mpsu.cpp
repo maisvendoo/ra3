@@ -85,10 +85,11 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     if (pos > 0)
         for (int i = 0; i < pos; i++)
         {
-            mpsu_input.unit_level_GDB[i] = static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_spt_state[i] = static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + (pos - i - 1) * SME_UNIT_STATE_SIZE]);
+            int bias = (pos - i - 1) * SME_UNIT_STATE_SIZE;
+            mpsu_input.unit_level_GDB[i] = static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + bias]);
+            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + bias]);
+            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + bias]);
+            mpsu_input.unit_spt_state[i] = static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + bias]);
         }
 
     // Состояние тормозов данного вагона
@@ -101,10 +102,11 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     if (pos < MAX_TRAIN_SIZE)
         for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
         {
-            mpsu_input.unit_level_GDB[pos + i] = static_cast<double>(backward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + (i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[(pos + i) * 2] = static_cast<double>(backward_inputs[SME_UNIT_BC1 + (i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_pBC[(pos + i) * 2 + 1] = static_cast<double>(backward_inputs[SME_UNIT_BC2 + (i - 1) * SME_UNIT_STATE_SIZE]);
-            mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + (i - 1) * SME_UNIT_STATE_SIZE]);
+            int bias = (i - 1) * SME_UNIT_STATE_SIZE;
+            mpsu_input.unit_level_GDB[pos + i] = static_cast<double>(backward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + bias]);
+            mpsu_input.unit_pBC[(pos + i) * 2] = static_cast<double>(backward_inputs[SME_UNIT_BC1 + bias]);
+            mpsu_input.unit_pBC[(pos + i) * 2 + 1] = static_cast<double>(backward_inputs[SME_UNIT_BC2 + bias]);
+            mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + bias]);
         }
 
     mpsu_input.Kmax = brake_mech[FWD_TROLLEY]->getMaxShoeForce();

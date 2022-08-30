@@ -106,11 +106,6 @@ void MfduDisplay::init()
     input_signals[MFDU_TRANSMISSION] = 0;       // Ошибка трансмиссии
     input_signals[MFDU_OIL_MOTOR] = 1;          // Уровень масла двигателя
     input_signals[MFDU_PRESSURE_OIL_MOTOR] = 1; // Пониженное давление масла двигателя
-    input_signals[MFDU_MOTOR] = 1;              // Двигатель
-    // Иконки слева от спидометра
-    input_signals[MFDU_COMPRESSOR] = 0;     // Компрессор
-    input_signals[MFDU_COMPRESSOR_1] = 0;   // Компрессор 1
-    input_signals[MFDU_COMPRESSOR_2] = 0;   // Компрессор 2
     input_signals[MFDU_ATTENTION] = 0;      // Внимание!
     input_signals[MFDU_STOP] = 0;           // СТОП
     input_signals[MFDU_REVERS_FWD] = 0;     // Реверсор вперед
@@ -135,12 +130,15 @@ void MfduDisplay::init()
     input_signals[MFDU_POS_IN_TRAIN] = 1;           // Порядковый номер вагона в поезде
     for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
-        input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] = 0;        // Тип вагона
-        input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] = 0;    // Номер вагона или отсутствие связи CAN
-        input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] = 0.0;      // Температура в вагоне
-        input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] = 0;  // Состояние вагонного оборудования
-        input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] = 0; // Состояние дизеля
-        input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE] = 0; // Состояние тормоза
+        input_signals[MFDU_TRAIN_UNIT + i * MFDU_UNIT_SIGNALS_SIZE] = 0;            // Тип вагона
+        input_signals[MFDU_TRAIN_UNIT_NUM + i * MFDU_UNIT_SIGNALS_SIZE] = 0;        // Номер вагона или отсутствие связи CAN
+        input_signals[MFDU_TRAIN_UNIT_T + i * MFDU_UNIT_SIGNALS_SIZE] = 0.0;        // Температура в вагоне
+        input_signals[MFDU_TRAIN_UNIT_DIESEL + i * MFDU_UNIT_SIGNALS_SIZE] = 0;     // Состояние дизеля
+        input_signals[MFDU_TRAIN_UNIT_COMPRESSOR + i * MFDU_UNIT_SIGNALS_SIZE] = 0; // Состояние компрессора
+        input_signals[MFDU_TRAIN_UNIT_EQUIP + i * MFDU_UNIT_SIGNALS_SIZE] = 0;      // Состояние вагонного оборудования
+        input_signals[MFDU_TRAIN_UNIT_BRAKES + i * MFDU_UNIT_SIGNALS_SIZE] = 0;     // Состояние тормоза
+        input_signals[MFDU_TRAIN_UNIT_DOOR_R + i * MFDU_UNIT_SIGNALS_SIZE] = 0;     // Состояние дверей правых
+        input_signals[MFDU_TRAIN_UNIT_DOOR_L + i * MFDU_UNIT_SIGNALS_SIZE] = 0;     // Состояние дверей левых
     }
     //mfduMainDisp_->updateData(input_signals);
 

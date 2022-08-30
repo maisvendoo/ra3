@@ -27,6 +27,7 @@ private:
 
     // блок иконок справа от спидометра
     void setBlockIcons_rightSpeedometer_(QLabel* parent);
+    int labMotor_state;
     std::vector<QLabel*> lab110380_;
     std::vector<QLabel*> labPvu_;
     std::vector<QLabel*> labEpk_;
@@ -53,10 +54,11 @@ private:
 
     // блок иконок слева от спидометра
     void setBlockIcons_leftSpeedometer_(QLabel* parent);
+    int labMotorCompressor_state;
     std::vector<QLabel*> labMotorCompressor_;
     std::vector<QLabel*> labMkFrame_;
-    std::vector<QLabel*> labMotorCompressor1_;
-    std::vector<QLabel*> labMotorCompressor2_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labMotorCompressorOn_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labMotorCompressorNum_;
     std::vector<QLabel*> labAttention_;
     std::vector<QLabel*> labStop_;
     std::vector<QLabel*> labFwd_;
@@ -82,15 +84,15 @@ private:
     TriggerLabel* labIakb110_;
 
     // блок иконок сверху от спидометра
-    QLabel* labNoHead_;
+    TriggerLabel* labNoHead_;
     void setBlockIcon_topSpeedometer_(QLabel* parent);
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labTrainUnit_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorR_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorL_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
-    std::array<QLabel*, MAX_TRAIN_SIZE> labNo1_;
-    std::array<QLabel*, MAX_TRAIN_SIZE> labNo2_;
-    std::array<QLabel*, MAX_TRAIN_SIZE> labT_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo1_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo2_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labT_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labVagonEquipment_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDiesel_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labBrakes_;
