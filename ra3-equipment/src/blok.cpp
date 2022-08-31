@@ -83,17 +83,6 @@ void BLOK::loadSpeedsMap(QString path)
 
             limits.push_back(limit);
         }
-
-        if (dir < 0)
-            std::reverse(limits.begin(), limits.end());
-
-        for (size_t i = 0; i < limits.size() - 1; ++i)
-        {
-            if (limits[i+1].value > limits[i].value)
-            {
-                limits[i+1].coord += dir * train_length;
-            }
-        }
     }
 }
 
@@ -128,8 +117,29 @@ void BLOK::loadStationsMap(QString path)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void BLOK::setTrainLength(double train_length)
+{
+    this->train_length = train_length;
+    if (limits.empty())
+        return;
+
+    for (size_t i = 0 + hs_n(dir); i < limits.size() - hs_p(dir); ++i)
+    {
+        if (limits[i + dir].value > limits[i].value)
+        {
+            limits[i + hs_p(dir)].coord += dir * train_length;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BLOK::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y);
+    Q_UNUSED(t);
+
     // Очищаем состояние ламп
     std::fill(lamps.begin(), lamps.end(), 0.0f);
 
@@ -207,7 +217,9 @@ void BLOK::ode_system(const state_vector_t &Y,
                       state_vector_t &dYdt,
                       double t)
 {
-
+    Q_UNUSED(Y);
+    Q_UNUSED(dYdt);
+    Q_UNUSED(t);
 }
 
 //------------------------------------------------------------------------------
@@ -373,7 +385,7 @@ void BLOK::calc_speed_limits()
     if (cur_lim.value > next_lim.value)
     {
         double a = 0.7;
-        limit_dist = pf(next_lim.coord - rail_coord);
+        limit_dist = pf(dir * (next_lim.coord - rail_coord));
         v_lim = sqrt( pow(next_lim.value / Physics::kmh, 2) + 2 * a * limit_dist) * Physics::kmh;
     }
 
@@ -390,7 +402,7 @@ void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
         return;
 
     size_t left_idx = 0;
-    size_t right_idx = limits.size() - 1;
+    size_t right_idx = limits.size();
     size_t idx = (left_idx + right_idx) / 2;
 
     while (idx != left_idx)
@@ -407,10 +419,20 @@ void BLOK::findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit)
 
     cur_limit = limits[idx];
 
-    if (idx < limits.size() - 1)
-        next_limit = limits[idx + 1];
-    else
+    if ((dir < 0) && (idx <= 0))
+    {
         next_limit = speed_limit_t();
+        next_limit.coord = -next_limit.coord;
+    }
+    else if ((dir > 0) && (idx >= (limits.size() - 1)))
+    {
+        next_limit = speed_limit_t();
+    }
+    else
+    {
+        next_limit.coord = limits[idx + hs_p(dir)].coord;
+        next_limit.value = limits[idx + dir].value;
+    }
 }
 
 //------------------------------------------------------------------------------
