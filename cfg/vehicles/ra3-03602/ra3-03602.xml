@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <Vehicle>
+        <EmptyMass>50500</EmptyMass>
+        <PayloadMass>0</PayloadMass> 
+        <Length>24.24</Length>
+        <WheelDiameter>0.86</WheelDiameter>
+        <MainResist>loco-resist</MainResist>
+        <NumAxis>4</NumAxis>
+        <SoundDir>ra3</SoundDir>
+        <WheelInertia>2.0</WheelInertia>
+
+        <FuelCapacity>350</FuelCapacity>
+        <FuelLevel>1.0</FuelLevel>
+
+        <MainResLeak>4e-5</MainResLeak>
+        <Number>3602</Number>
+
+        <!-- Передаточные числа тяговых редукторов -->
+        <ip1>1.2</ip1>
+        <ip2>2.78</ip2>
+
+        <IsActive>0</IsActive>
+
+        <ExtModelName>ra3/RA3-head-fwd.osgt</ExtModelName>
+        <ModelShift>0.0 -0.025 0.05</ModelShift>
+
+        <CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
+        <CabineShift>0.0 0.075 0.05</CabineShift>
+
+        <ExtTexturesDir>ra3/textures-036_02</ExtTexturesDir>
+        <AnimationsConfigDir>ra3-head</AnimationsConfigDir>
+
+        <DriverPos>0.56 9.95 2.9</DriverPos>
+
+        <!--<LogName>ra3-head-fwd.log</LogName>
+        <LogTimeout>0.1</LogTimeout>-->
+
+        <!--<Autostart>1</Autostart>-->
+
+    </Vehicle>
+</Config>
