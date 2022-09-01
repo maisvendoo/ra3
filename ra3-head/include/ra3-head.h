@@ -40,9 +40,12 @@ public:
 
     RA3HeadMotor(QObject *parent = Q_NULLPTR);
 
-    ~RA3HeadMotor() override;    
+    ~RA3HeadMotor() override;
 
 private:
+
+    /// Серийный номер вагона
+    int num;
 
     /// Передаточные числа редуктора 1 ступени
     double ip1;
@@ -64,6 +67,15 @@ private:
 
     /// Признак активной кабины в конфигурации
     bool is_active_ref;
+
+    /// Ориентация относительно активной кабины
+    bool is_orient_same;
+
+    /// Состояние дверей справа
+    int door_R_state;
+
+    /// Состояние дверей слева
+    int door_L_state;
 
     /// Аккумуляторная батарея 110 В
     Battery     *bat110;
@@ -133,7 +145,7 @@ private:
     AuxiliaryConverter  *aux_conv;
 
     /// Насос гидростатического привода
-    HydroPump   *hydro_pump;    
+    HydroPump   *hydro_pump;
 
     /// Главный резервуар
     Reservoir   *main_res;
@@ -203,10 +215,10 @@ private:
     std::array<Trigger, TUMBLERS_NUM> tumbler;
 
     /// Кнопка "Поддержание скорости"
-    KeyTrigger  button_speed_hold;    
+    KeyTrigger  button_speed_hold;
 
     /// Программа автозапуска
-    std::vector<autostart_step_t>   autostart_prog;    
+    std::vector<autostart_step_t>   autostart_prog;
 
     void initialization() override;
 

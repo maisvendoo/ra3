@@ -176,7 +176,7 @@ void TracController::stepKeysControl(double t, double dt)
 
         if (getKeyState(KEY_A))
         {
-            if (traction.getState())            
+            if (traction.getState())
                 dir = 1;
 
         }
@@ -191,19 +191,17 @@ void TracController::stepKeysControl(double t, double dt)
     old_traction_key = getKeyState(KEY_A);
     old_brake_key = getKeyState(KEY_D);
 
-    if (fwd_key && !old_fwd_key)
+    if (fwd_key && !old_fwd_key && (revers_pos < 1))
     {
         revers_pos++;
         emit soundPlay(reversSoundName);
     }
 
-    if (bwd_key && !old_bwd_key)
+    if (bwd_key && !old_bwd_key && (revers_pos > -1))
     {
         revers_pos--;
         emit soundPlay(reversSoundName);
     }
-
-    revers_pos = cut(revers_pos, -1, 1);
 
     old_fwd_key = fwd_key;
     old_bwd_key = bwd_key;
@@ -224,7 +222,7 @@ void TracController::processDiscretePositions(bool key_state, bool old_key_state
     if ( (key_state) && (!old_key_state) )
     {
         mode_pos += dir;
-        mode_pos = cut(mode_pos, -1, 1);        
+        mode_pos = cut(mode_pos, -1, 1);
     }
 }
 

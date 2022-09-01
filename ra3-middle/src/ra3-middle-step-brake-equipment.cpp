@@ -5,10 +5,16 @@
 //------------------------------------------------------------------------------
 void RA3Middle::stepBrakeEquipment(double t, double dt)
 {
-    bool is_parking_braked = static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
+    bool is_parking_braked =
+            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_ON]) ||
+            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
 
-    brake_module->setRefPressureLevel(forward_inputs[SME_REF_BRAKE_LEVEL_EPB]);
-    brake_module->releaseBrakes(forward_inputs[SME_BRAKE_RELEASE]);
+    brake_module->setRefPressureLevel(
+                backward_inputs[SME_REF_BRAKE_LEVEL_EPB] +
+                forward_inputs[SME_REF_BRAKE_LEVEL_EPB]);
+    brake_module->releaseBrakes(
+                backward_inputs[SME_BRAKE_RELEASE] ||
+                forward_inputs[SME_BRAKE_RELEASE]);
 
     brake_module->setVoltage(Ucc_110);
     brake_module->setParkingBrakeState(is_parking_braked);

@@ -18,9 +18,9 @@ public:
     ~HydroTransmission();
 
     /// Задать угловую скорость вражения выходного вала
-    double setOmegaInput(double omega) { this->omega_in = omega; }
+    void setOmegaInput(double omega) { this->omega_in = omega; }
 
-    double setOmegaOutput(double omega) { this->omega_out = omega; }
+    void setOmegaOutput(double omega) { this->omega_out = omega; }
 
     /// Вернуть момент на входном валу
     double getInputTorque() const { return M_in; }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+    <Vehicle>
+        <EmptyMass>39400</EmptyMass>
+        <PayloadMass>0</PayloadMass> 
+        <Length>24.7</Length>
+        <WheelDiameter>0.86</WheelDiameter>
+        <MainResist>loco-resist</MainResist>
+        <NumAxis>4</NumAxis>
+        <SoundDir>ra3</SoundDir>
+        <WheelInertia>2.0</WheelInertia>
+
+        <FuelCapacity>350</FuelCapacity>
+        <FuelLevel>1.0</FuelLevel>
+
+        <MainResLeak>4e-5</MainResLeak>
+        <Number>3603</Number>
+
+        <ExtModelName>ra3/RA3-middle.osgt</ExtModelName>
+        <ModelShift>0.0 0.0 0.05</ModelShift>
+
+        <ExtTexturesDir>ra3/textures-036_uppk</ExtTexturesDir>
+        <AnimationsConfigDir>ra3-middle</AnimationsConfigDir>
+
+        <DriverPos>0.56 9.95 2.9</DriverPos>        
+
+    </Vehicle>
+</Config>

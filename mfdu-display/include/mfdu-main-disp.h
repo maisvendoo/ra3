@@ -3,6 +3,8 @@
 
 #include    <QLabel>
 
+#include    "ra3-head-signals.h"
+
 #include    "display-types.h"
 #include    "trigger-label.h"
 
@@ -25,6 +27,7 @@ private:
 
     // блок иконок справа от спидометра
     void setBlockIcons_rightSpeedometer_(QLabel* parent);
+    int labMotor_state;
     std::vector<QLabel*> lab110380_;
     std::vector<QLabel*> labPvu_;
     std::vector<QLabel*> labEpk_;
@@ -51,10 +54,11 @@ private:
 
     // блок иконок слева от спидометра
     void setBlockIcons_leftSpeedometer_(QLabel* parent);
+    int labMotorCompressor_state;
     std::vector<QLabel*> labMotorCompressor_;
     std::vector<QLabel*> labMkFrame_;
-    std::vector<QLabel*> labMotorCompressor1_;
-    std::vector<QLabel*> labMotorCompressor2_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labMotorCompressorOn_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labMotorCompressorNum_;
     std::vector<QLabel*> labAttention_;
     std::vector<QLabel*> labStop_;
     std::vector<QLabel*> labFwd_;
@@ -80,16 +84,18 @@ private:
     TriggerLabel* labIakb110_;
 
     // блок иконок сверху от спидометра
+    TriggerLabel* labNoHead_;
     void setBlockIcon_topSpeedometer_(QLabel* parent);
-    std::vector<QLabel*> labVagonEquipment_left_;
-    std::vector<QLabel*> labVagonEquipment_right_;
-    std::vector<QLabel*> labPzdMini_left_;
-    std::vector<QLabel*> labPzdMini_right_;
-    std::vector<QLabel*> labBrakes_left_;
-    std::vector<QLabel*> labBrakes_right_;
-    std::vector<QLabel*> labCan_right_;
-    QLabel* labT_left_;
-    QLabel* labT_right_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labTrainUnit_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorR_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorL_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo1_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo2_;
+    std::array<TriggerLabel*, MAX_TRAIN_SIZE> labT_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labVagonEquipment_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDiesel_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labBrakes_;
 
     // Сообщения об ошибках
     void setErrosMsgBox_(QLabel *parent);
@@ -99,7 +105,7 @@ private:
     void fooNoneAdd2_(QPixmap &pixmap, QLabel* parent, std::vector<QLabel*> &label, int x, int y);
 
     void setNeededIcon_(std::vector<QLabel*> &vec_lab, int val);
-
+    void setNeededIcon_(std::vector<QLabel*> &vec_lab, int val, int x, int y);
 };
 
 #endif // MFDUMAINDISP_H

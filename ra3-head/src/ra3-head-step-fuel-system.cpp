@@ -20,11 +20,10 @@ void RA3HeadMotor::stepFuelSystem(double t, double dt)
         full_mass += fuel_tank->getFuelMass();
     }
 
-    // Топливный насос включается непосредственно, или с ведущей секции
-    bool is_fuel_pump = mpsu->getOutputData().is_fuel_pump1_ON ||
-            static_cast<bool>(forward_inputs[SME_BWD_FUEL_PUMP]);
+    // Включение топливного насоса
+    bool is_fuel_pump = mpsu->getOutputData().is_fuel_pump_ON;
 
     fuel_pump->setVoltage(Ucc_110 * static_cast<double>(is_fuel_pump));
     fuel_pump->setFuelLevel(common_fuel_level / 2.0);
-    fuel_pump->step(t, dt);    
+    fuel_pump->step(t, dt);
 }

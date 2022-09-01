@@ -85,9 +85,12 @@ void BTO092::stepParkingBrake()
     double v2 = static_cast<double>(is_release);
     double v1 = 1.0 - v2;
 
+    // Расход воздуха из запасного резервуара в цилиндры СТ
+    double Q_as_pb = K[2] * (pAS - p_pb) * v2 * hs_n(p_pb - pPB_max);
+    Qas = -Q_as_pb;
+
     // Расход воздуха в цилиндры СТ
-    Q_pb = K[2] * (pAS - p_pb) * v2 * hs_n(p_pb - pPB_max) -
-            K[1] * p_pb * v1;
+    Q_pb = Q_as_pb - K[1] * p_pb * v1;
 
     if (static_cast<bool>(v1))
     {
@@ -146,7 +149,11 @@ void BTO092::stepPneumoBrake()
     double ub = static_cast<double>(brake_valve->getContactState(0));
     double ur = static_cast<double>(release_valve->getContactState(0));
 
-    double Qpk2 = K[8] * (pAS - p2) * ub - K[9] * p2 * ur;
+    // Расход воздуха из запасного резервуара
+    double Q_as_p2 = K[8] * (pAS - p2) * ub;
+    Qas -= Q_as_p2;
+
+    double Qpk2 = Q_as_p2 - K[9] * p2 * ur;
 
     // Переключательный клапан (ПК)
     sw_valve->setInputFlow1(Qpk1); // Пневматическое торможение от КПУ

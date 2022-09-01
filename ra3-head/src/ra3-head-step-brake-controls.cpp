@@ -14,4 +14,11 @@ void RA3HeadMotor::stepBrakeControls(double t, double dt)
 
         p0 = kru->getBrakePipeInitPressure();
     }
+    // КОСТЫЛЬ под нынешнюю реализацию brakepipe
+    else
+    {
+        if (idx == 0)
+            p0 = static_cast<double>(backward_inputs[SME_P0]) +
+                 static_cast<double>(forward_inputs[SME_P0]);
+    }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+    <Common>
+        <CouplingModule>ef-coupling</CouplingModule>
+        <CabineInVehicle>0</CabineInVehicle>
+        <ChargingPressure>0.5</ChargingPressure>
+        <InitMainResPressure>0.8</InitMainResPressure>
+        <NoAir>0</NoAir>
+        <Title>РА3 040+039 (ЮППК, четырёхвагонный)</Title>
+        <Description>Дизель-поезд РА3-040 и РА3-039 в сплотке. Состав: 04001-04002+03902-03901. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур)</Description>
+    </Common>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04001-active</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04002</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-03902</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-03901</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+</Config>

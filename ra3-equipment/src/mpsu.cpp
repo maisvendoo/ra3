@@ -14,13 +14,15 @@ MPSU::MPSU(QObject *parent) : Device(parent)
   , startButtonTimer(new Timer(5.0, false))
   , button_select_old(false)
   , button_speed_plus_old(false)
-  , button_speed_minus_old(false)  
+  , button_speed_minus_old(false)
   , is_speed_hold_disable(false)
   , Kp(1.0)
   , Ki(0.0)
   , dv(0.0)
   , u(0.0)
   , T(0.5)
+  , lengthHead(24.24)
+  , lengthMiddle(24.7)
 
 {
     connect(startButtonTimer, &Timer::process, this, &MPSU::slotStartButtonTimer);
@@ -71,6 +73,7 @@ void MPSU::setInputData(const mpsu_input_t &mpsu_input)
         this->mpsu_input = mpsu_input;
     else
         this->mpsu_input = mpsu_input_t();
+
 }
 
 //------------------------------------------------------------------------------
@@ -122,6 +125,9 @@ void MPSU::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "v_HB", v_HB);
     cfg.getDouble(secName, "p_HB", p_HB);
     cfg.getDouble(secName, "n_min_gb", n_min_gb);
+
+    cfg.getDouble(secName, "lengthHead", lengthHead);
+    cfg.getDouble(secName, "lengthMiddle", lengthMiddle);
 }
 
 //------------------------------------------------------------------------------
@@ -135,8 +141,7 @@ void MPSU::reset()
 
     old_start_state = false;
 
-    for (size_t i = 0; i < trig_disel_start.size(); ++i)
-        trig_disel_start[i].reset();
+    trig_disel_start.reset();
 
     is_reseted = true;
 
@@ -146,43 +151,108 @@ void MPSU::reset()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void MPSU::train_config_process()
+{
+        // Обнуляем длину поезда
+        mpsu_output.train_size = 0;
+        mpsu_output.train_length = 0.0;
+        // Обрабатываем сигналы от вагонов спереди
+        int tc = static_cast<int>(mpsu_input.sme_train_config_fwd);
+        if (tc > 0)
+            for (int i = 0; i < MAX_TRAIN_SIZE - 1; i++)
+            {
+                // Сигнал от головных вагонов сзади разворачиваем (true)
+                mpsu_output.train_config[0] = train_config_parsing(tc % SME_MULTIPLIER, true);
+                tc = tc / SME_MULTIPLIER;
+                if (tc == 0)
+                    break;
+                else
+                    // Учитываем, что сигналы спереди пришли в обратном порядке
+                    for (int j = i + 1; j > 0; j--)
+                        mpsu_output.train_config[j] = mpsu_output.train_config[j - 1];
+            }
+        // Добавляем в поезд данный вагон
+        mpsu_output.train_size++;
+        mpsu_output.pos_in_train = mpsu_output.train_size;
+        mpsu_output.train_length += lengthHead;
+        mpsu_output.train_config[mpsu_output.pos_in_train - 1] = 1;
+        // Обрабатываем сигналы от вагонов сзади
+        if (mpsu_output.train_size >= MAX_TRAIN_SIZE)
+            return;
+        tc = static_cast<int>(mpsu_input.sme_train_config_bwd);
+        for (int i = mpsu_output.train_size; i < MAX_TRAIN_SIZE; i++)
+        {
+            // Сигнал от головных вагонов спереди не меняем (false)
+            mpsu_output.train_config[i] = train_config_parsing(tc % SME_MULTIPLIER, false);
+            tc = tc / SME_MULTIPLIER;
+            if (tc == 0)
+                break;
+        }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+int MPSU::train_config_parsing(int unit, bool bias)
+{
+    switch (unit)
+    {
+        case 1:
+        {
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthHead;
+            return 1 + bias;
+        }
+        case 2:
+        {
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthHead;
+            return 2 - bias;
+        }
+        case 3:
+        {
+            mpsu_output.train_size++;
+            mpsu_output.train_length += lengthMiddle;
+            return 3;
+        }
+        default:
+        {
+            return 0;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void MPSU::start_disels()
 {
-    if ( (mpsu_output.start_press_count == 1) &&
-         (!mpsu_output.is_disel_started()) )
+    if (((mpsu_output.start_press_count == 1) ||
+         mpsu_input.start_disel_sme) &&
+         (!mpsu_output.is_disel_started))
     {
         startButtonTimer->stop();
 
-        trig_disel_start[FWD_DISEL].set();
-        trig_disel_start[BWD_DISEL].set();
+        trig_disel_start.set();
 
-        trig_fuel_valve[FWD_DISEL].set();
-        trig_fuel_valve[BWD_DISEL].set();
+        trig_fuel_valve.set();
     }
 
-    mpsu_output.is_disel1_started = static_cast<bool>(hs_p(mpsu_input.disel1_shaft_freq - 700.0));
-    // Признак запуска дизеля 2
-    mpsu_output.is_disel2_started = static_cast<bool>(hs_p(mpsu_input.disel2_shaft_freq - 700.0));
+    mpsu_output.is_disel_started = static_cast<bool>(hs_p(mpsu_input.disel_shaft_freq - 700.0));
 
-    // Команды на включение топливных насосов
-    mpsu_output.is_fuel_pump1_ON = trig_disel_start[FWD_DISEL].getState();
-    mpsu_output.is_fuel_pump2_ON = trig_disel_start[BWD_DISEL].getState();
+    // Команда на включение топливного насоса
+    mpsu_output.is_fuel_pump_ON = trig_disel_start.getState();
 
-    // Команды на включение стартеров
-    mpsu_output.is_starter1_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press1 - 0.1)) &&
-            (!mpsu_output.is_disel1_started);
+    // Команда на включение стартера
+    mpsu_output.is_starter_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press - 0.1)) &&
+            (!mpsu_output.is_disel_started);
 
-    mpsu_output.is_starter2_ON = static_cast<bool>(hs_p(mpsu_input.fuel_press2 - 0.1)) &&
-            (!mpsu_output.is_disel2_started);
+    // Подача топлива
+    mpsu_output.is_fuel_valve_open = trig_fuel_valve.getState();
 
-    if (mpsu_output.is_disel1_started)
-            trig_disel_start[FWD_DISEL].reset();
+    if (mpsu_output.is_disel_started)
+            trig_disel_start.reset();
 
-    if (mpsu_output.is_disel2_started)
-            trig_disel_start[BWD_DISEL].reset();
-
-    mpsu_output.is_fuel_valve1_open = trig_fuel_valve[FWD_DISEL].getState();
-    mpsu_output.is_fuel_valve2_open = trig_fuel_valve[BWD_DISEL].getState();
 }
 
 //------------------------------------------------------------------------------
@@ -190,32 +260,14 @@ void MPSU::start_disels()
 //------------------------------------------------------------------------------
 void MPSU::stop_disels()
 {
-    if (mpsu_input.stop_disel)
+    if (mpsu_input.stop_disel || mpsu_input.stop_disel_sme)
     {
-        trig_fuel_valve[FWD_DISEL].reset();
-        trig_fuel_valve[BWD_DISEL].reset();
+        trig_fuel_valve.reset();
+        mpsu_output.stop_diesel = true;
         mpsu_output.start_press_count = -1;
     }
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-int MPSU::check_disels_oil_pressure(double p_oil)
-{
-    int mfdu_oil_press_level = 1;
-
-    // Анализируем уровень давления с выдачей сигнала в МФДУ
-    if (p_oil < 0.1)
-        mfdu_oil_press_level = 1;
-
-    if ( (p_oil >= 0.1) && (p_oil < 0.15) )
-        mfdu_oil_press_level = 0;
-
-    if (p_oil >= 0.15)
-        mfdu_oil_press_level = 2;
-
-    return mfdu_oil_press_level;
+    else
+        mpsu_output.stop_diesel = false;
 }
 
 //------------------------------------------------------------------------------
@@ -251,9 +303,9 @@ double MPSU::getTracRefDiselFreq(double trac_level, double brake_level)
 
     double n_ref = n_min;
 
-    if (!mpsu_output.hydro_brake_ON1)
+    if (!mpsu_output.hydro_brake_ON)
         n_ref = n_min + (n_max - n_min) * (trac_level - mpsu_input.trac_min) * motion_allow / (1.0 - mpsu_input.trac_min);
-    else    
+    else
         n_ref = n_min_gb + (n_max - n_min_gb) * (brake_level - mpsu_input.brake_min) * motion_allow / (1.0 - mpsu_input.brake_min);;
 
     return cut(n_ref, n_min, n_max);
@@ -264,12 +316,12 @@ double MPSU::getTracRefDiselFreq(double trac_level, double brake_level)
 //------------------------------------------------------------------------------
 void MPSU::check_revers()
 {
-    mpsu_output.revers_finish = mpsu_input.revers_state1 == mpsu_input.revers_state2;
+    mpsu_output.revers_finish = mpsu_input.revers_state;
 
     if (!mpsu_output.revers_finish)
         return;
 
-    switch (mpsu_input.revers_state1)
+    switch (mpsu_input.revers_handle)
     {
     case 1:
 
@@ -313,10 +365,10 @@ void MPSU::check_moition_disable()
         motion_lock.reset();
     }
 
-    errors[ERROR_ST1] = mpsu_input.is_parking_braked1 && mpsu_output.is_disel_started();
-    errors[ERROR_ST2] = mpsu_input.is_parking_braked2 && mpsu_output.is_disel_started();
-    errors[ERROR_REVERS_0] = (mpsu_input.revers_handle == 0) && mpsu_output.is_disel_started();
-    errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON && mpsu_output.is_disel_started();
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+    errors[ERROR_ST1 + i] = mpsu_input.unit_spt_state[i] && mpsu_output.is_disel_started;
+    errors[ERROR_REVERS_0] = (mpsu_input.revers_handle == 0) && mpsu_output.is_disel_started;
+    errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON && mpsu_output.is_disel_started;
 
     mpsu_output.motion_disable = false;
 
@@ -405,8 +457,9 @@ void MPSU::calc_brake_level_PB()
 {
     mpsu_output.pBC_max = 0.0;
     mpsu_output.pBC_min = mpsu_input.pBC_max;
+    mpsu_output.brake_level_PB = 0.0;
 
-    for (double pBC : mpsu_input.pBC)
+    for (double pBC : mpsu_input.unit_pBC)
     {
         if (pBC > mpsu_output.pBC_max)
         {
@@ -427,37 +480,32 @@ void MPSU::calc_brake_level_PB()
 //------------------------------------------------------------------------------
 void MPSU::hydro_brake_control()
 {
-    mpsu_output.brake_level = mpsu_input.brake_level_KM + mpsu_output.auto_brake_level;
-
     // Блокируем питание КЭБ если не собираемся тормозить
     if ( (!mpsu_input.is_KM_brake) && (!mpsu_output.is_speed_hold_ON) )
     {
-        mpsu_output.release_PB1 = false;
-        mpsu_output.brake_type1 = 2;
-        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
+        mpsu_output.release_PB = false;
+        mpsu_output.hydro_brake_ON = false;
         return;
     }
 
     // Блокируем питание КЭБ при экстренном торможении
     if (mpsu_input.is_emergency_brake)
     {
-        mpsu_output.release_PB1 = false;
-        mpsu_output.brake_type1 = 3;
-        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
+        mpsu_output.release_PB = false;
+        mpsu_output.hydro_brake_ON = false;
         return;
     }
 
     // При скорости ниже 30 км/ч отключаем ГДТ безусловно и замещаем его
     if (mpsu_input.v_kmh < 30)
     {
-        mpsu_output.release_PB1 = mpsu_output.release_PB2 = false;
-        mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = false;
-        mpsu_output.brake_type1 = 2;
+        mpsu_output.release_PB = false;
+        mpsu_output.hydro_brake_ON = false;
         return;
     }
 
     // Пытаемся включить ГДТ
-    mpsu_output.hydro_brake_ON1 = mpsu_output.hydro_brake_ON2 = (mpsu_input.is_KM_brake) || (mpsu_output.auto_brake_level >= 0.01);
+    mpsu_output.hydro_brake_ON = (mpsu_input.is_KM_brake) || (mpsu_output.auto_brake_level >= 0.01);
 
     // Расчитываем максимальное усилие, обеспечиваемое ГДТ
     double B_gb_max = mpsu_input.M_gb_max * mpsu_input.ip * 2.0 / mpsu_input.wheel_diam;
@@ -473,20 +521,49 @@ void MPSU::hydro_brake_control()
     // Определяем добавку по ЭПТ, если эффективности ГДТ не достаточно
     mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_output.brake_level);
     // Формируем признак "отпуск ЭПТ" при достаточном тормозном усилии от ГДТ
-    mpsu_output.release_PB1 = !static_cast<bool>(hs_p(B_ref - B_gb));
+    mpsu_output.release_PB = !static_cast<bool>(hs_p(B_ref - B_gb));
+}
 
-    if ( mpsu_output.hydro_brake_ON1 && (!mpsu_output.release_PB1) )
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void MPSU::unit_brakes_sheck()
+{
+    // Тип тормоза повагонно для вывода на дисплей МФДУ
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
     {
-        mpsu_output.brake_type1 = 1;
+        // По умолчанию погашен
+        mpsu_output.unit_brakes[i] = 0;
+        // Экстренное или включен СПТ - красный
+        if (mpsu_input.is_emergency_brake || mpsu_input.unit_spt_state[i])
+        {
+            mpsu_output.unit_brakes[i] = 4;
+            continue;
+        }
+        if ((mpsu_input.unit_pBC[2 * i] > 0.04) || (mpsu_input.unit_pBC[2 * i + 1] > 0.04))
+        {
+            // Только пневматика -
+            if (mpsu_input.unit_level_GDB[i] == 0.0)
+            {
+                mpsu_output.unit_brakes[i] = 3;
+                continue;
+            }
+            else
+            {
+                mpsu_output.unit_brakes[i] = 2;
+                continue;
+            }
+        }
+        if (mpsu_input.unit_level_GDB[i] > 0.01)
+            mpsu_output.unit_brakes[i] = 1;
     }
-    else
-    {
-        if (mpsu_output.hydro_brake_ON1)
-            mpsu_output.brake_type1 = 0;
 
-        if (!mpsu_output.release_PB1)
-            mpsu_output.brake_type1 = 2;
-    }
+    // Сигнал отпуска тормозов на всех тележках кроме последней
+    mpsu_output.sot = true;
+    for (int i = 0; i < mpsu_output.train_size * 2 - 1; i++)
+        mpsu_output.sot &= (mpsu_input.unit_pBC[i] < 0.04);
+    // Сигнал отпуска тормозов на последней тележке
+    mpsu_output.soth = (mpsu_input.unit_pBC[mpsu_output.train_size * 2 - 1] < 0.04);
 }
 
 //------------------------------------------------------------------------------
@@ -512,6 +589,26 @@ void MPSU::slotStartButtonTimer()
 {
     stop_disels();
     startButtonTimer->stop();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+int MPSU::check_disels_oil_pressure(double p_oil)
+{
+    int mfdu_oil_press_level = 1;
+
+    // Анализируем уровень давления с выдачей сигнала в МФДУ
+    if (p_oil < 0.1)
+        mfdu_oil_press_level = 1;
+
+    if ( (p_oil >= 0.1) && (p_oil < 0.15) )
+        mfdu_oil_press_level = 0;
+
+    if (p_oil >= 0.15)
+        mfdu_oil_press_level = 2;
+
+    return mfdu_oil_press_level;
 }
 
 //------------------------------------------------------------------------------
@@ -549,18 +646,10 @@ int MPSU::check_disels(int mfdu_oil_press_level)
 //------------------------------------------------------------------------------
 void MPSU::check_disels_oil_pressure()
 {
-    mpsu_output.mfdu_oil_press_level1 = check_disels_oil_pressure(mpsu_input.oil_press1);
-    mpsu_output.mfdu_oil_press_level2 = check_disels_oil_pressure(mpsu_input.oil_press2);
-
-    double p_oil = min(mpsu_input.oil_press1, mpsu_input.oil_press2);
-    mpsu_output.mfdu_oil_press_level = check_disels_oil_pressure(p_oil);
+    mpsu_output.mfdu_oil_press_level = check_disels_oil_pressure(mpsu_input.oil_press);
 
     // Контроль дизелей по всем параметрам
-    mpsu_output.mfdu_disel_state_level1 = check_disels(mpsu_output.mfdu_oil_press_level1);
-    mpsu_output.mfdu_disel_state_level2 = check_disels(mpsu_output.mfdu_oil_press_level2);
-
-    mpsu_output.mfdu_disel_state_level = max(mpsu_output.mfdu_disel_state_level1,
-                                             mpsu_output.mfdu_disel_state_level2);
+    mpsu_output.mfdu_disel_state_level = check_disels(mpsu_output.mfdu_oil_press_level);
 }
 
 //------------------------------------------------------------------------------
@@ -633,6 +722,9 @@ void MPSU::hold_speed_buttons_process()
 //------------------------------------------------------------------------------
 void MPSU::speed_regulator()
 {
+    mpsu_output.trac_level = mpsu_input.trac_level_KM + mpsu_output.auto_trac_level;
+    mpsu_output.brake_level = mpsu_input.brake_level_KM + mpsu_output.auto_brake_level;
+
     // Если не включен режим поддержания скорости - выдаем нулевое задание
     // Если задана нулевая скорость - действуем аналогично
     if ( (!mpsu_output.is_speed_hold_ON) || (mpsu_output.v_ref_kmh == 0) )
@@ -656,8 +748,14 @@ void MPSU::speed_regulator()
 //------------------------------------------------------------------------------
 void MPSU::main_loop_step(double t, double dt)
 {
+    Q_UNUSED(t);
+    Q_UNUSED(dt);
+
     // Включение дисплея
     mpsu_output.is_display_ON = true;
+
+    // Обработка конфигурации СМЕ
+    train_config_process();
 
     // Обработка кнопки "СТАРТ"
     start_button_process(mpsu_input.start_disel);
@@ -692,8 +790,13 @@ void MPSU::main_loop_step(double t, double dt)
     // Обработка ошибок
     output_error_msg();
 
-    mpsu_output.is_parking_braked = mpsu_input.is_parking_braked1 &&
-                                    mpsu_input.is_parking_braked2;
+    // Состояние СПТ
+    mpsu_output.spt_state = false;
+    for (size_t i = 0; i < MAX_TRAIN_SIZE; i++)
+        mpsu_output.spt_state |= mpsu_input.unit_spt_state[i];
+
+    // Тип торможения повагонно
+    unit_brakes_sheck();
 
     // Анализ давлений в тормозных цилиндрах
     calc_brake_level_PB();
@@ -714,7 +817,7 @@ void MPSU::main_loop_step(double t, double dt)
 void MPSU::start_button_process(bool is_start_button)
 {
     // Блокировка пуска дизеля при ненулевом положении КМ
-    if ( (!mpsu_input.is_KM_zero) && (!mpsu_output.is_disel_started()) )
+    if ( (!mpsu_input.is_KM_zero) && (!mpsu_output.is_disel_started) )
     {
         return;
     }
@@ -729,9 +832,7 @@ void MPSU::start_button_process(bool is_start_button)
         // Считаем нажатия
         mpsu_output.start_press_count++;
 
-        mpsu_output.start_press_count = cut(mpsu_output.start_press_count,
-                                                0,
-                                                static_cast<int>(NUM_DISELS) - 1);                
+        mpsu_output.start_press_count = cut(mpsu_output.start_press_count, 0, 1);
     }
 
     // Запоминаем предыдущее состояние кнопки

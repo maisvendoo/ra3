@@ -49,10 +49,6 @@ enum
     MFDU_TRANSMISSION,      // Ошибка трансмиссии
     MFDU_OIL_MOTOR,         // Уровень масла двигателя
     MFDU_PRESSURE_OIL_MOTOR,// Пониженное давление масла двигателя
-    MFDU_MOTOR,             // Двигатель
-    MFDU_COMPRESSOR,    // Компрессор
-    MFDU_COMPRESSOR_1,  // Компрессор 1
-    MFDU_COMPRESSOR_2,  // Компрессор 2
     MFDU_ATTENTION,     // Внимание!
     MFDU_STOP,          // СТОП
     MFDU_REVERS_FWD,    // Реверсор вперед
@@ -69,30 +65,20 @@ enum
     MFDU_TEMPERATURE_KAB,   // Температура кабины
     MFDU_I_AKB_24,          // Ток акб 24
     MFDU_I_AKB_110,         // Ток акб 110
-    MFDU_VAGON_EQUIPMENT_LEFT,  // Вагонное оборудование
-    MFDU_VAGON_EQUIPMENT_RIGHT, // Вагонное оборудование
-    MFDU_PZD_MINI_LEFT,         // ПЖД
-    MFDU_PZD_MINI_RIGHT,        // ПЖД
-    MFDU_BRAKES_LEFT,           // Тормоза
-    MFDU_BRAKES_RIGHT,          // Тормоза
-    MFDU_CAN_RIGHT,             // Отсутствие свзи с вагоном
-    MFDU_T_LEFT,                //
-    MFDU_T_RIGHT = 61,          //
-    MFDU_ERROR_CODE = 62,
+    MFDU_ERROR_CODE,
 
-    BLOK_STATION_INDEX = 96,// Номер станции в списке
-    BLOK_ACCELERATION = 97, // Ускорение
-    BLOK_VIGILANCE = 98, // Проверка бдительности
-    BLOK_DISPLAY_ON = 99, // Включение дисплея
-    BLOK_TM_PRESS = 100,
-    BLOK_UR_PRESS = 101,
-    BLOK_TC_PRESS = 102,
-
-    BLOK_RAILWAY_COORD = 103,
-    BLOK_VELOCITY = 104,
-    BLOK_VELOCITY_CURRENT_LIMIT = 105,
-    BLOK_VELOCITY_NEXT_LIMIT = 106,
-    BLOK_REVERS = 107,
+    MFDU_TRAIN_SIZE = 50,   // Количество вагонов
+    MFDU_POS_IN_TRAIN = 51,   // Количество вагонов
+    // Сигналы 52..105 - состояние вагонов, 9 сигналов на каждый вагон
+    MFDU_TRAIN_UNIT = MFDU_UNIT_SIGNALS_BEGIN,  // Тип вагона
+    MFDU_TRAIN_UNIT_NUM,    // Номер вагона или отсутствие связи CAN
+    MFDU_TRAIN_UNIT_T,      // Температура в вагоне
+    MFDU_TRAIN_UNIT_DIESEL, // Состояние дизеля
+    MFDU_TRAIN_UNIT_COMPRESSOR, // Состояние дизеля
+    MFDU_TRAIN_UNIT_EQUIP,  // Состояние вагонного оборудования
+    MFDU_TRAIN_UNIT_BRAKES, // Состояние тормоза
+    MFDU_TRAIN_UNIT_DOOR_R, // Состояние дверей правых
+    MFDU_TRAIN_UNIT_DOOR_L, // Состояние дверей левых
 
     STRELKA_VOLTMETER110 = 108,
     STRELKA_VOLTMETER24 = 109,
@@ -112,6 +98,20 @@ enum
     DRIVER_CONTROLLER = 118,
 
     DIRECTION_OF_MOVEMENT = 119,
+
+    BLOK_DISPLAY_ON = 130,      // Включение дисплея
+    BLOK_STATION_INDEX = 131,   // Номер станции в списке
+    BLOK_ACCELERATION = 132,    // Ускорение
+    BLOK_VIGILANCE = 133,       // Проверка бдительности
+    BLOK_TM_PRESS = 134,
+    BLOK_UR_PRESS = 135,
+    BLOK_TC_PRESS = 136,
+
+    BLOK_RAILWAY_COORD = 137,
+    BLOK_VELOCITY = 138,
+    BLOK_VELOCITY_CURRENT_LIMIT = 139,
+    BLOK_VELOCITY_NEXT_LIMIT = 140,
+    BLOK_REVERS = 141,
 
     ACTIVE_COCKPIT = 150,
     ALARM = 151,
@@ -158,7 +158,6 @@ enum
     RIGHT_OPEN = 187,
     RIGHT_CLOSE = 188,
     HOLD_SPEED = 189,
-
 
     // Угол вращения кардана 1
     SHAFT_1 = 192,

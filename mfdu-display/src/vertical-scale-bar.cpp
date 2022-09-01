@@ -13,16 +13,18 @@ VerticalScaleBar::VerticalScaleBar(QSize _size, QWidget *parent)
 
     img_ = QImage(this->size(), QImage::Format_ARGB32_Premultiplied);
 
-    labTraction_ = new QLabel("78%", this);
+    labTraction_ = new QLabel("0%", this);
     labTraction_->resize(this->width(), 20);
     labTraction_->move(0, h_2/2 - 10);
+    labTraction_->setFont(QFont("Arial", 10, 75));
     labTraction_->setAlignment(Qt::AlignCenter);
     labTraction_->setStyleSheet("border: none;"
-                                "color: green;");
+                                "color: limegreen;");
 
     labBrakingForce_ = new QLabel("0%", this);
     labBrakingForce_->resize(this->width(), 20);
     labBrakingForce_->move(0, h_2*3/2 - 10);
+    labBrakingForce_->setFont(QFont("Arial", 10, 75));
     labBrakingForce_->setAlignment(Qt::AlignCenter);
     labBrakingForce_->setStyleSheet("border: none;"
                                     "color: yellow;");
@@ -51,7 +53,7 @@ void VerticalScaleBar::setVal(int val)
         if (val > 48)
             labTraction_->setStyleSheet("border: none; color: black;");
         else
-            labTraction_->setStyleSheet("border: none; color: green;");
+            labTraction_->setStyleSheet("border: none; color: limegreen;");
     }
     else
     {

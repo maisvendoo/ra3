@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+    <Common>
+        <CouplingModule>ef-coupling</CouplingModule>
+        <CabineInVehicle>0</CabineInVehicle>
+        <ChargingPressure>0.5</ChargingPressure>
+        <InitMainResPressure>0.8</InitMainResPressure>
+        <NoAir>0</NoAir>
+        <Title>РА3 041+038+043 (ЮППК, шестивагонный)</Title>
+        <Description>Дизель-поезд РА3-041, РА3-038 и РА3-043 в сплотке. Состав: 04102-04101-03801-03802-04302-04301. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур)</Description>
+    </Common>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04102-active</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04101</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-03801</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-03802</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04301</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-04302</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+</Config>

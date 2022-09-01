@@ -115,7 +115,7 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
 
     double i_gp = 0;
 
-    if (omega_in >= 0.001)
+    if (qAbs(omega_in) >= 0.1)
         i_gp = omega_out / omega_in;
 
     revers_state = gap(Y[3]);
@@ -197,7 +197,7 @@ void HydroTransmission::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 double HydroTransmission::getHydroTranstCoeff(double omega_in, double omega_out)
 {
-    if (qAbs(omega_in) < 0.001)
+    if (qAbs(omega_in) < 0.1)
         return 0.0;
 
     return pf(gt_char.getValue(qAbs(omega_out) / qAbs(omega_in)));
@@ -208,7 +208,7 @@ double HydroTransmission::getHydroTranstCoeff(double omega_in, double omega_out)
 //------------------------------------------------------------------------------
 double HydroTransmission::getHydroCouplingCoeff(double omega_in, double omega_out)
 {
-    if (qAbs(omega_in) < 0.001)
+    if (qAbs(omega_in) < 0.1)
         return 0.0;
 
     return pf(gm_char.getValue(1.0 - qAbs(omega_out) / qAbs(omega_in)));

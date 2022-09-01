@@ -4,6 +4,10 @@
 //
 //------------------------------------------------------------------------------
 RA3Middle::RA3Middle(QObject *parent) : Vehicle(parent)
+  , num(4003)
+  , is_orient_same(true)
+  , door_R_state(1)
+  , door_L_state(1)
   , U_bat_110(0.0)
   , Ucc_110(0.0)
   , bat110(Q_NULLPTR)
@@ -43,6 +47,19 @@ void RA3Middle::initialization()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void RA3Middle::initBrakeDevices(double p0, double pTM, double pFL)
+{
+    Q_UNUSED (p0);
+
+    main_res->setY(0, pFL);
+    aux_res->setY(0, pFL);
+
+    brake_module->init(pTM, pFL);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void RA3Middle::step(double t, double dt)
 {
     stepControlCircuit(t, dt);
@@ -54,6 +71,8 @@ void RA3Middle::step(double t, double dt)
     stepBrakeEquipment(t, dt);
 
     stepSignalsOutput(t, dt);
+
+    stepSMESignalsOutput(t, dt);
 
     stepVehiclesConnect();
 
@@ -72,6 +91,7 @@ void RA3Middle::loadConfig(QString cfg_path)
         QString secName = "Vehicle";
 
         cfg.getDouble(secName, "MainResLeak", main_res_leak);
+        cfg.getInt(secName, "Number", num);
     }
 }
 

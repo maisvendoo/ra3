@@ -29,6 +29,18 @@ private:
         BWD_TROLLEY = 1
     };
 
+    /// Серийный номер вагона
+    int num;
+
+    /// Ориентация относительно активной кабины
+    bool is_orient_same;
+
+    /// Состояние дверей справа
+    int door_R_state;
+
+    /// Состояние дверей слева
+    int door_L_state;
+
     /// Напряжение от батареи 110 В
     double U_bat_110;
 
@@ -50,6 +62,11 @@ private:
     /// Коэффициент утечки из ГР
     double main_res_leak;
 
+    /// Переток воздуха из ПМ заднего вагона
+    double Q_pm_bwd;
+    /// Переток воздуха из ПМ переднего вагона
+    double Q_pm_fwd;
+
     /// Блок тормозного оборудования (БТО-092)
     BTO092 *brake_module;
 
@@ -63,6 +80,8 @@ private:
     std::array<RA3BrakeMech *, NUM_TROLLEY> brake_mech;
 
     void initialization() override;
+
+    void initBrakeDevices(double p0, double pTM, double pFL) override;
 
     void initControlCircuit();
 
@@ -83,6 +102,9 @@ private:
     void stepBrakeEquipment(double t, double dt);
 
     void stepSignalsOutput(double t, double dt);
+
+    /// Работа сигналов СМЕ
+    void stepSMESignalsOutput(double t, double dt);
 
     void stepVehiclesConnect();
 

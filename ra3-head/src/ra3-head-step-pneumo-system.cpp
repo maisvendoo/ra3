@@ -9,13 +9,19 @@ void RA3HeadMotor::stepPneumoSystem(double t, double dt)
     double K_pa = 0.05;
     double Q_pm_ar = K_pa * pf(main_res->getPressure() - aux_res->getPressure());
 
-    main_res->setAirFlow(motor_compr->getAirFlow() - Q_pm_ar);
+    // Задаем главному резервуару приток от компрессора, отток в блок-тормоз,
+    // отток в запасный резервуар и отток в ПМ для соседних вагонов
+    main_res->setAirFlow(motor_compr->getAirFlow() -
+                         brake_module->getPMFlow() -
+                         Q_pm_ar -
+                         backward_inputs[SME_PM_Q] -
+                         forward_inputs[SME_PM_Q]);
     main_res->setFlowCoeff(main_res_leak);
     main_res->step(t, dt);
 
     motor_compr->setU_power(aux_conv->getU_380() * press_reg->getState());
     motor_compr->setExternalPressure(main_res->getPressure());
-    motor_compr->step(t, dt);    
+    motor_compr->step(t, dt);
 
     press_reg->setPressure(main_res->getPressure());
     press_reg->step(t, dt);
