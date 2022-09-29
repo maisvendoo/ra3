@@ -258,19 +258,25 @@ void BLOK::alsn_process(int code_alsn)
         }
     case 1:
         {
+            lamps[RED_LAMP] = 1.0f;
+
+            break;
+        }
+    case 2:
+        {
             lamps[RED_YELLOW_LAMP] = 1.0f;
 
             break;
         }
 
-    case 2:
+    case 3:
         {
             lamps[YELLOW_LAMP] = 1.0f;
 
             break;
         }
 
-    case 3:
+    case 4:
         {
             lamps[GREEN_LAMP1] = 1.0f;
 

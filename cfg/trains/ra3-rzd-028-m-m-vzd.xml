@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+    <Common>
+        <CouplingModule>ef-coupling</CouplingModule>
+        <CabineInVehicle>0</CabineInVehicle>
+        <ChargingPressure>0.5</ChargingPressure>
+        <InitMainResPressure>0.8</InitMainResPressure>
+        <NoAir>0</NoAir>
+	<ClientName>02</ClientName>
+	<TrainID>50331782</TrainID>
+        <Title>РА3 028 (РЖД, двухвагонный) (для ВЖД)</Title>
+        <Description>Дизель-поезд РА3-028. Состав: 02801-02802. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур), Александр Мищенко (перекраска РЖД)</Description>            
+    </Common>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-02801-active</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>1</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>    
+    </Vehicle>
+
+    <Vehicle>
+         <Module>ra3-head</Module>
+         <ModuleConfig>ra3-02802</ModuleConfig>
+         <Count>1</Count>
+         <IsOrientationForward>0</IsOrientationForward>
+         <PayloadCoeff>1</PayloadCoeff>
+    </Vehicle>
+
+</Config>
