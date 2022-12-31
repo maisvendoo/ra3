@@ -45,14 +45,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     }
     else
     {
-        if (is_orient_same)
-            mpsu_input.revers_handle =
-                static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
+        // Сигнал позиции реверсора принимаем спереди наоборот, сзади правильно
+        mpsu_input.revers_handle =
+                static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) -
                 static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
-        else
-            mpsu_input.revers_handle = -1 * (
-                static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
-                static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));
         mpsu_input.is_KM_zero =
                 static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == 0.0f);
         mpsu_input.is_KM_traction =
