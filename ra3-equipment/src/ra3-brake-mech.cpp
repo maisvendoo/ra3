@@ -32,8 +32,8 @@ void RA3BrakeMech::preStep(state_vector_t &Y, double t)
 
     // Нажатие от блок-тормоза без энергоаккумулятора
     double K_b1 = 0.0;
-    if (Y[0] > p_end)
-        K_b1 = Kmax * (Y[0] - p_end) / p_max;
+    if (Y[0] - p_end > Physics::ZERO)
+        K_b1 = Kmax * (Y[0] - p_end) / (p_max - p_end);
 
     // Ограничение тормозного нажатия, учитывающее зазор в механизмах
     // блок тормоза с пружинным энергоаккумулятором
