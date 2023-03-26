@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 RA3Middle::RA3Middle(QObject *parent) : Vehicle(parent)
   , num(4003)
-  , is_orient_same(true)
   , door_R_state(1)
   , door_L_state(1)
   , U_bat_110(0.0)

@@ -6,9 +6,10 @@
         <Length>24.7</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
+        <WheelRailFriction>default</WheelRailFriction>
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
-        <WheelInertia>2.0</WheelInertia>
+        <WheelInertia>100.0</WheelInertia>
 
         <FuelCapacity>350</FuelCapacity>
         <FuelLevel>1.0</FuelLevel>

@@ -26,20 +26,7 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
             SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_MIDDLE);
 
-    // Определяем ориентацию относительно активной кабины
-    if (forward_inputs[SME_NO_ACTIVE] < 0)
-    {
-        // Если спереди получен сигнал от активной кабины,
-        // отправляемый назад, то ориентация совпадает
-        is_orient_same = (static_cast<int>(forward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_BWD);
-    }
-    if (backward_inputs[SME_NO_ACTIVE] < 0)
-    {
-        // Если сзади получен сигнал от активной кабины,
-        // отправляемый вперёд, то ориентация совпадает
-        is_orient_same = (static_cast<int>(backward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_FWD);
-    }
-    // Отправляем сигнал дальше
+    // Пропускаем дальше сигнал запрета включать другие кабины
     backward_outputs[SME_NO_ACTIVE] = forward_inputs[SME_NO_ACTIVE];
     forward_outputs[SME_NO_ACTIVE] = backward_inputs[SME_NO_ACTIVE];
 
