@@ -30,7 +30,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     mpsu_input.revers_state = hydro_trans->getReversState();
 
-    mpsu_input.v_kmh = qAbs(wheel_omega[0] * wheel_diameter * Physics::kmh / 2.0);
+    mpsu_input.v_kmh = qAbs(wheel_omega[0] * wheel_diameter[0] * Physics::kmh / 2.0);
 
     if (is_active)
     {
@@ -106,7 +106,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         }
 
     mpsu_input.Kmax = brake_mech[FWD_TROLLEY]->getMaxShoeForce();
-    mpsu_input.wheel_diam = wheel_diameter;
+    mpsu_input.wheel_diam = wheel_diameter[0];
     mpsu_input.M_gb = hydro_trans->getBrakeTorque();
     mpsu_input.M_gb_max = hydro_trans->getMaxBrakeTorque();
 

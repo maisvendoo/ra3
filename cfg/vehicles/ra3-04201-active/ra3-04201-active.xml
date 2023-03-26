@@ -6,6 +6,7 @@
         <Length>24.24</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
+        <WheelRailFriction>loco-diesel</WheelRailFriction>
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
         <WheelInertia>100.0</WheelInertia>

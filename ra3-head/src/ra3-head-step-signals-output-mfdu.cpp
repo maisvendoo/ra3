@@ -81,7 +81,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_PRESSURE_TM] = static_cast<float>(pTM);
 
     analogSignal[MFDU_S_SPEED_LIMIT] = static_cast<float>(min(120.0, blok->getCurrentSpeedLimit()));
-    analogSignal[MFDU_S_SPEED] = static_cast<float>(Physics::kmh * wheel_omega[0] * wheel_diameter / 2.0);
+    analogSignal[MFDU_S_SPEED] = static_cast<float>(Physics::kmh * wheel_omega[0] * wheel_diameter[0] / 2.0);
 
     analogSignal[MFDU_TRACTION_BRAKING] = static_cast<float>(100.0 * (mpsu->getOutputData().trac_level) * hydro_trans->getTractionLevel()
                                                               - 100 * mpsu->getOutputData().brake_level);
