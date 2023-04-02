@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
     <Device>
-    	
         <Order>2</Order>
-		
-		<P_nom>6000.0</P_nom>
-		<omega_nom>151.3</omega_nom>
-		<U_nom>400.0</U_nom>
-		<zp>2</zp>
-		<freq>50</freq>
-		<lambda>2.5</lambda>
-		<Mc>30.0</Mc>
-		<J>0.3</J>
+        <SubStepNum>1</SubStepNum>
+        <Solver>euler</Solver>
+
+        <P_nom>6000.0</P_nom>
+        <omega_nom>151.3</omega_nom>
+        <U_nom>400.0</U_nom>
+        <zp>2</zp>
+        <freq>50</freq>
+        <lambda>2.5</lambda>
+        <Mc>30.0</Mc>
+        <J>0.3</J>
 
         <K1>1e-4</K1>
 

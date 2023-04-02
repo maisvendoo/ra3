@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
-    <Device>    	
-        
-    	<Order>2</Order>
+    <Device>
+        <Order>2</Order>
+        <SubStepNum>1</SubStepNum>
+        <Solver>euler</Solver>
 
         <PosDelay>300</PosDelay>
 
@@ -10,13 +11,13 @@
         <K2>0.9e-4</K2>
 
         <EqResLeak>0.0</EqResLeak>
-		
-		<V_bp>0.002</V_bp>
-		
-		<K3>1e-2</K3>
-		<K4>1e-2</K4>
-		
-		<A>10.0</A>
+
+        <V_bp>0.002</V_bp>
+
+        <K3>1e-2</K3>
+        <K4>1e-2</K4>
+
+        <A>10.0</A>
 
     </Device>
 </Config>
