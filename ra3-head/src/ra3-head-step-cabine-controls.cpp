@@ -14,7 +14,7 @@ void RA3HeadMotor::stepCabineControls(double t, double dt)
         km->setControl(keys);
         km->setFwdKey(tumbler[SWITCH_REVERS_FWD].getState());
         km->setBwdKey(tumbler[SWITCH_REVERS_BWD].getState());
-        km->setBrakePipePressure(pTM);
+        km->setBPpressure(brakepipe->getPressure());
         km->step(t, dt);
     }
 }

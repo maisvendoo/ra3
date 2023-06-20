@@ -67,16 +67,13 @@ void RA3HeadMotor::initialization()
     initDisel();
 
     // Инициализация системы обеспечения сжатым воздухом
-    initPneumoSystem();
-
-    // Инициализируем тормозные механизмы
-    initBrakeMech();
-
-    // Инициализация тормозного оборудования
-    initBrakeEquipment();
+    initPneumoSupply();
 
     // Инициализация приборов управления тормозами
-    initBrakeControls();
+    initBrakesControl();
+
+    // Инициализация тормозного оборудования
+    initBrakesEquipment();
 
     // Инициализация приборов безопасности
     initSafetyDevices();
@@ -92,20 +89,6 @@ void RA3HeadMotor::initialization()
 
     // Инициализация автозапуска
     initAutostart();
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void RA3HeadMotor::initBrakeDevices(double p0, double pTM, double pFL)
-{
-    main_res->setY(0, pFL);
-    aux_res->setY(0, pFL);
-
-    charge_press = p0;
-
-    kru->init(pTM, pFL);
-    brake_module->init(pTM, pFL);
 }
 
 //------------------------------------------------------------------------------
@@ -128,16 +111,13 @@ void RA3HeadMotor::step(double t, double dt)
     stepDisel(t, dt);
 
     // Работа системы обеспечения сжатым воздухом
-    stepPneumoSystem(t, dt);
-
-    // Работа тормозных механизмов
-    stepBrakeMech(t, dt);
-
-    // Работа тормозного оборудования
-    stepBrakeEquipment(t, dt);
+    stepPneumoSupply(t, dt);
 
     // Работа приборов управления тормозами
-    stepBrakeControls(t, dt);
+    stepBrakesControl(t, dt);
+
+    // Работа тормозного оборудования
+    stepBrakesEquipment(t, dt);
 
     // Работа приборов безопасности
     stepSafetyDevices(t, dt);

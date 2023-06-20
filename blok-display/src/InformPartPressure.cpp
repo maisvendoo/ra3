@@ -22,6 +22,8 @@
 InformPartPressure::InformPartPressure(QString strHead, QWidget *parent)
     : ImageLabel(parent)
 {
+    Q_UNUSED(strHead)
+
     this->setGeometry(0, 0, 70, 550);
     /*this->setStyleSheet("border: 2px solid yellow;"
                         "color: white;"

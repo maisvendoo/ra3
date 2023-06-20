@@ -48,6 +48,9 @@ void AuxiliaryConverter::step(double t, double dt)
 //------------------------------------------------------------------------------
 void AuxiliaryConverter::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     // Включение входного питания по сигналу МПСУ
     // и нормальному напряжению на входе
     bool is_powered = power_ON &&
@@ -76,7 +79,9 @@ void AuxiliaryConverter::ode_system(const state_vector_t &Y,
                                     state_vector_t &dYdt,
                                     double t)
 {
-
+    Q_UNUSED(Y)
+    Q_UNUSED(dYdt)
+    Q_UNUSED(t)
 }
 
 //------------------------------------------------------------------------------

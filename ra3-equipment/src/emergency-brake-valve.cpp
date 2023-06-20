@@ -4,9 +4,9 @@
 //
 //------------------------------------------------------------------------------
 EmergencyBrakeValve::EmergencyBrakeValve(QObject *parent) : Device(parent)
-  , emergencyRate(0.0)
-  , pTM(0.0)
-  , K_flow(50.0)
+  , QBP(0.0)
+  , pBP(0.0)
+  , K_flow(5.0e-2)
   , Kv(4.0)
 {
 
@@ -23,13 +23,51 @@ EmergencyBrakeValve::~EmergencyBrakeValve()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void EmergencyBrakeValve::setBPpressure(double value)
+{
+    pBP = value;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double EmergencyBrakeValve::getBPflow() const
+{
+    return QBP;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void EmergencyBrakeValve::setEmergencyBrake(bool is_emergency)
+{
+    if (is_emergency)
+        brake.set();
+    else
+        brake.reset();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+bool EmergencyBrakeValve::isEmergencyBrake() const
+{
+    return brake.getState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void EmergencyBrakeValve::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     double u = static_cast<double>(brake.getState());
 
-    emergencyRate = K_flow * pTM * u;
+    QBP = - K_flow * pBP * u;
 
-    emit soundSetVolume("EB_vipusk", qRound(emergencyRate * Kv));
+    emit soundSetVolume("EB_vipusk", qRound(nf(QBP) * Kv));
 }
 
 //------------------------------------------------------------------------------
@@ -39,7 +77,9 @@ void EmergencyBrakeValve::ode_system(const state_vector_t &Y,
                                      state_vector_t &dYdt,
                                      double t)
 {
-
+    Q_UNUSED(t)
+    Q_UNUSED(Y)
+    Q_UNUSED(dYdt)
 }
 
 //------------------------------------------------------------------------------
@@ -58,11 +98,14 @@ void EmergencyBrakeValve::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 void EmergencyBrakeValve::stepKeysControl(double t, double dt)
 {
+    Q_UNUSED(t)
+    Q_UNUSED(dt)
+
     if (getKeyState(KEY_X))
     {
         if (isShift())
         {
-            brake.reset();            
+            brake.reset();
         }
         else
         {

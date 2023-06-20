@@ -5,20 +5,19 @@
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::initBrakeEquipment()
+void RA3HeadMotor::initBrakesControl()
 {
-    brake_module = new BTO092();
-    brake_module->setCustomConfigDir(config_dir);
-    brake_module->read_custom_config(config_dir + QDir::separator() + "bto092");
+    // Кран резервного управления
+    kru = new KRU091();
+    kru->setCustomConfigDir(config_dir);
+    kru->read_custom_config(config_dir + QDir::separator() + "kru091");
 
-    pb_split = new PneumoSplitter();
-    pb_split->read_config("pneumo-splitter");
-
-    bc_split = new PneumoSplitter();
-    bc_split->read_config("pneumo-splitter");
+    epk = new AutoTrainStopEPK151D();
+    epk->read_custom_config(config_dir + QDir::separator() + "epk");
 
     emerg_brake_valve = new EmergencyBrakeValve();
     emerg_brake_valve->read_custom_config(config_dir +
                                           QDir::separator() +
                                           "emergency-brake-valve");
+
 }

@@ -73,7 +73,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     mpsu_input.button_speed_plus = tumbler[BUTTON_SPEED_PLUS].getState();
     mpsu_input.button_speed_minus = tumbler[BUTTON_SPEED_MINUS].getState();
 
-    mpsu_input.pBC_max = brake_module->getMaxBrakeCylinderPressure();
+    mpsu_input.pBC_max = brake_module->getMaxBCpressure();
 
     int pos = mpsu->getOutputData().pos_in_train - 1;
     // Состояние тормозов вагонов спереди
@@ -90,8 +90,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     // Состояние тормозов данного вагона
     mpsu_input.unit_level_GDB[pos] = hydro_trans->getBrakeLevel();
-    mpsu_input.unit_pBC[pos * 2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    mpsu_input.unit_pBC[pos * 2 + 1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    mpsu_input.unit_pBC[pos * 2] = brake_mech[TROLLEY_FWD]->getBCpressure();
+    mpsu_input.unit_pBC[pos * 2 + 1] = brake_mech[TROLLEY_BWD]->getBCpressure();
     mpsu_input.unit_spt_state[pos] = brake_module->isParkingBraked();
 
     // Состояние тормозов вагонов сзади
@@ -105,13 +105,13 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + bias]);
         }
 
-    mpsu_input.Kmax = brake_mech[FWD_TROLLEY]->getMaxShoeForce();
+    mpsu_input.Kmax = brake_mech[TROLLEY_FWD]->getMaxShoeForce();
     mpsu_input.wheel_diam = wheel_diameter[0];
     mpsu_input.M_gb = hydro_trans->getBrakeTorque();
     mpsu_input.M_gb_max = hydro_trans->getMaxBrakeTorque();
 
     mpsu_input.is_emergency_brake =
-            (pTM <= 0.3) ||
+            (brakepipe->getPressure() <= 0.3) ||
             km->isEmergencyBrake() ||
             emerg_brake_valve->isEmergencyBrake() ||
             static_cast<float>(backward_inputs[SME_IS_EMERGENCY_BRAKE]) ||

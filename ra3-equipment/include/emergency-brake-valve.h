@@ -14,17 +14,23 @@ public:
 
     ~EmergencyBrakeValve();
 
-    void setBrakePipePressure(double pTM) { this->pTM = pTM; }
+    /// Задать давление от тормозной магистрали
+    void setBPpressure(double value);
 
-    double getEmergencyRate() const { return emergencyRate; }
+    /// Поток в тормозную магистраль
+    double getBPflow() const;
 
-    bool isEmergencyBrake() const { return brake.getState(); }
+    /// Задать состояние экстренного торможения
+    void setEmergencyBrake(bool is_emergency);
+
+    /// Экстренное торможение
+    bool isEmergencyBrake() const;
 
 private:
 
-    double emergencyRate;
+    double QBP;
 
-    double pTM;
+    double pBP;
 
     double K_flow;
 

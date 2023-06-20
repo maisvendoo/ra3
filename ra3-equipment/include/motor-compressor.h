@@ -2,25 +2,18 @@
 #define     MOTOR_COMPRESSOR_H
 
 #include    "device.h"
+#include    "motor-compressor-ac.h"
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-class MotorCompressor : public Device
+class MotorCompressor : public ACMotorCompressor
 {
 public:
 
     MotorCompressor(QObject *parent = Q_NULLPTR);
 
     ~MotorCompressor();
-
-    void setExternalPressure(double press);
-
-    double getAirFlow() const;
-
-    void setU_power(double value);
-
-    bool isPowered() const { return is_powered; }
 
 private:
 
@@ -39,45 +32,7 @@ private:
     /// Перегрузочная способность по моменту
     double lambda;
 
-    /// Внешнее противодавление
-    double  p;
-
-    /// Расход возхуа
-    double  Q;
-
-    /// "Подача" компрессора
-    double  p0;
-
-    double  Mmax;
-
-    double  s_kr;
-
-    double  Un;
-
-    double  U_power;
-
-    double  omega0;
-
-    double  J;
-
-    double  Mc;
-
-    double  Vnk;
-
-    bool is_powered;
-
-    enum
-    {
-        NUM_COEFFS = 6
-    };
-
-    std::array<double, NUM_COEFFS>  K;
-
-    void preStep(state_vector_t &Y, double t);
-
-    void ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t);
-
-    void load_config(CfgReader &cfg);    
+    void load_config(CfgReader &cfg);
 };
 
 #endif // MOTOR_COMPRESSOR_H

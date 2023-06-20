@@ -15,7 +15,6 @@
 #include    "generator.h"
 #include    "aux-converter.h"
 #include    "motor-compressor.h"
-#include    "pressure-regulator.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
 #include    "kru-091.h"
@@ -144,38 +143,76 @@ private:
     /// Насос гидростатического привода
     HydroPump   *hydro_pump;
 
-    /// Главный резервуар
-    Reservoir   *main_res;
-
-    /// Запасный резервуар
-    Reservoir   *aux_res;
-
     /// Компрессорный агрегат
-    MotorCompressor *motor_compr;
+    MotorCompressor     *motor_compressor;
 
-    /// Регулятор давления в ГР
-    PressureRegulator *press_reg;
+    /// Регулятор давления ГР
+    PressureRegulator   *press_reg;
 
-    /// Блок тормозного оборудования БТО-092
-    BTO092  *brake_module;
+    /// Главный резервуар
+    Reservoir   *main_reservoir;
 
-    /// Тройник на питание СТ
-    PneumoSplitter *pb_split;
+    /// Концевой кран питательной магистрали спереди
+    PneumoAngleCock *anglecock_fl_fwd;
+
+    /// Концевой кран питательной магистрали сзади
+    PneumoAngleCock *anglecock_fl_bwd;
+
+    /// Рукав питательной  магистрали спереди
+    PneumoHose      *hose_fl_fwd;
+
+    /// Рукав питательной  магистрали сзади
+    PneumoHose      *hose_fl_bwd;
 
     /// Кран резервного управления
     KRU091  *kru;
 
+    /// ЭПК
+    AutoTrainStopEPK151D *epk;
+
+    /// Тормозная магистраль
+    Reservoir   *brakepipe;
+
+    /// Блок тормозного оборудования БТО-092
+    BTO092  *brake_module;
+
+    /// Запасный резервуар
+    Reservoir   *supply_reservoir;
+
+    /// Концевой кран тормозной магистрали спереди
+    PneumoAngleCock *anglecock_bp_fwd;
+
+    /// Концевой кран тормозной магистрали сзади
+    PneumoAngleCock *anglecock_bp_bwd;
+
+    /// Рукав тормозной магистрали спереди
+    PneumoHose   *hose_bp_fwd;
+
+    /// Рукав тормозной магистрали сзади
+    PneumoHose   *hose_bp_bwd;
+
+    /// Тройник на питание СТ
+    PneumoSplitter *pb_split;
+
     /// Тройник на питание ТЦ
     PneumoSplitter *bc_split;
+
+    enum
+    {
+        NUM_TROLLEYS = 2,
+        NUM_AXIS_PER_TROLLEY = 2,
+        TROLLEY_FWD = 0,
+        TROLLEY_BWD = 1
+    };
+
+    /// Тормозные механизмы тележек
+    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
 
     /// Контроллер тяги/торможения
     TracController *km;
 
-    /// Безопасны локомотивный комплекс (БЛОК)
+    /// Безопасный локомотивный объединённый комплекс (БЛОК)
     BLOK    *blok;
-
-    /// ЭПК
-    AutoTrainStopEPK151D *epk;
 
     /// Гидропередача
     HydroTransmission *hydro_trans;
@@ -189,13 +226,6 @@ private:
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank;
 
-    enum
-    {
-        NUM_TROLLEYS = 2,
-        FWD_TROLLEY = 0,
-        BWD_TROLLEY = 1
-    };
-
     /// Индексы осей
     enum
     {
@@ -204,9 +234,6 @@ private:
         AXIS_3 = 3,
         ASIS_4 = 4
     };
-
-    /// Тормозная механика тележек
-    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
 
     /// Выключатели в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
@@ -219,7 +246,7 @@ private:
 
     void initialization() override;
 
-    void initBrakeDevices(double p0, double pTM, double pFL) override;
+    void initBrakeDevices(double p0, double pBP, double pFL) override;
 
     /// Инициализация органов управления в кабине
     void initCabineControls();
@@ -237,16 +264,13 @@ private:
     void initDisel();
 
     /// Инициализация системы обеспечения сжатым воздухом
-    void initPneumoSystem();
-
-    /// Инициализация механической части тормозной системы
-    void initBrakeMech();
-
-    /// Инициализация тормозного оборудования
-    void initBrakeEquipment();
+    void initPneumoSupply();
 
     /// Инициализация приборов управления тормозами
-    void initBrakeControls();
+    void initBrakesControl();
+
+    /// Инициализация тормозного оборудования
+    void initBrakesEquipment();
 
     /// Инициализация приборов безопасности
     void initSafetyDevices();
@@ -281,13 +305,13 @@ private:
     void stepDisel(double t, double dt);
 
     /// Работа системы обеспечения сжатым воздухом
-    void stepPneumoSystem(double t, double dt);
+    void stepPneumoSupply(double t, double dt);
 
-    /// Работа механической части тормозной системы
-    void stepBrakeMech(double t, double dt);
+    /// Работа приборов управления тормозами
+    void stepBrakesControl(double t, double dt);
 
     /// Работа тормозного оборудования
-    void stepBrakeEquipment(double t, double dt);
+    void stepBrakesEquipment(double t, double dt);
 
     /// Работа приборов безопасности
     void stepSafetyDevices(double t, double dt);
@@ -295,10 +319,7 @@ private:
     /// Работа подсистемы тяги
     void stepTraction(double t, double dt);
 
-    /// Работа приборов управления тормозами
-    void stepBrakeControls(double t, double dt);
-
-    /// Выбод сигналов
+    /// Вывод сигналов
     void stepSignalsOutput(double t, double dt);
 
     /// Работа прочего оборудования

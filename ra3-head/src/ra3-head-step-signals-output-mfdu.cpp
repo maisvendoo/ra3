@@ -14,7 +14,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_REVERS_BWD] = static_cast<float>(!mpsu->getOutputData().revers_bwd);
     analogSignal[MFDU_REVERS_NEUTRAL] = static_cast<float>(!mpsu->getOutputData().revers_neutral);
 
-    analogSignal[MFDU_PRESSURE_PM] = static_cast<float>(main_res->getPressure());
+    analogSignal[MFDU_PRESSURE_PM] = static_cast<float>(main_reservoir->getPressure());
 
 
     // Неактивные подсистемы
@@ -78,7 +78,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_I_AKB_110] = static_cast<float>(Icc_110);
     analogSignal[MFDU_I_AKB_24] = static_cast<float>(Icc_24);
 
-    analogSignal[MFDU_PRESSURE_TM] = static_cast<float>(pTM);
+    analogSignal[MFDU_PRESSURE_TM] = static_cast<float>(brakepipe->getPressure());
 
     analogSignal[MFDU_S_SPEED_LIMIT] = static_cast<float>(min(120.0, blok->getCurrentSpeedLimit()));
     analogSignal[MFDU_S_SPEED] = static_cast<float>(Physics::kmh * wheel_omega[0] * wheel_diameter[0] / 2.0);
@@ -143,7 +143,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] = 25.1f;
     analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] = 1.0f;
     analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
-    analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] = static_cast<float>(motor_compr->isPowered());
+    analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] = static_cast<float>(motor_compressor->isPowered());
     is_generator_active |= generator->isActive();
     is_fuel_pump_active |= fuel_pump->isStarted();
 

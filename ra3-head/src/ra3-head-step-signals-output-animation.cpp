@@ -15,10 +15,10 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[STRELKA_VOLTMETER110] = static_cast<float>(Ucc_110 / 150.0);
     analogSignal[STRELKA_VOLTMETER24] = static_cast<float>(Ucc_24 / 30.0);
 
-    analogSignal[STRELKA_P_GR] = static_cast<float>(main_res->getPressure() / 1.2);
-    analogSignal[STRELKA_P_TM] = static_cast<float>(pTM / 1.2);
-    analogSignal[STRELKA_P_TC1] = static_cast<float>(brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure() / 0.6);
-    analogSignal[STRELKA_P_TC2] = static_cast<float>(brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure() / 0.6);
+    analogSignal[STRELKA_P_GR] = static_cast<float>(main_reservoir->getPressure() / 1.2);
+    analogSignal[STRELKA_P_TM] = static_cast<float>(brakepipe->getPressure() / 1.2);
+    analogSignal[STRELKA_P_TC1] = static_cast<float>(brake_mech[TROLLEY_FWD]->getBCpressure() / 0.6);
+    analogSignal[STRELKA_P_TC2] = static_cast<float>(brake_mech[TROLLEY_BWD]->getBCpressure() / 0.6);
 
     // Кнопки пуска и остановки дизелей
     analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[BUTTON_START].getState());

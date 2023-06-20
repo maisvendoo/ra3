@@ -81,7 +81,7 @@ void BlokDisplay::initMainWindow()
 
     updateTimer = new QTimer;
     connect(updateTimer, &QTimer::timeout, this, &BlokDisplay::slotUpdateTimer, Qt::QueuedConnection);
-    updateTimer->setInterval(timeInterval);        
+    updateTimer->setInterval(timeInterval);
     updateTimer->start();
 }
 
@@ -143,10 +143,10 @@ void BlokDisplay::slotUpdateTimer()
     structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
     structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
 
-    if (!stations.empty())
+    if ((!stations.empty()) && (input_signals[BLOK_STATION_INDEX] >= 0.0f))
     {
-        int i = static_cast<int>(input_signals[BLOK_STATION_INDEX]);
-        if (i >= 0)
+        size_t i = static_cast<size_t>(input_signals[BLOK_STATION_INDEX]);
+        if (i < stations.size())
             strcpy(structsBLOK.ip_val.station, stations[i].toStdString().c_str());
         else
             strcpy(structsBLOK.ip_val.station, " ");

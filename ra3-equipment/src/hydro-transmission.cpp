@@ -35,6 +35,7 @@ HydroTransmission::HydroTransmission(QObject *parent) : Device(parent)
   , Kp(1.0)
   , Ki(0.0)
   , delta_level(0.0)
+  , switch_relay(new Hysteresis(i_min, i_max, false))
 {
     setY(3, revers_pos_ref);
 }
@@ -109,6 +110,9 @@ double HydroTransmission::brakeTorqueLimit(double omega_out)
 //------------------------------------------------------------------------------
 void HydroTransmission::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     double u_torque = static_cast<double>(is_traction);
 
     double u_brake = static_cast<double>(is_brake);
@@ -117,10 +121,11 @@ void HydroTransmission::preStep(state_vector_t &Y, double t)
 
     if (qAbs(omega_in) >= 0.1)
         i_gp = omega_out / omega_in;
+    switch_relay->setValue(i_gp);
 
     revers_state = gap(Y[3]);
 
-    u_gt = static_cast<double>(switch_relay.getState(i_gp)) * qAbs(revers_state * revers_handle) * u_torque;
+    u_gt = static_cast<double>(switch_relay->getState()) * qAbs(revers_state * revers_handle) * u_torque;
     u_gm = (1.0 - u_gt) * qAbs(revers_state * revers_handle) * u_torque;
     u_gb = u_brake;
 
@@ -147,6 +152,8 @@ void HydroTransmission::ode_system(const state_vector_t &Y,
                                    state_vector_t &dYdt,
                                    double t)
 {
+    Q_UNUSED(t)
+
     dYdt[0] = (u_gt - Y[0]) / T_gt;
 
     dYdt[1] = (u_gm - Y[1]) / T_gm;
@@ -172,7 +179,7 @@ void HydroTransmission::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "i_min", i_min);
     cfg.getDouble(secName, "i_max", i_max);
 
-    switch_relay.setRange(i_min, i_max);
+    switch_relay->setRange(i_min, i_max);
 
     QString path = custom_config_dir + QDir::separator() + "gdt.csv";
     gt_char.load(path.toStdString());

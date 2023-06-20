@@ -12,14 +12,6 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     backward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
     forward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
 
-    // Давление в ПМ для промежуточного вагона
-    backward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
-    forward_outputs[SME_PM_PRESSURE] = main_res->getPressure();
-
-    // Обнуляем сигнал потока из ПМ соседних вагонов - есть собственный компрессор
-    backward_outputs[SME_PM_Q] = 0.0f;
-    forward_outputs[SME_PM_Q] = 0.0f;
-
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов
@@ -33,7 +25,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Сигналы из активной кабины
     if (is_active)
     {
-        // КОСТЫЛЬ под нынешнюю реализацию brakepipe.
+/*        // КОСТЫЛЬ под нынешнюю реализацию brakepipe.
         // Если активная кабина не в начале,
         // то передаем давление от тормозного крана в сигналы СМЕ,
         // чтобы установить давление в начале тормозной магистрали.
@@ -41,7 +33,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         {
             backward_outputs[SME_P0] = kru->getBrakePipeInitPressure();
             forward_outputs[SME_P0] = kru->getBrakePipeInitPressure();
-        }
+        }*/
 
         // Сигнал включения контактора "Бортсеть" на ведомые секции
         backward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
@@ -113,9 +105,9 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
             backward_outputs[i] = forward_inputs[i];
             forward_outputs[i] = backward_inputs[i];
         }
-        // Пропускаем дальше сигнал-костыль p0
+/*        // Пропускаем дальше сигнал-костыль p0
         backward_outputs[SME_P0] = forward_inputs[SME_P0];
-        forward_outputs[SME_P0] = backward_inputs[SME_P0];
+        forward_outputs[SME_P0] = backward_inputs[SME_P0];*/
     }
 
     // Пропускаем сигналы состояния следующих вагонов со смещением
@@ -151,8 +143,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     forward_outputs[SME_UNIT_GENERATOR] = static_cast<float>(generator->isActive());
 
     // Сигнал состояния компрессора
-    backward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
-    forward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compr->isPowered());
+    backward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compressor->isPowered());
+    forward_outputs[SME_UNIT_COMPRESSOR] = static_cast<float>(motor_compressor->isPowered());
 
     // Сигнал состояния гидропередачи
     backward_outputs[SME_UNIT_GDT_REVERS_STATE] = hydro_trans->getReversState();
@@ -163,10 +155,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Давление в тормозных цилиндрах
     // Назад отправляем в обратном порядке
     // Вперёд отправляем в правильном порядке
-    backward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-    backward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    forward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    backward_outputs[SME_UNIT_BC1] = brake_mech[TROLLEY_BWD]->getBCpressure();
+    backward_outputs[SME_UNIT_BC2] = brake_mech[TROLLEY_FWD]->getBCpressure();
+    forward_outputs[SME_UNIT_BC1] = brake_mech[TROLLEY_BWD]->getBCpressure();
+    forward_outputs[SME_UNIT_BC2] = brake_mech[TROLLEY_FWD]->getBCpressure();
 
     // Состояние дверей
     // Назад отправляем зеркально

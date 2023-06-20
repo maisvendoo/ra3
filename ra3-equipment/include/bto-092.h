@@ -3,10 +3,9 @@
 
 #include    "airdistributor.h"
 #include    "hysteresis.h"
-#include    "switching-valve.h"
+#include    "pneumo-switching-valve.h"
 #include    "pneumo-reducer.h"
 #include    "pneumo-relay.h"
-#include    "reservoir.h"
 #include    "electro-lock-valve.h"
 
 //------------------------------------------------------------------------------
@@ -20,45 +19,49 @@ public:
 
     ~BTO092();
 
-    void setParkingBrakePressure(double p_pb) { this->p_pb = p_pb; }
+    /// Задать питающее напряжение
+    void setPowerVoltage(double value);
 
-    double getParkingBrakeAirFlow() const { return Q_pb; }
+    /// Задать давление от камер отпуска стояночного тормоза
+    void setPBpressure(double value);
 
-    void setParkingBrakeState(bool is_parking_braked)
-    {
-        this->is_parking_brake_ON = is_parking_braked;
-    }
+    /// Поток в камеры отпуска стояночного тормоза
+    double getPBflow() const;
 
-    void setVoltage(double U_pow) { this->U_pow = U_pow; }
+    /// Задать состояние стояночного тормоза
+    void setParkingBrakeState(bool is_parking_braked);
 
+    /// Состояние стояночного тормоза
     bool isParkingBraked();
 
+    /// Задать отпуск пневматических тормозов
+    void releaseBrakes(bool release);
+
+    /// Задать требуемый уровень электропневматического торможения
+    void setRefEPBlevel(double ref_level);
+
+    /// Максимальное давление в тормозных цилиндрах
+    double getMaxBCpressure() const;
+
+    /// Шаг моделирования блока тормозного оборудования
     void step(double t, double dt) override;
-
-    void releaseBrakes(bool is_release) { this->is_release = is_release; }
-
-    void setRefPressureLevel(double p_ref) { this->p_ref = p_ref * pBC_max; }
-
-    double getMaxBrakeCylinderPressure() const { return pBC_max; }
-
-    double getPMFlow() const { return bc_reducer->getQ_in(); };
 
 private:
 
-    /// Давление в магистрали стояночного тормоза
-    double p_pb;
+    /// Давление от магистрали отпуска стояночного тормоза
+    double pPB;
 
-    /// Поток в магистраль стояночного тормоза
-    double Q_pb;
-
-    /// Состояние стояночного тормоза
-    bool is_parking_brake_ON;
-
-    /// Признак срабатывания стояночного тормоза
-    bool is_parking_braked;
+    /// Поток в магистраль отпуска стояночного тормоза
+    double QPB;
 
     /// Уставка давления в цилиндрах стояночного тормоза (ЦСТ)
     double pPB_max;
+
+    /// Состояние стояночного тормоза
+    bool ref_parking_brake_state;
+
+    /// Гистерезисный блок, для определения статуса стояночного тормоза
+    Hysteresis  *parking_brake_state;
 
     /// Напряжение питания
     double U_pow;
@@ -66,26 +69,23 @@ private:
     /// Номинальное напряжение питания
     double U_nom;
 
-    /// Переключательный клапан
-    SwitchingValve *sw_valve;
+    /// Максимальное давление в тормозных цилиндрах
+    double pBC_max;
 
     /// Редуктор питания магистрали ТЦ
     PneumoReducer *bc_reducer;
 
-    /// Реле давления для наполнения ТЦ
-    PneumoReley *bc_relay;
+    /// Переключательный клапан
+    SwitchingValve *sw_valve;
 
-    /// Максимальное давление в тормозных цилиндрах
-    double pBC_max;
+    /// Реле давления для наполнения ТЦ
+    PneumoRelay *bc_relay;
 
     /// Условная площадь управляющего поршня
     double A;
 
     /// Давление пружин
     double ps;
-
-    /// Условный резервуар, имитирующий рабочую полость КПУ
-    Reservoir   *work_res;
 
     /// Сигнал включения КЭБ для отпуска тормозов
     bool is_release;
@@ -106,21 +106,20 @@ private:
     double ept_eps;
 
     /// Минимальная ступень торможения ЭПТ
-    double p_min;
+    //double p_min;
 
+    /// Управление вентилями ЭПТ
     int state_ept;
 
+    /// Озвучка применения стояночного тормоза
     bool pb_brake_play;
 
     enum
     {
-        NUM_COEFFS = 10
+        NUM_COEFFS = 9
     };
 
     std::array<double, NUM_COEFFS> K;
-
-    /// Гистерезисный блок, для определения статуса СТ
-    Hysteresis  parking_brake;
 
     void preStep(state_vector_t &Y, double t) override;
 

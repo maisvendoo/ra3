@@ -54,7 +54,7 @@ void ElectroLockValve::preStep(state_vector_t &Y, double t)
     double v2 = 1.0 - v1;
 
     double Q1 = Q_in * v1;
-    volume->setAirFlow(Q1);
+    volume->setFlow(Q1);
 
     Q_out = Q_in * v2 - K_atm * p_out * v1;
 
@@ -85,5 +85,5 @@ void ElectroLockValve::load_config(CfgReader &cfg)
     valve->read_custom_config(custom_config_dir + QDir::separator() + "mk");
     valve->setInitContactState(0, false);
 
-    volume->setFlowCoeff(0);
+    volume->setLeakCoeff(0);
 }

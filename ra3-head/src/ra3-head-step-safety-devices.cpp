@@ -18,10 +18,4 @@ void RA3HeadMotor::stepSafetyDevices(double t, double dt)
     blok->setTrainLength(mpsu->getOutputData().train_length);
     blok->setKeyEPK(epk->getStateKey());
     blok->step(t, dt);
-
-    epk->setFeedlinePressure(main_res->getPressure());
-    epk->setBrakepipePressure(pTM);
-    epk->setKeyState(tumbler[KEY_EPK].getState());
-    epk->powerOn(blok->getEPKstate());
-    epk->step(t, dt);
 }
