@@ -516,12 +516,13 @@ void MPSU::hydro_brake_control()
     // Рассчитываем потребное усилие, заданное от КМ или регулятора скорости
     double B_ref = (mpsu_input.brake_level_KM + mpsu_output.auto_brake_level) * calcMaxBrakeForce(qAbs(mpsu_input.v_kmh));
 
-    // Определяем задание ГДТ, пытаемся реализовать заданное усили за счет применения ГДТ
+    // Определяем задание ГДТ, пытаемся реализовать заданное усилие за счет применения ГДТ
     mpsu_output.brake_ref_level_GB = cut(B_ref / B_gb_max, 0.0, 1.0);
     // Определяем добавку по ЭПТ, если эффективности ГДТ не достаточно
     mpsu_output.brake_ref_level_EPB = cut( (B_ref - B_gb) / B_ref, 0.0, mpsu_output.brake_level);
-    // Формируем признак "отпуск ЭПТ" при достаточном тормозном усилии от ГДТ
-    mpsu_output.release_PB = !static_cast<bool>(hs_p(B_ref - B_gb));
+
+    // Формируем сигнал "отпуск ПТ" на моторную тележку при работе ГДТ
+    mpsu_output.release_PB = (mpsu_input.M_gb > Physics::ZERO);
 }
 
 //------------------------------------------------------------------------------

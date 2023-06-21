@@ -43,13 +43,8 @@ void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
     pb_split->setPipePressure1(brake_mech[TROLLEY_FWD]->getPBpressure());
     pb_split->setPipePressure2(brake_mech[TROLLEY_BWD]->getPBpressure());
     pb_split->step(t, dt);
-/*
-    bc_split->setInputFlow(brake_module->getBCflow());
-    bc_split->setPipePressure1(brake_mech[TROLLEY_FWD]->getBCpressure());
-    bc_split->setPipePressure2(brake_mech[TROLLEY_BWD]->getBCpressure());
-    bc_split->step(t, dt);
-*/
-    // Тормозные рычажные передачи тележек подключены к тройникам
+
+    // Тормозные рычажные передачи тележек
     brake_mech[TROLLEY_FWD]->setPBflow(pb_split->getPipeFlow1());
     brake_mech[TROLLEY_FWD]->setBCflow(brake_module->getBCflow1());
     brake_mech[TROLLEY_FWD]->setAngularVelocity(0, wheel_omega[0]);
