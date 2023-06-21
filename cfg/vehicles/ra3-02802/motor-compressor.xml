@@ -33,7 +33,7 @@
         <K_pressure>0.015</K_pressure>
 
         <!-- Коэффициент потока в питательную магистраль -->
-        <K_flow>0.005</K_flow>
+        <K_flow>0.001</K_flow>
 
         <!-- <SoundName>Motor_Compressor</SoundName> -->
         <RegulateSoundByOnOff>0</RegulateSoundByOnOff>

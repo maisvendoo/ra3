@@ -6,7 +6,8 @@
 #include    "pneumo-switching-valve.h"
 #include    "pneumo-reducer.h"
 #include    "pneumo-relay.h"
-#include    "electro-lock-valve.h"
+//#include    "electro-lock-valve.h"
+#include    "relay.h"
 
 //------------------------------------------------------------------------------
 //
@@ -22,6 +23,18 @@ public:
     /// Задать питающее напряжение
     void setPowerVoltage(double value);
 
+    /// Задать давление от тормозных цилиндров передней (моторной) тележки
+    void setBCpressure1(double value);
+
+    /// Поток в тормозные цилиндры передней (моторной) тележки
+    double getBCflow1() const;
+
+    /// Задать давление от тормозных цилиндров задней (безмоторной) тележки
+    void setBCpressure2(double value);
+
+    /// Поток в тормозные цилиндры задней (безмоторной) тележки
+    double getBCflow2() const;
+
     /// Задать давление от камер отпуска стояночного тормоза
     void setPBpressure(double value);
 
@@ -34,7 +47,7 @@ public:
     /// Состояние стояночного тормоза
     bool isParkingBraked();
 
-    /// Задать отпуск пневматических тормозов
+    /// Задать отпуск пневматических тормозов на моторной тележке
     void releaseBrakes(bool release);
 
     /// Задать требуемый уровень электропневматического торможения
@@ -47,6 +60,12 @@ public:
     void step(double t, double dt) override;
 
 private:
+
+    /// Давление от магистрали отпуска стояночного тормоза
+    double pBC_motor;
+
+    /// Поток в тормозные цилиндры передней (моторной) тележки
+    double QBC_motor;
 
     /// Давление от магистрали отпуска стояночного тормоза
     double pPB;
@@ -78,8 +97,11 @@ private:
     /// Переключательный клапан
     SwitchingValve *sw_valve;
 
-    /// Реле давления для наполнения ТЦ
-    PneumoRelay *bc_relay;
+    /// Реле давления для наполнения ТЦ передней (моторной) тележки
+    PneumoRelay *bc_relay1;
+
+    /// Реле давления для наполнения ТЦ задней (безмоторной) тележки
+    PneumoRelay *bc_relay2;
 
     /// Условная площадь управляющего поршня
     double A;
@@ -89,10 +111,10 @@ private:
 
     /// Сигнал включения КЭБ для отпуска тормозов
     bool is_release;
-
+/*
     /// КЭБ (Клапан электроблокировочный)
     ElectroLockValve *keb;
-
+*/
     /// Вентиль отпуска ЭПТ (ВО)
     Relay   *release_valve;
 

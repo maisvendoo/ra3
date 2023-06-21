@@ -11,11 +11,11 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     // Обнуляем сигнал давления ПМ - на данном вагоне нет источника сжатого воздуха
     backward_outputs[SME_PM_PRESSURE] = 0.0f;
     forward_outputs[SME_PM_PRESSURE] = 0.0f;
-
+/*
     // Отправляем в соседние вагоны перетоки воздуха из их ПМ
     backward_outputs[SME_PM_Q] = Q_pm_bwd;
     forward_outputs[SME_PM_Q] = Q_pm_fwd;
-
+*/
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов
@@ -36,9 +36,9 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
         backward_outputs[i] = forward_inputs[i];
         forward_outputs[i] = backward_inputs[i];
     }
-    // Пропускаем дальше сигнал-костыль p0
+/*    // Пропускаем дальше сигнал-костыль p0
     backward_outputs[SME_P0] = forward_inputs[SME_P0];
-    forward_outputs[SME_P0] = backward_inputs[SME_P0];
+    forward_outputs[SME_P0] = backward_inputs[SME_P0];*/
 
     // Пропускаем сигналы состояния следующих вагонов со смещением
     for (size_t i = SME_UNIT_STATE_BEGIN + SME_UNIT_STATE_SIZE; i < backward_outputs.size(); i++)
@@ -63,10 +63,10 @@ void RA3Middle::stepSMESignalsOutput(double t, double dt)
     // Давление в тормозных цилиндрах
     // Назад отправляем в обратном порядке
     // Вперёд отправляем в правильном порядке
-    backward_outputs[SME_UNIT_BC1] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
-    backward_outputs[SME_UNIT_BC2] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    forward_outputs[SME_UNIT_BC1] = brake_mech[FWD_TROLLEY]->getBrakeCylinderPressure();
-    forward_outputs[SME_UNIT_BC2] = brake_mech[BWD_TROLLEY]->getBrakeCylinderPressure();
+    backward_outputs[SME_UNIT_BC1] = brake_mech[TROLLEY_BWD]->getBCpressure();
+    backward_outputs[SME_UNIT_BC2] = brake_mech[TROLLEY_FWD]->getBCpressure();
+    forward_outputs[SME_UNIT_BC1] = brake_mech[TROLLEY_BWD]->getBCpressure();
+    forward_outputs[SME_UNIT_BC2] = brake_mech[TROLLEY_FWD]->getBCpressure();
 
     // Состояние дверей
     // Назад отправляем зеркально

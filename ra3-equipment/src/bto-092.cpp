@@ -16,11 +16,12 @@ BTO092::BTO092(QObject *parent) : AirDistributor(parent)
   , pBC_max(0.4)
   , bc_reducer(new PneumoReducer(pBC_max))
   , sw_valve(new SwitchingValve())
-  , bc_relay(new PneumoRelay())
+  , bc_relay1(new PneumoRelay())
+  , bc_relay2(new PneumoRelay())
   , A(0.5)
   , ps(0.5)
   , is_release(false)
-  , keb(new ElectroLockValve())
+//  , keb(new ElectroLockValve())
   , release_valve(new Relay(1))
   , brake_valve(new Relay(1))
   , p_ref(0.0)
@@ -46,6 +47,38 @@ BTO092::~BTO092()
 void BTO092::setPowerVoltage(double value)
 {
     U_pow = value;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BTO092::setBCpressure1(double value)
+{
+    pBC_motor = value;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double BTO092::getBCflow1() const
+{
+    return QBC_motor;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void BTO092::setBCpressure2(double value)
+{
+    pBC = value;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double BTO092::getBCflow2() const
+{
+    return QBC;
 }
 
 //------------------------------------------------------------------------------
@@ -116,10 +149,12 @@ void BTO092::step(double t, double dt)
     bc_reducer->setInputPressure(pSR);
     bc_reducer->step(t, dt);
 
-    bc_relay->step(t, dt);
+    bc_relay1->step(t, dt);
 
+    bc_relay2->step(t, dt);
+/*
     keb->step(t, dt);
-
+*/
     release_valve->step(t, dt);
 
     brake_valve->step(t, dt);
@@ -210,33 +245,40 @@ void BTO092::stepPneumoBrake()
     // Электропневматическое торможение (ЭПТ)
     sw_valve->setInputFlow2(Q_fl_pk2 - Q_pk2_atm);
     // Выход к реле давления наполнения ТЦ через КЭБ
-    sw_valve->setOutputPressure(keb->getP_in());
-
+    sw_valve->setOutputPressure(bc_relay2->getControlPressure());
+/*
     // КЭБ
     keb->setVoltage(U_pow);
     keb->setState(is_release);
     keb->setQ_in(sw_valve->getOutputFlow());
     keb->setP_out(bc_relay->getControlPressure());
+*/
+    // Реле давления задней (безмоторной) тележки
+    // управляет тормозами напрямую
+    bc_relay2->setControlFlow(sw_valve->getOutputFlow());
+    bc_relay2->setPipePressure(pBC);
+    bc_relay2->setFLpressure(bc_reducer->getOutPressure());
 
-    // Реле давления
-    bc_relay->setControlFlow(keb->getQ_out());
-    bc_relay->setPipePressure(pBC);
-    bc_relay->setFLpressure(bc_reducer->getOutPressure());
+    // Реле давления передней (моторной) тележки
+    // управляет тормозами при отключенном электроблокировочном клапане (КЭБ)
+    double is_keb = hs_p(U_pow - 0.9 * U_nom) * static_cast<double>(is_release);
+    bc_relay1->setControlPressure((1 - is_keb) * bc_relay2->getControlPressure());
+    bc_relay1->setPipePressure(pBC_motor);
+    bc_relay1->setFLpressure(bc_reducer->getOutPressure());
 
-    // Поток в тормозные цилиндры
-    QBC = bc_relay->getPipeFlow();
+    // Поток в тормозные цилиндры задней (безмоторной) тележки
+    QBC = bc_relay2->getPipeFlow();
+
+    // Поток в тормозные цилиндры передней (моторной) тележки
+    QBC_motor = bc_relay1->getPipeFlow();
 
     // Поток на выходе из редуктора
-    bc_reducer->setOutFlow(- Q_fl_pk1 - Q_fl_pk2 - bc_relay->getFLflow());
+    bc_reducer->setOutFlow(- Q_fl_pk1 - Q_fl_pk2
+                           - bc_relay1->getFLflow()
+                           - bc_relay2->getFLflow());
 
     // Добавляем расход в редуктор к потоку в запасный резервуар
     QSR += -bc_reducer->getInputFlow();
-    DebugMsg = QString("pBC%1(BP%2|EPB%3)|sw%4|rel%5")
-            .arg(10.0 * pBC, 6, 'f', 2)
-            .arg(10.0 * p1, 6, 'f', 2)
-            .arg(10.0 * p2, 6, 'f', 2)
-            .arg(10.0 * keb->getP_in(), 6, 'f', 2)
-            .arg(10.0 * bc_relay->getControlPressure(), 6, 'f', 2);
 }
 
 //------------------------------------------------------------------------------
@@ -305,15 +347,14 @@ void BTO092::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "ps", ps);
 
     sw_valve->read_config("zpk");
-    bc_relay->read_custom_config(custom_config_dir +
-                                 QDir::separator() +
-                                 "bto-pneumo-relay");
+    bc_relay1->read_config("rd304");
+    bc_relay2->read_config("rd304");
     bc_reducer->read_config("pneumo-reducer");
     bc_reducer->setRefPressure(pBC_max);
-
+/*
     keb->setCustomConfigDir(custom_config_dir);
     keb->read_custom_config(custom_config_dir + QDir::separator() + "keb");
-
+*/
     release_valve->read_custom_config(custom_config_dir +
                                       QDir::separator() +
                                       "ept_valve");

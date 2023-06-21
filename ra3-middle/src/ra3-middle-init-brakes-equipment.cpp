@@ -1,11 +1,11 @@
-#include    "ra3-head.h"
+#include    "ra3-middle.h"
 
 #include    <QDir>
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::initBrakesEquipment()
+void RA3Middle::initBrakesEquipment()
 {
     // Тормозная магистраль
     double volume_bp = length * 0.0343 * 0.0343 * Physics::PI / 4.0;

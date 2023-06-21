@@ -1,19 +1,12 @@
-#include    "ra3-head.h"
+#include    "ra3-middle.h"
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
+void RA3Middle::stepBrakesEquipment(double t, double dt)
 {
     // Тормозная магистраль
     double BP_flow = 0.0;
-    if (is_active)
-    {
-        BP_flow += km->getBPflow();
-        BP_flow += kru->getBPflow();
-        BP_flow += emerg_brake_valve->getBPflow();
-        BP_flow += epk->getBPflow();
-    }
     BP_flow += brake_module->getBPflow();
     BP_flow += anglecock_bp_fwd->getFlowToPipe();
     BP_flow += anglecock_bp_bwd->getFlowToPipe();
@@ -22,14 +15,15 @@ void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
 
     // Блок тормозного оборудования
     brake_module->setPowerVoltage(Ucc_110);
-    brake_module->setRefEPBlevel(mpsu->getOutputData().brake_ref_level_EPB);
-    brake_module->releaseBrakes(mpsu->getOutputData().release_PB);
+    brake_module->setRefEPBlevel(
+                backward_inputs[SME_REF_BRAKE_LEVEL_EPB] +
+                forward_inputs[SME_REF_BRAKE_LEVEL_EPB]);
 
-    bool is_parking_braked =
-            (is_active && tumbler[SWITCH_PARKING_BRAKE].getState()) ||
+    brake_module->releaseBrakes(false);
+
+    brake_module->setParkingBrakeState(
             static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_ON]) ||
-            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON]);
-    brake_module->setParkingBrakeState(is_parking_braked);
+            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON])  );
 
     brake_module->setSRpressure(supply_reservoir->getPressure());
     brake_module->setBPpressure(brakepipe->getPressure());

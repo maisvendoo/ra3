@@ -26,7 +26,7 @@ void RA3HeadMotor::debugOutput(double t, double dt)
             .arg(100.0 * (km->getTractionLevel() - km->getBrakeLevel()), 4, 'f', 0)
             .arg(hydro_trans->getOutputTorque(), 6, 'f', 0)
             .arg(100.0 * (  hydro_trans->getTractionLevel()
-                          - hydro_trans->getBrakeLevel()  ) , 6, 'f', 0);
+                          - hydro_trans->getBrakeLevel()  ) , 4, 'f', 0);
     DebugMsg += QString("ALSN:%1|D:%2|")
             .arg(alsn_info.code_alsn, 2)
             .arg(alsn_info.signal_dist, 8, 'f', 1);

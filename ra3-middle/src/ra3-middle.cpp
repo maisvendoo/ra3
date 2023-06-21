@@ -5,18 +5,17 @@
 //------------------------------------------------------------------------------
 RA3Middle::RA3Middle(QObject *parent) : Vehicle(parent)
   , num(4003)
+  , main_res_leak(0.0)
   , door_R_state(1)
   , door_L_state(1)
   , U_bat_110(0.0)
   , Ucc_110(0.0)
   , bat110(Q_NULLPTR)
   , KM_power(Q_NULLPTR)
-  , main_res(Q_NULLPTR)
-  , aux_res(Q_NULLPTR)
-  , main_res_leak(0.0)
+  , main_reservoir(Q_NULLPTR)
   , brake_module(Q_NULLPTR)
+  , supply_reservoir(Q_NULLPTR)
   , pb_split(Q_NULLPTR)
-  , bc_split(Q_NULLPTR)
 {
 
 }
@@ -36,24 +35,9 @@ void RA3Middle::initialization()
 {
     initControlCircuit();
 
-    initPneumoSystem();
+    initPneumoSupply();
 
-    initBrakeMech();
-
-    initBrakeEquipment();
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void RA3Middle::initBrakeDevices(double p0, double pTM, double pFL)
-{
-    Q_UNUSED (p0);
-
-    main_res->setY(0, pFL);
-    aux_res->setY(0, pFL);
-
-    brake_module->init(pTM, pFL);
+    initBrakesEquipment();
 }
 
 //------------------------------------------------------------------------------
@@ -63,11 +47,9 @@ void RA3Middle::step(double t, double dt)
 {
     stepControlCircuit(t, dt);
 
-    stepPneumoSystem(t, dt);
+    stepPneumoSupply(t, dt);
 
-    stepBrakeMech(t, dt);
-
-    stepBrakeEquipment(t, dt);
+    stepBrakesEquipment(t, dt);
 
     stepSignalsOutput(t, dt);
 

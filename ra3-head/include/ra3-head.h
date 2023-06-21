@@ -41,6 +41,8 @@ public:
 
     ~RA3HeadMotor() override;
 
+    void initBrakeDevices(double p0, double pBP, double pFL) override;
+
 private:
 
     /// Серийный номер вагона
@@ -194,9 +196,6 @@ private:
     /// Тройник на питание СТ
     PneumoSplitter *pb_split;
 
-    /// Тройник на питание ТЦ
-    PneumoSplitter *bc_split;
-
     enum
     {
         NUM_TROLLEYS = 2,
@@ -245,8 +244,6 @@ private:
     std::vector<autostart_step_t>   autostart_prog;
 
     void initialization() override;
-
-    void initBrakeDevices(double p0, double pBP, double pFL) override;
 
     /// Инициализация органов управления в кабине
     void initCabineControls();
