@@ -134,7 +134,7 @@ void KRU091::ode_system(const state_vector_t &Y,
     double Q_charge_er = K[1] * vr * (reducer->getOutPressure() - Y[ER_PRESSURE]);
 
     // Расход воздуха из РР
-    double Q_brake_er = K[2] * vb * Y[ER_PRESSURE] - eq_res_leak * Y[ER_PRESSURE];
+    double Q_brake_er = (K[2] * vb + eq_res_leak) * Y[ER_PRESSURE];
 
     // Задаем расход в РР
     setERflow(Q_charge_er - Q_brake_er);

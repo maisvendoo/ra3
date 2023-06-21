@@ -29,7 +29,7 @@
         <CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
         <CabineShift>0.0 0.075 0.05</CabineShift>
 
-        <ExtTexturesDir>textures-060_rzd</ExtTexturesDir>
+        <ExtTexturesDir>ra3/textures-060_rzd</ExtTexturesDir>
         <AnimationsConfigDir>ra3-head</AnimationsConfigDir>
 
         <DriverPos>0.56 9.95 2.9</DriverPos>

@@ -15,8 +15,10 @@ void RA3Middle::debugOutput(double t, double dt)
     DebugMsg += QString("pBP%1|pBC%2|pPB%3|pSR%4|")
             .arg(10.0 * brakepipe->getPressure(), 6, 'f', 2)
             .arg(10.0 * brake_mech[TROLLEY_FWD]->getBCpressure(), 6, 'f', 2)
-            .arg(10.0 * brake_mech[TROLLEY_BWD]->getPBpressure(), 6, 'f', 2)
+            .arg(10.0 * brake_mech[TROLLEY_BWD]->getBCpressure(), 6, 'f', 2)
             .arg(10.0 * supply_reservoir->getPressure(), 6, 'f', 2);
-    DebugMsg += QString("pFL%1|")
-            .arg(10.0 * main_reservoir->getPressure(), 6, 'f', 2);
+    DebugMsg += QString("pFL%1|pPB%2|pPB%3|")
+            .arg(10.0 * main_reservoir->getPressure(), 6, 'f', 2)
+            .arg(10.0 * brake_mech[TROLLEY_FWD]->getPBpressure(), 6, 'f', 2)
+            .arg(10.0 * brake_mech[TROLLEY_BWD]->getPBpressure(), 6, 'f', 2);
 }
