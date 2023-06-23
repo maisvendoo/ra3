@@ -1,23 +1,27 @@
-#include    "ra3-head.h"
+#include    "ra3-middle.h"
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
+void RA3Middle::stepSME(double t, double dt)
 {
     Q_UNUSED(t)
     Q_UNUSED(dt)
-/*
+
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов
-    backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
-            SME_MULTIPLIER * (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_BWD);
+    sme_bwd->setSignal(SME_TRAIN_CONFIG,
+            SME_MULTIPLIER * (static_cast<int>(sme_fwd->getSignal(SME_TRAIN_CONFIG)) % SME_LIMIT) + SME_MIDDLE);
+//    backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+//            SME_MULTIPLIER * (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_MIDDLE);
     // Отправляем сигнал вперёд от данного
     // и не более чем 4 следующих вагонов
-    forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
-            SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_FWD);
-*/
+    sme_fwd->setSignal(SME_TRAIN_CONFIG,
+            SME_MULTIPLIER * (static_cast<int>(sme_bwd->getSignal(SME_TRAIN_CONFIG)) % SME_LIMIT) + SME_MIDDLE);
+//    forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+//            SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_MIDDLE);
+/*
     // Напряжение зарядки АКБ на промежуточный вагон
     backward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
     forward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
@@ -25,13 +29,13 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Сигналы из активной кабины
     if (is_active)
     {
-        // Сигнал запрета включать другие кабины
-        backward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
-        forward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
-
         // Сигнал включения контактора "Бортсеть" на ведомые секции
         backward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
         forward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
+
+        // Сигнал запрета включать другие кабины
+        backward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
+        forward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
 
         // Сигнал запуска дизеля на ведомые секции
         backward_outputs[SME_DISEL_START] = static_cast<float>(mpsu->getOutputData().start_press_count == 1);
@@ -81,6 +85,10 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Обработка сигналов неактивной кабиной
     else
     {
+        // Пропускаем дальше сигнал запрета включать другие кабины
+        backward_outputs[SME_NO_ACTIVE] = forward_inputs[SME_NO_ACTIVE];
+        forward_outputs[SME_NO_ACTIVE] = backward_inputs[SME_NO_ACTIVE];
+
         // Пропускаем дальше все сигналы из активной кабины
         for (size_t i = SME_ACTIVE_BEGIN; i < SME_ACTIVE_BEGIN + SME_ACTIVE_SIZE; ++i)
         {
@@ -150,5 +158,5 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Состояние стояночного пружинного тормоза в ведущую секцию
     backward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
     forward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
-
+*/
 }

@@ -5,6 +5,7 @@
 
 #include    "ra3-middle-signals.h"
 
+#include    "ra3-sme-connector.h"
 #include    "battery.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
@@ -47,6 +48,12 @@ private:
 
     /// Контактор включения батареи 110 В
     Relay   *KM_power;
+
+    /// Соединения для работы по системе многих единиц (СМЕ) спереди
+    RA3SME  *sme_fwd;
+
+    /// Соединения для работы по системе многих единиц (СМЕ) сзади
+    RA3SME  *sme_bwd;
 
     /// Главный резервуар
     Reservoir   *main_reservoir;
@@ -100,6 +107,10 @@ private:
 
     void initialization() override;
 
+    /// Инициализация связей системы многих единиц (СМЕ)
+    void initSME();
+
+    /// Инициализация цепей управления
     void initControlCircuit();
 
     /// Инициализация системы обеспечения сжатым воздухом
@@ -110,6 +121,10 @@ private:
 
     void step(double t, double dt) override;
 
+    /// Моделирование сигналов СМЕ
+    void stepSME(double t, double dt);
+
+    /// Моделирование работы цепей управления
     void stepControlCircuit(double t, double dt);
 
     /// Работа системы обеспечения сжатым воздухом
@@ -118,6 +133,7 @@ private:
     /// Работа тормозного оборудования
     void stepBrakesEquipment(double t, double dt);
 
+    /// Вывод сигналов на анимации модели поезда
     void stepSignalsOutput(double t, double dt);
 
     /// Работа сигналов СМЕ
@@ -125,6 +141,7 @@ private:
 
     void stepVehiclesConnect();
 
+    /// Отладочный вывод
     void debugOutput(double t, double dt);
 
     void loadConfig(QString cfg_path) override;

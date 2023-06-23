@@ -8,6 +8,7 @@
 #include    "battery.h"
 #include    "relay.h"
 #include    "mpsu.h"
+#include    "ra3-sme-connector.h"
 #include    "electric-fuel-pump.h"
 #include    "disel.h"
 #include    "starter.h"
@@ -112,11 +113,17 @@ private:
     /// Микропроцессорная система управления МПСУ
     MPSU    *mpsu;
 
-    /// Топливоподкачивающий насос
-    ElectricFuelPump    *fuel_pump;
+    /// Соединения для работы по системе многих единиц (СМЕ) спереди
+    RA3SME  *sme_fwd;
+
+    /// Соединения для работы по системе многих единиц (СМЕ) сзади
+    RA3SME  *sme_bwd;
 
     /// Свисток и тифон
     TrainHorn *horn;
+
+    /// Топливоподкачивающий насос
+    ElectricFuelPump    *fuel_pump;
 
     /// Дизель
     Disel   *disel;
@@ -248,6 +255,9 @@ private:
     /// Инициализация органов управления в кабине
     void initCabineControls();
 
+    /// Инициализация связей системы многих единиц (СМЕ)
+    void initSME();
+
     /// Инициализация переключателей
     void initTumblers(QString config_name);
 
@@ -289,7 +299,7 @@ private:
     /// Моделирование работы органов управления в кабине
     void stepCabineControls(double t, double dt);
 
-    /// Моедлирования работы системы питания топливом
+    /// Моделирование работы системы питания топливом
     void stepFuelSystem(double t, double dt);
 
     /// Моделирование работы цепей управления
@@ -297,6 +307,9 @@ private:
 
     /// Моделирование работы МПСУ
     void stepMPSU(double t, double dt);
+
+    /// Моделирование сигналов СМЕ
+    void stepSME(double t, double dt);
 
     /// Работа дизеля
     void stepDisel(double t, double dt);

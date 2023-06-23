@@ -26,8 +26,8 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , Icc_24(0.0)
   , KM_power(Q_NULLPTR)
   , mpsu(Q_NULLPTR)
-  , fuel_pump(Q_NULLPTR)
   , horn(Q_NULLPTR)
+  , fuel_pump(Q_NULLPTR)
   , disel(Q_NULLPTR)
   , starter(Q_NULLPTR)
   , autostart_timer(Q_NULLPTR)
@@ -56,6 +56,9 @@ void RA3HeadMotor::initialization()
 
     // Инициализация органов управления в кабине
     initCabineControls();
+
+    // Инициализация связей системы многих единиц (СМЕ)
+    initSME();
 
     // Инициализация системы питания топливом
     initFuelSystem();
@@ -106,6 +109,9 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Работа МПСУ
     stepMPSU(t, dt);
+
+    // Моделирование сигналов СМЕ
+    stepSME(t, dt);
 
     // Работа дизеля
     stepDisel(t, dt);

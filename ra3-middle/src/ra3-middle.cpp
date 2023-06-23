@@ -33,10 +33,16 @@ RA3Middle::~RA3Middle()
 //------------------------------------------------------------------------------
 void RA3Middle::initialization()
 {
+    // Инициализация связей системы многих единиц (СМЕ)
+    initSME();
+
+    // Инициализация цепей управления
     initControlCircuit();
 
+    // Инициализация системы обеспечения сжатым воздухом
     initPneumoSupply();
 
+    // Инициализация тормозного оборудования
     initBrakesEquipment();
 }
 
@@ -45,18 +51,26 @@ void RA3Middle::initialization()
 //------------------------------------------------------------------------------
 void RA3Middle::step(double t, double dt)
 {
+    // Моделирование сигналов СМЕ
+    stepSME(t, dt);
+
+    // Работа цепей управления
     stepControlCircuit(t, dt);
 
+    // Работа системы обеспечения сжатым воздухом
     stepPneumoSupply(t, dt);
 
+    // Работа тормозного оборудования
     stepBrakesEquipment(t, dt);
 
+    // Вывод сигналов
     stepSignalsOutput(t, dt);
 
     stepSMESignalsOutput(t, dt);
 
     stepVehiclesConnect();
 
+    // Отладочный вывод по F1
     debugOutput(t, dt);
 }
 

@@ -3,21 +3,25 @@
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
+void RA3HeadMotor::stepSME(double t, double dt)
 {
     Q_UNUSED(t)
     Q_UNUSED(dt)
-/*
+
     // Опрос конфигурации СМЕ
     // Отправляем сигнал назад от данного
     // и не более чем 4 предыдущих вагонов
-    backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
-            SME_MULTIPLIER * (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_BWD);
+    sme_bwd->setSignal(SME_TRAIN_CONFIG,
+           SME_MULTIPLIER * (static_cast<int>(sme_fwd->getSignal(SME_TRAIN_CONFIG)) % SME_LIMIT) + SME_HEAD_BWD);
+//    backward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+//           SME_MULTIPLIER * (static_cast<int>(forward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_BWD);
     // Отправляем сигнал вперёд от данного
     // и не более чем 4 следующих вагонов
-    forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
-            SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_FWD);
-*/
+    sme_fwd->setSignal(SME_TRAIN_CONFIG,
+            SME_MULTIPLIER * (static_cast<int>(sme_bwd->getSignal(SME_TRAIN_CONFIG)) % SME_LIMIT) + SME_HEAD_FWD);
+//    forward_outputs[SME_TRAIN_CONFIG] = static_cast<float>(
+//            SME_MULTIPLIER * (static_cast<int>(backward_inputs[SME_TRAIN_CONFIG]) % SME_LIMIT) + SME_HEAD_FWD);
+/*
     // Напряжение зарядки АКБ на промежуточный вагон
     backward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
     forward_outputs[SME_CHARGE_VOLTAGE] = aux_conv->getU_110();
@@ -150,5 +154,5 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Состояние стояночного пружинного тормоза в ведущую секцию
     backward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
     forward_outputs[SME_UNIT_SPT_STATE] = static_cast<float>(brake_module->isParkingBraked());
-
+*/
 }

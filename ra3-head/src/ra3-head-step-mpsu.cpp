@@ -6,8 +6,10 @@
 void RA3HeadMotor::stepMPSU(double t, double dt)
 {
     mpsu_input_t mpsu_input;
-    mpsu_input.sme_train_config_fwd = forward_inputs[SME_TRAIN_CONFIG];
-    mpsu_input.sme_train_config_bwd = backward_inputs[SME_TRAIN_CONFIG];
+    mpsu_input.sme_train_config_fwd = sme_fwd->getSignal(SME_TRAIN_CONFIG);
+//    mpsu_input.sme_train_config_fwd = forward_inputs[SME_TRAIN_CONFIG];
+    mpsu_input.sme_train_config_bwd = sme_bwd->getSignal(SME_TRAIN_CONFIG);
+//    mpsu_input.sme_train_config_bwd = backward_inputs[SME_TRAIN_CONFIG];
 
     mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
 
