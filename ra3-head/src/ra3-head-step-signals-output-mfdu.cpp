@@ -118,21 +118,21 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
             int bias_mfdu = i * MFDU_UNIT_SIGNALS_SIZE;
             int bias_sme = (pos - i - 1) * SME_UNIT_STATE_SIZE;
             analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] =
-                    forward_inputs[SME_UNIT_NUM + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_NUM + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] =
-                    forward_inputs[SME_UNIT_DOOR_L + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_DOOR_L + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] =
-                    forward_inputs[SME_UNIT_DOOR_R + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_DOOR_R + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] =
-                    forward_inputs[SME_UNIT_T + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_T + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] =
-                    forward_inputs[SME_UNIT_EQUIP + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_EQUIP + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] =
-                    forward_inputs[SME_UNIT_DIESEL + bias_sme];
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_DIESEL + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] =
-                    forward_inputs[SME_UNIT_COMPRESSOR + bias_sme];
-            is_generator_active |= static_cast<bool>(forward_inputs[SME_UNIT_GENERATOR + bias_sme]);
-            is_fuel_pump_active |= static_cast<bool>(forward_inputs[SME_UNIT_FUEL_PUMP + bias_sme]);
+                    static_cast<float>(sme_fwd->getSignal(SME_UNIT_COMPRESSOR + bias_sme));
+            is_generator_active |= static_cast<bool>(sme_fwd->getSignal(SME_UNIT_GENERATOR + bias_sme));
+            is_fuel_pump_active |= static_cast<bool>(sme_fwd->getSignal(SME_UNIT_FUEL_PUMP + bias_sme));
         }
 
     // Состояние данного вагона
@@ -154,21 +154,21 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
             int bias_mfdu = (pos + i) * MFDU_UNIT_SIGNALS_SIZE;
             int bias_sme = (i - 1) * SME_UNIT_STATE_SIZE;
             analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] =
-                    backward_inputs[SME_UNIT_NUM + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_NUM + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] =
-                    backward_inputs[SME_UNIT_DOOR_R + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_DOOR_R + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] =
-                    backward_inputs[SME_UNIT_DOOR_L + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_DOOR_L + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] =
-                    backward_inputs[SME_UNIT_T + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_T + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] =
-                    backward_inputs[SME_UNIT_EQUIP + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_EQUIP + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] =
-                    backward_inputs[SME_UNIT_DIESEL + bias_sme];
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_DIESEL + bias_sme));
             analogSignal[MFDU_TRAIN_UNIT_COMPRESSOR + bias_mfdu] =
-                    backward_inputs[SME_UNIT_COMPRESSOR + bias_sme];
-            is_generator_active |= static_cast<bool>(backward_inputs[SME_UNIT_GENERATOR + bias_sme]);
-            is_fuel_pump_active |= static_cast<bool>(backward_inputs[SME_UNIT_FUEL_PUMP + bias_sme]);
+                    static_cast<float>(sme_bwd->getSignal(SME_UNIT_COMPRESSOR + bias_sme));
+            is_generator_active |= static_cast<bool>(sme_bwd->getSignal(SME_UNIT_GENERATOR + bias_sme));
+            is_fuel_pump_active |= static_cast<bool>(sme_bwd->getSignal(SME_UNIT_FUEL_PUMP + bias_sme));
         }
 
     // Статус генератора

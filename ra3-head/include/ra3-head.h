@@ -338,9 +338,6 @@ private:
     /// Работа автозапуска
     void stepAutostart(double t, double dt);
 
-    /// Связывание сигналов СМЕ
-    void stepVehiclesConnect();
-
     /// Отладочный вывод
     void debugOutput(double t, double dt);
 
@@ -354,9 +351,6 @@ private:
 
     /// Вывод сигналов на панель контрольных ламп
     void controlLampsSignalsOutput(double t, double dt);
-
-    /// Вывод сигналов СМЕ
-    void stepSMESignalsOutput(double t, double dt);
 
     /// Регистрация параметров движения
     void stepRegistrator(double t, double dt);

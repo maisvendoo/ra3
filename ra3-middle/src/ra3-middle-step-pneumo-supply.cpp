@@ -10,8 +10,7 @@ void RA3Middle::stepPneumoSupply(double t, double dt)
     double Q_pm_sr = K_ps * pf(  main_reservoir->getPressure()
                                - supply_reservoir->getPressure());
 
-    // Задаём главному резервуару приток от компрессора,
-    // отток в запасный, расход на питание КРУ и ЭПК, потоки из рукавов
+    // Задаём главному резервуару отток в запасный, потоки из рукавов
     double FL_flow = 0.0;
     FL_flow += -Q_pm_sr;
     FL_flow += anglecock_fl_fwd->getFlowToPipe();

@@ -136,11 +136,6 @@ private:
     /// Вывод сигналов на анимации модели поезда
     void stepSignalsOutput(double t, double dt);
 
-    /// Работа сигналов СМЕ
-    void stepSMESignalsOutput(double t, double dt);
-
-    void stepVehiclesConnect();
-
     /// Отладочный вывод
     void debugOutput(double t, double dt);
 

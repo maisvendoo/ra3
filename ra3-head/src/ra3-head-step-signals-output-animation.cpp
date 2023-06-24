@@ -10,7 +10,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     // Кнопки "БОРТСЕТЬ"
     analogSignal[SIG_BUTTON_ON] = static_cast<float>(tumbler[BUTTON_PWR_ON].getState());
-    analogSignal[SIG_BUTTON_OFF] = static_cast<float>(!tumbler[BUTTON_PWR_OFF].getState());
+    analogSignal[SIG_BUTTON_OFF] = static_cast<float>(!tumbler[NO_BUTTON_PWR_OFF].getState());
 
     analogSignal[STRELKA_VOLTMETER110] = static_cast<float>(Ucc_110 / 150.0);
     analogSignal[STRELKA_VOLTMETER24] = static_cast<float>(Ucc_24 / 30.0);

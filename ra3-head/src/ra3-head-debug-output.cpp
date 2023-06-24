@@ -24,13 +24,18 @@ void RA3HeadMotor::debugOutput(double t, double dt)
     DebugMsg += QString("pER%1|KRU:%2|")
             .arg(10.0 * kru->getERpressure(), 6, 'f', 2)
             .arg(kru->getPositionName(), 3);
-    DebugMsg += QString("Rev%1|Pos%2%|T%3 N*m(%4%)|")
+
+    QString pos = QString("Pos%1%")
+            .arg(100.0 * (km->getTractionLevel() - km->getBrakeLevel()), 4, 'f', 0);
+    if (mpsu->getOutputData().is_speed_hold_ON)
+        pos = QString("V%1/%2")
+                .arg(qAbs(wheel_omega[0] * rk[0] * Physics::kmh), 3, 'f', 0)
+                .arg(mpsu->getOutputData().v_ref_kmh, 3);
+    DebugMsg += QString("Rev%1|%2|T%3 N*m(%4%)|")
             .arg(km->getReversHandlePos(), 2, 'f', 0)
-            .arg(100.0 * (km->getTractionLevel() - km->getBrakeLevel()), 4, 'f', 0)
+            .arg(pos)
             .arg(hydro_trans->getOutputTorque(), 6, 'f', 0)
             .arg(100.0 * (  hydro_trans->getTractionLevel()
                           - hydro_trans->getBrakeLevel()  ) , 4, 'f', 0);
-    DebugMsg += QString("ALSN:%1|D:%2|")
-            .arg(alsn_info.code_alsn, 2)
-            .arg(alsn_info.signal_dist, 8, 'f', 1);
+    DebugMsg += QString("          ");
 }

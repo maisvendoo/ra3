@@ -43,10 +43,5 @@ void RA3HeadMotor::stepBrakesControl(double t, double dt)
             emerg_brake_valve->setEmergencyBrake(false);
             emerg_brake_valve->step(t, dt);
         }
-
-        /*    // КОСТЫЛЬ под нынешнюю реализацию brakepipe
-        if (idx == 0)
-            p0 = static_cast<double>(backward_inputs[SME_P0]) +
-                 static_cast<double>(forward_inputs[SME_P0]);*/
     }
 }

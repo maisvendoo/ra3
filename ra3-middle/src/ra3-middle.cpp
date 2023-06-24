@@ -66,10 +66,6 @@ void RA3Middle::step(double t, double dt)
     // Вывод сигналов
     stepSignalsOutput(t, dt);
 
-    stepSMESignalsOutput(t, dt);
-
-    stepVehiclesConnect();
-
     // Отладочный вывод по F1
     debugOutput(t, dt);
 }

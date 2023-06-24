@@ -26,11 +26,11 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     // Включение контактора "Бортсеть"
     bool is_KM_bat_110 = false;
     if (is_active)
-        is_KM_bat_110 = tumbler[BUTTON_PWR_ON].getState() ||
-                (KM_power->getContactState(0) && (tumbler[BUTTON_PWR_OFF].getState()));
+        is_KM_bat_110 = tumbler[BUTTON_PWR_ON].getState()
+            || (KM_power->getContactState(0) && (tumbler[NO_BUTTON_PWR_OFF].getState()));
     else
-        is_KM_bat_110 = static_cast<bool>(backward_inputs[SME_POWER_ON]) ||
-                static_cast<bool>(forward_inputs[SME_POWER_ON]);
+        is_KM_bat_110 = static_cast<bool>(sme_fwd->getSignal(SME_POWER_ON))
+                     || static_cast<bool>(sme_bwd->getSignal(SME_POWER_ON));
 
     KM_power->setVoltage(U_bat_110 * static_cast<double>(is_KM_bat_110));
     KM_power->step(t, dt);

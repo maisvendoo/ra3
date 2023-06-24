@@ -16,14 +16,14 @@ void RA3Middle::stepBrakesEquipment(double t, double dt)
     // Блок тормозного оборудования
     brake_module->setPowerVoltage(Ucc_110);
     brake_module->setRefEPBlevel(
-                backward_inputs[SME_REF_BRAKE_LEVEL_EPB] +
-                forward_inputs[SME_REF_BRAKE_LEVEL_EPB]);
+                  sme_fwd->getSignal(SME_BRAKE_LEVEL)
+                + sme_bwd->getSignal(SME_BRAKE_LEVEL));
 
     brake_module->releaseBrakes(false);
 
     brake_module->setParkingBrakeState(
-            static_cast<bool>(backward_inputs[SME_PARKING_BRAKE_ON]) ||
-            static_cast<bool>(forward_inputs[SME_PARKING_BRAKE_ON])  );
+                   static_cast<bool>(sme_fwd->getSignal(SME_PARKING_BRAKE_ON))
+                || static_cast<bool>(sme_bwd->getSignal(SME_PARKING_BRAKE_ON)) );
 
     brake_module->setSRpressure(supply_reservoir->getPressure());
     brake_module->setBPpressure(brakepipe->getPressure());

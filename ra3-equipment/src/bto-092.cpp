@@ -274,8 +274,8 @@ void BTO092::stepPneumoBrake()
 
     // Поток на выходе из редуктора
     bc_reducer->setOutFlow(- Q_fl_pk1 - Q_fl_pk2
-                           - bc_relay1->getFLflow()
-                           - bc_relay2->getFLflow());
+                           + bc_relay1->getFLflow()
+                           + bc_relay2->getFLflow());
 
     // Добавляем расход в редуктор к потоку в запасный резервуар
     QSR += -bc_reducer->getInputFlow();

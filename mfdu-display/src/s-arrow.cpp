@@ -44,7 +44,7 @@ void SArrow::setVal(float val)
 
     val_old = qRound(val);
 
-    if (val < 0) val = 0;
+    if (val < 0) val = -val;
     if (val > maxVal_) val = maxVal_;
 
     draw_(val);

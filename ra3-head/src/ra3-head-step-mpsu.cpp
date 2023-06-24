@@ -7,21 +7,16 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 {
     mpsu_input_t mpsu_input;
     mpsu_input.sme_train_config_fwd = sme_fwd->getSignal(SME_TRAIN_CONFIG);
-//    mpsu_input.sme_train_config_fwd = forward_inputs[SME_TRAIN_CONFIG];
     mpsu_input.sme_train_config_bwd = sme_bwd->getSignal(SME_TRAIN_CONFIG);
-//    mpsu_input.sme_train_config_bwd = backward_inputs[SME_TRAIN_CONFIG];
 
     mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
 
     mpsu_input.start_disel = tumbler[BUTTON_START].getState();
     mpsu_input.stop_disel = tumbler[BUTTON_STOP].getState();
-    mpsu_input.start_disel_sme =
-            static_cast<bool>(backward_inputs[SME_DISEL_START] == 1.0f) ||
-            static_cast<bool>(forward_inputs[SME_DISEL_START] == 1.0f);
-    mpsu_input.stop_disel_sme =
-            static_cast<bool>(backward_inputs[SME_DISEL_STOP] == 1.0f) ||
-            static_cast<bool>(forward_inputs[SME_DISEL_STOP] == 1.0f);
-
+    mpsu_input.start_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == 1.0f)
+                               ||(sme_bwd->getSignal(SME_DIESEL_START_STOP) == 1.0f);
+    mpsu_input.stop_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == -1.0f)
+                              ||(sme_bwd->getSignal(SME_DIESEL_START_STOP) == -1.0f);
     mpsu_input.fuel_press = fuel_pump->getFuelPressure();
     mpsu_input.oil_press = disel->getOilPressure();
 
@@ -49,24 +44,23 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
     {
         // Сигнал позиции реверсора принимаем спереди наоборот, сзади правильно
         mpsu_input.revers_handle =
-                static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) -
-                static_cast<int>(forward_inputs[SME_REVERS_HANDLE]);
+              - static_cast<int>(sme_fwd->getSignal(SME_REVERS_HANDLE))
+              + static_cast<int>(sme_bwd->getSignal(SME_REVERS_HANDLE));
+
         mpsu_input.is_KM_zero =
-                static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == 0.0f);
+                ( (sme_fwd->getSignal(SME_KM_STATE) + sme_bwd->getSignal(SME_KM_STATE)) == 0.0);
         mpsu_input.is_KM_traction =
-                static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == 1.0f);
+                ( (sme_fwd->getSignal(SME_KM_STATE) + sme_bwd->getSignal(SME_KM_STATE)) == 1.0);
         mpsu_input.is_KM_brake =
-                static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == -1.0f);
+                ( (sme_fwd->getSignal(SME_KM_STATE) + sme_bwd->getSignal(SME_KM_STATE)) == -1.0);
         mpsu_input.trac_level_KM =
-                static_cast<double>(forward_inputs[SME_KM_TRACTION_LEVEL]) +
-                static_cast<double>(backward_inputs[SME_KM_TRACTION_LEVEL]);
+                (sme_fwd->getSignal(SME_TRACTION_LEVEL) + sme_bwd->getSignal(SME_TRACTION_LEVEL));
         mpsu_input.brake_level_KM =
-                static_cast<double>(forward_inputs[SME_KM_BRAKE_LEVEL]) +
-                static_cast<double>(backward_inputs[SME_KM_BRAKE_LEVEL]);
+                (sme_fwd->getSignal(SME_BRAKE_LEVEL) + sme_bwd->getSignal(SME_BRAKE_LEVEL));
 
         mpsu_input.is_autostop_ON =
-                static_cast<bool>(backward_inputs[SME_IS_AUTOSTOP_ON]) ||
-                static_cast<bool>(forward_inputs[SME_IS_AUTOSTOP_ON]);
+                static_cast<bool>(sme_fwd->getSignal(SME_IS_AUTOSTOP_ON)) ||
+                static_cast<bool>(sme_bwd->getSignal(SME_IS_AUTOSTOP_ON));
     }
 
     // Обеспечение режима поддержания заданной скорости
@@ -84,10 +78,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         for (int i = 0; i < pos; i++)
         {
             int bias = (pos - i - 1) * SME_UNIT_STATE_SIZE;
-            mpsu_input.unit_level_GDB[i] = static_cast<double>(forward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + bias]);
-            mpsu_input.unit_pBC[i * 2] = static_cast<double>(forward_inputs[SME_UNIT_BC2 + bias]);
-            mpsu_input.unit_pBC[i * 2 + 1] = static_cast<double>(forward_inputs[SME_UNIT_BC1 + bias]);
-            mpsu_input.unit_spt_state[i] = static_cast<bool>(forward_inputs[SME_UNIT_SPT_STATE + bias]);
+            mpsu_input.unit_level_GDB[i] = sme_fwd->getSignal(SME_UNIT_GDT_BRAKE_LEVEL + bias);
+            mpsu_input.unit_pBC[i * 2]     = sme_fwd->getSignal(SME_UNIT_BC2 + bias);
+            mpsu_input.unit_pBC[i * 2 + 1] = sme_fwd->getSignal(SME_UNIT_BC1 + bias);
+            mpsu_input.unit_spt_state[i] = static_cast<bool>(sme_fwd->getSignal(SME_UNIT_SPT_STATE + bias));
         }
 
     // Состояние тормозов данного вагона
@@ -101,10 +95,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
         {
             int bias = (i - 1) * SME_UNIT_STATE_SIZE;
-            mpsu_input.unit_level_GDB[pos + i] = static_cast<double>(backward_inputs[SME_UNIT_GDT_BRAKE_LEVEL + bias]);
-            mpsu_input.unit_pBC[(pos + i) * 2] = static_cast<double>(backward_inputs[SME_UNIT_BC1 + bias]);
-            mpsu_input.unit_pBC[(pos + i) * 2 + 1] = static_cast<double>(backward_inputs[SME_UNIT_BC2 + bias]);
-            mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(backward_inputs[SME_UNIT_SPT_STATE + bias]);
+            mpsu_input.unit_level_GDB[pos + i] = sme_bwd->getSignal(SME_UNIT_GDT_BRAKE_LEVEL + bias);
+            mpsu_input.unit_pBC[(pos + i) * 2]     = sme_bwd->getSignal(SME_UNIT_BC1 + bias);
+            mpsu_input.unit_pBC[(pos + i) * 2 + 1] = sme_bwd->getSignal(SME_UNIT_BC2 + bias);
+            mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(sme_bwd->getSignal(SME_UNIT_SPT_STATE + bias));
         }
 
     mpsu_input.Kmax = brake_mech[TROLLEY_FWD]->getMaxShoeForce();
@@ -116,8 +110,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             (brakepipe->getPressure() <= 0.3) ||
             km->isEmergencyBrake() ||
             emerg_brake_valve->isEmergencyBrake() ||
-            static_cast<float>(backward_inputs[SME_IS_EMERGENCY_BRAKE]) ||
-            static_cast<float>(forward_inputs[SME_IS_EMERGENCY_BRAKE]);
+            static_cast<bool>(sme_fwd->getSignal(SME_IS_EMERGENCY_BRAKE)) ||
+            static_cast<bool>(sme_bwd->getSignal(SME_IS_EMERGENCY_BRAKE));
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);
