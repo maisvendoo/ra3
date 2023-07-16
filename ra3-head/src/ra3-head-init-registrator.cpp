@@ -1,16 +1,17 @@
 #include    "ra3-head.h"
 
+#include    <QDir>
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::stepRegistrator(double t, double dt)
+void RA3HeadMotor::initRegistrator()
 {
     if (!is_Registarator_on)
         return;
 
-    QString msg = QString("%1 %2 %3 %4")
-            .arg(railway_coord, 10, 'f', 2)
-            .arg(blok->getVelocityKmh(), 4, 'f', 2);
-
-    reg->print(msg, t, dt);
+    reg = new Registrator();
+    reg->read_custom_config(config_dir +
+                            QDir::separator() +
+                            "registrator");
 }

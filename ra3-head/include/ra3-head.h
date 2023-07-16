@@ -22,7 +22,6 @@
 #include    "trac-controller.h"
 #include    "blok.h"
 #include    "hydro-transmission.h"
-#include    "registrator.h"
 #include    "emergency-brake-valve.h"
 #include    "key-trigger.h"
 #include    "epk151d.h"
@@ -139,6 +138,9 @@ private:
 
     /// Признак автозапуска
     bool is_autostart;
+
+    /// Признак включения регистрации
+    bool is_Registarator_on;
 
     /// Реле стартера
     Relay *starter_relay;
@@ -293,6 +295,9 @@ private:
 
     /// Инициализация последовательности автозапуска
     void initAutostart();
+
+    /// Инициализация регистратора
+    void initRegistrator();
 
     void step(double t, double dt) override;
 

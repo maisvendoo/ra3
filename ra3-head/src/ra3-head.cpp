@@ -33,6 +33,7 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , autostart_timer(Q_NULLPTR)
   , count_step(0)
   , is_autostart(false)
+  , is_Registarator_on(false)
 {
 
 }
@@ -92,6 +93,9 @@ void RA3HeadMotor::initialization()
 
     // Инициализация автозапуска
     initAutostart();
+
+    // Инициализация регистратора
+    initRegistrator();
 }
 
 //------------------------------------------------------------------------------
@@ -175,21 +179,14 @@ void RA3HeadMotor::loadConfig(QString cfg_path)
         cfg.getBool(secName, "IsActive", is_active_ref);
 
         cfg.getDouble(secName, "MainResLeak", main_res_leak);
-        cfg.getInt(secName, "Number", num);
-
-        QString log_name;
-        if (cfg.getString(secName, "LogName", log_name))
-        {
-            double timeout = 0.1;
-            cfg.getDouble(secName, "LogTimeout", timeout);
-
-            reg = new Registrator(log_name, timeout);
-        }
+        cfg.getInt(secName, "Number", num);        
 
         cfg.getDouble(secName, "ip1", ip1);
         cfg.getDouble(secName, "ip2", ip2);
 
         cfg.getBool(secName, "Autostart", is_autostart);
+
+        cfg.getBool(secName, "isRegistratorOn", is_Registarator_on);
     }
 }
 
