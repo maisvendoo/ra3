@@ -19,17 +19,13 @@ void RA3HeadMotor::stepTraction(double t, double dt)
     }
     else
     {
-        if (is_orient_same)
-            hydro_trans->setRefReversState(
-                    static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
-                    static_cast<int>(forward_inputs[SME_REVERS_HANDLE]));
-        else
-            hydro_trans->setRefReversState(-1 * (
-                    static_cast<int>(backward_inputs[SME_REVERS_HANDLE]) +
-                    static_cast<int>(forward_inputs[SME_REVERS_HANDLE])));
+        // Сигнал позиции реверсора принимаем спереди наоборот, сзади правильно
+        hydro_trans->setRefReversState(
+                    - static_cast<int>(sme_fwd->getSignal(SME_REVERS_HANDLE))
+                    + static_cast<int>(sme_bwd->getSignal(SME_REVERS_HANDLE)) );
         hydro_trans->setTractionMode(
-                    static_cast<bool>((backward_inputs[SME_KM_STATE] + forward_inputs[SME_KM_STATE]) == 1.0f) ||
-                    is_auto_traction);
+                       (sme_fwd->getSignal(SME_TRACTION_LEVEL) > Physics::ZERO)
+                    || (sme_bwd->getSignal(SME_TRACTION_LEVEL) > Physics::ZERO) );
         hydro_trans->setBrakeMode(mpsu->getOutputData().hydro_brake_ON);
     }
 

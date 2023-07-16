@@ -56,7 +56,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
 
     QRect geoIP; // размер и положение элементов
     int fooH_ip = 70; // высота элементов
-    Qt::Alignment alignLeft = Qt::Alignment(Qt::AlignVCenter + Qt::AlignLeft);
+    //Qt::Alignment alignLeft = Qt::Alignment(Qt::AlignVCenter + Qt::AlignLeft);
     Qt::Alignment alignCenter = Qt::AlignCenter;
 
     // устанавливаем элементы информационного блока и заносим в map
@@ -157,7 +157,7 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
                                                  speedometer_->y() + speedometer_->height()*0.78),
                                           40,
                                           QColor(0,0,0),
-                                          this );    
+                                          this );
 
 }
 
@@ -185,7 +185,7 @@ void TopBlock::set_ipVal(ip_val_t *val)
     informPartMap_[ip_->distanceTarget]->setText(QString::number(val->distanceTarget) + "м");
     informPartMap_[ip_->typeTarget]->setText(QString(val->typeTarget));
     informPartMap_[ip_->nameTarget]->setText(QString(val->nameTarget));
-    informPartMap_[ip_->zz]->setText(QString(val->zz));    
+    informPartMap_[ip_->zz]->setText(QString(val->zz));
 }
 
 //-----------------------------------------------------------------------------

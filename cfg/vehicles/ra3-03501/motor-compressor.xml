@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
     <Device>
-    	
         <Order>2</Order>
-		
-		<P_nom>6000.0</P_nom>
-		<omega_nom>151.3</omega_nom>
-		<U_nom>400.0</U_nom>
-		<zp>2</zp>
-		<freq>50</freq>
-		<lambda>2.5</lambda>
-		<Mc>30.0</Mc>
-		<J>0.3</J>
+        <SubStepNum>1</SubStepNum>
+        <Solver>euler</Solver>
 
-        <K1>1e-4</K1>
+        <!-- Номинальное напряжение -->
+        <U_nom>380.0</U_nom>
 
-        <K2>0.001</K2>
+        <!-- Номинальная угловая скорость магнитного поля статора -->
+        <!-- <omega0>157.08</omega0> -->
 
-        <K3>0.01</K3>
+        <!-- Максимальный момент -->
+        <!-- <Mmax>455.8</Mmax> -->
 
-        <K4>0.0003</K4>
+        <!-- Критическое скольжение -->
+        <!-- <s_kr>0.154</s_kr> -->
 
-        <K5>2.0</K5>
+        <!-- Момент инерции ротора -->
+        <J>2.0</J>
+
+        <!-- Момент сопротивления вращению ротора -->
+        <Mxx>30.0</Mxx>
+
+        <P_nom>6000.0</P_nom>
+        <omega_nom>151.3</omega_nom>
+        <zp>2</zp>
+        <freq>50</freq>
+        <lambda>2.5</lambda>
+
+        <!-- Коэффициент перехода от скорости ротора к производимому давлению -->
+        <K_pressure>0.015</K_pressure>
+
+        <!-- Коэффициент потока в питательную магистраль -->
+        <K_flow>0.001</K_flow>
+
+        <!-- <SoundName>Motor_Compressor</SoundName> -->
+        <RegulateSoundByOnOff>0</RegulateSoundByOnOff>
+        <RegulateSoundByPitch>0</RegulateSoundByPitch>
 
     </Device>
 </Config>

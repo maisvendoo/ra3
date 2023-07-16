@@ -23,7 +23,8 @@ HydroPump::~HydroPump()
 //------------------------------------------------------------------------------
 void HydroPump::preStep(state_vector_t &Y, double t)
 {
-
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
 }
 
 //------------------------------------------------------------------------------
@@ -33,6 +34,9 @@ void HydroPump::ode_system(const state_vector_t &Y,
                            state_vector_t &dYdt,
                            double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     dYdt[0] = (K_press * omega - Y[0]) / T;
 }
 

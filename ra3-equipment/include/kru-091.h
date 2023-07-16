@@ -3,7 +3,6 @@
 
 #include    "brake-crane.h"
 #include    "pneumo-reducer.h"
-#include    "reservoir.h"
 
 //------------------------------------------------------------------------------
 //
@@ -18,13 +17,13 @@ public:
 
     void step(double t, double dt) override;
 
-    void setPosition(int &position) override;
+    void setHandlePosition(int &position) override;
 
-    QString getPositionName() override;
+    QString getPositionName() const override;
 
-    float getHandlePosition() override;
+    double getHandlePosition() const override;
 
-    void init(double pTM, double pFL) override;
+    void init(double pBP, double pFL) override;
 
 private:
 
@@ -37,6 +36,8 @@ private:
 
     int handle_pos;
 
+    QStringList positions_names;
+
     int min_pos;
 
     int max_pos;
@@ -46,8 +47,6 @@ private:
     Timer *incTimer;
 
     Timer *decTimer;
-
-    Reservoir *eq_res;
 
     /// Клапан зарядки РР
     double vr;
@@ -61,19 +60,8 @@ private:
     /// Утечка из РР
     double eq_res_leak;
 
-    /// Условный объем тормозной магистрали
-    double V_bp;
-
     /// Условная площадь уравнительного поршня РД
     double A;
-
-    /// Атмосферный клапан РД
-    double u1;
-
-    /// Зарядный клапан РД
-    double u2;
-
-    double Q_bp;
 
     enum
     {

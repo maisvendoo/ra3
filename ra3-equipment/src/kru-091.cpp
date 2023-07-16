@@ -6,24 +6,23 @@
 //
 //------------------------------------------------------------------------------
 KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
-  , handle_pos(0)
+  , handle_pos(POS_RELEASE)
   , min_pos(POS_RELEASE)
   , max_pos(POS_BRAKE)
   , pos_delay(0.3)
   , incTimer(new Timer(pos_delay))
   , decTimer(new Timer(pos_delay))
-  , eq_res(new Reservoir(0.002))
   , vr(1.0)
   , vb(0.0)
-  , reducer(new PneumoReducer)
+  , reducer(new PneumoReducer(0.5))
   , eq_res_leak(0.0)
-  , V_bp(0.002)
   , A(1.0)
-  , u1(0.0)
-  , u2(0.0)
-  , Q_bp(0.0)
 {
+    Ver = 0.002;
+
     std::fill(K.begin(), K.end(), 0.0);
+
+    positions_names << "RELEASE" << "  HOLD " << " BRAKE ";
 
     connect(incTimer, &Timer::process, this, &KRU091::inc_position);
     connect(decTimer, &Timer::process, this, &KRU091::dec_position);
@@ -42,15 +41,9 @@ KRU091::~KRU091()
 //------------------------------------------------------------------------------
 void KRU091::step(double t, double dt)
 {
-    incTimer->step(t, dt);
-    decTimer->step(t, dt);
-
     reducer->setRefPressure(p0);
     reducer->setInputPressure(pFL);
     reducer->step(t, dt);
-
-    eq_res->setFlowCoeff(eq_res_leak);
-    eq_res->step(t, dt);
 
     BrakeCrane::step(t, dt);
 }
@@ -58,8 +51,9 @@ void KRU091::step(double t, double dt)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void KRU091::setPosition(int &position)
+void KRU091::setHandlePosition(int &position)
 {
+    handle_pos = position;
     switch (position)
     {
     case POS_RELEASE:
@@ -79,15 +73,15 @@ void KRU091::setPosition(int &position)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-QString KRU091::getPositionName()
+QString KRU091::getPositionName() const
 {
-    return QString();
+    return positions_names[handle_pos];
 }
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-float KRU091::getHandlePosition()
+double KRU091::getHandlePosition() const
 {
     return static_cast<float>(handle_pos) / 2.0f;
 }
@@ -95,10 +89,11 @@ float KRU091::getHandlePosition()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void KRU091::init(double pTM, double pFL)
+void KRU091::init(double pBP, double pFL)
 {
-    setY(BP_PRESSURE, pTM);
-    eq_res->setY(0, pTM);
+    Q_UNUSED(pFL)
+
+    setY(ER_PRESSURE, pBP);
 }
 
 //------------------------------------------------------------------------------
@@ -106,32 +101,26 @@ void KRU091::init(double pTM, double pFL)
 //------------------------------------------------------------------------------
 void KRU091::preStep(state_vector_t &Y, double t)
 {
-    // Поток воздуха в РР
-    Y[ER_PRESSURE] = eq_res->getPressure();
+    Q_UNUSED(t)
 
-    // Расход воздуха из редуктора
-    double Qr = K[1] * (reducer->getOutPressure() - Y[ER_PRESSURE]);
-
-    // Расход воздуха из РР
-    double Qer = Qr * vr - K[2] * Y[ER_PRESSURE] * vb;
-
-    // Задаем расход в РР
-    eq_res->setAirFlow(Qer);
-
-    // Задаем расход из рабочего объема редуктора
-    reducer->setQ_out(-Qr * vr);
-
-    // Разница давлений в УР и ТМ
-    double dp = Y[ER_PRESSURE] - Y[BP_PRESSURE];
+    // Разница давлений в РР и ТМ
+    double dp = A * (Y[ER_PRESSURE] - pBP);
 
     // Расчет проходных сечений клапанов РД
-    u1 = cut(nf(A * dp), 0.0, 1.0); // Разрядка ТМ
-    u2 = cut(pf(A * dp), 0.0, 1.0); // Зарядка ТМ
+    // Зарядка ТМ
+    double Q_charge_bp = cut(dp, 0.0, K[3]) * (pFL - pBP);
 
-    emit soundSetVolume("KRU-091_brake", qRound(2e5 * nf(Q_bp)));
-    emit soundSetVolume("KRU-091_release", qRound(2e6 * pf(Q_bp)));
+    // Разрядка ТМ
+    double Q_brake_bp = cut(-dp, 0.0, K[4]) * pBP;
 
-    DebugMsg = QString(" RD: %1").arg(reducer->getOutPressure(), 4, 'f', 2);
+    // Суммарный поток в питательную магистраль
+    QFL = -reducer->getInputFlow() - Q_charge_bp;
+
+    // Суммарный поток в тормозную магистраль
+    QBP = Q_charge_bp - Q_brake_bp;
+
+    emit soundSetVolume("KRU-091_brake", qRound(2e5 * Q_brake_bp));
+    emit soundSetVolume("KRU-091_release", qRound(2e6 * Q_charge_bp));
 }
 
 //------------------------------------------------------------------------------
@@ -141,10 +130,19 @@ void KRU091::ode_system(const state_vector_t &Y,
                         state_vector_t &dYdt,
                         double t)
 {
-    // Расход воздуха из ТМ
-    Q_bp = - K[3] * Y[BP_PRESSURE] * u1 + K[4] * (pFL - Y[BP_PRESSURE]) * u2;
+    // Расход воздуха из редуктора в РР
+    double Q_charge_er = K[1] * vr * (reducer->getOutPressure() - Y[ER_PRESSURE]);
 
-    dYdt[BP_PRESSURE] = Q_bp / V_bp;
+    // Расход воздуха из РР
+    double Q_brake_er = (K[2] * vb + eq_res_leak) * Y[ER_PRESSURE];
+
+    // Задаем расход в РР
+    setERflow(Q_charge_er - Q_brake_er);
+
+    // Задаем расход из рабочего объема редуктора
+    reducer->setOutFlow(-Q_charge_er);
+
+    BrakeCrane::ode_system(Y, dYdt, t);
 }
 
 //------------------------------------------------------------------------------
@@ -153,6 +151,11 @@ void KRU091::ode_system(const state_vector_t &Y,
 void KRU091::load_config(CfgReader &cfg)
 {
     QString secName = "Device";
+
+    double tmp = 0.0;
+    cfg.getDouble(secName, "EqReservoirVolume", tmp);
+    if (tmp > 0.0)
+        Ver = tmp;
 
     for (size_t i = 1; i < K.size(); ++i)
     {
@@ -170,13 +173,10 @@ void KRU091::load_config(CfgReader &cfg)
     incTimer->setTimeout(pos_delay);
     decTimer->setTimeout(pos_delay);
 
-    reducer->read_custom_config(custom_config_dir +
-                                QDir::separator() +
-                                "pneumo-reducer");
+    reducer->read_config("pneumo-reducer");
 
     cfg.getDouble(secName, "EqResLeak", eq_res_leak);
 
-    cfg.getDouble(secName, "V_bp", V_bp);
     cfg.getDouble(secName, "A", A);
 }
 
@@ -205,7 +205,10 @@ void KRU091::stepKeysControl(double t, double dt)
         incTimer->stop();
     }
 
-    setPosition(handle_pos);
+    setHandlePosition(handle_pos);
+
+    incTimer->step(t, dt);
+    decTimer->step(t, dt);
 }
 
 //------------------------------------------------------------------------------

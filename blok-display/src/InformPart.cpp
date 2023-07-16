@@ -27,6 +27,8 @@ InformPart::InformPart(QRect geo, QString strHead, QString strText,
                         Qt::Alignment align,
                         QWidget *parent , QString config_path, int marginLeft, bool isDrawX, bool isDrawO) : ImageLabel(parent)
 {
+    Q_UNUSED(strHead)
+
     // устанавливаем геометрию класса
     this->setGeometry(geo);
 

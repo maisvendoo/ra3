@@ -5,6 +5,7 @@
 
 #include    "ra3-middle-signals.h"
 
+#include    "ra3-sme-connector.h"
 #include    "battery.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
@@ -20,20 +21,15 @@ public:
 
     ~RA3Middle();
 
-private:
+    void initBrakeDevices(double p0, double pBP, double pFL) override;
 
-    enum
-    {
-        NUM_TROLLEY = 2,
-        FWD_TROLLEY = 0,
-        BWD_TROLLEY = 1
-    };
+private:
 
     /// Серийный номер вагона
     int num;
 
-    /// Ориентация относительно активной кабины
-    bool is_orient_same;
+    /// Коэффициент утечки из ГР
+    double main_res_leak;
 
     /// Состояние дверей справа
     int door_R_state;
@@ -53,61 +49,94 @@ private:
     /// Контактор включения батареи 110 В
     Relay   *KM_power;
 
+    /// Соединения для работы по системе многих единиц (СМЕ) спереди
+    RA3SME  *sme_fwd;
+
+    /// Соединения для работы по системе многих единиц (СМЕ) сзади
+    RA3SME  *sme_bwd;
+
     /// Главный резервуар
-    Reservoir *main_res;
+    Reservoir   *main_reservoir;
+
+    /// Концевой кран питательной магистрали спереди
+    PneumoAngleCock *anglecock_fl_fwd;
+
+    /// Концевой кран питательной магистрали сзади
+    PneumoAngleCock *anglecock_fl_bwd;
+
+    /// Рукав питательной  магистрали спереди
+    PneumoHose      *hose_fl_fwd;
+
+    /// Рукав питательной  магистрали сзади
+    PneumoHose      *hose_fl_bwd;
+
+    /// Тормозная магистраль
+    Reservoir   *brakepipe;
+
+    /// Блок тормозного оборудования БТО-092
+    BTO092  *brake_module;
 
     /// Запасный резервуар
-    Reservoir *aux_res;
+    Reservoir   *supply_reservoir;
 
-    /// Коэффициент утечки из ГР
-    double main_res_leak;
+    /// Концевой кран тормозной магистрали спереди
+    PneumoAngleCock *anglecock_bp_fwd;
 
-    /// Переток воздуха из ПМ заднего вагона
-    double Q_pm_bwd;
-    /// Переток воздуха из ПМ переднего вагона
-    double Q_pm_fwd;
+    /// Концевой кран тормозной магистрали сзади
+    PneumoAngleCock *anglecock_bp_bwd;
 
-    /// Блок тормозного оборудования (БТО-092)
-    BTO092 *brake_module;
+    /// Рукав тормозной магистрали спереди
+    PneumoHose   *hose_bp_fwd;
 
-    /// Разветвитель на стояночный тормоз
+    /// Рукав тормозной магистрали сзади
+    PneumoHose   *hose_bp_bwd;
+
+    /// Тройник на питание СТ
     PneumoSplitter *pb_split;
 
-    /// Разветвитель на магистраль ТЦ
-    PneumoSplitter *bc_split;
+    enum
+    {
+        NUM_TROLLEYS = 2,
+        NUM_AXIS_PER_TROLLEY = 2,
+        TROLLEY_FWD = 0,
+        TROLLEY_BWD = 1
+    };
 
     /// Тормозные механизмы тележек
-    std::array<RA3BrakeMech *, NUM_TROLLEY> brake_mech;
+    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
 
     void initialization() override;
 
-    void initBrakeDevices(double p0, double pTM, double pFL) override;
+    /// Инициализация связей системы многих единиц (СМЕ)
+    void initSME();
 
+    /// Инициализация цепей управления
     void initControlCircuit();
 
-    void initPneumoSystem();
+    /// Инициализация системы обеспечения сжатым воздухом
+    void initPneumoSupply();
 
-    void initBrakeMech();
-
-    void initBrakeEquipment();
+    /// Инициализация тормозного оборудования
+    void initBrakesEquipment();
 
     void step(double t, double dt) override;
 
+    /// Моделирование сигналов СМЕ
+    void stepSME(double t, double dt);
+
+    /// Моделирование работы цепей управления
     void stepControlCircuit(double t, double dt);
 
-    void stepPneumoSystem(double t, double dt);
+    /// Работа системы обеспечения сжатым воздухом
+    void stepPneumoSupply(double t, double dt);
 
-    void stepBrakeMech(double t, double dt);
+    /// Работа тормозного оборудования
+    void stepBrakesEquipment(double t, double dt);
 
-    void stepBrakeEquipment(double t, double dt);
-
+    /// Вывод сигналов на анимации модели поезда
     void stepSignalsOutput(double t, double dt);
 
-    /// Работа сигналов СМЕ
-    void stepSMESignalsOutput(double t, double dt);
-
-    void stepVehiclesConnect();
-
+    /// Отладочный вывод
     void debugOutput(double t, double dt);
 
     void loadConfig(QString cfg_path) override;

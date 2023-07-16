@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
-	<Device>
-		
-		<omega_handle>5</omega_handle>
+    <Device>
 
-		<trac_min>10</trac_min>
-		<brake_min>10</brake_min>
+        <omega_handle>5</omega_handle>
 
-		<K_flow>50.0</K_flow>
+        <trac_min>10</trac_min>
+        <brake_min>10</brake_min>
 
-	</Device>
+        <!-- Коэффициент разрядки ТМ в атмосферу при экстренном торможении -->
+        <K_flow>8.0e-2</K_flow>
+
+    </Device>
 </Config>

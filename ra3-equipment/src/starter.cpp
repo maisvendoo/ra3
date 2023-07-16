@@ -40,6 +40,9 @@ double Starter::getTorque() const
 //------------------------------------------------------------------------------
 void Starter::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     double Rp = 0.014 * hs_n(omega - 50.0) + 0.016;
 
     I = (U - cPhi * omega) / (Ra + Rp);
@@ -61,7 +64,9 @@ void Starter::preStep(state_vector_t &Y, double t)
 //------------------------------------------------------------------------------
 void Starter::ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t)
 {
-
+    Q_UNUSED(Y)
+    Q_UNUSED(dYdt)
+    Q_UNUSED(t)
 }
 
 //------------------------------------------------------------------------------

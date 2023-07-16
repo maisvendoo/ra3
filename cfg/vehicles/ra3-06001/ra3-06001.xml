@@ -6,9 +6,10 @@
         <Length>24.24</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
+        <WheelRailFriction>loco-diesel</WheelRailFriction>
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
-        <WheelInertia>2.0</WheelInertia>
+        <WheelInertia>100.0</WheelInertia>
 
         <FuelCapacity>350</FuelCapacity>
         <FuelLevel>1.0</FuelLevel>
@@ -28,7 +29,7 @@
         <CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
         <CabineShift>0.0 0.075 0.05</CabineShift>
 
-        <ExtTexturesDir>textures-060_rzd</ExtTexturesDir>
+        <ExtTexturesDir>ra3/textures-060_rzd</ExtTexturesDir>
         <AnimationsConfigDir>ra3-head</AnimationsConfigDir>
 
         <DriverPos>0.56 9.95 2.9</DriverPos>

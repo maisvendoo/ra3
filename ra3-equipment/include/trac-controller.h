@@ -46,14 +46,14 @@ public:
 
     void setReversHandleSoundName(QString name) { reversSoundName = name; }
 
-    bool isEmergencyBrake() const { return  emerg_brake.getState(); }
+    /// Задать давление от тормозной магистрали
+    void setBPpressure(double value);
 
-    void setBrakePipePressure(double pTM) { this->pTM = pTM; }
+    /// Поток в тормозную магистраль
+    double getBPflow() const;
 
-    double getEmergencyRate() const
-    {
-        return emergencyRate;
-    }
+    /// Экстренное торможение
+    bool isEmergencyBrake() const;
 
     void setFwdKey(bool key_state) { fwd_key = key_state; }
 
@@ -103,14 +103,14 @@ private:
 
     QString reversSoundName;
 
-    /// Коэффициент утечки через клапан ЭТ
+    /// Коэффициент утечки через клапан экстренного торможения
     double K_flow;
 
     /// Дввление в тормозной магистрали
-    double pTM;
+    double pBP;
 
-    /// Тем экстренного торможения
-    double emergencyRate;
+    /// Расход из тормозной магистрали при экстренном торможении
+    double QBP;
 
     /// Блок-контакт "ХОД"
     Trigger traction;

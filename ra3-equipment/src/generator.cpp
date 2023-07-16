@@ -15,7 +15,7 @@ Generator::Generator(QObject *parent) : Device(parent)
   , I(0.0)
   , U(0.0)
   , u(0.0)
-  , delta_omega(0.0)  
+  , delta_omega(0.0)
   , Mc(0.0)
   , is_active(false)
 {
@@ -35,6 +35,8 @@ Generator::~Generator()
 //------------------------------------------------------------------------------
 void Generator::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(t)
+
     // Расчет линейного напряжения
     U = (cF * Y[0] - r * I) * sqrt(3.0);
 
@@ -59,6 +61,8 @@ void Generator::ode_system(const state_vector_t &Y,
                            state_vector_t &dYdt,
                            double t)
 {
+    Q_UNUSED(t)
+
     // Момент на приводном гидромоторе
     double M_hm = K[2] * pressure * u;
 
@@ -78,7 +82,7 @@ void Generator::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "omega_nom", omega_nom);
     cfg.getDouble(secName, "U_nom", U_nom);
     cfg.getDouble(secName, "I_nom", I_nom);
-    cfg.getDouble(secName, "J", J);    
+    cfg.getDouble(secName, "J", J);
     cfg.getDouble(secName, "Mc", Mc);
 
     // Условный КПД генератора

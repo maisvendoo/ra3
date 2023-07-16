@@ -19,9 +19,9 @@ void RA3HeadMotor::keyProcess()
 
     // БОРТСЕТЬ ОТКЛ.
     if (getKeyState(KEY_I))
-        tumbler[BUTTON_PWR_OFF].reset();
+        tumbler[NO_BUTTON_PWR_OFF].reset();
     else
-        tumbler[BUTTON_PWR_OFF].set();
+        tumbler[NO_BUTTON_PWR_OFF].set();
 
     // СТАРТ
     if (getKeyState(KEY_K))

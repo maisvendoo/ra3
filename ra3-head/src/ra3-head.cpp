@@ -14,7 +14,6 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , main_res_leak(0.0)
   , is_active(false)
   , is_active_ref(false)
-  , is_orient_same(true)
   , door_R_state(1)
   , door_L_state(1)
   , bat110(Q_NULLPTR)
@@ -27,8 +26,8 @@ RA3HeadMotor::RA3HeadMotor(QObject *parent) : Vehicle(parent)
   , Icc_24(0.0)
   , KM_power(Q_NULLPTR)
   , mpsu(Q_NULLPTR)
-  , fuel_pump(Q_NULLPTR)
   , horn(Q_NULLPTR)
+  , fuel_pump(Q_NULLPTR)
   , disel(Q_NULLPTR)
   , starter(Q_NULLPTR)
   , autostart_timer(Q_NULLPTR)
@@ -58,6 +57,9 @@ void RA3HeadMotor::initialization()
     // Инициализация органов управления в кабине
     initCabineControls();
 
+    // Инициализация связей системы многих единиц (СМЕ)
+    initSME();
+
     // Инициализация системы питания топливом
     initFuelSystem();
 
@@ -68,16 +70,13 @@ void RA3HeadMotor::initialization()
     initDisel();
 
     // Инициализация системы обеспечения сжатым воздухом
-    initPneumoSystem();
-
-    // Инициализируем тормозные механизмы
-    initBrakeMech();
-
-    // Инициализация тормозного оборудования
-    initBrakeEquipment();
+    initPneumoSupply();
 
     // Инициализация приборов управления тормозами
-    initBrakeControls();
+    initBrakesControl();
+
+    // Инициализация тормозного оборудования
+    initBrakesEquipment();
 
     // Инициализация приборов безопасности
     initSafetyDevices();
@@ -98,20 +97,6 @@ void RA3HeadMotor::initialization()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void RA3HeadMotor::initBrakeDevices(double p0, double pTM, double pFL)
-{
-    main_res->setY(0, pFL);
-    aux_res->setY(0, pFL);
-
-    charge_press = p0;
-
-    kru->init(pTM, pFL);
-    brake_module->init(pTM, pFL);
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
 void RA3HeadMotor::step(double t, double dt)
 {
     stepCabineControls(t, dt);
@@ -125,20 +110,20 @@ void RA3HeadMotor::step(double t, double dt)
     // Работа МПСУ
     stepMPSU(t, dt);
 
+    // Моделирование сигналов СМЕ
+    stepSME(t, dt);
+
     // Работа дизеля
     stepDisel(t, dt);
 
     // Работа системы обеспечения сжатым воздухом
-    stepPneumoSystem(t, dt);
-
-    // Работа тормозных механизмов
-    stepBrakeMech(t, dt);
-
-    // Работа тормозного оборудования
-    stepBrakeEquipment(t, dt);
+    stepPneumoSupply(t, dt);
 
     // Работа приборов управления тормозами
-    stepBrakeControls(t, dt);
+    stepBrakesControl(t, dt);
+
+    // Работа тормозного оборудования
+    stepBrakesEquipment(t, dt);
 
     // Работа приборов безопасности
     stepSafetyDevices(t, dt);
@@ -151,9 +136,6 @@ void RA3HeadMotor::step(double t, double dt)
 
     // Вывод сигналов
     stepSignalsOutput(t, dt);
-
-    // Обрабока линий СМЕ
-    stepVehiclesConnect();
 
     // Регистрация параметров движения
     stepRegistrator(t, dt);

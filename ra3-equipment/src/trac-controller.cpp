@@ -24,9 +24,9 @@ TracController::TracController(QObject *parent) : Device(parent)
   , tracTimer(new Timer)
   , mainHandleSoundName("KM_main")
   , reversSoundName("KM_revers")
-  , K_flow(50.0)
-  , pTM(0.0)
-  , emergencyRate(0.0)
+  , K_flow(5.0e-2)
+  , pBP(0.0)
+  , QBP(0.0)
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
@@ -47,6 +47,30 @@ TracController::~TracController()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void TracController::setBPpressure(double value)
+{
+    pBP = value;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+double TracController::getBPflow() const
+{
+    return QBP;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+bool TracController::isEmergencyBrake() const
+{
+    return emerg_brake.getState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 float TracController::getHandlePosition() const
 {
     double level = mode_pos * 100 + trac_level - brake_level - 300 * static_cast<int>(emerg_brake.getState());
@@ -59,15 +83,20 @@ float TracController::getHandlePosition() const
 //------------------------------------------------------------------------------
 void TracController::preStep(state_vector_t &Y, double t)
 {
+    Q_UNUSED(Y)
+    Q_UNUSED(t)
+
     if (mode_pos != mode_pos_old)
     {
         emit soundPlay(mainHandleSoundName);
         mode_pos_old = mode_pos;
     }
 
-    emergencyRate = K_flow * pTM * static_cast<double>(emerg_brake.getState());
+    double u = static_cast<double>(emerg_brake.getState());
 
-    emit soundSetVolume("KM_vipusk", qRound(10.0 * emergencyRate));
+    QBP = - K_flow * pBP * u;
+
+    emit soundSetVolume("KM_vipusk", qRound(10.0 * nf(QBP)));
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +106,9 @@ void TracController::ode_system(const state_vector_t &Y,
                                     state_vector_t &dYdt,
                                     double t)
 {
-
+    Q_UNUSED(t)
+    Q_UNUSED(Y)
+    Q_UNUSED(dYdt)
 }
 
 //------------------------------------------------------------------------------

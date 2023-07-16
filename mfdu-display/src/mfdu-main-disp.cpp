@@ -204,6 +204,9 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 {
     int startX = speedometer_->x() + speedometer_->width() + 13;
@@ -220,7 +223,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooY = startY;
 
     // 11
-    fooNoneAdd_(pixmap, parent, lab110380_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_110380_380")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -245,7 +247,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 12
-    fooNoneAdd_(pixmap, parent, labPvu_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pvu")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -260,7 +261,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 13
-    fooNoneAdd_(pixmap, parent, labEpk_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_epk_on")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -275,7 +275,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 14
-    fooNoneAdd_(pixmap, parent, labFier1_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fier1_noSignals")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -300,7 +299,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 15
-    fooNoneAdd_(pixmap, parent, labFier2_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fier2_noSignals")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -326,7 +324,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX + fooDeltaX;
     fooY += fooDeltaY;
     // 22
-    fooNoneAdd_(pixmap, parent, labPtf_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_ptf")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -341,7 +338,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 23
-    fooNoneAdd_(pixmap, parent, labPzd_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pzd")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -366,7 +362,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 24
-    fooNoneAdd_(pixmap, parent, labPump_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pump")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -386,7 +381,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 25
-    fooNoneAdd_(pixmap, parent, labTpn_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_tpn")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -402,7 +396,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 31
-    fooNoneAdd_(pixmap, parent, labFire_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_fire")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -417,7 +410,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 32
-    fooNoneAdd_(pixmap, parent, labOz_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_oz_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -437,7 +429,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 33
-    fooNoneAdd_(pixmap, parent, labDoor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_door")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -452,7 +443,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 34
-    fooNoneAdd_(pixmap, parent, labGenerator_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_generator")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -467,7 +457,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 35
-    fooNoneAdd_(pixmap, parent, labVip_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_vip")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -483,7 +472,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 41
-    fooNoneAdd_(pixmap, parent, labIncOzMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_incOzMotor_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -503,7 +491,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 42
-    fooNoneAdd_(pixmap, parent, labDecOzMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_decOzMotor_1")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -523,7 +510,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX*2;
     // 44
-    fooNoneAdd_(pixmap, parent, labWc_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_wc")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -538,7 +524,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 45
-    fooNoneAdd_(pixmap, parent, labAntyYuz_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_antyYuz_work")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -559,7 +544,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
     fooX = startX;
     fooY += fooDeltaY;
     // 51
-    fooNoneAdd_(pixmap, parent, labRevers_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_revers")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -574,7 +558,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 52
-    fooNoneAdd_(pixmap, parent, labTransmission_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_transmission")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -589,7 +572,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 53
-    fooNoneAdd_(pixmap, parent, labOilMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_oilMotor_up")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -609,7 +591,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 54
-    fooNoneAdd_(pixmap, parent, labPressureOilMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_pressureOilMotor_up")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -629,7 +610,6 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
     fooX += fooDeltaX;
     // 55
-    fooNoneAdd_(pixmap, parent, labMotor_, fooX, fooY);
     if (!pixmap.load(":/mfdu/main_motor_off")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
@@ -653,8 +633,9 @@ void MfduMainDisp::setBlockIcons_rightSpeedometer_(QLabel *parent)
 
 }
 
-
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
 {
     int startX = 92;
@@ -781,8 +762,9 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
 
 }
 
-
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setBlockDownParameters_(QLabel *parent)
 {
     int fooX = 90;
@@ -799,8 +781,9 @@ void MfduMainDisp::setBlockDownParameters_(QLabel *parent)
 
 }
 
-
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::drawLabel_(QLabel *parent, TriggerLabel *&lab, QPoint pos, QString color, Qt::Alignment align)
 {
     lab = new TriggerLabel("0", parent);
@@ -813,8 +796,9 @@ void MfduMainDisp::drawLabel_(QLabel *parent, TriggerLabel *&lab, QPoint pos, QS
     lab->setAlignment(align);
 }
 
-
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
 {
     labNoHead_ = new TriggerLabel("00101", parent);
@@ -958,6 +942,9 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
     }
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
 {
     int fooX = 230;
@@ -1032,26 +1019,9 @@ void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
     labErros_.push_back(labFoo);
 }
 
-void MfduMainDisp::fooNoneAdd_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)
-{
-//    if (!pixmap.load(":/mfdu/none")) { return; }
-//    QLabel* lab = new QLabel(parent);
-//    lab->move(x,y);
-//    lab->setPixmap(pixmap);
-//    label.push_back(lab);
-}
-
-void MfduMainDisp::fooNoneAdd2_(QPixmap &pixmap, QLabel *parent, std::vector<QLabel *> &label, int x, int y)
-{
-//    if (!pixmap.load(":/mfdu/none35")) { return; }
-//    QLabel* lab = new QLabel(parent);
-//    lab->move(x,y);
-//    lab->setPixmap(pixmap);
-//    label.push_back(lab);
-}
-
-
-
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val)
 {
     for (int i = 0, n = vec_lab.size(); i < n; ++i)
@@ -1068,6 +1038,9 @@ void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val)
     }
 }
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
 void MfduMainDisp::setNeededIcon_(std::vector<QLabel *> &vec_lab, int val, int x, int y)
 {
     for (int i = 0, n = vec_lab.size(); i < n; ++i)

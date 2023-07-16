@@ -6,6 +6,9 @@
 //------------------------------------------------------------------------------
 enum
 {
+    /// Количество сигналов в соединениях СМЕ
+    NUM_RA3_SME_SIGNALS = 100,
+
     /// наибольшее число вагонов в СМЕ
     MAX_TRAIN_SIZE = 6,
     /// множитель накопительного сигнала конфигурации
@@ -18,22 +21,15 @@ enum
     SME_HEAD_BWD = 2,
     /// промежуточный вагон любой ориентации
     SME_MIDDLE = 3,
-    /// активная кабина, сигнал вперёд
-    SME_ACTIVE_FWD = -1,
-    /// активная кабина, сигнал назад
-    SME_ACTIVE_BWD = -2,
+
     /// начало массива сигналов СМЕ от активной кабины
     SME_ACTIVE_BEGIN = 10,
     /// размер массива сигналов СМЕ от активной кабины
     SME_ACTIVE_SIZE = 15,
     /// начало массива сигналов СМЕ от вагонов
-    SME_UNIT_STATE_BEGIN = 25,
+    SME_UNIT_STATE_BEGIN = SME_ACTIVE_BEGIN + SME_ACTIVE_SIZE,
     /// размер массива сигналов СМЕ от вагонов
     SME_UNIT_STATE_SIZE = 15,
-    /// начало массива сигналов для передачи состояния вагона на дисплей МФДУ
-    MFDU_UNIT_SIGNALS_BEGIN = 52,
-    /// размер массива сигналов для передачи состояния вагона на дисплей МФДУ
-    MFDU_UNIT_SIGNALS_SIZE = 9
 };
 
 //------------------------------------------------------------------------------
@@ -41,50 +37,44 @@ enum
 //------------------------------------------------------------------------------
 enum
 {
+    /// Сигнал управления соединением СМЕ
+    SME_OUTPUT_REF_STATE = 0,
+    /// Сигнал состояния соединения СМЕ
+    SME_INPUT_IS_CONNECTED = 0,
+
     /// Сигнал опроса конфигурации поезда
-    SME_TRAIN_CONFIG = 0,
+    SME_TRAIN_CONFIG = 1,
 
-    /// Сигнал запрета включать другие кабины
-    /// и для определения ориентации относительно активной кабины
-    SME_NO_ACTIVE = 1,
+    // Общие сигналы для межвагонных связей
+    SME_CHARGE_VOLTAGE = 2,     ///< Напряжение бортовой сети
 
-    /// Общие сигналы для межвагонных связей
-    SME_CHARGE_VOLTAGE = 2,
-    SME_PM_PRESSURE = 3,
-    SME_PM_Q = 4,
+    // Общие сигналы с ведущей секции
+    SME_NO_ACTIVE = SME_ACTIVE_BEGIN,   ///< Сигнал запрета включать другие кабины
+    SME_POWER_ON,               ///< Сигнал включения бортсети
+    SME_DIESEL_START_STOP,      ///< Сигналы включения-выключения дизеля
+    SME_IS_AUTOSTOP_ON,         ///< Сигнал наличия включённого ЭПК
+    SME_REVERS_HANDLE,          ///< Сигнал состояния реверсора
+    SME_KM_STATE,               ///< Сигнал положения рукоятки контроллера
+    SME_TRACTION_LEVEL,         ///< Сигнал уровня тяги
+    SME_BRAKE_LEVEL,            ///< Сигнал уровня торможения
+    SME_PARKING_BRAKE_ON,       ///< Сигнал включения стояночного тормоза
+    SME_IS_EMERGENCY_BRAKE,     ///< Сигнал экстренного торможения
 
-    /// КОСТЫЛЬ под нынешнюю реализацию brakepipe
-    SME_P0 = 9,
-
-    /// Общие сигналы с ведущей секции
-    SME_POWER_ON = SME_ACTIVE_BEGIN,
-    SME_DISEL_START,
-    SME_DISEL_STOP,
-    SME_IS_AUTOSTOP_ON,
-    SME_REVERS_HANDLE,
-    SME_KM_STATE,
-    SME_KM_TRACTION_LEVEL,
-    SME_KM_BRAKE_LEVEL,
-    SME_REF_BRAKE_LEVEL_EPB,
-    SME_BRAKE_RELEASE,
-    SME_PARKING_BRAKE_ON,
-    SME_IS_EMERGENCY_BRAKE,
-
-    /// Сигналы состояния вагонов
-    SME_UNIT_NUM = SME_UNIT_STATE_BEGIN,
-    SME_UNIT_T,
-    SME_UNIT_DOOR_R,
-    SME_UNIT_DOOR_L,
-    SME_UNIT_EQUIP,
-    SME_UNIT_DIESEL,
-    SME_UNIT_FUEL_PUMP,
-    SME_UNIT_GENERATOR,
-    SME_UNIT_COMPRESSOR,
-    SME_UNIT_GDT_REVERS_STATE,
-    SME_UNIT_GDT_BRAKE_LEVEL,
-    SME_UNIT_BC1,
-    SME_UNIT_BC2,
-    SME_UNIT_SPT_STATE,
+    // Сигналы состояния вагонов
+    SME_UNIT_NUM = SME_UNIT_STATE_BEGIN, ///< Сигнал серийного номера
+    SME_UNIT_T,                 ///< Сигнал температуры в салоне
+    SME_UNIT_DOOR_R,            ///< Сигнал состояния дверей справа
+    SME_UNIT_DOOR_L,            ///< Сигнал состояния дверей слева
+    SME_UNIT_EQUIP,             ///< Сигнал состояния бортового оборудования
+    SME_UNIT_DIESEL,            ///< Сигнал состояния дизеля
+    SME_UNIT_FUEL_PUMP,         ///< Сигнал состояния топливного насоса
+    SME_UNIT_GENERATOR,         ///< Сигнал состояния генератора
+    SME_UNIT_COMPRESSOR,        ///< Сигнал состояния компрессора
+    SME_UNIT_GDT_REVERS_STATE,  ///< Сигнал реверсирования гидропередачи
+    SME_UNIT_GDT_BRAKE_LEVEL,   ///< Сигнал уровня гидродинамического тормоза
+    SME_UNIT_BC1,               ///< Сигнал давления в ТЦ первой тележки
+    SME_UNIT_BC2,               ///< Сигнал давления в ТЦ второй тележки
+    SME_UNIT_SPT_STATE,         ///< Сигнал применения стояночного тормоза
 };
 
 #endif // RA3_SME_SIGNALS_H

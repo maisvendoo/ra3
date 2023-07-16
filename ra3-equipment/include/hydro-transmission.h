@@ -32,7 +32,7 @@ public:
     void setTractionMode(bool is_fill)
     {
         is_traction = is_fill;
-    }    
+    }
 
     /// Сигнал наполнения гидротормоза
     void setBrakeMode(bool is_fill)
@@ -143,7 +143,7 @@ private:
     LinearInterpolation gm_char;
 
     /// Гистерезис для реализации переключения скоростей
-    Hysteresis  switch_relay;
+    Hysteresis  *switch_relay;
 
     void preStep(state_vector_t &Y, double t) override;
 

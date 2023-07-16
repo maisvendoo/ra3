@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
-	<Device>
-		<Order>2</Order>
-		<ShoeType>composite</ShoeType>
-		<ShoesCyl>1</ShoesCyl>
-		<ShoesAxis>2</ShoesAxis>
-		<CylNum>4</CylNum>
-		<DeadVolume>0.0</DeadVolume>
-		<CylinderDiameter>0.19</CylinderDiameter>
-		<StockOut>0.132</StockOut>		
-		<InitPressure>0.0</InitPressure>
-		
-		<Kmax>1.45</Kmax>
-		<p_max>0.4</p_max>
-		
-		<pPM_max>0.8</pPM_max>
-		<num_ea>2</num_ea>
-		<V_st>0.005</V_st>
+    <Device>
+        <Order>2</Order>
+        <SubStepNum>1</SubStepNum>
+        <Solver>euler</Solver>
 
-	</Device>
+        <!-- Число тормозных цилиндров в тормозной рычажной передаче -->
+        <CylindersNum>4</CylindersNum>
+
+        <!-- Диаметр тормозного цилиндра, м -->
+        <CylindersDiameter>0.19</CylindersDiameter>
+
+        <!-- Максимальный выход штока, м -->
+        <StockOut>0.132</StockOut>
+
+        <!-- Мёртвый объём тормозных цилиндров и подводящих труб, м^3 -->
+        <DeadVolume>1.0e-3</DeadVolume>
+
+        <!-- Коэффициент утечек из тормозных цилиндров -->
+        <kLeak>1.0e-6</kLeak>
+
+        <!-- Давление в ТЦ - начало движения поршня из отпускного положения -->
+        <pBegin>0.02</pBegin>
+
+        <!-- Давление в ТЦ - окончание движения поршня в тормозное положение -->
+        <pEnd>0.04</pEnd>
+
+        <!-- Максимальное давление в ТЦ -->
+        <pMax>0.4</pMax>
+
+        <!-- Максимальное нажатие на колодку (при максимальном давлении), тс -->
+        <Kmax>1.45</Kmax>
+
+        <!-- Число колодок на каждой оси -->
+        <!-- <ShoesAxis>2</ShoesAxis> -->
+
+        <!-- Эффективный радиус тормозной поверхности (радиус поверхности катания колёс или тормозных дисков) -->
+        <!-- <EffRadius>0.430</EffRadius> -->
+
+        <!-- Материал колодок: iron/iron-ph/composite (чугун/фосфористый чугун/композит) -->
+        <ShoeType>composite</ShoeType>
+
+        <!-- Начальное давление в тормозных цилиндрах -->
+        <InitPressure>0.0</InitPressure>
+
+        <!-- Число цилиндров отжатия пружинных энергоаккумуляторов стояночного тормоза -->
+        <num_ea>2</num_ea>
+
+        <!-- Объём цилиндров отжатия пружинных энергоаккумуляторов стояночного тормоза -->
+        <V_st>0.005</V_st>
+
+    </Device>
 </Config>

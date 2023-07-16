@@ -34,16 +34,16 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
         for (int i = 0; i < pos; i++)
         {
             int bias = (pos - i - 1) * SME_UNIT_STATE_SIZE;
-            kdp &= (forward_inputs[SME_UNIT_DOOR_L + bias] == 1.0f);
-            kdl &= (forward_inputs[SME_UNIT_DOOR_R + bias] == 1.0f);
+            kdp &= (sme_fwd->getSignal(SME_UNIT_DOOR_L + bias) == 1.0);
+            kdl &= (sme_fwd->getSignal(SME_UNIT_DOOR_R + bias) == 1.0);
         }
     // Проверяем состояние дверей вагонов сзади
     if (pos < mpsu->getOutputData().train_size)
         for (int i = 1; i < (mpsu->getOutputData().train_size - pos); i++)
         {
             int bias = (i - 1) * SME_UNIT_STATE_SIZE;
-            kdp &= (backward_inputs[SME_UNIT_DOOR_R + bias] == 1.0f);
-            kdl &= (backward_inputs[SME_UNIT_DOOR_L + bias] == 1.0f);
+            kdp &= (sme_bwd->getSignal(SME_UNIT_DOOR_R + bias) == 1.0);
+            kdl &= (sme_bwd->getSignal(SME_UNIT_DOOR_L + bias) == 1.0);
         }
 
     analogSignal[KDL] = static_cast<float>(kdl);

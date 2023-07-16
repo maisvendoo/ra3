@@ -6,9 +6,10 @@
         <Length>24.7</Length>
         <WheelDiameter>0.86</WheelDiameter>
         <MainResist>loco-resist</MainResist>
+        <WheelRailFriction>default</WheelRailFriction>
         <NumAxis>4</NumAxis>
         <SoundDir>ra3</SoundDir>
-        <WheelInertia>2.0</WheelInertia>
+        <WheelInertia>100.0</WheelInertia>
 
         <FuelCapacity>350</FuelCapacity>
         <FuelLevel>1.0</FuelLevel>
@@ -19,7 +20,7 @@
         <ExtModelName>ra3/RA3-middle.osgt</ExtModelName>
         <ModelShift>0.0 0.0 0.05</ModelShift>
 
-        <ExtTexturesDir>textures-060_rzd</ExtTexturesDir>
+        <ExtTexturesDir>ra3/textures-060_rzd</ExtTexturesDir>
         <AnimationsConfigDir>ra3-middle</AnimationsConfigDir>
 
         <DriverPos>0.56 9.95 2.9</DriverPos>        

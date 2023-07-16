@@ -34,9 +34,4 @@ void RA3HeadMotor::initSafetyDevices()
             QDir::separator() + "stations.conf";
 
     blok->loadStationsMap(path);
-
-    epk = new AutoTrainStopEPK151D();
-    epk->read_custom_config(config_dir +
-                            QDir::separator() +
-                            "epk");
 }
