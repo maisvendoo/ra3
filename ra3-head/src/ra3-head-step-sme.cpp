@@ -40,8 +40,8 @@ void RA3HeadMotor::stepSME(double t, double dt)
         sme_bwd->setSignal(SME_DIESEL_START_STOP, tmp);
 
         // Сигнал работы ЭПК на ведомые секции
-        sme_fwd->setSignal(SME_IS_AUTOSTOP_ON, static_cast<double>(epk->getStateKey()));
-        sme_bwd->setSignal(SME_IS_AUTOSTOP_ON, static_cast<double>(epk->getStateKey()));
+        sme_fwd->setSignal(SME_IS_AUTOSTOP_ON, static_cast<double>(epk->isKeyOn()));
+        sme_bwd->setSignal(SME_IS_AUTOSTOP_ON, static_cast<double>(epk->isKeyOn()));
 
         // Сигнал позиции реверсора на ведомые секции
         // Вперёд отправляем правильно, назад наоборот

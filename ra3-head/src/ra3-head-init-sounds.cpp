@@ -12,6 +12,7 @@ void RA3HeadMotor::initSounds()
     active_cab_relay->setSoundName("Relay");
 
     connect(horn, &TrainHorn::soundPlay, this, &RA3HeadMotor::soundPlay);
+    connect(horn, &TrainHorn::soundSetVolume, this, &RA3HeadMotor::soundSetVolume);
     connect(horn, &TrainHorn::soundStop, this, &RA3HeadMotor::soundStop);
 
     connect(fuel_pump, &ElectricFuelPump::soundPlay, this, &RA3HeadMotor::soundPlay);

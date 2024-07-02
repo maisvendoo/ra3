@@ -16,6 +16,6 @@ void RA3HeadMotor::stepSafetyDevices(double t, double dt)
     blok->setRailCoord(railway_coord + dir * getLength() / 2.0);
     blok->setVelocity(wheel_omega[0] * wheel_diameter[0] / 2.0);
     blok->setTrainLength(mpsu->getOutputData().train_length);
-    blok->setKeyEPK(epk->getStateKey());
+    blok->setKeyEPK(epk->isKeyOn());
     blok->step(t, dt);
 }

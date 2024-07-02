@@ -60,7 +60,7 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     }
 
     // ЭПК
-    analogSignal[MFDU_EPK] = static_cast<float>(!epk->getStateKey());
+    analogSignal[MFDU_EPK] = static_cast<float>(!epk->isKeyOn());
 
     // Экстренное
     analogSignal[MFDU_XREN1] = static_cast<float>(!(km->isEmergencyBrake() || emerg_brake_valve->isEmergencyBrake()));

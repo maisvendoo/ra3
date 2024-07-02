@@ -36,8 +36,6 @@ public:
 
     bool isTractionAllowed() const { return is_powered; }
 
-    void setKeyState(bool key_state) { keyOn(key_state); }
-
 private:
 
     /// Постоянная времени срабатывание электромеханической части (катушки)

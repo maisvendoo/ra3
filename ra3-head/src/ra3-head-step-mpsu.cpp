@@ -43,7 +43,7 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.brake_level_KM = km->getBrakeLevel();
 
         // Состояние приборов безопасности
-        mpsu_input.is_autostop_ON = epk->getStateKey();
+        mpsu_input.is_autostop_ON = epk->isKeyOn();
 
         // Обеспечение режима поддержания заданной скорости
         mpsu_input.button_speed_hold = button_speed_hold.getState();

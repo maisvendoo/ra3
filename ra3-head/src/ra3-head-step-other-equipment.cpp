@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::stepOtherEquipment(double t, double dt)
 {
+    horn->setFLpressure(main_reservoir->getPressure());
     horn->setControl(keys);
     horn->step(t, dt);
 

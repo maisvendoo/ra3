@@ -49,7 +49,8 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[RB] = static_cast<float>(tumbler[BUTTON_RB].getState());
     analogSignal[RBS] = static_cast<float>(tumbler[BUTTON_RBS].getState());
 
-    analogSignal[EPK] = static_cast<float>(epk->getStateKey());
+    //analogSignal[EPK] = static_cast<float>(epk->isKeyOn());
+    analogSignal[EPK] = static_cast<float>(tumbler[KEY_EPK].getState());
 
     analogSignal[SPEED_SELECTION] = static_cast<float>(tumbler[BUTTON_SPEED_SELECTION].getState());
     analogSignal[SPEED_PLUS] = static_cast<float>(tumbler[BUTTON_SPEED_PLUS].getState());
