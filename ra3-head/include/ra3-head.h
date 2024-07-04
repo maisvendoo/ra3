@@ -129,6 +129,9 @@ private:
     /// Свисток и тифон
     TrainHorn *horn;
 
+    /// Система подачи песка под оси передней (моторной) тележки
+    SandingSystem   *sand_system;
+
     /// Топливоподкачивающий насос
     ElectricFuelPump    *fuel_pump;
 

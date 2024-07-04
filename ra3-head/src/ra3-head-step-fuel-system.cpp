@@ -8,7 +8,7 @@ void RA3HeadMotor::stepFuelSystem(double t, double dt)
     double common_fuel_level = 0.0;
 
     // Расчет массы вагона без топлива
-    full_mass = empty_mass + payload_coeff * payload_mass;
+    full_mass = empty_mass + payload_coeff * payload_mass + sand_system->getSandMass();
 
     for (FuelTank *fuel_tank : fuel_tank)
     {
