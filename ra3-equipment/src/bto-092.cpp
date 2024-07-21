@@ -140,6 +140,24 @@ double BTO092::getMaxBCpressure() const
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+sound_state_t BTO092::getSoundState(size_t idx) const
+{
+    (void) idx;
+    return pb_brake_play;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float BTO092::getSoundSignal(size_t idx) const
+{
+    (void) idx;
+    return pb_brake_play.createSoundSignal();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void BTO092::step(double t, double dt)
 {
     parking_brake_state->setValue(pPB);
@@ -187,18 +205,7 @@ void BTO092::stepParkingBrake()
     QSR = -Q_fl_pb;
 
     // Озвучка применения стояночного тормоза (выхода воздуха из ЦСТ)
-    if (static_cast<bool>(v1))
-    {
-        if (!pb_brake_play)
-        {
-            emit soundPlay("PB_brake");
-            pb_brake_play = true;
-        }
-    }
-    else
-    {
-        pb_brake_play = false;
-    }
+    pb_brake_play.state = (v1 > Physics::ZERO);
 }
 
 //------------------------------------------------------------------------------

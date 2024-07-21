@@ -19,4 +19,7 @@ void RA3HeadMotor::stepSignalsOutput(double t, double dt)
 
     // Вывод сигналов на контрольные лампы
     controlLampsSignalsOutput(t, dt);
+
+    // Вывод сигналов звучки
+    stepSoundSignalsOutput(t, dt);
 }

@@ -22,18 +22,12 @@ TracController::TracController(QObject *parent) : Device(parent)
   , dir(0)
   , brakeTimer(new Timer)
   , tracTimer(new Timer)
-  , mainHandleSoundName("KM_main")
-  , reversSoundName("KM_revers")
   , K_flow(5.0e-2)
   , pBP(0.0)
   , QBP(0.0)
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
-
-    emerg_brake.setOnSoundName("KM_main");
-    emerg_brake.setOffSoundName("KM_main");
-    connect(&emerg_brake, &Trigger::soundPlay, this, &TracController::soundPlay);
 }
 
 //------------------------------------------------------------------------------
@@ -65,7 +59,31 @@ double TracController::getBPflow() const
 //------------------------------------------------------------------------------
 bool TracController::isEmergencyBrake() const
 {
-    return emerg_brake.getState();
+    return mode_pos == -2;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+bool TracController::isBrake() const
+{
+    return mode_pos == -1;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+bool TracController::isZero() const
+{
+    return mode_pos == 0;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+bool TracController::isTraction() const
+{
+    return mode_pos == 1;
 }
 
 //------------------------------------------------------------------------------
@@ -73,9 +91,29 @@ bool TracController::isEmergencyBrake() const
 //------------------------------------------------------------------------------
 float TracController::getHandlePosition() const
 {
-    double level = mode_pos * 100 + trac_level - brake_level - 300 * static_cast<int>(emerg_brake.getState());
+    float level = static_cast<float>(mode_pos * 10 + trac_level - brake_level);
 
-    return static_cast<float>(level) / 500.0f;
+    return level / 100.0f;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+sound_state_t TracController::getSoundState(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx];
+    return Device::getSoundState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float TracController::getSoundSignal(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx].createSoundSignal();
+    return Device::getSoundSignal();
 }
 
 //------------------------------------------------------------------------------
@@ -88,15 +126,16 @@ void TracController::preStep(state_vector_t &Y, double t)
 
     if (mode_pos != mode_pos_old)
     {
-        emit soundPlay(mainHandleSoundName);
+        sounds[MAIN_CHANGE_MODE_SOUND].play();
         mode_pos_old = mode_pos;
     }
 
-    double u = static_cast<double>(emerg_brake.getState());
+    double u = static_cast<double>(mode_pos == -2);
 
     QBP = - K_flow * pBP * u;
 
-    emit soundSetVolume("KM_vipusk", qRound(10.0 * nf(QBP)));
+    sounds[MAIN_EMERGENCY_FLOW_SOUND].state = (mode_pos == -2);
+    sounds[MAIN_EMERGENCY_FLOW_SOUND].volume = 2.0 * pBP;
 }
 
 //------------------------------------------------------------------------------
@@ -133,12 +172,42 @@ void TracController::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 void TracController::stepKeysControl(double t, double dt)
 {
-    processDiscretePositions(getKeyState(KEY_A), old_traction_key, 1);
-    processDiscretePositions(getKeyState(KEY_D), old_brake_key, -1);
+    // Контроллер в нулевой позиции (выбег)
+    if (mode_pos == 0)
+    {
+        trac_level = brake_level = 0;
 
+        if ( (getKeyState(KEY_D)) && (!old_brake_key) )
+        {
+            --mode_pos;
+            // Запрещаем непрерывное управление до второго нажатия клавиши
+            brake = false;
+        }
+        else if ( (getKeyState(KEY_A)) && (!old_traction_key) )
+        {
+            ++mode_pos;
+            // Запрещаем непрерывное управление до второго нажатия клавиши
+            traction = false;
+        }
+    }
+
+    // Контроллер в экстренном торможении
+    if (mode_pos == -2)
+    {
+        traction = false;
+        brake = true;
+        // Возврат в максимальный уровень торможения
+        if (getKeyState(KEY_A))
+        {
+            mode_pos = -1;
+            brake_level = 90;
+        }
+    }
+
+    // Контроллер в торможении
     if (mode_pos == -1)
     {
-        traction.reset();
+        traction = false;
         dir = 0;
 
         if (!brakeTimer->isStarted())
@@ -146,46 +215,48 @@ void TracController::stepKeysControl(double t, double dt)
 
         if (getKeyState(KEY_A))
         {
+            // Возврат в выбег
             if (brake_level == 0)
             {
                 mode_pos = 0;
                 brakeTimer->stop();
-                brake.reset();
+                brake = false;
             }
             else
             {
                 dir = 1;
             }
-
-            if (emerg_brake.getState())
-            {
-                if (!old_traction_key)
-                    emerg_brake.reset();
-            }
         }
 
         if (getKeyState(KEY_D))
         {
-            if (brake.getState())
+            // Управляем дальше только после второго нажатия клавиши
+            if (brake)
                 dir = -1;
 
+            // После максимального уровня торможения переход в экстренное
             if (brake_level == 90)
             {
+                // Только новым нажатием клавиши
                 if (!old_brake_key)
-                    emerg_brake.set();
+                {
+                    mode_pos = -2;
+                }
             }
         }
         else
         {
-            brake.set();
+            // Разрешаем управление, отпустив клавишу после первого нажатия
+            brake = true;
         }
     }
 
     brakeTimer->step(t, dt);
 
+    // Контроллер в тяге
     if (mode_pos == 1)
     {
-        brake.reset();
+        brake = false;
         dir = 0;
 
         if (!tracTimer->isStarted())
@@ -193,11 +264,12 @@ void TracController::stepKeysControl(double t, double dt)
 
         if (getKeyState(KEY_D))
         {
+            // Возврат в выбег
             if (trac_level == 0)
             {
                 mode_pos = 0;
                 tracTimer->stop();
-                traction.reset();
+                traction = false;
             }
             else
             {
@@ -207,13 +279,15 @@ void TracController::stepKeysControl(double t, double dt)
 
         if (getKeyState(KEY_A))
         {
-            if (traction.getState())
+            // Управляем дальше только после второго нажатия клавиши
+            if (traction)
                 dir = 1;
 
         }
         else
         {
-            traction.set();
+            // Разрешаем управление, отпустив клавишу после первого нажатия
+            traction = true;
         }
     }
 
@@ -222,39 +296,21 @@ void TracController::stepKeysControl(double t, double dt)
     old_traction_key = getKeyState(KEY_A);
     old_brake_key = getKeyState(KEY_D);
 
+    // Управление реверсом
     if (fwd_key && !old_fwd_key && (revers_pos < 1))
     {
         revers_pos++;
-        emit soundPlay(reversSoundName);
+        sounds[REVERS_CHANGE_POS_SOUND].play();
     }
 
     if (bwd_key && !old_bwd_key && (revers_pos > -1))
     {
         revers_pos--;
-        emit soundPlay(reversSoundName);
+        sounds[REVERS_CHANGE_POS_SOUND].play();
     }
 
     old_fwd_key = fwd_key;
     old_bwd_key = bwd_key;
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void TracController::processDiscretePositions(bool key_state, bool old_key_state, int dir)
-{
-    if (mode_pos != 0)
-        return;
-
-    trac_level = brake_level = 0;
-    traction.reset();
-    brake.reset();
-
-    if ( (key_state) && (!old_key_state) )
-    {
-        mode_pos += dir;
-        mode_pos = cut(mode_pos, -1, 1);
-    }
 }
 
 //------------------------------------------------------------------------------

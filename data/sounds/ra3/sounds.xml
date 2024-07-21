@@ -1,59 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 
-	<!-- Включение -->
+	<!-- Свисток -->
+	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
 	<Sound>
-		<Name>Tumbler_On</Name>
-		<Path>tumbler.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
+		<SignalID>201</SignalID>
+		<Filename>svistok.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
+		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.05 11.2 0.9</LocalPosition>
 	</Sound>
 
-	<!-- Выключение -->
+	<!-- Тифон -->
+	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
 	<Sound>
-		<Name>Tumbler_Off</Name>
-		<Path>tumbler.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
+		<SignalID>202</SignalID>
+		<Filename>tifon.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
+		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.05 11.2 0.9</LocalPosition>
 	</Sound>
 
-	<!-- Звук включения контактора -->
+	<!-- Реверсор -->
 	<Sound>
-		<Name>Relay</Name>
-		<Path>relay.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
+		<SignalID>203</SignalID>
+		<Filename>switcher.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>Tifon</Name>
-		<Path>tifon.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-0.06 10.38 2.45</LocalPosition>
 	</Sound>
 
+	<!-- Контроллер машиниста -->
 	<Sound>
-		<Name>Svistok</Name>
-		<Path>svistok.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
+		<SignalID>204</SignalID>
+		<Filename>km.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.21 10.45 2.45</LocalPosition>
 	</Sound>
-	
+
+
+	<!-- Экстренное торможение от контроллера машиниста -->
+	<Sound>
+		<SignalID>205</SignalID>
+		<Filename>395_vypusk.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.95 8.4 2.5</LocalPosition>
+	</Sound>
+
+	<!-- Клапан аварийного экстренного торможения -->
+	<Sound>
+		<SignalID>206</SignalID>
+		<Filename>395_vypusk.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.25 10.4 2.4</LocalPosition>
+	</Sound>
+
+	<!-- БЛОК: озвучка нажатия кнопок -->
+	<Sound>
+		<SignalID>207</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.61 10.79 2.58</LocalPosition>
+	</Sound>
+
+	<!-- БЛОК: прерывистый сигнал при приближении к лимиту скорости -->
+	<Sound>
+		<SignalID>208</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.61 10.79 2.58</LocalPosition>
+	</Sound>
+
+	<!-- Тумблер стояночного тормоза -->
+	<Sound>
+		<SignalID>209</SignalID>
+		<Filename>switcher.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.77 10.81 2.62</LocalPosition>
+	</Sound>
+
+	<!-- Применение стояночного тормоза -->
+	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
+	<Sound>
+		<SignalID>210</SignalID>
+		<Filename>pb_brake.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.95 8.4 2.5</LocalPosition>
+	</Sound>
+
+	<!-- Наполнение тормозной магистрали от крана резервного управления КРУ091 -->
+	<Sound>
+		<SignalID>215</SignalID>
+		<Filename>395_2.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.0 10.5 2.4</LocalPosition>
+	</Sound>
+
+	<!-- Опорожнение тормозной магистрали от крана резервного управления КРУ091 -->
+	<Sound>
+		<SignalID>216</SignalID>
+		<Filename>395_5.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.0 10.5 2.4</LocalPosition>
+	</Sound>
+
+	<!-- БЛОК: озвучка свистка ЭПК -->
+	<Sound>
+		<SignalID>220</SignalID>
+		<Filename>epk.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.61 10.79 2.58</LocalPosition>
+	</Sound>
+
+	<!-- Переключение реле питания бортовой сети -->
+	<Sound>
+		<SignalID>235</SignalID>
+		<Filename>relay.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-0.95 8.4 2.5</LocalPosition>
+	</Sound>
+
+	<!-- Переключение реле активной кабины -->
+	<Sound>
+		<SignalID>236</SignalID>
+		<Filename>relay.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-0.95 8.4 2.5</LocalPosition>
+	</Sound>
+
+	<!-- =================================== -->
+	<!-- ============== OLD ================ -->
+	<!-- =================================== -->
+
 	<!-- Электрический топливный насос (ЭТН) -->
 	<Sound>
 		<Name>Fuel_Pump1</Name>
@@ -156,105 +291,4 @@
 		<PlayOnStart>0</PlayOnStart>
 	</Sound>
 
-	<Sound>
-		<Name>EPK</Name>
-		<Path>epk_2.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>Switcher</Name>
-		<Path>switcher.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>KM_revers</Name>
-		<Path>switcher.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>KM_main</Name>
-		<Path>km2.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>PB_brake</Name>
-		<Path>pb_brake.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>	
-
-
-	<Sound>
-		<Name>BLOK_RB</Name>
-		<Path>blok_beep_3.wav</Path>
-		<InitVolume>100</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>EB_vipusk</Name>
-		<Path>395_vypusk.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>KM_vipusk</Name>
-		<Path>395_vypusk.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>KRU-091_brake</Name>
-		<Path>395_5.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-
-	<Sound>
-		<Name>KRU-091_release</Name>
-		<Path>395_2.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>100</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
 </Config>

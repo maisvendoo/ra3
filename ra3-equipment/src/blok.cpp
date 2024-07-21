@@ -95,6 +95,9 @@ void BLOK::loadStationsMap(QString path)
 
     if (stations_file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+        // Смещение координат, чтобы искать ближайшую станцию в трёх километрах
+        double add_coord_radius = 3000.0;
+
         while (!stations_file.atEnd())
         {
             QByteArray line = stations_file.readLine();
@@ -103,15 +106,68 @@ void BLOK::loadStationsMap(QString path)
             if (tokens.size() < 3)
                 continue;
 
-            station_t station;
             qSetRealNumberPrecision(2);
-            station.begin_coord = pf(tokens[0].toDouble() - 3000.0);
-            station.end_coord = pf(tokens[1].toDouble() + 3000.0);
+            double begin_coord = tokens[0].toDouble();
+            double end_coord = tokens[1].toDouble();
+
+            // Координата начала станции не меньше нуля или конца предыдущей станции
+            double prev_end_coord = 0.0;
+            if (!stations.empty())
+                prev_end_coord = (stations.end()-1)->end_coord - add_coord_radius;
+            if (begin_coord < prev_end_coord)
+                begin_coord = prev_end_coord;
+
+            // Координата конца станции не меньше координаты начала
+            if (end_coord < begin_coord)
+                continue;
+
+            // Если станция ближе к предыдущей, чем радиус смещения координат,
+            // то смещаем их соответствующие границы поиска к средней точке
+            if ( (!stations.empty())
+               && ((begin_coord - prev_end_coord) < (2.0 * add_coord_radius)) )
+            {
+                double middle_point_coord = (begin_coord + prev_end_coord) / 2.0;
+
+                (stations.end()-1)->end_coord = middle_point_coord;
+                begin_coord = middle_point_coord;
+            }
+            else
+            {
+                // Смещение координаты начала станции
+                begin_coord = pf(begin_coord - add_coord_radius);
+            }
+
+            // Смещение координаты конца станции
+            end_coord = end_coord + add_coord_radius;
+
+            station_t station;
+            station.begin_coord = begin_coord;
+            station.end_coord = end_coord;
             station.name = tokens[2];
 
             stations.push_back(station);
         }
     }
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+sound_state_t BLOK::getSoundState(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx];
+    return Device::getSoundState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float BLOK::getSoundSignal(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx].createSoundSignal();
+    return Device::getSoundSignal();
 }
 
 //------------------------------------------------------------------------------
@@ -288,13 +344,13 @@ void BLOK::sounds_process()
     if ( (state_RB && (!state_RB_old)) ||
          (state_RB_old && (!state_RB)) )
     {
-        emit soundPlay("BLOK_RB");
+        sounds[BUTTON_PRESS_SOUND].play();
     }
 
     if ( (state_RBS && (!state_RBS_old)) ||
          (state_RBS_old && (!state_RBS)) )
     {
-        emit soundPlay("BLOK_RB");
+        sounds[BUTTON_PRESS_SOUND].play();
     }
 
     state_RB_old = state_RB;
@@ -486,5 +542,5 @@ void BLOK::onSafetyTimer()
 //------------------------------------------------------------------------------
 void BLOK::onBeepTimer()
 {
-    emit soundPlay("BLOK_RB");
+    sounds[VELOCITY_NEAR_LIMIT_SOUND].play();
 }

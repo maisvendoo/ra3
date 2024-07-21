@@ -27,7 +27,7 @@ public:
 */
     void step(double t, double dt) override;
 
-    void setHandlePosition(int &position) override;
+    void setHandlePosition(int position) override;
 
     QString getPositionName() const override;
 

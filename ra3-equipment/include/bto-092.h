@@ -56,6 +56,12 @@ public:
     /// Максимальное давление в тормозных цилиндрах
     double getMaxBCpressure() const;
 
+    /// Состояние звука применения стояночного тормоза
+    sound_state_t getSoundState(size_t idx = 0) const override;
+
+    /// Сигнал состояния звука применения стояночного тормоза
+    float getSoundSignal(size_t idx = 0) const override;
+
     /// Шаг моделирования блока тормозного оборудования
     void step(double t, double dt) override;
 
@@ -134,7 +140,7 @@ private:
     int state_ept;
 
     /// Озвучка применения стояночного тормоза
-    bool pb_brake_play;
+    sound_state_t pb_brake_play;
 
     enum
     {

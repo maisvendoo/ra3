@@ -26,6 +26,12 @@ public:
     /// Экстренное торможение
     bool isEmergencyBrake() const;
 
+    /// Состояние звука
+    sound_state_t getSoundState(size_t idx = 0) const override;
+
+    /// Сигнал состояния звука
+    float getSoundSignal(size_t idx = 0) const override;
+
 private:
 
     double QBP;
@@ -35,6 +41,8 @@ private:
     double K_flow;
 
     double Kv;
+
+    sound_state_t sound_flow;
 
     Trigger brake;
 

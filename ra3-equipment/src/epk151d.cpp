@@ -28,7 +28,6 @@ AutoTrainStopEPK151D::AutoTrainStopEPK151D(QObject *parent)
     , V2(1e-3)
     , emergencyRate(0.0)
     , is_whistle_on(0.0)
-    , is_whistle(false)
 {
     std::fill(K.begin(), K.end(), 0.0);
     std::fill(k.begin(), k.end(), 0.0);
@@ -45,6 +44,16 @@ AutoTrainStopEPK151D::~AutoTrainStopEPK151D()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+void AutoTrainStopEPK151D::init(double pTM, double pFL)
+{
+    setY(0, 0.0);
+    setY(2, pTM);
+    setY(1, pFL);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 double AutoTrainStopEPK151D::getEmergencyBrakeRate() const
 {
     return emergencyRate;
@@ -53,11 +62,19 @@ double AutoTrainStopEPK151D::getEmergencyBrakeRate() const
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void AutoTrainStopEPK151D::init(double pTM, double pFL)
+sound_state_t AutoTrainStopEPK151D::getSoundState(size_t idx) const
 {
-    setY(0, 0.0);
-    setY(2, pTM);
-    setY(1, pFL);
+    (void) idx;
+    return sound_state_t(is_whistle_on > Physics::ZERO);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float AutoTrainStopEPK151D::getSoundSignal(size_t idx) const
+{
+    (void) idx;
+    return sound_state_t::createSoundSignal(is_whistle_on > Physics::ZERO);
 }
 
 //------------------------------------------------------------------------------
@@ -83,13 +100,13 @@ void AutoTrainStopEPK151D::ode_system(const state_vector_t &Y,
 
     double sum_p2 = Y[0] + pk * (1.0 - is_key_on) - pd;
 
-    double u5 = is_whistle_on = cut(nf(k[4] * sum_p2), 0.0, 1.0);
+    is_whistle_on = cut(nf(k[4] * sum_p2), 0.0, 1.0);
 
     // Поток из питательной магистрали в камеру выдержки времени
     double Q_fl_2 = K[4] * (pFL - Y[1]) * hs_p(sum_p2);
 
     // Разрядка камеры выдержки времени в атмосферу
-    double Q_2_atm = K[5] * Y[1] * u5;
+    double Q_2_atm = K[5] * Y[1] * is_whistle_on;
 
     // Поток из тормозной магистрали в камеру над срывным клапаном
     double Q_bp_1 = K[1] * (pBP - Y[2]);
@@ -113,29 +130,6 @@ void AutoTrainStopEPK151D::ode_system(const state_vector_t &Y,
     dYdt[2] = (Q_bp_1 - Q_1_atm) / V1;
 
     dYdt[0] = ( pk * u1 * u2 - Y[0] ) / T1;
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void AutoTrainStopEPK151D::preStep(state_vector_t &Y, double t)
-{
-    Q_UNUSED(Y)
-    Q_UNUSED(t)
-
-    if (static_cast<bool>(is_whistle_on))
-    {
-        if (!is_whistle)
-        {
-            is_whistle = true;
-            emit soundPlay("EPK");
-        }
-    }
-    else
-    {
-        is_whistle = false;
-        emit soundStop("EPK");
-    }
 }
 
 //------------------------------------------------------------------------------

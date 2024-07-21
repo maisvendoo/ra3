@@ -106,6 +106,16 @@ public:
 
    int getStationIndex() const { return station_idx; }
 
+   enum {
+       NUM_SOUNDS = 2,
+       BUTTON_PRESS_SOUND = 0,
+       VELOCITY_NEAR_LIMIT_SOUND = 1
+   };
+
+   sound_state_t getSoundState(size_t idx = BUTTON_PRESS_SOUND) const override;
+
+   float getSoundSignal(size_t idx = BUTTON_PRESS_SOUND) const override;
+
 private:
 
    double U_pow;
@@ -185,6 +195,8 @@ private:
     std::vector<station_t> stations;
 
    std::array<float, NUM_LAMPS> lamps;
+
+    std::array<sound_state_t, NUM_SOUNDS> sounds;
 
    Trigger epk_state;
 

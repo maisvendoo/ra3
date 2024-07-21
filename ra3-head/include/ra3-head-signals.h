@@ -24,15 +24,10 @@ enum
     // Кнопка "БОРТСЕТЬ ОТКЛ."
     SIG_BUTTON_OFF = 1,
 
-    // Подача питания на МФДУ
-    SIG_MFDU_ON = 2,
-    // Подача питания на дисплей БЛОК-М
-    SIG_BLOK_ON = 3,
-
     SIG_BUTTON_START = 4,
     SIG_BUTTON_STOP = 5,
 
-    // МФДУ (МНОГОФУНКЦИОНАЛЬНЫЙ ДИСПЛЕЙ УПРАВЛЕНИЯ)
+    // МФДУ (МНОГОФУНКЦИОНАЛЬНЫЙ ДИСПЛЕЙ УПРАВЛЕНИЯ) сигналы 6..49
     MFDU_DISPLAY_ON = 6,
     MFDU_S_SPEED,       // Спидометр. Скорость
     MFDU_S_SPEED_LIMIT, // Спидометр. Ограничение скорости
@@ -110,6 +105,7 @@ enum
 
     DIRECTION_OF_MOVEMENT = 119,
 
+    // Дисплей БЛОК сигналы 130..141
     BLOK_DISPLAY_ON = 130,      // Включение дисплея
     BLOK_STATION_INDEX = 131,   // Номер станции в списке
     BLOK_ACCELERATION = 132,    // Ускорение
@@ -124,6 +120,7 @@ enum
     BLOK_VELOCITY_NEXT_LIMIT = 140,
     BLOK_REVERS = 141,
 
+    // Контрольные лампы
     ACTIVE_COCKPIT = 150,
     ALARM = 151,
     ANXIETY = 152,
@@ -135,6 +132,7 @@ enum
     KDL = 158,
     KDP = 159,
 
+    // Лампы локомотивного светофора
     LS_W = 160,
     LS_R = 161,
     LS_RY = 162,
@@ -144,6 +142,7 @@ enum
     LS_G3 = 166,
     LS_G4 = 167,
 
+    // Лампы локомотивного светофора
     LS_W_1 = 168,
     LS_R_1 = 169,
     LS_RY_1 = 170,
@@ -153,12 +152,16 @@ enum
     LS_G3_1 = 174,
     LS_G4_1 = 175,
 
+    // Кнопка экстренного торможения
     EMERGENCY_STOP_BUTTON = 176,
 
+    // Кнопки бдительности
     RB = 177,
     RBS = 178,
+    // Ключ ЭПК
     EPK = 179,
 
+    // Кнопки пульта
     SPEED_SELECTION = 180,
     SPEED_PLUS = 181,
     SPEED_MINUS = 182,
@@ -180,7 +183,44 @@ enum
     WHEEL_1 = 194,
     WHEEL_2 = 195,
     WHEEL_3 = 196,
-    WHEEL_4 = 197
+    WHEEL_4 = 197,
+
+    // Звуки
+    SOUND_SVISTOK = 201,
+    SOUND_TIFON = 202,
+
+    SOUND_REVERSOR = 203,
+    SOUND_CONTROLLER = 204,
+    SOUND_KM_EMERGENCY = 205,
+    SOUND_EMERGENCY_VALVE = 206,
+
+    SOUND_BLOK_BUTTON = 207,
+    SOUND_BLOK_SPEED_LIMIT = 208,
+
+    SOUND_PARKING_BRAKE_SWITCHER = 209,
+    SOUND_PARKING_BRAKE_FLOW = 210,
+
+    SOUND_BRAKE_CRANE_BP_FILL_FLOW = 215,
+    SOUND_BRAKE_CRANE_BP_DRAIN_FLOW = 216,
+
+    SOUND_EPK_WHISTLE = 220,
+/*
+    SOUND_5_10 = 221,
+    SOUND_10_20 = 222,
+    SOUND_20_30 = 223,
+    SOUND_30_40 = 224,
+    SOUND_40_50 = 225,
+    SOUND_50_60 = 226,
+    SOUND_60_70 = 227,
+    SOUND_70_80 = 228,
+    SOUND_80_90 = 229,
+    SOUND_90_100 = 230,
+    SOUND_100_110 = 231,
+    SOUND_110_X = 232,
+*/
+    SOUND_RELAY_POWER = 235,
+    SOUND_RELAY_ACTIVE_CAB = 236,
+
 };
 
 #endif // RA3_HEAD_SIGNALS_H

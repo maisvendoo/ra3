@@ -14,26 +14,28 @@ public:
 
     ~TracController();
 
-    /// Признак нулевого положения
-    bool isZero()
-    {
-        return mode_pos == 0;
-    }
+    /// Блок-контакт "ЭКСТРЕННОЕ ТОРМОЖЕНИЕ"
+    bool isEmergencyBrake() const;
 
-    bool isTraction() { return mode_pos == 1; }
+    /// Блок-контакт "ТОРМОЖЕНИЕ"
+    bool isBrake() const;
 
-    bool isBrake() { return mode_pos == -1; }
+    /// Блок-контакт "ВЫБЕГ"
+    bool isZero() const;
+
+    /// Блок-контакт "ХОД"
+    bool isTraction() const;
 
     float getHandlePosition() const;
 
     double getTractionLevel() const
     {
-        return static_cast<double>(trac_min * pf(mode_pos) + trac_level) / 100.0;
+        return static_cast<double>(trac_min * (mode_pos > 0) + trac_level) / 100.0;
     }
 
     double getBrakeLevel() const
     {
-        return static_cast<double>(brake_min * nf(mode_pos) + brake_level) / 100.0;
+        return static_cast<double>(brake_min * (mode_pos < 0) + brake_level) / 100.0;
     }
 
     double getMinTracLevel() const { return static_cast<double>(trac_min) / 100.0; }
@@ -42,27 +44,32 @@ public:
 
     float getReversHandlePos() const { return static_cast<float>(revers_pos); }
 
-    void setMainHandleSoundName(QString name) { mainHandleSoundName = name; }
-
-    void setReversHandleSoundName(QString name) { reversSoundName = name; }
-
     /// Задать давление от тормозной магистрали
     void setBPpressure(double value);
 
     /// Поток в тормозную магистраль
     double getBPflow() const;
 
-    /// Экстренное торможение
-    bool isEmergencyBrake() const;
-
     void setFwdKey(bool key_state) { fwd_key = key_state; }
 
     void setBwdKey(bool key_state) { bwd_key = key_state; }
 
+    enum {
+        NUM_SOUNDS = 3,
+        REVERS_CHANGE_POS_SOUND = 0,    ///< Звук переключения реверсора
+        MAIN_CHANGE_MODE_SOUND = 1,     ///< Звук переключения контроллера
+        MAIN_EMERGENCY_FLOW_SOUND = 2   ///< Звук расхода воздуха при экстренном торможении
+    };
+    /// Состояние звука
+    sound_state_t getSoundState(size_t idx = REVERS_CHANGE_POS_SOUND) const override;
+
+    /// Сигнал состояния звука
+    float getSoundSignal(size_t idx = REVERS_CHANGE_POS_SOUND) const override;
+
 private:
 
     /// Позиция, определяющая режим управления
-    /// (0 - выбег, 1 - ход, -1 - торможение)
+    /// (0 - выбег, 1 - ход, -1 - торможение, -2 - экстренное торможение)
     int mode_pos;
 
     int mode_pos_old;
@@ -99,10 +106,6 @@ private:
 
     Timer *tracTimer;
 
-    QString mainHandleSoundName;
-
-    QString reversSoundName;
-
     /// Коэффициент утечки через клапан экстренного торможения
     double K_flow;
 
@@ -112,14 +115,14 @@ private:
     /// Расход из тормозной магистрали при экстренном торможении
     double QBP;
 
-    /// Блок-контакт "ХОД"
-    Trigger traction;
+    /// Управление рукояткой в тяге после второго нажатия
+    bool traction;
 
-    /// Блок-контакт "ТОРМОЖЕНИЕ"
-    Trigger brake;
+    /// Управление рукояткой в торможении после второго нажатия
+    bool brake;
 
-    /// Блок-контакт "ЭКСТРЕННОЕ ТОРМОЖЕНИЕ"
-    Trigger emerg_brake;
+    /// Счётчик и состояние звуков
+    std::array <sound_state_t, NUM_SOUNDS> sounds;
 
     void preStep(state_vector_t &Y, double t) override;
 
@@ -130,8 +133,6 @@ private:
     void load_config(CfgReader &cfg) override;
 
     void stepKeysControl(double t, double dt) override;
-
-    void processDiscretePositions(bool key_state, bool old_key_state, int dir);
 
 private slots:
 

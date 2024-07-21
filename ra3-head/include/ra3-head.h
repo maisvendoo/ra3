@@ -385,6 +385,9 @@ private:
     /// Вывод сигналов на анимации модели поезда
     void animationSignalsOutput(double t, double dt);
 
+    /// Вывод сигналов звучки
+    void stepSoundSignalsOutput(double t, double dt);
+
 private slots:
 
     void slotAutostart();

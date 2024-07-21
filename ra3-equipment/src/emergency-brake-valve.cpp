@@ -4,10 +4,11 @@
 //
 //------------------------------------------------------------------------------
 EmergencyBrakeValve::EmergencyBrakeValve(QObject *parent) : Device(parent)
-  , QBP(0.0)
-  , pBP(0.0)
-  , K_flow(5.0e-2)
-  , Kv(4.0)
+    , QBP(0.0)
+    , pBP(0.0)
+    , K_flow(5.0e-2)
+    , Kv(4.0)
+    , sound_flow(sound_state_t())
 {
 
 }
@@ -58,6 +59,24 @@ bool EmergencyBrakeValve::isEmergencyBrake() const
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+sound_state_t EmergencyBrakeValve::getSoundState(size_t idx) const
+{
+    (void) idx;
+    return sound_flow;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float EmergencyBrakeValve::getSoundSignal(size_t idx) const
+{
+    (void) idx;
+    return sound_flow.createSoundSignal();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void EmergencyBrakeValve::preStep(state_vector_t &Y, double t)
 {
     Q_UNUSED(Y)
@@ -67,7 +86,8 @@ void EmergencyBrakeValve::preStep(state_vector_t &Y, double t)
 
     QBP = - K_flow * pBP * u;
 
-    emit soundSetVolume("EB_vipusk", qRound(nf(QBP) * Kv));
+    sound_flow.state = brake.getState();
+    sound_flow.volume = 2.0 * pBP;
 }
 
 //------------------------------------------------------------------------------

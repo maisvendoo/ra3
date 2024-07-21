@@ -26,6 +26,13 @@ KRU091::KRU091(QObject *parent) : BrakeCrane(parent)
 
     connect(incTimer, &Timer::process, this, &KRU091::inc_position);
     connect(decTimer, &Timer::process, this, &KRU091::dec_position);
+
+    sounds[CHANGE_POS_SOUND] = sound_state_t();
+    sounds[ER_STAB_SOUND] = sound_state_t();
+    sounds[ER_FILL_FLOW_SOUND] = sound_state_t();
+    sounds[ER_DRAIN_FLOW_SOUND] = sound_state_t();
+    sounds[BP_FILL_FLOW_SOUND] = sound_state_t(true, 0.0f, 1.0f);
+    sounds[BP_DRAIN_FLOW_SOUND] = sound_state_t(true, 0.0f, 1.0f);
 }
 
 //------------------------------------------------------------------------------
@@ -59,7 +66,7 @@ void KRU091::step(double t, double dt)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void KRU091::setHandlePosition(int &position)
+void KRU091::setHandlePosition(int position)
 {
     handle_pos = position;
 
@@ -126,8 +133,8 @@ void KRU091::preStep(state_vector_t &Y, double t)
     {
         QFL = -reducer->getInputFlow();
         QBP = 0.0;
-        emit soundSetVolume("KRU-091_brake", 0);
-        emit soundSetVolume("KRU-091_release", 0);
+        sounds[BP_FILL_FLOW_SOUND].volume = 0.0;
+        sounds[BP_DRAIN_FLOW_SOUND].volume = 0.0;
         return;
     }
 
@@ -147,8 +154,8 @@ void KRU091::preStep(state_vector_t &Y, double t)
     // Суммарный поток в тормозную магистраль
     QBP = Q_charge_bp - Q_brake_bp;
 
-    emit soundSetVolume("KRU-091_brake", qRound(1e5 * Q_brake_bp));
-    emit soundSetVolume("KRU-091_release", qRound(1e6 * Q_charge_bp));
+    sounds[BP_FILL_FLOW_SOUND].volume = 1000.0 * Q_charge_bp;
+    sounds[BP_DRAIN_FLOW_SOUND].volume = 1000.0 * Q_brake_bp;
 }
 
 //------------------------------------------------------------------------------
