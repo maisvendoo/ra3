@@ -7,7 +7,9 @@ void RA3HeadMotor::stepBrakesControl(double t, double dt)
 {
     kru->setFLpressure(main_reservoir->getPressure());
     kru->setBPpressure(brakepipe->getPressure());
-    kru->setActive(active_cab_relay->getContactState(1));
+    kru->setActive(active_cab_relay->getContactState(1) &&
+                   (!emerg_brake_valve->isEmergencyBrake()) &&
+                   (!km->isEmergencyBrake()));
     kru->setControl(keys);
     kru->step(t, dt);
 
