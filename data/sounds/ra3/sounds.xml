@@ -113,7 +113,6 @@
 	</Sound>
 
 	<!-- Применение стояночного тормоза -->
-	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
 	<Sound>
 		<SignalID>210</SignalID>
 		<Filename>pb_brake.wav</Filename>
@@ -185,110 +184,63 @@
 		<LocalPosition>-0.95 8.4 2.5</LocalPosition>
 	</Sound>
 
-	<!-- =================================== -->
-	<!-- ============== OLD ================ -->
-	<!-- =================================== -->
-
 	<!-- Электрический топливный насос (ЭТН) -->
 	<Sound>
-		<Name>Fuel_Pump1</Name>
-		<Path>fuel_pump.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>2</MaxVolume>
+		<SignalID>237</SignalID>
+		<Filename>fuel_pump.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>1</Loop>
 		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>Fuel_Pump2</Name>
-		<Path>fuel_pump.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>1</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 3.2 0.5</LocalPosition>
 	</Sound>
 
+	<!-- Стартер - запуск дизеля -->
 	<Sound>
-		<Name>Starter1</Name>
-		<Path>disel-start.wav</Path>
-		<InitVolume>10</InitVolume>
-		<MaxVolume>10</MaxVolume>
+		<SignalID>238</SignalID>
+		<Filename>disel-start.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>0.8</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 3.2 0.5</LocalPosition>
 	</Sound>
-	
+
+	<!-- Дизель - номинальные обороты -->
 	<Sound>
-		<Name>Starter2</Name>
-		<Path>disel-start.wav</Path>
-		<InitVolume>10</InitVolume>
-		<MaxVolume>10</MaxVolume>
+		<SignalID>239</SignalID>
+		<Filename>disel-work-nominal.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 3.2 0.5</LocalPosition>
+	</Sound>
+	<!-- Дизель - повышенные обороты -->
+	<Sound>
+		<SignalID>240</SignalID>
+		<Filename>disel-work-high.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 3.2 0.5</LocalPosition>
+	</Sound>
+
+	<!-- Дизель - остановка -->
+	<Sound>
+		<SignalID>241</SignalID>
+		<Filename>disel-stop.wav</Filename>
+		<InitVolume>0.0</InitVolume>
+		<MaxVolume>0.67</MaxVolume>
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<!-- Дизель -->
-	<Sound>
-		<Name>d1-Disel</Name>
-		<Path>x0.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>40</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-Disel</Name>
-		<Path>x0.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>40</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d1-pos0</Name>
-		<Path>x0.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>40</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-pos0</Name>
-		<Path>x0.wav</Path>
-		<InitVolume>0</InitVolume>
-		<MaxVolume>40</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>1</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d1-stop</Name>
-		<Path>disel-stop.wav</Path>
-		<InitVolume>4</InitVolume>
-		<MaxVolume>4</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
-	</Sound>
-	
-	<Sound>
-		<Name>d2-stop</Name>
-		<Path>disel-stop.wav</Path>
-		<InitVolume>4</InitVolume>
-		<MaxVolume>4</MaxVolume>
-		<InitPitch>1.0</InitPitch>
-		<Loop>0</Loop>
-		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 3.2 0.5</LocalPosition>
 	</Sound>
 
 </Config>

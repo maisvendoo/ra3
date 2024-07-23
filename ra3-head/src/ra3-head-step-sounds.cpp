@@ -36,4 +36,11 @@ void RA3HeadMotor::stepSoundSignalsOutput(double t, double dt)
     // Реле
     analogSignal[SOUND_RELAY_POWER] = KM_power->getSoundSignal(Relay::CHANGE_SOUND);
     analogSignal[SOUND_RELAY_ACTIVE_CAB] = active_cab_relay->getSoundSignal(Relay::CHANGE_SOUND);
+
+    // Двигательная установка
+    analogSignal[SOUND_FUEL_PUMP] = fuel_pump->getSoundSignal();
+    analogSignal[SOUND_DISEL_STARTER] = starter->getSoundSignal();
+    analogSignal[SOUND_DISEL_NOM_FREQ] = disel->getSoundSignal(Disel::NOMINAL_FREQUENCY_SOUND);
+    analogSignal[SOUND_DISEL_HIGH_FREQ] = disel->getSoundSignal(Disel::HIGH_FREQUENCY_SOUND);
+    analogSignal[SOUND_DISEL_STOP] = disel->getSoundSignal(Disel::STOP_SOUND);
 }

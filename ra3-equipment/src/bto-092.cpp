@@ -205,7 +205,7 @@ void BTO092::stepParkingBrake()
     QSR = -Q_fl_pb;
 
     // Озвучка применения стояночного тормоза (выхода воздуха из ЦСТ)
-    pb_brake_play.state = (v1 > Physics::ZERO);
+    pb_brake_play.state = (pPB > 0.1) && (v1 > Physics::ZERO);
 }
 
 //------------------------------------------------------------------------------

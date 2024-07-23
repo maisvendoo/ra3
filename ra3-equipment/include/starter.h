@@ -20,9 +20,13 @@ public:
 
     void setOmega(double omega) { this->omega = omega; }
 
-    void setSoundName(QString soundName) { this->soundName = soundName; }
-
     double getCurrent() const { return I; }
+
+    /// Звук запуска дизеля
+    sound_state_t getSoundState(size_t idx = 0) const;
+
+    /// Звук запуска дизеля
+    float getSoundSignal(size_t idx = 0) const;
 
 private:
 
@@ -53,10 +57,8 @@ private:
     /// Напряжение на якоре
     double U;
 
-    /// Имя звукового файла
-    QString soundName;
-
-    bool is_sound;
+    /// Звук запуска дизеля
+    sound_state_t disel_start_sound;
 
     void preStep(state_vector_t &Y, double t);
 

@@ -26,9 +26,14 @@ public:
     /// Задать напряжение на двигателе насоса
     void setVoltage(double U);
 
-    void setSoundName(QString soundName) { this->soundName = soundName; }
-
+    /// Признак работы топливного насоса
     bool isStarted() const { return is_started; }
+
+    /// Состояние звука топливного насоса
+    sound_state_t getSoundState(size_t idx = 0) const;
+
+    /// Сигнал состояния звука топливного насоса
+    float getSoundSignal(size_t idx = 0) const;
 
 private:
 
@@ -71,9 +76,11 @@ private:
     /// Фактическое давление нагнетаемого топлива
     double fuel_press;
 
+    /// Признак работы топливного насоса
     bool is_started;
 
-    QString soundName;
+    /// Звук топливного насоса
+    sound_state_t sound;
 
     void preStep(state_vector_t &Y, double t);
 

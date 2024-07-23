@@ -18,9 +18,8 @@ ElectricFuelPump::ElectricFuelPump(QObject *parent) : Device(parent)
   , fuel_level(0.0)
   , fuel_press(0.0)
   , is_started(false)
-  , soundName("Fuel_Pump")
 {
-
+    sound = sound_state_t();
 }
 
 //------------------------------------------------------------------------------
@@ -66,6 +65,24 @@ void ElectricFuelPump::setVoltage(double U)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+sound_state_t ElectricFuelPump::getSoundState(size_t idx) const
+{
+    (void) idx;
+    return sound;
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float ElectricFuelPump::getSoundSignal(size_t idx) const
+{
+    (void) idx;
+    return sound.createSoundSignal();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void ElectricFuelPump::preStep(state_vector_t &Y, double t)
 {
     Q_UNUSED(t)
@@ -76,20 +93,9 @@ void ElectricFuelPump::preStep(state_vector_t &Y, double t)
 
     Ia = (U - cF * Y[0] * Physics::sign(If)) / Ra;
 
-    if ( (Y[0] >= 0.1) && !is_started)
-    {
-        emit soundPlay(soundName);
-        is_started = true;
-    }
-
-    if ((Y[0] < 0.1) && is_started)
-    {
-        emit soundStop(soundName);
-        is_started = false;
-    }
-
-    emit soundSetPitch(soundName, static_cast<float>(Y[0] / omega_nom));
-    emit soundSetVolume(soundName, static_cast<int>(Y[0] * 100 / omega_nom));
+    sound.state = (Y[0] > 0.1);
+    sound.pitch = static_cast<float>(Y[0] / omega_nom);
+    sound.volume = static_cast<int>(Y[0] / omega_nom);
 }
 
 //------------------------------------------------------------------------------

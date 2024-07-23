@@ -13,8 +13,6 @@ Starter::Starter(QObject *parent) : Device(parent)
   , Ra(0.1)
   , omega(0.0)
   , U(0.0)
-  , soundName("")
-  , is_sound(true)
 {
 
 }
@@ -38,6 +36,24 @@ double Starter::getTorque() const
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+sound_state_t Starter::getSoundState(size_t idx) const
+{
+    (void) idx;
+    return sound_state_t(U > 0.9 * U_nom);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float Starter::getSoundSignal(size_t idx) const
+{
+    (void) idx;
+    return sound_state_t::createSoundSignal(U > 0.9 * U_nom);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void Starter::preStep(state_vector_t &Y, double t)
 {
     Q_UNUSED(Y)
@@ -46,17 +62,6 @@ void Starter::preStep(state_vector_t &Y, double t)
     double Rp = 0.014 * hs_n(omega - 50.0) + 0.016;
 
     I = (U - cPhi * omega) / (Ra + Rp);
-
-    if ( static_cast<bool>(hs_p(U - 0.9 * U_nom)) && is_sound )
-    {
-        emit soundPlay(soundName);
-        is_sound = false;
-    }
-
-    if (!static_cast<bool>(hs_p(U - 0.9 * U_nom)))
-    {
-        is_sound = true;
-    }
 }
 
 //------------------------------------------------------------------------------

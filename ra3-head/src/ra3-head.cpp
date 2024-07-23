@@ -100,9 +100,6 @@ void RA3HeadMotor::initialization()
     // Инициализация разного оборудования
     initOtherEquipment(modules_dir, custom_cfg_dir);
 
-    // Инициализация озвучки
-    initSounds();
-
     // Инициализация автозапуска
     initAutostart(modules_dir, custom_cfg_dir);
 

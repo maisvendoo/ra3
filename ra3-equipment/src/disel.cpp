@@ -13,8 +13,8 @@ Disel::Disel(QObject *parent) : Device(parent)
   , ip(3.3)
   , J_shaft(1.0)
   , is_fuel_ignition(false)
+  , was_fuel_ignition(false)
   , state_mv6(false)
-  , old_state_mv6(false)
   , state_vtn(false)
   , n_ref(800.0)
   , n_ref_prev(n_ref)
@@ -22,14 +22,12 @@ Disel::Disel(QObject *parent) : Device(parent)
   , Q_fuel(0.0)
   , M_d(0.0)
   , omega_min(19.9)
-  , start_time(3.0)
-  , timer(new Timer)
+  , start_time(8.0)
+  , timer(new Timer(start_time, false))
   , fuel_pressure(0.0)
   , delta_omega(0.0)
   , pos_count(0)
-  , soundName("pos0")
   , fuel_level(0.0)
-  , name("d1")
 {
     std::fill(K.begin(), K.end(), 0.0);
 
@@ -77,6 +75,26 @@ void Disel::setStarterTorque(double M_sg)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+sound_state_t Disel::getSoundState(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx];
+    return Device::getSoundState();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+float Disel::getSoundSignal(size_t idx) const
+{
+    if (idx < sounds.size())
+        return sounds[idx].createSoundSignal();
+    return Device::getSoundSignal();
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
 void Disel::preStep(state_vector_t &Y, double t)
 {
     Q_UNUSED(t)
@@ -113,18 +131,26 @@ void Disel::preStep(state_vector_t &Y, double t)
 
     M_d = (M1 + M2) * static_cast<double>(is_fuel_ignition);
 
-    //switchDiselSound(n_ref);
+    double frec = getShaftFreq();
+    // Звук работы на номинальных оборотах, с затиханием на высоких
+    sounds[NOMINAL_FREQUENCY_SOUND].state = is_fuel_ignition;
+    sounds[NOMINAL_FREQUENCY_SOUND].pitch = frec / 800.0;
+    sounds[NOMINAL_FREQUENCY_SOUND].volume = 1.0 - pf(frec - 1600.0) / 800.0;
+    // Звук работы на повышенных оборотах, с затиханием на низких
+    sounds[HIGH_FREQUENCY_SOUND].state = is_fuel_ignition;
+    sounds[HIGH_FREQUENCY_SOUND].pitch = frec / 1250.0;
+    sounds[HIGH_FREQUENCY_SOUND].volume = pf(frec - 700.0) / (1500.0);
 
-    emit soundSetPitch(soundName, static_cast<float>(getShaftFreq() / 800));
-    emit soundSetVolume(soundName, static_cast<int>(Y[1] * 100.0 / 83.8));
-
-    if (old_state_mv6)
+    if (is_fuel_ignition)
     {
-        if (state_mv6 != old_state_mv6)
-        {
-            emit soundStop(soundName);
-            emit soundPlay(name + "-stop");
-        }
+        // Сбрасываем звук остановки дизеля
+        sounds[STOP_SOUND].state = false;
+        was_fuel_ignition = true;
+    }
+    else
+    {
+        // Звук остановки дизеля - только если уже был запуск дизеля
+        sounds[STOP_SOUND].state = was_fuel_ignition;
     }
 }
 
@@ -160,9 +186,6 @@ void Disel::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "Qmax", Q_max);
     cfg.getDouble(secName, "omega_min", omega_min);
     cfg.getDouble(secName, "start_time", start_time);
-    cfg.getString(secName, "Name", name);
-
-    soundName = name + "-pos0";
 
     timer->firstProcess(false);
     timer->setTimeout(start_time);
@@ -177,38 +200,8 @@ void Disel::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void Disel::switchDiselSound(double n_ref)
-{
-    double dn = pf(n_ref - 800);
-
-    int i = 0;
-
-    for (; i < MAX_POS; ++i)
-    {
-        if ( (dn >= i * 425) && (dn < (i+1) * 425) )
-        {
-            pos_count = i;
-            break;
-        }
-    }
-
-    QString newSoundName = name + QString("-pos%1").arg(i);
-
-    if (newSoundName != soundName)
-    {
-        emit soundStop(soundName);
-        soundName = newSoundName;
-        emit soundPlay(soundName);
-    }
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
 void Disel::slotFuelIgnition()
 {
-    is_fuel_ignition = state_mv6 && static_cast<bool>(hs_p(fuel_pressure - 0.1));
-    soundName = name + "-pos0";
-    emit soundPlay(soundName);
+    is_fuel_ignition = state_mv6 && (fuel_pressure >= 0.1);
     timer->stop();
 }

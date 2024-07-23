@@ -31,7 +31,6 @@ public:
     /// Задать состояние МВ6
     void setMV6state(bool state_mv6)
     {
-        old_state_mv6 = this->state_mv6;
         this->state_mv6 = state_mv6;
     }
 
@@ -69,7 +68,18 @@ public:
     /// Вернуть фактический расход топлива
     double getFuelFlow() const { return Q_fuel; }
 
-    void setName(QString name) { this->name = name; }
+    enum {
+        NUM_SOUNDS = 4,
+        NOMINAL_FREQUENCY_SOUND = 0,
+        HIGH_FREQUENCY_SOUND = 1,
+        STOP_SOUND = 3
+    };
+
+    /// Состояние звуков дизеля
+    sound_state_t getSoundState(size_t idx = NOMINAL_FREQUENCY_SOUND) const;
+
+    /// Сигналы состояния звуков дизеля
+    float getSoundSignal(size_t idx = NOMINAL_FREQUENCY_SOUND) const;
 
 private:
 
@@ -111,11 +121,11 @@ private:
     /// Признак воспламенения топлива
     bool    is_fuel_ignition;
 
+    /// Первое воспламенение топлива (чтобы не озвучивать остановку дизеля на старте)
+    bool    was_fuel_ignition;
+
     /// Состояние вентиля МВ6
     bool    state_mv6;
-
-    /// Предыдущее состояние вентиля МВ6
-    bool    old_state_mv6;
 
     /// Состояние вентиля ВТН
     bool    state_vtn;
@@ -153,29 +163,19 @@ private:
     /// Счетчик позиций
     int     pos_count;
 
-    /// Имя текущего проигрываемого звука
-    QString soundName;
-
     /// Уровень топлива в баке
     double fuel_level;
 
-    enum
-    {
-        MIN_POS = 0,
-        MAX_POS = 4
-    };
-
-    QString name;
-
     std::array<double, NUM_COEFFS>  K;
+
+    /// Состояние звуков дизеля
+    std::array<sound_state_t, NUM_SOUNDS> sounds;
 
     void preStep(state_vector_t &Y, double t);
 
     void ode_system(const state_vector_t &Y, state_vector_t &dYdt, double t);
 
     void load_config(CfgReader &cfg);
-
-    void switchDiselSound(double n_ref);
 
 private:
 

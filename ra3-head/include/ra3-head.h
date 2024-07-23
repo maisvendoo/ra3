@@ -299,9 +299,6 @@ private:
     /// Инициализация прочего оборудования
     void initOtherEquipment(const QString &modules_dir, const QString &custom_cfg_dir);
 
-    /// Инициализация звуков
-    void initSounds();
-
     /// Инициализация последовательности автозапуска
     void initAutostart(const QString &modules_dir, const QString &custom_cfg_dir);
 
