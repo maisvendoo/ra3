@@ -243,4 +243,16 @@
 		<LocalPosition>0.0 3.2 0.5</LocalPosition>
 	</Sound>
 
+	<!-- Подача песка спереди -->
+	<Sound>
+		<SignalID>241</SignalID>
+		<Filename>sand.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>1</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>0.0 8.6 0.0</LocalPosition>
+	</Sound>
+
 </Config>

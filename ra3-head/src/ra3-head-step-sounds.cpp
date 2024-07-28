@@ -43,4 +43,7 @@ void RA3HeadMotor::stepSoundSignalsOutput(double t, double dt)
     analogSignal[SOUND_DISEL_NOM_FREQ] = disel->getSoundSignal(Disel::NOMINAL_FREQUENCY_SOUND);
     analogSignal[SOUND_DISEL_HIGH_FREQ] = disel->getSoundSignal(Disel::HIGH_FREQUENCY_SOUND);
     analogSignal[SOUND_DISEL_STOP] = disel->getSoundSignal(Disel::STOP_SOUND);
+
+    // Песочница
+    analogSignal[SOUND_SAND_DELIVERY] = sand_system->getSoundSignal();
 }
