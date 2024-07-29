@@ -245,7 +245,7 @@
 
 	<!-- Подача песка спереди -->
 	<Sound>
-		<SignalID>241</SignalID>
+		<SignalID>242</SignalID>
 		<Filename>sand.wav</Filename>
 		<InitVolume>1.0</InitVolume>
 		<MaxVolume>1.0</MaxVolume>
