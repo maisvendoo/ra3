@@ -47,7 +47,7 @@ void RA3HeadMotor::stepPneumoSupply(double t, double dt)
 
     // Концевые краны питательной магистрали
     anglecock_fl_fwd->setPipePressure(main_reservoir->getPressure());
-    //anglecock_fl_fwd->setControl(keys);
+    anglecock_fl_fwd->setControl(keys);
     anglecock_fl_fwd->step(t, dt);
     anglecock_fl_bwd->setPipePressure(main_reservoir->getPressure());
     //anglecock_fl_bwd->setControl(keys);
@@ -58,7 +58,7 @@ void RA3HeadMotor::stepPneumoSupply(double t, double dt)
     hose_fl_fwd->setFlowCoeff(anglecock_fl_fwd->getFlowCoeff());
     hose_fl_fwd->setCoord(railway_coord + dir * orient * (length / 2.0 - anglecock_fl_fwd->getShiftCoord()));
     hose_fl_fwd->setShiftSide(anglecock_fl_fwd->getShiftSide());
-    //hose_fl_fwd->setControl(keys);
+    hose_fl_fwd->setControl(keys);
     hose_fl_fwd->step(t, dt);
     hose_fl_bwd->setPressure(anglecock_fl_bwd->getPressureToHose());
     hose_fl_bwd->setFlowCoeff(anglecock_fl_bwd->getFlowCoeff());
