@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set (LIBRARY_OUTPUT_PATH "../../modules/ep1m")
+set (LIBRARY_OUTPUT_PATH "../../modules/ra3-head")
 
 set (CMAKE_SHARED_MODULE_PREFIX "")
 

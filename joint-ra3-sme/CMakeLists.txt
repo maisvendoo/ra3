@@ -2,7 +2,7 @@ set (TARGET joint-ra3-sme)
 
 project (${TARGET})
 
-set (LIBRARY_OUTPUT_PATH "../../modules/${TARGET}")
+set (LIBRARY_OUTPUT_PATH "../../modules/ra3-head")
 
 set (CMAKE_SHARED_MODULE_PREFIX "")
 
