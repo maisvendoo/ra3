@@ -1,5 +1,5 @@
 *.pro.user
 *.pro.user.*
-*.autosave
 *.sfk
-
+*.txt.user
+*.txt.user.*
