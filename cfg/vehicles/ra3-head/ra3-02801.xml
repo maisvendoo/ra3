@@ -32,7 +32,7 @@
 
 		<DriverPos>0.56 9.95 2.9</DriverPos>
 
-		<!--<isRegistratorOn>1</isRegistratorOn>-->
+		<isRegistratorOn>1</isRegistratorOn>
 
 		<!--<Autostart>1</Autostart>-->
 

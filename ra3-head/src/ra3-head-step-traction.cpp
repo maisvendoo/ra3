@@ -36,4 +36,6 @@ void RA3HeadMotor::stepTraction(double t, double dt)
 
     Q_a[1] = ip * hydro_trans->getOutputTorque() / 2.0;
     Q_a[2] = ip * hydro_trans->getOutputTorque() / 2.0;
+
+    tractionForce = (Q_a[1] + Q_a[2]) * 2.0 / wheel_diameter[0];
 }

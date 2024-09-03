@@ -239,6 +239,8 @@ private:
     /// Клапан аварийного экстренного торможения
     EmergencyBrakeValve *emerg_brake_valve;
 
+    double tractionForce = 0.0;
+
     enum
     {
         NUM_TANKS = 2,

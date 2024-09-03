@@ -57,6 +57,11 @@ public:
 
     double getMaxBrakeTorque() { return brakeTorqueLimit(omega_out); }
 
+    double getHydroTransLevel() const
+    {
+        return u_gt;
+    }
+
 private:
 
     bool is_traction;
