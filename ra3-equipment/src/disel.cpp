@@ -119,17 +119,13 @@ void Disel::preStep(state_vector_t &Y, double t)
 
     double u = cut(s1, 0.0, 1.0);
 
-    double Q1 = u * static_cast<double>(state_vtn) * Q_max;
+    double Q = u * Q_max;
 
-    double Q2 = u * Q_max;
+    Q_fuel = K[6] * Q;
 
-    Q_fuel = K[6] * (Q1 + Q2);
+    double M = K[3] * Q;
 
-    double M1 = K[2] * Q1;
-
-    double M2 = K[3] * Q2;
-
-    M_d = (M1 + M2) * static_cast<double>(is_fuel_ignition);
+    M_d = M * static_cast<double>(is_fuel_ignition);
 
     double frec = getShaftFreq();
     // Звук работы на номинальных оборотах, с затиханием на высоких

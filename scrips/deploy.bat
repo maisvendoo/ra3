@@ -1,5 +1,5 @@
 set ADDON_NAME=ra3
-set VERSION=v3.0.1
+set VERSION=v3.0.2
 set DIR_NAME=%ADDON_NAME%-%VERSION%
 
 set PKG_DIR=..\..\package
