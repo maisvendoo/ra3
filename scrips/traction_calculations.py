@@ -47,12 +47,21 @@ for i in range(0, rows):
 plt.figure(figsize=(16,8))
 plt.rcParams.update({'font.size': 22})
     
-plt.ylim(0.0, 4.0)
-plt.plot(i_k, k_gt, color=(0.5, 0.0, 0.0), linewidth=0.75) 
+#plt.ylim(0.0, 4.0)
+#plt.plot(i_k, k_gt, color=(0.5, 0.0, 0.0), linewidth=0.75) 
+
+#plt.ylim(0.0, 100.0)
+#plt.plot(trac_char[0], trac_char[1], color=(0.5, 0.0, 0.0), linewidth=0.75) 
     
 gdt_file = open("gdt.csv", "w")
 
 for i in range(0, rows):
     gdt_file.write(str(i_k[i]) + " " + str(k_gt[i]) + "\n")
 
-gdt_file.close()    
+gdt_file.close()  
+
+
+gdm = pd.read_csv("../cfg/vehicles/ra3-head/gdm.csv", sep="\s+", header=None)
+
+plt.ylim(0.0, 2.0)
+plt.plot(gdm[0], gdm[1], color=(0.5, 0.0, 0.0), linewidth=0.75)  
