@@ -48,11 +48,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_POWER_ON] = static_cast<float>(KM_power->getContactState(2));
 
         // Сигнал запрета включать другие кабины
-        // Отправляем вперёд и назад разные занчения,
-        // чтобы остальные вагоны могли определить
-        // свою ориентацию относительно активной кабины
-        backward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE_BWD);
-        forward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE_FWD);
+        backward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
+        forward_outputs[SME_NO_ACTIVE] = static_cast<float>(SME_ACTIVE);
 
         // Сигнал запуска дизеля на ведомые секции
         backward_outputs[SME_DISEL_START] = static_cast<float>(mpsu->getOutputData().start_press_count == 1);
@@ -67,7 +64,8 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
         forward_outputs[SME_IS_AUTOSTOP_ON] = epk->getStateKey();
 
         // Сигнал позиции реверсора на ведомые секции
-        backward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
+        // Назад отправляем наоборот, вперёд правильно
+        backward_outputs[SME_REVERS_HANDLE] = -1 * km->getReversHandlePos();
         forward_outputs[SME_REVERS_HANDLE] = km->getReversHandlePos();
 
         // Сигналы блок-контактов КМ на ведомые секции
@@ -105,20 +103,7 @@ void RA3HeadMotor::stepSMESignalsOutput(double t, double dt)
     // Обработка сигналов неактивной кабиной
     else
     {
-        // Определяем ориентацию относительно активной кабины
-        if (forward_inputs[SME_NO_ACTIVE] < 0)
-        {
-            // Если спереди получен сигнал от активной кабины,
-            // отправляемый назад, то ориентация совпадает
-            is_orient_same = (static_cast<int>(forward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_BWD);
-        }
-        if (backward_inputs[SME_NO_ACTIVE] < 0)
-        {
-            // Если сзади получен сигнал от активной кабины,
-            // отправляемый вперёд, то ориентация совпадает
-            is_orient_same = (static_cast<int>(backward_inputs[SME_NO_ACTIVE]) == SME_ACTIVE_FWD);
-        }
-        // Отправляем сигнал дальше
+        // Пропускаем дальше сигнал запрета включать другие кабины
         backward_outputs[SME_NO_ACTIVE] = forward_inputs[SME_NO_ACTIVE];
         forward_outputs[SME_NO_ACTIVE] = backward_inputs[SME_NO_ACTIVE];
 

@@ -459,16 +459,16 @@ void MPSU::calc_brake_level_PB()
     mpsu_output.pBC_min = mpsu_input.pBC_max;
     mpsu_output.brake_level_PB = 0.0;
 
-    for (double pBC : mpsu_input.unit_pBC)
+    for (size_t i = 0; i < static_cast<size_t>(mpsu_output.train_size) * 2; ++i)
     {
-        if (pBC > mpsu_output.pBC_max)
+        if (mpsu_input.unit_pBC[i] > mpsu_output.pBC_max)
         {
-            mpsu_output.pBC_max = pBC;
+            mpsu_output.pBC_max = mpsu_input.unit_pBC[i];
         }
 
-        if (pBC < mpsu_output.pBC_min)
+        if (mpsu_input.unit_pBC[i] < mpsu_output.pBC_min)
         {
-            mpsu_output.pBC_min = pBC;
+            mpsu_output.pBC_min = mpsu_input.unit_pBC[i];
         }
     }
 
@@ -542,18 +542,20 @@ void MPSU::unit_brakes_sheck()
         }
         if ((mpsu_input.unit_pBC[2 * i] > 0.04) || (mpsu_input.unit_pBC[2 * i + 1] > 0.04))
         {
-            // Только пневматика -
-            if (mpsu_input.unit_level_GDB[i] == 0.0)
-            {
-                mpsu_output.unit_brakes[i] = 3;
-                continue;
-            }
-            else
+            // Совмещённое ГДТ + пневматика - белый
+            if (mpsu_input.unit_level_GDB[i] > 0.01)
             {
                 mpsu_output.unit_brakes[i] = 2;
                 continue;
             }
+            // Только пневматика - жёлтый
+            else
+            {
+                mpsu_output.unit_brakes[i] = 3;
+                continue;
+            }
         }
+        // Только ГДТ - синий
         if (mpsu_input.unit_level_GDB[i] > 0.01)
             mpsu_output.unit_brakes[i] = 1;
     }

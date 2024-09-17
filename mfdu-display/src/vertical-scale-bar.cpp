@@ -55,7 +55,7 @@ void VerticalScaleBar::setVal(int val)
         else
             labTraction_->setStyleSheet("border: none; color: limegreen;");
     }
-    else
+    if (val <= 0)
     {
         labBrakingForce_->setText(QString::number(std::abs(val)) + "%");
 

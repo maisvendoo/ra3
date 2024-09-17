@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
-	
-	<!-- Пружинный стояночный тормоз (СПТ) -->
-	<Tumbler>
-		<ID>4</ID>
-		<State>1</State>
-	</Tumbler>
 
-	<Tumbler>
-		<ID>1</ID>
-		<State>1</State>
-	</Tumbler>
+    <!-- Пружинный стояночный тормоз (СПТ) -->
+    <Tumbler>
+        <ID>4</ID>
+        <State>1</State>
+    </Tumbler>
+
+    <Tumbler>
+        <ID>1</ID>
+        <State>1</State>
+    </Tumbler>
 
 </Config>
