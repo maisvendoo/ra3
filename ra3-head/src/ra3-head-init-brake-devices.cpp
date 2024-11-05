@@ -14,8 +14,7 @@ void RA3HeadMotor::initBrakeDevices(double p0, double pBP, double pFL)
     hose_fl_bwd->setPressure(pFL);
 
     // Инициализация давления в приборах управления тормозами
-    charge_press = p0;
-    kru->setChargePressure(charge_press);
+    kru->setChargePressure(p0);
     kru->init(pBP, pFL);
 
     epk->init(pBP, pFL);

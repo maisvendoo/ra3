@@ -18,11 +18,12 @@ find_package(device ${RRS_VERSION} REQUIRED)
 find_package(vehicle ${RRS_VERSION} REQUIRED)
 
 file (GLOB INCLUDES "./include/*.h")
-file (GLOB EQP_INCLUDES "../ra3-equipment/include/*.h")
+#file (GLOB EQP_INCLUDES "../ra3-equipment/include/*.h")
 file (GLOB SOURCES "./src/*.cpp")
-file (GLOB EQP_SOURCES "../ra3-equipment/src/*.cpp")
+#file (GLOB EQP_SOURCES "../ra3-equipment/src/*.cpp")
 
-add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES} ${EQP_SOURCES} ${EQP_INCLUDES})
+#add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES} ${EQP_SOURCES} ${EQP_INCLUDES})
+add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES})
 
 target_include_directories (${TARGET} PRIVATE ./include/)
 target_include_directories (${TARGET} PRIVATE ../ra3-equipment/include)
