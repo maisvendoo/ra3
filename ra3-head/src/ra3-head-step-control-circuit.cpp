@@ -24,7 +24,7 @@ void RA3HeadMotor::stepControlCircuit(double t, double dt)
     bat24->step(t, dt);
 
     // Включение контактора "Бортсеть"
-    bool is_KM_bat_110 = tumbler[BUTTON_PWR_ON].getState() ||
+    bool is_KM_bat_110 = tumbler[IS_BUTTON_PWR_ON].getState() ||
                        ( KM_power->getContactState(0) &&
                          active_cab_relay->getContactState(1) &&
                          tumbler[NO_BUTTON_PWR_OFF].getState() ) ||

@@ -9,7 +9,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     Q_UNUSED(dt);
 
     // Кнопки "БОРТСЕТЬ"
-    analogSignal[SIG_BUTTON_ON] = static_cast<float>(tumbler[BUTTON_PWR_ON].getState());
+    analogSignal[SIG_BUTTON_ON] = static_cast<float>(tumbler[IS_BUTTON_PWR_ON].getState());
     analogSignal[SIG_BUTTON_OFF] = static_cast<float>(!tumbler[NO_BUTTON_PWR_OFF].getState());
 
     analogSignal[STRELKA_VOLTMETER110] = static_cast<float>(Ucc_110 / 150.0);
@@ -21,10 +21,10 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[STRELKA_P_TC2] = static_cast<float>(brake_mech[TROLLEY_BWD]->getBCpressure() / 0.6);
 
     // Кнопки пуска и остановки дизелей
-    analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[BUTTON_START].getState());
-    analogSignal[SIG_BUTTON_STOP] = static_cast<float>(tumbler[BUTTON_STOP].getState());
+    analogSignal[SIG_BUTTON_START] = static_cast<float>(tumbler[IS_BUTTON_START].getState());
+    analogSignal[SIG_BUTTON_STOP] = static_cast<float>(tumbler[IS_BUTTON_STOP].getState());
 
-    analogSignal[SW_PARKING_BRAKE] = static_cast<float>(tumbler[SWITCH_PARKING_BRAKE].getState());
+    analogSignal[SW_PARKING_BRAKE] = static_cast<float>(tumbler[IS_SWITCH_PARKING_BRAKE].getState());
 
     analogSignal[HANDLE_KRU_091] = kru->getHandlePosition();
 
@@ -46,15 +46,15 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     analogSignal[EMERGENCY_STOP_BUTTON] = static_cast<float>(emerg_brake_valve->isEmergencyBrake());
 
-    analogSignal[RB] = static_cast<float>(tumbler[BUTTON_RB].getState());
-    analogSignal[RBS] = static_cast<float>(tumbler[BUTTON_RBS].getState());
+    analogSignal[RB] = static_cast<float>(tumbler[IS_BUTTON_RB].getState());
+    analogSignal[RBS] = static_cast<float>(tumbler[IS_BUTTON_RBS].getState());
 
     //analogSignal[EPK] = static_cast<float>(epk->isKeyOn());
-    analogSignal[EPK] = static_cast<float>(tumbler[KEY_EPK].getState());
+    analogSignal[EPK] = static_cast<float>(tumbler[IS_KEY_EPK].getState());
 
-    analogSignal[SPEED_SELECTION] = static_cast<float>(tumbler[BUTTON_SPEED_SELECTION].getState());
-    analogSignal[SPEED_PLUS] = static_cast<float>(tumbler[BUTTON_SPEED_PLUS].getState());
-    analogSignal[SPEED_MINUS] = static_cast<float>(tumbler[BUTTON_SPEED_MINUS].getState());
+    analogSignal[SPEED_SELECTION] = static_cast<float>(tumbler[IS_BUTTON_SPEED_SELECTION].getState());
+    analogSignal[SPEED_PLUS] = static_cast<float>(tumbler[IS_BUTTON_SPEED_PLUS].getState());
+    analogSignal[SPEED_MINUS] = static_cast<float>(tumbler[IS_BUTTON_SPEED_MINUS].getState());
     analogSignal[HOLD_SPEED] = static_cast<float>(button_speed_hold.getState());
 
 

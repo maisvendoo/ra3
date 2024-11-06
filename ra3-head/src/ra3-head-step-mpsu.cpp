@@ -11,8 +11,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
 
-    mpsu_input.start_disel = tumbler[BUTTON_START].getState();
-    mpsu_input.stop_disel = tumbler[BUTTON_STOP].getState();
+    mpsu_input.start_disel = tumbler[IS_BUTTON_START].getState();
+    mpsu_input.stop_disel = tumbler[IS_BUTTON_STOP].getState();
     mpsu_input.start_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == 1.0f)
                                ||(sme_bwd->getSignal(SME_DIESEL_START_STOP) == 1.0f);
     mpsu_input.stop_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == -1.0f)
@@ -47,9 +47,9 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
         // Обеспечение режима поддержания заданной скорости
         mpsu_input.button_speed_hold = button_speed_hold.getState();
-        mpsu_input.button_speed_select = tumbler[BUTTON_SPEED_SELECTION].getState();
-        mpsu_input.button_speed_plus = tumbler[BUTTON_SPEED_PLUS].getState();
-        mpsu_input.button_speed_minus = tumbler[BUTTON_SPEED_MINUS].getState();
+        mpsu_input.button_speed_select = tumbler[IS_BUTTON_SPEED_SELECTION].getState();
+        mpsu_input.button_speed_plus = tumbler[IS_BUTTON_SPEED_PLUS].getState();
+        mpsu_input.button_speed_minus = tumbler[IS_BUTTON_SPEED_MINUS].getState();
 
     }
     else

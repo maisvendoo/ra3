@@ -69,8 +69,8 @@ void RA3HeadMotor::stepSME(double t, double dt)
         forward_outputs[SME_REF_BRAKE_LEVEL_EPB] = static_cast<float>(mpsu->getOutputData().brake_ref_level_EPB);
 */
         // Сигнал управления стояночным тормозом на ведомые секции
-        sme_fwd->setSignal(SME_PARKING_BRAKE_ON, static_cast<double>(tumbler[SWITCH_PARKING_BRAKE].getState()));
-        sme_bwd->setSignal(SME_PARKING_BRAKE_ON, static_cast<double>(tumbler[SWITCH_PARKING_BRAKE].getState()));
+        sme_fwd->setSignal(SME_PARKING_BRAKE_ON, static_cast<double>(tumbler[IS_SWITCH_PARKING_BRAKE].getState()));
+        sme_bwd->setSignal(SME_PARKING_BRAKE_ON, static_cast<double>(tumbler[IS_SWITCH_PARKING_BRAKE].getState()));
 
         // Сигнал экстренного торможения на ведомые секции
         bool is_emergency = (  emerg_brake_valve->isEmergencyBrake()

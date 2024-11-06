@@ -23,7 +23,7 @@ void RA3HeadMotor::stepSafetyDevices(double t, double dt)
     blok->setRailCoord(profile_point_data.railway_coord);
     blok->setVelocity(wheel_omega[0] * wheel_diameter[0] / 2.0);
     blok->setTrainLength(mpsu->getOutputData().train_length);
-    blok->setRBstate(tumbler[BUTTON_RB].getState());
-    blok->setRBSstate(tumbler[BUTTON_RBS].getState());
+    blok->setRBstate(tumbler[IS_BUTTON_RB].getState());
+    blok->setRBSstate(tumbler[IS_BUTTON_RBS].getState());
     blok->step(t, dt);
 }

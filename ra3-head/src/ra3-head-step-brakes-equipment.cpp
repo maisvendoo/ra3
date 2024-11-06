@@ -31,7 +31,7 @@ void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
     brake_module->releaseBrakes(mpsu->getOutputData().release_PB);
 
     bool is_parking_braked =
-            ( tumbler[SWITCH_PARKING_BRAKE].getState() && active_cab_relay->getContactState(1) ) ||
+            ( tumbler[IS_SWITCH_PARKING_BRAKE].getState() && active_cab_relay->getContactState(1) ) ||
             static_cast<bool>(sme_fwd->getSignal(SME_PARKING_BRAKE_ON)) ||
             static_cast<bool>(sme_bwd->getSignal(SME_PARKING_BRAKE_ON));
     brake_module->setParkingBrakeState(is_parking_braked);
