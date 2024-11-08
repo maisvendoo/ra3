@@ -3,7 +3,7 @@
 	<Vehicle>
 		<EmptyMass>39400</EmptyMass>
 		<PayloadMass>0</PayloadMass> 
-		<Length>24.7</Length>
+		<Length>23.03</Length>
 		<WheelDiameter>0.86</WheelDiameter>
 		<MainResist>loco-resist</MainResist>
 		<WheelRailFriction>default</WheelRailFriction>
@@ -15,12 +15,12 @@
 		<FuelLevel>1.0</FuelLevel>
 
 		<MainResLeak>4e-5</MainResLeak>
-		<Number>3503</Number>
+		<Number>3803</Number>
 
-		<ExtModelName>ra3/RA3-middle.osgt</ExtModelName>
-		<ModelShift>0.0 0.0 0.05</ModelShift>
+		<ExtModelName>ra3/ra3-middle.osgt</ExtModelName>
+		<ModelShift>0.0 0.0 0.04</ModelShift>
 
-		<!-- <ExtTexturesDir>ra3/images</ExtTexturesDir> -->
+		<ExtTexturesDir>ra3/images/ra3-038</ExtTexturesDir>
 		<AnimationsConfigDir>ra3-middle</AnimationsConfigDir>
 
 		<DriverPos>0.56 9.95 2.9</DriverPos>

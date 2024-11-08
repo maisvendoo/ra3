@@ -64,9 +64,9 @@ private:
     std::vector<QLabel*> labFwd_;
     std::vector<QLabel*> labBwd_;
     std::vector<QLabel*> labBwdFwd_;
-    std::vector<QLabel*> labXren1_;
-    std::vector<QLabel*> labXren2_;
-    std::vector<QLabel*> labXren3_;
+    std::vector<QLabel*> labEmergBrakes_;
+    std::vector<QLabel*> labParkBrakes_;
+    std::vector<QLabel*> labHoldBrakes_;
 
     // Вертикальная шкала тяги/торможения
     VerticalScaleBar* verticalScaleBar_;

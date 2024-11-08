@@ -89,9 +89,9 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     setNeededIcon_(labFwd_, input_signals[MFDU_REVERS_FWD]);
     setNeededIcon_(labBwd_, input_signals[MFDU_REVERS_BWD]);
     setNeededIcon_(labBwdFwd_, input_signals[MFDU_REVERS_NEUTRAL]);
-    setNeededIcon_(labXren1_, input_signals[MFDU_XREN1]);
-    setNeededIcon_(labXren2_, input_signals[MFDU_XREN2]);
-    setNeededIcon_(labXren3_, input_signals[MFDU_XREN3]);
+    setNeededIcon_(labEmergBrakes_, input_signals[MFDU_EMERGENCY_BRAKES]);
+    setNeededIcon_(labParkBrakes_, input_signals[MFDU_PARKING_BRAKES]);
+    setNeededIcon_(labHoldBrakes_, input_signals[MFDU_HOLDING_BRAKES]);
 
     // вертикальная шкала тяги/торможения
     verticalScaleBar_->setVal(input_signals[MFDU_TRACTION_BRAKING]);
@@ -742,7 +742,7 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo = new QLabel(parent);
     labFoo->move(fooX, startY + 190);
     labFoo->setPixmap(pixmap);
-    labXren1_.push_back(labFoo);
+    labEmergBrakes_.push_back(labFoo);
 
 
     fooX += 52;
@@ -750,7 +750,7 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo = new QLabel(parent);
     labFoo->move(fooX, startY + 190);
     labFoo->setPixmap(pixmap);
-    labXren2_.push_back(labFoo);
+    labParkBrakes_.push_back(labFoo);
 
 
     fooX += 52;
@@ -758,7 +758,7 @@ void MfduMainDisp::setBlockIcons_leftSpeedometer_(QLabel *parent)
     labFoo = new QLabel(parent);
     labFoo->move(fooX, startY + 190);
     labFoo->setPixmap(pixmap);
-    labXren3_.push_back(labFoo);
+    labHoldBrakes_.push_back(labFoo);
 
 }
 

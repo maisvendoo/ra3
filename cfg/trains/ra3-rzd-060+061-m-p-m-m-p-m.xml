@@ -5,35 +5,15 @@
 		<ChargingPressure>0.5</ChargingPressure>
 		<InitMainResPressure>0.8</InitMainResPressure>
 		<NoAir>0</NoAir>
-		<Title>РА3 042+036 (ЮППК, пятивагонный)</Title>
-		<Description>Дизель-поезд РА3-042 и РА3-036 в сплотке. Состав: 04201-04202-03601-03603-03602. Авторы: Ксения Шалобаева (модель кабины), Азер Рустамов (внешняя модель), Дмитрий Притыкин (программирование систем), Богос Даглдиян (дисплеи МФДУ и БЛОК), Денис Максименко (обработка текстур)</Description>
+		<Title>РА3-060+061 (ТЧ-4)</Title>
+		<Description>Рельсовый автобус РА3-060+061. Авторы: Александр Мищенко, Азер Рустамов, Дмитрий Притыкин, Михаил Арепьев, Богос Даглдиян, Денис Максименко</Description>
 	</Common>
 
 	<Vehicle>
 		<ModuleDir>ra3-head</ModuleDir>
 		<Module>ra3-head</Module>
 		<ModuleConfigDir>ra3-head</ModuleConfigDir>
-		<ModuleConfig>ra3-04201</ModuleConfig>
-		<IsOrientationForward>1</IsOrientationForward>
-		<Count>1</Count>
-		<PayloadCoeff>1</PayloadCoeff>
-	</Vehicle>
-
-	<Vehicle>
-		<ModuleDir>ra3-head</ModuleDir>
-		<Module>ra3-head</Module>
-		<ModuleConfigDir>ra3-head</ModuleConfigDir>
-		<ModuleConfig>ra3-04202</ModuleConfig>
-		<IsOrientationForward>0</IsOrientationForward>
-		<Count>1</Count>
-		<PayloadCoeff>1</PayloadCoeff>
-	</Vehicle>
-
-	<Vehicle>
-		<ModuleDir>ra3-head</ModuleDir>
-		<Module>ra3-head</Module>
-		<ModuleConfigDir>ra3-head</ModuleConfigDir>
-		<ModuleConfig>ra3-03601</ModuleConfig>
+		<ModuleConfig>ra3-06001</ModuleConfig>
 		<IsOrientationForward>1</IsOrientationForward>
 		<Count>1</Count>
 		<PayloadCoeff>1</PayloadCoeff>
@@ -43,7 +23,7 @@
 		<ModuleDir>ra3-middle</ModuleDir>
 		<Module>ra3-middle</Module>
 		<ModuleConfigDir>ra3-middle</ModuleConfigDir>
-		<ModuleConfig>ra3-03603</ModuleConfig>
+		<ModuleConfig>ra3-06003</ModuleConfig>
 		<IsOrientationForward>1</IsOrientationForward>
 		<Count>1</Count>
 		<PayloadCoeff>1</PayloadCoeff>
@@ -53,7 +33,37 @@
 		<ModuleDir>ra3-head</ModuleDir>
 		<Module>ra3-head</Module>
 		<ModuleConfigDir>ra3-head</ModuleConfigDir>
-		<ModuleConfig>ra3-03602</ModuleConfig>
+		<ModuleConfig>ra3-06002</ModuleConfig>
+		<IsOrientationForward>0</IsOrientationForward>
+		<Count>1</Count>
+		<PayloadCoeff>1</PayloadCoeff>
+	</Vehicle>
+
+	<Vehicle>
+		<ModuleDir>ra3-head</ModuleDir>
+		<Module>ra3-head</Module>
+		<ModuleConfigDir>ra3-head</ModuleConfigDir>
+		<ModuleConfig>ra3-06101</ModuleConfig>
+		<IsOrientationForward>1</IsOrientationForward>
+		<Count>1</Count>
+		<PayloadCoeff>1</PayloadCoeff>
+	</Vehicle>
+
+	<Vehicle>
+		<ModuleDir>ra3-middle</ModuleDir>
+		<Module>ra3-middle</Module>
+		<ModuleConfigDir>ra3-middle</ModuleConfigDir>
+		<ModuleConfig>ra3-06103</ModuleConfig>
+		<IsOrientationForward>1</IsOrientationForward>
+		<Count>1</Count>
+		<PayloadCoeff>1</PayloadCoeff>
+	</Vehicle>
+
+	<Vehicle>
+		<ModuleDir>ra3-head</ModuleDir>
+		<Module>ra3-head</Module>
+		<ModuleConfigDir>ra3-head</ModuleConfigDir>
+		<ModuleConfig>ra3-06102</ModuleConfig>
 		<IsOrientationForward>0</IsOrientationForward>
 		<Count>1</Count>
 		<PayloadCoeff>1</PayloadCoeff>

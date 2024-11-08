@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 enum
 {
-    /// начало массива сигналов для передачи состояния вагона на дисплей МФДУ
-    MFDU_UNIT_SIGNALS_BEGIN = 52,
     /// размер массива сигналов для передачи состояния вагона на дисплей МФДУ
     MFDU_UNIT_SIGNALS_SIZE = 9
 };
@@ -18,7 +16,7 @@ enum
 //
 //------------------------------------------------------------------------------
 enum
-{/*
+{
     // === АНИМАЦИИ КУЗОВА ===
     // Резерв - бортовой номер
     //SERIAL_NUMBER = 0,
@@ -88,8 +86,10 @@ enum
     //BUFFERLIGHT_RED_L_FWD = 40,
     //BUFFERLIGHT_WHITE_R_FWD = 41,
     //BUFFERLIGHT_RED_R_FWD = 42,
+    //LIGHT_UPPER_RED_L = 43,
+    //LIGHT_UPPER_RED_R = 44,
 
-    // 43-49 резерв на прочие анимации кузова - подсветку, двери в кабину и т.п.
+    // 45-49 резерв на прочие анимации кузова - подсветку, двери в кабину и т.п.
 
     // === АНИМАЦИИ КАБИНЫ ===
     // Панель органов управления ПОУ
@@ -187,6 +187,7 @@ enum
     BUTTON_TYPHON_MP = 123,
 
     // Панель управления ПУ-4
+    // Верхний ряд
     BUTTON_OPEN_L_DOORS = 124,
     BUTTON_OPEN_L_DOORS_INDICATOR = 125,
     BUTTON_CLOSE_L_DOORS = 126,
@@ -200,6 +201,7 @@ enum
     BUTTON_OPEN_R_DOORS_INDICATOR = 134,
     BUTTON_CLOSE_R_DOORS = 135,
     BUTTON_CLOSE_R_DOORS_INDICATOR = 136,
+    // Нижний ряд
     BUTTON_SPEED_MAINTAINING = 137,
     BUTTON_SPEED_MAINTAINING_INDICATOR = 138,
     BUTTON_SPEED_SELECTION = 139,
@@ -260,24 +262,58 @@ enum
     //JOYSTIK_MIRROR_VERTICAL_AXIS = 182,
     //CONTROL_GEAR_MANOMETER_BRIGTHNESS = 183,
 
-// TODO // МФДУ
-// TODO // БЛОК
-// TODO // Звуки
-*/
-    // Кнопка "БОРТСЕТЬ ВКЛ."
-    SIG_BUTTON_ON = 0,
-    // Кнопка "БОРТСЕТЬ ОТКЛ."
-    SIG_BUTTON_OFF = 1,
+    // 184-199 резерв на прочие анимации кабины
 
-    SIG_BUTTON_START = 4,
-    SIG_BUTTON_STOP = 5,
+    // === СИГНАЛЫ ЗВУКОВ ===
+    SOUND_SVISTOK = 201,
+    SOUND_TIFON = 202,
 
-    // МФДУ (МНОГОФУНКЦИОНАЛЬНЫЙ ДИСПЛЕЙ УПРАВЛЕНИЯ) сигналы 6..49
-    MFDU_DISPLAY_ON = 6,
-    MFDU_S_SPEED,       // Спидометр. Скорость
-    MFDU_S_SPEED_LIMIT, // Спидометр. Ограничение скорости
-    MFDU_S_GREEN_DIGIT, // Спидометр. Зеленое число
-    MFDU_S_WHITE_DIGIT, // Спидометр. Белое число
+    SOUND_REVERSOR = 203,
+    SOUND_CONTROLLER = 204,
+    SOUND_KM_EMERGENCY = 205,
+    SOUND_EMERGENCY_VALVE = 206,
+
+    SOUND_BLOK_BUTTON = 207,
+    SOUND_BLOK_SPEED_LIMIT = 208,
+
+    SOUND_PARKING_BRAKE_SWITCHER = 209,
+    SOUND_PARKING_BRAKE_FLOW = 210,
+
+    SOUND_BRAKE_CRANE_BP_FILL_FLOW = 215,
+    SOUND_BRAKE_CRANE_BP_DRAIN_FLOW = 216,
+
+    SOUND_EPK_WHISTLE = 220,
+
+    //SOUND_5_10 = 221,
+    //SOUND_10_20 = 222,
+    //SOUND_20_30 = 223,
+    //SOUND_30_40 = 224,
+    //SOUND_40_50 = 225,
+    //SOUND_50_60 = 226,
+    //SOUND_60_70 = 227,
+    //SOUND_70_80 = 228,
+    //SOUND_80_90 = 229,
+    //SOUND_90_100 = 230,
+    //SOUND_100_110 = 231,
+    //SOUND_110_X = 232,
+
+    SOUND_RELAY_POWER = 235,
+    SOUND_RELAY_ACTIVE_CAB = 236,
+
+    SOUND_FUEL_PUMP = 237,
+    SOUND_DISEL_STARTER = 238,
+    SOUND_DISEL_NOM_FREQ = 239,
+    SOUND_DISEL_HIGH_FREQ = 240,
+    SOUND_DISEL_STOP = 241,
+
+    SOUND_SAND_DELIVERY = 242,
+
+    // === СИГНАЛЫ МФДУ ===
+    MFDU_DISPLAY_ON = 250,  // Включение дисплея
+    MFDU_S_SPEED,           // Спидометр. Скорость
+    MFDU_S_SPEED_LIMIT,     // Спидометр. Ограничение скорости
+    MFDU_S_GREEN_DIGIT,     // Спидометр. Зеленое число
+    MFDU_S_WHITE_DIGIT,     // Спидометр. Белое число
     MFDU_ACTIVE_CHARGE,     // Подпитка
     MFDU_PVU,               // Подвагонное управление
     MFDU_EPK,               // ЭПК
@@ -300,15 +336,15 @@ enum
     MFDU_TRANSMISSION,      // Ошибка трансмиссии
     MFDU_OIL_MOTOR,         // Уровень масла двигателя
     MFDU_PRESSURE_OIL_MOTOR,// Пониженное давление масла двигателя
-    MFDU_ATTENTION,     // Внимание!
-    MFDU_STOP,          // СТОП
-    MFDU_REVERS_FWD,    // Реверсор вперед
-    MFDU_REVERS_BWD,    // Реверсор назад
-    MFDU_REVERS_NEUTRAL,// Реверсор нейтальное положение
-    MFDU_XREN1,         //
-    MFDU_XREN2,         //
-    MFDU_XREN3,         //
-    MFDU_TRACTION_BRAKING,// Тяга/торможение
+    MFDU_ATTENTION,         // Внимание!
+    MFDU_STOP,              // СТОП
+    MFDU_REVERS_FWD,        // Реверсор вперед
+    MFDU_REVERS_BWD,        // Реверсор назад
+    MFDU_REVERS_NEUTRAL,    // Реверсор нейтальное положение
+    MFDU_EMERGENCY_BRAKES,  // Экстренное торможение
+    MFDU_PARKING_BRAKES,    // Стояночный пружинный тормоз
+    MFDU_HOLDING_BRAKES,    // Тормоз удержания
+    MFDU_TRACTION_BRAKING,  // Тяга/торможение
     MFDU_PRESSURE_PM,       // Давление ПМ
     MFDU_PRESSURE_TM,       // Давление ТМ
     MFDU_PRESSURE_TC_MAX,   // Давление ТЦ max
@@ -316,163 +352,36 @@ enum
     MFDU_TEMPERATURE_KAB,   // Температура кабины
     MFDU_I_AKB_24,          // Ток акб 24
     MFDU_I_AKB_110,         // Ток акб 110
-    MFDU_ERROR_CODE,
+    MFDU_ERROR_CODE,        // id сообщения об ошибке
 
-    MFDU_TRAIN_SIZE = 50,   // Количество вагонов
-    MFDU_POS_IN_TRAIN = 51,   // Количество вагонов
-    // Сигналы 52..105 - состояние вагонов, 9 сигналов на каждый вагон
+    MFDU_TRAIN_SIZE,   // Количество вагонов
+    MFDU_POS_IN_TRAIN, // Положение в поезде
+    MFDU_UNIT_SIGNALS_BEGIN,
+    // Сигналы 296..349 - состояние вагонов, 9 сигналов на каждый вагон
     MFDU_TRAIN_UNIT = MFDU_UNIT_SIGNALS_BEGIN,  // Тип вагона
     MFDU_TRAIN_UNIT_NUM,    // Номер вагона или отсутствие связи CAN
     MFDU_TRAIN_UNIT_T,      // Температура в вагоне
     MFDU_TRAIN_UNIT_DIESEL, // Состояние дизеля
-    MFDU_TRAIN_UNIT_COMPRESSOR, // Состояние дизеля
+    MFDU_TRAIN_UNIT_COMPRESSOR, // Состояние компрессора
     MFDU_TRAIN_UNIT_EQUIP,  // Состояние вагонного оборудования
     MFDU_TRAIN_UNIT_BRAKES, // Состояние тормоза
     MFDU_TRAIN_UNIT_DOOR_R, // Состояние дверей правых
     MFDU_TRAIN_UNIT_DOOR_L, // Состояние дверей левых
 
-    STRELKA_VOLTMETER110 = 108,
-    STRELKA_VOLTMETER24 = 109,
+    // === СИГНАЛЫ БЛОК ===
+    BLOK_DISPLAY_ON = 350,      // Включение дисплея
+    BLOK_STATION_INDEX = 351,   // Номер станции в списке
+    BLOK_ACCELERATION = 352,    // Ускорение
+    BLOK_VIGILANCE = 353,       // Проверка бдительности
+    BLOK_TM_PRESS = 354,
+    BLOK_UR_PRESS = 355,
+    BLOK_TC_PRESS = 356,
 
-    STRELKA_P_GR = 110,
-    STRELKA_P_TM = 111,
-    STRELKA_P_TC1 = 112,
-    STRELKA_P_TC2 = 113,
-
-    SW_PARKING_BRAKE = 114,
-
-    HANDLE_KRU_091 = 115,
-
-    SIG_BUTTON_TYPHON = 116,
-    SIG_BUTTON_WHISTLE = 117,
-
-    DRIVER_CONTROLLER = 118,
-
-    DIRECTION_OF_MOVEMENT = 119,
-
-    // Дисплей БЛОК сигналы 130..141
-    BLOK_DISPLAY_ON = 130,      // Включение дисплея
-    BLOK_STATION_INDEX = 131,   // Номер станции в списке
-    BLOK_ACCELERATION = 132,    // Ускорение
-    BLOK_VIGILANCE = 133,       // Проверка бдительности
-    BLOK_TM_PRESS = 134,
-    BLOK_UR_PRESS = 135,
-    BLOK_TC_PRESS = 136,
-
-    BLOK_RAILWAY_COORD = 137,
-    BLOK_VELOCITY = 138,
-    BLOK_VELOCITY_CURRENT_LIMIT = 139,
-    BLOK_VELOCITY_NEXT_LIMIT = 140,
-    BLOK_REVERS = 141,
-
-    // Контрольные лампы
-    ACTIVE_COCKPIT = 150,
-    ALARM = 151,
-    ANXIETY = 152,
-    SOTH = 153,
-    SOT = 154,
-    OVERHEATING_OF_AXLE_BOXES = 155,
-    PARKING_BRAKE = 156,
-    BATTERY = 157,
-    KDL = 158,
-    KDP = 159,
-
-    // Лампы локомотивного светофора
-    LS_W = 160,
-    LS_R = 161,
-    LS_RY = 162,
-    LS_Y = 163,
-    LS_G1 = 164,
-    LS_G2 = 165,
-    LS_G3 = 166,
-    LS_G4 = 167,
-
-    // Лампы локомотивного светофора
-    LS_W_1 = 168,
-    LS_R_1 = 169,
-    LS_RY_1 = 170,
-    LS_Y_1 = 171,
-    LS_G1_1 = 172,
-    LS_G2_1 = 173,
-    LS_G3_1 = 174,
-    LS_G4_1 = 175,
-
-    // Кнопка экстренного торможения
-    EMERGENCY_STOP_BUTTON = 176,
-
-    // Кнопки бдительности
-    RB = 177,
-    RBS = 178,
-    // Ключ ЭПК
-    EPK = 179,
-
-    // Кнопки пульта
-    SPEED_SELECTION = 180,
-    SPEED_PLUS = 181,
-    SPEED_MINUS = 182,
-    SPEED_HOLD = 183,
-    LEFT_OPEN = 184,
-    LEFT_CLOSE = 185,
-    STEPS = 186,
-    RIGHT_OPEN = 187,
-    RIGHT_CLOSE = 188,
-    HOLD_SPEED = 189,
-
-    // Угол вращения кардана 1
-    SHAFT_1 = 192,
-
-    // Угол вращения кардана 2
-    SHAFT_2 = 193,
-
-    // Углы поворота колесных пар
-    WHEEL_1 = 194,
-    WHEEL_2 = 195,
-    WHEEL_3 = 196,
-    WHEEL_4 = 197,
-
-    // Звуки
-    SOUND_SVISTOK = 201,
-    SOUND_TIFON = 202,
-
-    SOUND_REVERSOR = 203,
-    SOUND_CONTROLLER = 204,
-    SOUND_KM_EMERGENCY = 205,
-    SOUND_EMERGENCY_VALVE = 206,
-
-    SOUND_BLOK_BUTTON = 207,
-    SOUND_BLOK_SPEED_LIMIT = 208,
-
-    SOUND_PARKING_BRAKE_SWITCHER = 209,
-    SOUND_PARKING_BRAKE_FLOW = 210,
-
-    SOUND_BRAKE_CRANE_BP_FILL_FLOW = 215,
-    SOUND_BRAKE_CRANE_BP_DRAIN_FLOW = 216,
-
-    SOUND_EPK_WHISTLE = 220,
-/*
-    SOUND_5_10 = 221,
-    SOUND_10_20 = 222,
-    SOUND_20_30 = 223,
-    SOUND_30_40 = 224,
-    SOUND_40_50 = 225,
-    SOUND_50_60 = 226,
-    SOUND_60_70 = 227,
-    SOUND_70_80 = 228,
-    SOUND_80_90 = 229,
-    SOUND_90_100 = 230,
-    SOUND_100_110 = 231,
-    SOUND_110_X = 232,
-*/
-    SOUND_RELAY_POWER = 235,
-    SOUND_RELAY_ACTIVE_CAB = 236,
-
-    SOUND_FUEL_PUMP = 237,
-    SOUND_DISEL_STARTER = 238,
-    SOUND_DISEL_NOM_FREQ = 239,
-    SOUND_DISEL_HIGH_FREQ = 240,
-    SOUND_DISEL_STOP = 241,
-
-    SOUND_SAND_DELIVERY = 242
+    BLOK_RAILWAY_COORD = 357,
+    BLOK_VELOCITY = 358,
+    BLOK_VELOCITY_CURRENT_LIMIT = 359,
+    BLOK_VELOCITY_NEXT_LIMIT = 360,
+    BLOK_REVERS = 361,
 };
 
 #endif // RA3_HEAD_SIGNALS_H

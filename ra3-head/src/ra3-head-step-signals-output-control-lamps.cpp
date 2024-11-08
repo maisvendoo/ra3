@@ -8,22 +8,23 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     Q_UNUSED(t);
     Q_UNUSED(dt);
 
-    // "АКТИВНАЯ КАБИНА"
-    analogSignal[ACTIVE_COCKPIT] = static_cast<float>(active_cab_relay->getContactState(1));
+    // Контрольные лампы на блоке индикации БИ-4
 
-    // "БАТАРЕЯ" (показывает что сеть питается от батареи)
-    analogSignal[BATTERY] = static_cast<float>(hs_n(bat110->getChargeCurrent()));
-
-    analogSignal[ALARM] = static_cast<float>(mpsu->getOutputData().is_red_alarm);
-    analogSignal[ANXIETY] = static_cast<float>(mpsu->getOutputData().is_yellow_alarm);
-
-    // Сигнализация стояночного тормоза
-    analogSignal[PARKING_BRAKE] = static_cast<float>(mpsu->getOutputData().spt_state);
-    // Сигнализация отпуска тележек всех вагонов,
-    // кроме последней тележки хвостового вагона
-    analogSignal[SOT] = static_cast<float>(mpsu->getOutputData().sot);
-    // Сигнализация отпуска последней тележки хвостового вагона
-    analogSignal[SOTH] = static_cast<float>(mpsu->getOutputData().soth);
+    // Проверка наличия питания "БОРТСЕТЬ"
+    if ((Ucc_110 - 99.0) < 0.0)
+    {
+        analogSignal[INDICATOR_DOORS_CLOSED_L] = 0.0f;
+        analogSignal[INDICATOR_DOORS_CLOSED_R] = 0.0f;
+        analogSignal[INDICATOR_PARKING_BRAKE] = 0.0f;
+        analogSignal[INDICATOR_BATTERY] = 0.0f;
+        analogSignal[INDICATOR_OVERHEATING_AXLE_BOXES] = 0.0f;
+        analogSignal[INDICATOR_RELEASE_BRAKES] = 0.0f;
+        analogSignal[INDICATOR_ALARM_LOW] = 0.0f;
+        analogSignal[INDICATOR_RELEASE_BRAKES_TAIL] = 0.0f;
+        analogSignal[INDICATOR_ALARM_HIGH] = 0.0f;
+        analogSignal[INDICATOR_ACTIVE_CABINE] = 0.0f;
+        return;
+    }
 
     // Лампы контроля закрытия дверей
     bool kdp = (door_R_state == 1);
@@ -45,27 +46,31 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
             kdp &= (sme_bwd->getSignal(SME_UNIT_DOOR_R + bias) == 1.0);
             kdl &= (sme_bwd->getSignal(SME_UNIT_DOOR_L + bias) == 1.0);
         }
+    analogSignal[INDICATOR_DOORS_CLOSED_L] = static_cast<float>(kdl);
+    analogSignal[INDICATOR_DOORS_CLOSED_R] = static_cast<float>(kdp);
 
-    analogSignal[KDL] = static_cast<float>(kdl);
-    analogSignal[KDP] = static_cast<float>(kdp);
+    // Сигнализация стояночного тормоза
+    analogSignal[INDICATOR_PARKING_BRAKE] = static_cast<float>(mpsu->getOutputData().spt_state);
 
-    // Лампы кнопок панели ПУ-4
-    analogSignal[LEFT_CLOSE] = 1.0f;
-    analogSignal[RIGHT_CLOSE] = 1.0f;
-    analogSignal[SPEED_HOLD] = static_cast<float>(mpsu->getOutputData().is_speed_hold_ON);
+    // "БАТАРЕЯ" (показывает что сеть питается от батареи)
+    analogSignal[INDICATOR_BATTERY] = static_cast<float>(hs_n(bat110->getChargeCurrent()));
 
-    // Проверка наличия питания "БОРТСЕТЬ"
-    bool is_power_on = static_cast<bool>(hs_p(Ucc_110 - 99.0));
+    // Сигнализация перегрева букс
+    analogSignal[INDICATOR_OVERHEATING_AXLE_BOXES] = 0.0f;
 
-    // Активация ламп с учетом наличия питания
-    for (size_t i = ACTIVE_COCKPIT; i <= KDP; ++i)
-    {
-        analogSignal[i] = analogSignal[i] * static_cast<float>(is_power_on);
-    }
+    // Сигнализация отпуска тележек всех вагонов,
+    // кроме последней тележки хвостового вагона
+    analogSignal[INDICATOR_RELEASE_BRAKES] = static_cast<float>(mpsu->getOutputData().sot);
 
-    // Активация ламп в кнопках ПУ-4 с учетом наличия питания
-    for (size_t i = SPEED_HOLD; i <= RIGHT_CLOSE; ++i)
-    {
-        analogSignal[i] = analogSignal[i] * static_cast<float>(is_power_on);
-    }
+    // Тревога - предупреждение
+    analogSignal[INDICATOR_ALARM_LOW] = static_cast<float>(mpsu->getOutputData().is_yellow_alarm);
+
+    // Сигнализация отпуска последней тележки хвостового вагона
+    analogSignal[INDICATOR_RELEASE_BRAKES_TAIL] = static_cast<float>(mpsu->getOutputData().soth);
+
+    // Тревога - авария
+    analogSignal[INDICATOR_ALARM_HIGH] = static_cast<float>(mpsu->getOutputData().is_red_alarm);
+
+    // "АКТИВНАЯ КАБИНА"
+    analogSignal[INDICATOR_ACTIVE_CABINE] = static_cast<float>(active_cab_relay->getContactState(1));
 }

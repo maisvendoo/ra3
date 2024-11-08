@@ -3,7 +3,7 @@
 	<Vehicle>
 		<EmptyMass>50500</EmptyMass>
 		<PayloadMass>0</PayloadMass> 
-		<Length>24.24</Length>
+		<Length>23.62</Length>
 		<WheelDiameter>0.86</WheelDiameter>
 		<MainResist>loco-resist</MainResist>
 		<WheelRailFriction>loco-diesel</WheelRailFriction>
@@ -21,16 +21,16 @@
 		<ip1>1.2</ip1>
 		<ip2>2.78</ip2>
 
-		<ExtModelName>ra3/RA3-head-fwd.osgt</ExtModelName>
-		<ModelShift>0.0 -0.025 0.05</ModelShift>
+		<ExtModelName>ra3/ra3-head_01.osgt</ExtModelName>
+		<ModelShift>0.0 0.0 0.04</ModelShift>
 
-		<CabineModel>ra3/RA3-cabview-fwd.osgt</CabineModel>
-		<CabineShift>0.0 0.075 0.05</CabineShift>
+		<CabineModel>ra3/ra3-cab.osgt</CabineModel>
+		<CabineShift>0.0 0.0 0.04</CabineShift>
 
-		<ExtTexturesDir>ra3/textures-038_02</ExtTexturesDir>
+		<ExtTexturesDir>ra3/images/ra3-038</ExtTexturesDir>
 		<AnimationsConfigDir>ra3-head</AnimationsConfigDir>
 
-		<DriverPos>0.56 9.95 2.9</DriverPos>
+		<DriverPos>0.56 9.85 3</DriverPos>
 
 		<!--<isRegistratorOn>1</isRegistratorOn>-->
 

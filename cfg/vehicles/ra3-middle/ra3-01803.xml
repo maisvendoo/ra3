@@ -15,12 +15,12 @@
 		<FuelLevel>1.0</FuelLevel>
 
 		<MainResLeak>4e-5</MainResLeak>
-		<Number>6003</Number>
+		<Number>1803</Number>
 
 		<ExtModelName>ra3/ra3-middle.osgt</ExtModelName>
 		<ModelShift>0.0 0.0 0.04</ModelShift>
 
-		<ExtTexturesDir>ra3/images/ra3-06003</ExtTexturesDir>
+		<ExtTexturesDir>ra3/images/ra3-018</ExtTexturesDir>
 		<AnimationsConfigDir>ra3-middle</AnimationsConfigDir>
 
 		<DriverPos>0.56 9.95 2.9</DriverPos>
