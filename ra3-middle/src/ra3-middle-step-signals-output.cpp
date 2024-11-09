@@ -14,25 +14,25 @@ void RA3Middle::stepSignalsOutput(double t, double dt)
     analogSignal[WHEELSET_3] = static_cast<float>(wheel_rotation_angle[2] / 2.0 / Physics::PI);
     analogSignal[WHEELSET_4] = static_cast<float>(wheel_rotation_angle[3] / 2.0 / Physics::PI);
 
-    // TODO // Двери
-    analogSignal[DOOR_L_FWD_WARNING_INDICATOR] = 0.0f;
-    analogSignal[DOOR_L_FWD_STEP] = 0.0f;
-    analogSignal[DOOR_L_FWD_SKID] = 0.0f;
-    analogSignal[DOOR_L_FWD_LEFT] = 0.0f;
-    analogSignal[DOOR_L_FWD_RIGHT] = 0.0f;
-    analogSignal[DOOR_L_BWD_WARNING_INDICATOR] = 0.0f;
-    analogSignal[DOOR_L_BWD_STEP] = 0.0f;
-    analogSignal[DOOR_L_BWD_SKID] = 0.0f;
-    analogSignal[DOOR_L_BWD_LEFT] = 0.0f;
-    analogSignal[DOOR_L_BWD_RIGHT] = 0.0f;
-    analogSignal[DOOR_R_FWD_WARNING_INDICATOR] = 0.0f;
-    analogSignal[DOOR_R_FWD_STEP] = 0.0f;
-    analogSignal[DOOR_R_FWD_SKID] = 0.0f;
-    analogSignal[DOOR_R_FWD_LEFT] = 0.0f;
-    analogSignal[DOOR_R_FWD_RIGHT] = 0.0f;
-    analogSignal[DOOR_R_BWD_WARNING_INDICATOR] = 0.0f;
-    analogSignal[DOOR_R_BWD_STEP] = 0.0f;
-    analogSignal[DOOR_R_BWD_SKID] = 0.0f;
-    analogSignal[DOOR_R_BWD_LEFT] = 0.0f;
-    analogSignal[DOOR_R_BWD_RIGHT] = 0.0f;
+    // Двери
+    analogSignal[DOOR_L_FWD_WARNING_INDICATOR] = door_L->getWarningSignal();
+    analogSignal[DOOR_L_FWD_STEP] = door_L->getStepState();
+    analogSignal[DOOR_L_FWD_SKID] = door_L->getDoorSkidState();
+    analogSignal[DOOR_L_FWD_LEFT] = door_L->getDoorState();
+    analogSignal[DOOR_L_FWD_RIGHT] = door_L->getDoorState();
+    analogSignal[DOOR_L_BWD_WARNING_INDICATOR] = door_L->getWarningSignal();
+    analogSignal[DOOR_L_BWD_STEP] = door_L->getStepState();
+    analogSignal[DOOR_L_BWD_SKID] = door_L->getDoorSkidState();
+    analogSignal[DOOR_L_BWD_LEFT] = door_L->getDoorState();
+    analogSignal[DOOR_L_BWD_RIGHT] = door_L->getDoorState();
+    analogSignal[DOOR_R_FWD_WARNING_INDICATOR] = door_R->getWarningSignal();
+    analogSignal[DOOR_R_FWD_STEP] = door_R->getStepState();
+    analogSignal[DOOR_R_FWD_SKID] = door_R->getDoorSkidState();
+    analogSignal[DOOR_R_FWD_LEFT] = door_R->getDoorState();
+    analogSignal[DOOR_R_FWD_RIGHT] = door_R->getDoorState();
+    analogSignal[DOOR_R_BWD_WARNING_INDICATOR] = door_R->getWarningSignal();
+    analogSignal[DOOR_R_BWD_STEP] = door_R->getStepState();
+    analogSignal[DOOR_R_BWD_SKID] = door_R->getDoorSkidState();
+    analogSignal[DOOR_R_BWD_LEFT] = door_R->getDoorState();
+    analogSignal[DOOR_R_BWD_RIGHT] = door_R->getDoorState();
 }

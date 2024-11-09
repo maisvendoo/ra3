@@ -43,6 +43,9 @@ void RA3Middle::initialization()
 
     // Инициализация тормозного оборудования
     initBrakesEquipment(modules_dir, custom_cfg_dir);
+
+    // Инициализация разного оборудования
+    initOtherEquipment(modules_dir, custom_cfg_dir);
 }
 
 //------------------------------------------------------------------------------
@@ -72,6 +75,9 @@ void RA3Middle::step(double t, double dt)
 
     // Работа тормозного оборудования
     stepBrakesEquipment(t, dt);
+
+    // Работа разного оборудования
+    stepOtherEquipment(t, dt);
 
     // Вывод сигналов
     stepSignalsOutput(t, dt);

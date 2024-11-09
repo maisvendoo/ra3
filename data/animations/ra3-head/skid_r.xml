@@ -3,7 +3,7 @@
 	<AnalogTranslation>
 		<SignalID>16</SignalID>
 		<Duration>10.0</Duration>
-		<Axis>-1.0 0.0 0.0</Axis>
+		<Axis>1.0 0.0 0.0</Axis>
 	</AnalogTranslation>
 
 	<KeyPoint>

@@ -9,6 +9,7 @@
 #include    "battery.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
+#include    "door-control-module.h"
 
 //------------------------------------------------------------------------------
 //
@@ -51,11 +52,11 @@ private:
     /// Коэффициент утечки из ГР
     double main_res_leak = 0.0;
 
-    /// Состояние дверей справа
-    int door_R_state = 1;
+    /// Двери справа
+    DoorControlModule *door_R = nullptr;
 
-    /// Состояние дверей слева
-    int door_L_state = 1;
+    /// Двери слева
+    DoorControlModule *door_L = nullptr;
 
     /// Напряжение от батареи 110 В
     double U_bat_110 = 0.0;
@@ -142,6 +143,9 @@ private:
     /// Инициализация тормозного оборудования
     void initBrakesEquipment(const QString &modules_dir, const QString &custom_cfg_dir);
 
+    /// Инициализация прочего оборудования
+    void initOtherEquipment(const QString &modules_dir, const QString &custom_cfg_dir);
+
     /// Предварительные расчёты перед симуляцией
     void preStep(double t) override;
 
@@ -165,6 +169,9 @@ private:
 
     /// Работа тормозного оборудования
     void stepBrakesEquipment(double t, double dt);
+
+    /// Работа прочего оборудования
+    void stepOtherEquipment(double t, double dt);
 
     /// Вывод сигналов на анимации модели поезда
     void stepSignalsOutput(double t, double dt);
