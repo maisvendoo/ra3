@@ -27,8 +27,8 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     }
 
     // Лампы контроля закрытия дверей
-    bool kdp = (door_R_state == 1);
-    bool kdl = (door_L_state == 1);
+    bool kdp = (door_R->getDoorControlState() == 1);
+    bool kdl = (door_L->getDoorControlState() == 1);
     int pos = mpsu->getOutputData().pos_in_train - 1;
     // Проверяем состояние дверей вагонов спереди, принимаем сигналы зеркально
     if (pos > 0)

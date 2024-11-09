@@ -77,6 +77,17 @@ void RA3HeadMotor::stepSME(double t, double dt)
                             || km->isEmergencyBrake() );
         sme_fwd->setSignal(SME_IS_EMERGENCY_BRAKE, static_cast<double>(is_emergency));
         sme_bwd->setSignal(SME_IS_EMERGENCY_BRAKE, static_cast<double>(is_emergency));
+
+        // Сигнал использовать выдвижную ступень
+        sme_fwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_BUTTON_STEP].getState()));
+        sme_bwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_BUTTON_STEP].getState()));
+
+        // Сигналы управления дверями - дублируем команду с дверей данного вагона
+        // Вперёд отправляем правильно, назад зеркально
+        sme_fwd->setSignal(SME_DOOR_L_OPEN, static_cast<double>(door_L->getRefState()));
+        sme_fwd->setSignal(SME_DOOR_R_OPEN, static_cast<double>(door_R->getRefState()));
+        sme_bwd->setSignal(SME_DOOR_L_OPEN, static_cast<double>(door_R->getRefState()));
+        sme_bwd->setSignal(SME_DOOR_R_OPEN, static_cast<double>(door_L->getRefState()));
     }
     // Обработка сигналов неактивной кабиной
     else
@@ -142,10 +153,10 @@ void RA3HeadMotor::stepSME(double t, double dt)
     // Состояние дверей
     // Вперёд отправляем правильно
     // Назад отправляем зеркально
-    sme_fwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_R_state));
-    sme_fwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_L_state));
-    sme_bwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_L_state));
-    sme_bwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_R_state));
+    sme_fwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_R->getDoorControlState()));
+    sme_fwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_L->getDoorControlState()));
+    sme_bwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_L->getDoorControlState()));
+    sme_bwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_R->getDoorControlState()));
 
     // Состояние стояночного пружинного тормоза в ведущую секцию
     sme_fwd->setSignal(SME_UNIT_SPT_STATE, static_cast<double>(brake_module->isParkingBraked()));

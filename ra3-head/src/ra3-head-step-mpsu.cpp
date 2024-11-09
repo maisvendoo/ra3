@@ -46,11 +46,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.is_autostop_ON = epk->isKeyOn();
 
         // Обеспечение режима поддержания заданной скорости
-        mpsu_input.button_speed_hold = button_speed_hold.getState();
+        mpsu_input.button_speed_hold = tumbler[IS_FIXED_SPEED_HOLD].getState();
         mpsu_input.button_speed_select = tumbler[IS_BUTTON_SPEED_SELECTION].getState();
         mpsu_input.button_speed_plus = tumbler[IS_BUTTON_SPEED_PLUS].getState();
         mpsu_input.button_speed_minus = tumbler[IS_BUTTON_SPEED_MINUS].getState();
-
     }
     else
     {

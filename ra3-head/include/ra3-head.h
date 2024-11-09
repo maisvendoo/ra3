@@ -21,8 +21,8 @@
 #include    "blok.h"
 #include    "hydro-transmission.h"
 #include    "emergency-brake-valve.h"
-#include    "key-trigger.h"
 #include    "epk151d.h"
+#include    "door-control-module.h"
 
 #include    "ra3-head-signals.h"
 
@@ -81,11 +81,11 @@ private:
     /// Реле активной кабины
     Relay   *active_cab_relay = nullptr;
 
-    /// Состояние дверей справа
-    int door_R_state = 1;
+    /// Дверь справа
+    DoorControlModule *door_R = nullptr;
 
-    /// Состояние дверей слева
-    int door_L_state = 1;
+    /// Дверь слева
+    DoorControlModule *door_L = nullptr;
 
     /// Аккумуляторная батарея 110 В
     Battery     *bat110 = nullptr;
@@ -250,9 +250,6 @@ private:
 
     /// Выключатели в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
-
-    /// Кнопка "Поддержание скорости"
-    KeyTrigger  button_speed_hold;
 
     /// Ограничения скорости на путевой инфраструктуре
     SpeedMap    *speedmap_fwd = nullptr;

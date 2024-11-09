@@ -46,4 +46,8 @@ void RA3HeadMotor::stepSoundSignalsOutput(double t, double dt)
 
     // Песочница
     analogSignal[SOUND_SAND_DELIVERY] = sand_system->getSoundSignal();
+
+    // Предупреждение о закрытии дверей
+    analogSignal[SOUND_DOOR_WARN_L] = door_L->getSoundSignal();
+    analogSignal[SOUND_DOOR_WARN_R] = door_R->getSoundSignal();
 }

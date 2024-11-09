@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Device>
+		<Order>3</Order>
+		<SubStepNum>1</SubStepNum>
+		<Solver>euler</Solver>
+
+		<!-- Время открытия/закрытия выдвиженой ступени, с -->
+		<step_moving_time>2.0</step_moving_time>
+
+		<!-- Время открытия/закрытия направляющего рельса дверей, с -->
+		<door_skid_moving_time>0.5</door_skid_moving_time>
+
+		<!-- Время открытия/закрытия дверей, с -->
+		<door_moving_time>3.0</door_moving_time>
+
+		<!-- Периодичность предупреждающего звукового и светового сигнала, с -->
+		<warning_signal_period>1.0</warning_signal_period>
+
+	</Device>
+</Config>

@@ -19,4 +19,11 @@ void RA3HeadMotor::initOtherEquipment(const QString &modules_dir, const QString 
 
     hydro_pump = new HydroPump();
     hydro_pump->read_config("hydro-pump", custom_cfg_dir);
+
+    // Двери
+    tumbler[IS_BUTTON_STEP].set();
+    door_L = new DoorControlModule();
+    door_L->read_config("door-control-module", custom_cfg_dir);
+    door_R = new DoorControlModule();
+    door_R->read_config("door-control-module", custom_cfg_dir);
 }

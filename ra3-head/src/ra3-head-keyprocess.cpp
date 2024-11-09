@@ -76,8 +76,14 @@ void RA3HeadMotor::keyProcess()
     else
         tumbler[IS_BUTTON_SPEED_MINUS].reset();
 
-    // Кнопка "Поддержание скорости"
-    button_speed_hold.setState(getKeyState(KEY_G));
+    // Кнопка "ступени"
+    if (getKeyState(KEY_R))
+    {
+        if (isShift())
+            tumbler[IS_BUTTON_STEP].set();
+        if (isControl())
+            tumbler[IS_BUTTON_STEP].reset();
+    }
 
     // ЭПК
     if (getKeyState(KEY_N))
@@ -98,4 +104,73 @@ void RA3HeadMotor::keyProcess()
         tumbler[IS_SWITCH_REVERS_BWD].set();
     else
         tumbler[IS_SWITCH_REVERS_BWD].reset();
+
+    // Кнопка "Поддержание скорости"
+    if (getKeyState(KEY_G))
+    {
+        tumbler[IS_BUTTON_SPEED_HOLD].set();
+    }
+    else
+    {
+        if (tumbler[IS_BUTTON_SPEED_HOLD].getState())
+        {
+            tumbler[IS_BUTTON_SPEED_HOLD].reset();
+
+            // При отпускании кнопки - меняем статус фиксации нажатого положения
+            if (tumbler[IS_FIXED_SPEED_HOLD].getState())
+                tumbler[IS_FIXED_SPEED_HOLD].reset();
+            else
+                tumbler[IS_FIXED_SPEED_HOLD].set();
+        }
+    }
+
+    // Кнопка "Открыть двери левые"
+    if (isControl() && (getKeyState(KEY_T)))
+        tumbler[IS_BUTTON_DOOR_L_OPEN].set();
+    else
+        tumbler[IS_BUTTON_DOOR_L_OPEN].reset();
+
+    // Кнопка "Закрыть двери левые"
+    if (isShift() && (getKeyState(KEY_T)))
+    {
+        tumbler[IS_BUTTON_DOOR_L_CLOSE].set();
+    }
+    else
+    {
+        if (tumbler[IS_BUTTON_DOOR_L_CLOSE].getState())
+        {
+            tumbler[IS_BUTTON_DOOR_L_CLOSE].reset();
+
+            // При отпускании кнопки - меняем статус фиксации нажатого положения
+            if (tumbler[IS_FIXED_DOOR_L_CLOSE].getState())
+                tumbler[IS_FIXED_DOOR_L_CLOSE].reset();
+            else
+                tumbler[IS_FIXED_DOOR_L_CLOSE].set();
+        }
+    }
+
+    // Кнопка "Открыть двери левые"
+    if (isControl() && (getKeyState(KEY_Y)))
+        tumbler[IS_BUTTON_DOOR_R_OPEN].set();
+    else
+        tumbler[IS_BUTTON_DOOR_R_OPEN].reset();
+
+    // Кнопка "Закрыть двери левые"
+    if (isShift() && (getKeyState(KEY_Y)))
+    {
+        tumbler[IS_BUTTON_DOOR_R_CLOSE].set();
+    }
+    else
+    {
+        if (tumbler[IS_BUTTON_DOOR_R_CLOSE].getState())
+        {
+            tumbler[IS_BUTTON_DOOR_R_CLOSE].reset();
+
+            // При отпускании кнопки - меняем статус фиксации нажатого положения
+            if (tumbler[IS_FIXED_DOOR_R_CLOSE].getState())
+                tumbler[IS_FIXED_DOOR_R_CLOSE].reset();
+            else
+                tumbler[IS_FIXED_DOOR_R_CLOSE].set();
+        }
+    }
 }

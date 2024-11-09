@@ -308,6 +308,9 @@ enum
 
     SOUND_SAND_DELIVERY = 242,
 
+    SOUND_DOOR_WARN_L = 243,
+    SOUND_DOOR_WARN_R = 244,
+
     // === СИГНАЛЫ МФДУ ===
     MFDU_DISPLAY_ON = 250,  // Включение дисплея
     MFDU_S_SPEED,           // Спидометр. Скорость

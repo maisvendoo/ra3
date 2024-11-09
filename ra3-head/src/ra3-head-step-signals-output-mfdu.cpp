@@ -137,8 +137,8 @@ void RA3HeadMotor::mdfuSignalsOutput(double t, double dt)
     // Состояние данного вагона
     int bias_mfdu = pos * MFDU_UNIT_SIGNALS_SIZE;
     analogSignal[MFDU_TRAIN_UNIT_NUM + bias_mfdu] = static_cast<float>(num);
-    analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] = static_cast<float>(door_R_state);
-    analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] = static_cast<float>(door_L_state);
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_R + bias_mfdu] = static_cast<float>(door_R->getDoorControlState());
+    analogSignal[MFDU_TRAIN_UNIT_DOOR_L + bias_mfdu] = static_cast<float>(door_L->getDoorControlState());
     analogSignal[MFDU_TRAIN_UNIT_T + bias_mfdu] = 25.1f;
     analogSignal[MFDU_TRAIN_UNIT_EQUIP + bias_mfdu] = 1.0f;
     analogSignal[MFDU_TRAIN_UNIT_DIESEL + bias_mfdu] = static_cast<float>(mpsu->getOutputData().mfdu_disel_state_level + 1);
