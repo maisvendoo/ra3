@@ -5,7 +5,8 @@
 //------------------------------------------------------------------------------
 DoorControlModule::DoorControlModule(QObject *parent) : Device(parent)
 {
-    connect(warnSignalTimer, &Timer::process, this, &DoorControlModule::slotChangeWarningSignalState);
+    connect(warnSignalTimer, &Timer::process, this, &DoorControlModule::slotWarningSignalTimeout);
+    connect(warnSignalChange, &Timer::process, this, &DoorControlModule::slotChangeWarningSignalState);
 }
 
 //------------------------------------------------------------------------------
@@ -14,6 +15,16 @@ DoorControlModule::DoorControlModule(QObject *parent) : Device(parent)
 DoorControlModule::~DoorControlModule()
 {
 
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void DoorControlModule::step(double t, double dt)
+{
+    warnSignalChange->step(t, dt);
+    warnSignalTimer->step(t, dt);
+    Device::step(t, dt);
 }
 
 //------------------------------------------------------------------------------
@@ -146,14 +157,42 @@ void DoorControlModule::preStep(state_vector_t &Y, double t)
     }
     else
     {
-        // Закрытие дверей
-        door_ref_state = 0.0;
-
-        // После схлопывания дверей закрываем направляющий рельс
         if (Y[DOOR_STATE] < 0.05)
+        {
+            // Двери закрыты и останутся закрытыми
+            door_ref_state = 0.0;
             door_skid_ref_state = 0.0;
+        }
         else
-            door_skid_ref_state = 1.0;
+        {
+            // Закрываем открытые двери - сперва включаем предупреждающий сигнал
+            if (!warnSignalChange->isStarted())
+            {
+                // Выдержка времени с предупреждающим сигналом перед закрытием дверей
+                warnSignalTimer->start();
+                // Мигание лампы
+                warnSignalChange->start();
+            }
+        }
+
+        // Закрытие дверей
+        if (warnSignalChange->isStarted())
+        {
+            // Собственно закрытие дверей см. в слоте таймера выдержки времени
+
+            // После схлопывания дверей закрываем направляющий рельс
+            if (Y[DOOR_STATE] < 0.05)
+                door_skid_ref_state = 0.0;
+            else
+                door_skid_ref_state = 1.0;
+
+            // Предупреждающий сигнал отключается после закрытия направляющего рельса
+            if (Y[DOOR_SKID_STATE] < 0.05)
+            {
+                warnSignalChange->stop();
+                warn_signal = false;
+            }
+        }
 
         // После закрытия направляющего рельса убираем выдвижную ступень
         if (steps_enabled)
@@ -168,17 +207,6 @@ void DoorControlModule::preStep(state_vector_t &Y, double t)
             step_ref_state = 0.0;
         }
 
-        // Пока направляющий рельс не закрыт - работает предупреждающий сигнал
-        if (Y[DOOR_SKID_STATE] < 0.05)
-        {
-            warnSignalTimer->stop();
-            warn_signal = false;
-        }
-        else
-        {
-            if (!warnSignalTimer->isStarted())
-                warnSignalTimer->start();
-        }
     }
 }
 
@@ -248,7 +276,19 @@ void DoorControlModule::load_config(CfgReader &cfg)
     cfg.getDouble(secName, "warning_signal_period", tmp);
     if (tmp > Physics::ZERO)
         warning_signal_period = tmp;
-    warnSignalTimer->setTimeout(warning_signal_period / 2.0);
+    warnSignalChange->setTimeout(warning_signal_period / 2.0);
+
+    cfg.getDouble(secName, "warning_time", warning_time);
+    warnSignalTimer->setTimeout(warning_time);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void DoorControlModule::slotWarningSignalTimeout()
+{
+    warnSignalTimer->stop();
+    door_ref_state = 0.0;
 }
 
 //------------------------------------------------------------------------------

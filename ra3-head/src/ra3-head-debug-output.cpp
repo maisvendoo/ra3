@@ -39,7 +39,7 @@ void RA3HeadMotor::debugOutput(double t, double dt)
                                   - hydro_trans->getBrakeLevel()  ) , 4, 'f', 0);
 
     DebugMsg += QString("\n");
-    DebugMsg += QString("%1%2%3---couplings---%5%6%7")
+    DebugMsg += QString("%1%2%3-%4-couplings---%5%6%7")
                     .arg(coupling_fwd->isLinked() ? "=" : " ")
                     .arg(coupling_fwd->isCoupled() ? "=" : " ")
                     .arg((coupling_fwd->getOutputSignal(COUPL_OUTPUT_REF_STATE) > -0.5) ? "=" : ">")

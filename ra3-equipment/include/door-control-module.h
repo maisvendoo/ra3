@@ -14,6 +14,8 @@ public:
 
     ~DoorControlModule();
 
+    void step(double t, double dt) override;
+
     /// Включить выдвижные ступени
     void setStepsEnabled(bool is_steps_enabled);
 
@@ -83,10 +85,14 @@ private:
     /// Периодичность предупреждающего звукового и светового сигнала, с
     double warning_signal_period = 1.0;
 
+    /// Выдержка времени с предупреждающим сигналом перед закрытием, с
+    double warning_time = 2.0;
+
     /// Включение предупреждающего зуммера и сигнальной лампы
     bool warn_signal = false;
 
-    Timer *warnSignalTimer = new Timer(warning_signal_period / 2.0, true);
+    Timer *warnSignalTimer = new Timer(warn_signal, false);
+    Timer *warnSignalChange = new Timer(warning_signal_period / 2.0, true);
 
     void preStep(state_vector_t &Y, double t) override;
 
@@ -98,6 +104,7 @@ private:
 
 private slots:
 
+    void slotWarningSignalTimeout();
     void slotChangeWarningSignalState();
 };
 
