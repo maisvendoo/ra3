@@ -39,12 +39,12 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     // Кнопки "БОРТСЕТЬ"
     analogSignal[BUTTON_BOARDNET_ON] = static_cast<float>(tumbler[IS_BUTTON_PWR_ON].getState());
     analogSignal[BUTTON_BOARDNET_OFF] = static_cast<float>(!tumbler[NO_BUTTON_PWR_OFF].getState());
-    //analogSignal[BUTTON_TRANSIT] = 0.0f;
-    //analogSignal[BUTTON_TRANSIT_PROTECTIVE_COVER] = 0.0f;
+    analogSignal[BUTTON_TRANSIT] = 0.0f;
+    analogSignal[BUTTON_TRANSIT_PROTECTIVE_COVER] = 0.0f;
     //analogSignal[BUTTON_TRANSIT_INDICATOR] = 0.0f;
-    //analogSignal[TOOGLE_EMERGENCY_CONTROL] = 0.0f;
-    //analogSignal[BUTTON_POWER_SUPPLY] = 0.0f;
-    //analogSignal[BUTTON_POWER_SUPPLY_PROTECTIVE_COVER] = 0.0f;
+    analogSignal[TOOGLE_KEY_EMERGENCY_CONTROL] = 0.0f;
+    analogSignal[BUTTON_POWER_SUPPLY] = 0.0f;
+    analogSignal[BUTTON_POWER_SUPPLY_PROTECTIVE_COVER] = 0.0f;
     //analogSignal[BUTTON_POWER_SUPPLY_INDICATOR] = 0.0f;
     analogSignal[ARROW_VOLTMETER_24V] = static_cast<float>(Ucc_110 / 150.0);
     analogSignal[ARROW_VOLTMETER_110V] = static_cast<float>(Ucc_24 / 30.0);
@@ -56,7 +56,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[TOOGLE_CABINE_VENTILATION] = 0.0f;
     analogSignal[TOOGLE_CABINE_CONDITIONER] = 0.0f;
     analogSignal[TOOGLE_CABINE_HEATER] = 0.0f;
-    //analogSignal[CONTROL_GEAR_CABINE_TEMPERATURE] = 0.0f;
+    analogSignal[DIMMER_CABINE_TEMPERATURE] = 0.0f;
 
     // Блок защиты и коммутации БЗК
     analogSignal[AZV_1_HEATING_TF1_MTU] = 1.0f;
@@ -101,7 +101,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     // Панель управления ПУ-1
     analogSignal[BUTTON_EMERGENCY_CONTROL] = 0.0f;
-    //analogSignal[BUTTON_EMERGENCY_CONTROL_PROTECTIVE_COVER] = 0.0f;
+    analogSignal[BUTTON_EMERGENCY_CONTROL_PROTECTIVE_COVER] = 0.0f;
     analogSignal[BUTTON_DIESEL_START] = static_cast<float>(tumbler[IS_BUTTON_START].getState());
     analogSignal[BUTTON_DISEL_STOP] = static_cast<float>(tumbler[IS_BUTTON_STOP].getState());
     //analogSignal[BUTTON_REPEAT] = 0.0f;
@@ -129,10 +129,11 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[BUTTON_CLOSE_L_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_L_CLOSE].getState()) * 0.5f +
                                          static_cast<float>(tumbler[IS_BUTTON_DOOR_L_CLOSE].getState()) * 0.5f;
     analogSignal[BUTTON_CLOSE_L_DOORS_INDICATOR] = static_cast<float>(is_active && (tumbler[IS_FIXED_DOOR_L_CLOSE].getState()));
-    //analogSignal[BUTTON_SAND] = sand_system->isSandDelivery();
+    //analogSignal[BUTTON_SAND] = static_cast<float>(tumbler[IS_SAND].getState());
     analogSignal[TOOGLE_SALON_LIGHTING] = 0.0f;
-    analogSignal[BUTTON_STEPS] = static_cast<float>(tumbler[IS_BUTTON_STEP].getState());
-    analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_BUTTON_STEP].getState());
+    analogSignal[BUTTON_STEPS] = static_cast<float>(tumbler[IS_FIXED_STEP].getState()) * 0.5f +
+                                 static_cast<float>(tumbler[IS_BUTTON_STEP].getState()) * 0.5f;
+    analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_FIXED_STEP].getState());
     analogSignal[BUTTON_OPEN_R_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_R_OPEN].getState());
     analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(is_active && (door_R->getDoorControlState() > 1));
     analogSignal[BUTTON_CLOSE_R_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_R_CLOSE].getState()) * 0.5f +
@@ -148,12 +149,12 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
 
     // Панель управления ПУ-5
     analogSignal[TOOGLE_CONTROL_PANEL_LIGHTING_MP] = 0.0f;
-    //analogSignal[CONTROL_GEAR_CONTROL_PANEL_BRIGTNESS_MP] = 0.0f;
+    analogSignal[DIMMER_CONTROL_PANEL_BRIGTNESS_MP] = 0.0f;
 
     // Панель управления ПУ-6
     analogSignal[TOOGLE_CABINE_LIGHTING] = 0.0f;
     analogSignal[TOOGLE_CONTROL_PANEL_LIGHTING_M] = 0.0f;
-    //analogSignal[CONTROL_GEAR_CONTROL_PANEL_BRIGTNESS_M] = 0.0f;
+    analogSignal[DIMMER_CONTROL_PANEL_BRIGTNESS_M] = 0.0f;
 
     // Лампы локомотивного светофора на блоке индикации БИ-2
     analogSignal[INDICATOR_LS_W_MP] = blok->getLampState(WHITE_LAMP);

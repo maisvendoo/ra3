@@ -7,7 +7,7 @@
 enum
 {
     /// Общее количество элементов управления
-    TUMBLERS_NUM = 22,
+    TUMBLERS_NUM = 25,
 
     /// Нажата кнопка "БОРТСЕТЬ ВКЛ."
     IS_BUTTON_PWR_ON = 0,
@@ -37,8 +37,8 @@ enum
     /// Нажата кнопка "Скорость -"
     IS_BUTTON_SPEED_MINUS = 9,
 
-    /// Нажата кнопка "Ступени"
-    IS_BUTTON_STEP = 10,
+    /// Нажата кнопка "Песок"
+    IS_SAND = 10,
 
     /// Ключ ЭПК включён
     IS_KEY_EPK = 11,
@@ -54,21 +54,26 @@ enum
     /// Зафиксировано нажатое положение кнопки "Поддержание скорости"
     IS_FIXED_SPEED_HOLD = 15,
 
+    /// Нажата кнопка "Ступени"
+    IS_BUTTON_STEP = 16,
+    /// Зафиксировано нажатое положение кнопки "Ступени"
+    IS_FIXED_STEP = 17,
+
     /// Нажата кнопка "Открыть двери левые"
-    IS_BUTTON_DOOR_L_OPEN = 16,
+    IS_BUTTON_DOOR_L_OPEN = 18,
 
     /// Нажата кнопка "Закрыть двери левые"
-    IS_BUTTON_DOOR_L_CLOSE = 17,
+    IS_BUTTON_DOOR_L_CLOSE = 19,
     /// Зафиксировано нажатое положение кнопки "Закрыть двери левые"
-    IS_FIXED_DOOR_L_CLOSE = 18,
+    IS_FIXED_DOOR_L_CLOSE = 20,
 
     /// Нажата кнопка "Открыть двери правые"
-    IS_BUTTON_DOOR_R_OPEN = 19,
+    IS_BUTTON_DOOR_R_OPEN = 21,
 
     /// Нажата кнопка "Закрыть двери правые"
-    IS_BUTTON_DOOR_R_CLOSE = 20,
+    IS_BUTTON_DOOR_R_CLOSE = 22,
     /// Зафиксировано нажатое положение кнопки "Закрыть двери правые"
-    IS_FIXED_DOOR_R_CLOSE = 21,
+    IS_FIXED_DOOR_R_CLOSE = 23,
 };
 
 #endif // RA3_TUMBLERS_DEFINE_H

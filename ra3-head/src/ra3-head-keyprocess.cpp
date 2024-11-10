@@ -5,9 +5,6 @@
 //------------------------------------------------------------------------------
 void RA3HeadMotor::keyProcess()
 {
-/*    if (!is_active)
-        return;*/
-
     if (is_autostart)
         return;
 
@@ -59,31 +56,28 @@ void RA3HeadMotor::keyProcess()
         tumbler[IS_BUTTON_RBS].reset();
 
     // Выбор скорости
-    if (getKeyState((KEY_F)))
+    if (getKeyState(KEY_F))
         tumbler[IS_BUTTON_SPEED_SELECTION].set();
     else
         tumbler[IS_BUTTON_SPEED_SELECTION].reset();
 
     // Скорость +
-    if (getKeyState((KEY_Q)))
+    if (getKeyState(KEY_Q))
         tumbler[IS_BUTTON_SPEED_PLUS].set();
     else
         tumbler[IS_BUTTON_SPEED_PLUS].reset();
 
     // Скорость -
-    if (getKeyState((KEY_E)))
+    if (getKeyState(KEY_E))
         tumbler[IS_BUTTON_SPEED_MINUS].set();
     else
         tumbler[IS_BUTTON_SPEED_MINUS].reset();
 
-    // Кнопка "ступени"
-    if (getKeyState(KEY_R))
-    {
-        if (isShift())
-            tumbler[IS_BUTTON_STEP].set();
-        if (isControl())
-            tumbler[IS_BUTTON_STEP].reset();
-    }
+    // Песок
+    if (getKeyState(KEY_Delete))
+        tumbler[IS_SAND].set();
+    else
+        tumbler[IS_SAND].reset();
 
     // ЭПК
     if (getKeyState(KEY_N))
@@ -121,6 +115,25 @@ void RA3HeadMotor::keyProcess()
                 tumbler[IS_FIXED_SPEED_HOLD].reset();
             else
                 tumbler[IS_FIXED_SPEED_HOLD].set();
+        }
+    }
+
+    // Кнопка "ступени"
+    if (isShift() && (getKeyState(KEY_R)))
+    {
+        tumbler[IS_BUTTON_STEP].set();
+    }
+    else
+    {
+        if (tumbler[IS_BUTTON_STEP].getState())
+        {
+            tumbler[IS_BUTTON_STEP].reset();
+
+            // При отпускании кнопки - меняем статус фиксации нажатого положения
+            if (tumbler[IS_FIXED_STEP].getState())
+                tumbler[IS_FIXED_STEP].reset();
+            else
+                tumbler[IS_FIXED_STEP].set();
         }
     }
 

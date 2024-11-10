@@ -11,7 +11,7 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
 
     // Система подачи песка под оси передней (моторной) тележки
     sand_system->setFLpressure(main_reservoir->getPressure());
-    sand_system->setControl(keys);
+    sand_system->setSandDeliveryOn(tumbler[IS_SAND].getState());
     sand_system->step(t, dt);
     // Пересчёт трения колесо-рельс
     psi[0] = sand_system->getWheelRailFrictionCoeff(psi[0]);

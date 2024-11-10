@@ -9,6 +9,38 @@
 		<IsRelease>1</IsRelease>
 	</Step>
 
+	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
+	<Step>
+		<ID>2</ID>
+		<State>1</State>
+		<Timeout>2.0</Timeout>
+		<IsRelease>1</IsRelease>
+	</Step>
+
+	<!-- ПУСТОЙ ШАГ - ЗАДЕРЖКА ПЕРЕД ВТОРЫМ НАЖАТИЕМ КНОПКИ ДЛЯ СТАРТА ДИЗЕЛЕЙ -->
+	<Step>
+		<ID>24</ID>
+		<State>1</State>
+		<Timeout>1.0</Timeout>
+		<IsRelease>1</IsRelease>
+	</Step>
+
+	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
+	<Step>
+		<ID>2</ID>
+		<State>1</State>
+		<Timeout>2.0</Timeout>
+		<IsRelease>1</IsRelease>
+	</Step>
+
+	<!-- Выключатель СПТ -->
+	<Step>
+		<ID>4</ID>
+		<State>0</State>
+		<Timeout>1.0</Timeout>
+		<IsRelease>1</IsRelease>
+	</Step>
+
 	<!-- Ключ ЭПК -->
 	<Step>
 		<ID>11</ID>
@@ -25,42 +57,10 @@
 		<IsRelease>1</IsRelease>
 	</Step>
 
-	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
-	<Step>
-		<ID>2</ID>
-		<State>1</State>
-		<Timeout>2.0</Timeout>
-		<IsRelease>1</IsRelease>
-	</Step>
-
-	<!-- ПУСТОЙ ШАГ - ЗАДЕРЖКА ПЕРЕД ВТОРЫМ НАЖАТИЕМ КНОПКИ ДЛЯ СТАРТА ДИЗЕЛЕЙ -->
-	<Step>
-		<ID>14</ID>
-		<State>1</State>
-		<Timeout>1.0</Timeout>
-		<IsRelease>1</IsRelease>
-	</Step>
-
-	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
-	<Step>
-		<ID>2</ID>
-		<State>1</State>
-		<Timeout>2.0</Timeout>
-		<IsRelease>1</IsRelease>
-	</Step>
-
 	<!-- Реверс вперёд -->
 	<Step>
 		<ID>12</ID>
 		<State>1</State>
-		<Timeout>1.0</Timeout>
-		<IsRelease>1</IsRelease>
-	</Step>
-
-	<!-- Выключатель СПТ -->
-	<Step>
-		<ID>4</ID>
-		<State>0</State>
 		<Timeout>1.0</Timeout>
 		<IsRelease>1</IsRelease>
 	</Step>
