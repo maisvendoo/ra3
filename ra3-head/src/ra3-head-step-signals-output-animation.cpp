@@ -132,8 +132,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     //analogSignal[BUTTON_SAND] = sand_system->isSandDelivery();
     analogSignal[TOOGLE_SALON_LIGHTING] = 0.0f;
     analogSignal[BUTTON_STEPS] = static_cast<float>(tumbler[IS_BUTTON_STEP].getState());
-    //analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_BUTTON_STEP].getState());
-    analogSignal[BUTTON_STEPS_INDICATOR] = 0.5f + sinf(2.0f * t) / 2.0f;
+    analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_BUTTON_STEP].getState());
     analogSignal[BUTTON_OPEN_R_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_R_OPEN].getState());
     analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(is_active && (door_R->getDoorControlState() > 1));
     analogSignal[BUTTON_CLOSE_R_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_R_CLOSE].getState()) * 0.5f +
