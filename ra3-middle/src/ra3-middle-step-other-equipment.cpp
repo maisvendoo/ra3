@@ -5,6 +5,10 @@
 //------------------------------------------------------------------------------
 void RA3Middle::stepOtherEquipment(double t, double dt)
 {
+    // Двери
+    door_L->setPowerVoltage(Ucc_110);
+    door_R->setPowerVoltage(Ucc_110);
+
     // Включение выдвижной ступени по сигналам СМЕ
     bool is_step = (sme_fwd->getSignal(SME_IS_STEP) + sme_bwd->getSignal(SME_IS_STEP)) >= 1.0;
 

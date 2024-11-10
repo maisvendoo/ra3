@@ -22,9 +22,30 @@ DoorControlModule::~DoorControlModule()
 //------------------------------------------------------------------------------
 void DoorControlModule::step(double t, double dt)
 {
+    // При выключенном питании ничего не делаем
+    if (U_power < 0.9 * U_nom)
+    {
+        ref_state = false;
+        step_ref_state = 0.0;
+        door_skid_ref_state = 0.0;
+        door_ref_state = 0.0;
+        warnSignalChange->stop();
+        warnSignalTimer->stop();
+        warn_signal = false;
+        return;
+    }
+
     warnSignalChange->step(t, dt);
     warnSignalTimer->step(t, dt);
     Device::step(t, dt);
+}
+
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+void DoorControlModule::setPowerVoltage(double U)
+{
+    U_power = U;
 }
 
 //------------------------------------------------------------------------------
@@ -258,6 +279,11 @@ void DoorControlModule::load_config(CfgReader &cfg)
     QString secName = "Device";
 
     double tmp = 0.0;
+    cfg.getDouble(secName, "U_nom", tmp);
+    if (tmp > Physics::ZERO)
+        U_nom = tmp;
+
+    tmp = 0.0;
     cfg.getDouble(secName, "step_moving_time", tmp);
     if (tmp > Physics::ZERO)
         step_moving_time = tmp;

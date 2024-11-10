@@ -5,6 +5,9 @@
 		<SubStepNum>1</SubStepNum>
 		<Solver>euler</Solver>
 
+		<!-- Номинальное напряжение питания, В -->
+		<U_nom>110.0</U_nom>
+
 		<!-- Время открытия/закрытия выдвиженой ступени, с -->
 		<step_moving_time>2.0</step_moving_time>
 

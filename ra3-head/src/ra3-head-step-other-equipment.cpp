@@ -21,26 +21,34 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
     hydro_pump->step(t, dt);
 
     // Двери
+    door_L->setPowerVoltage(Ucc_110);
+    door_R->setPowerVoltage(Ucc_110);
     if (active_cab_relay->getContactState(1))
     {
+        // Включение выдвижной ступени
         door_L->setStepsEnabled(tumbler[IS_BUTTON_STEP].getState());
+        door_R->setStepsEnabled(tumbler[IS_BUTTON_STEP].getState());
+
         if (tumbler[IS_FIXED_DOOR_L_CLOSE].getState())
         {
+            // Безусловно закрываем, если кнопка "закрыть" зафиксирована нажатой
             door_L->close();
         }
         else
         {
+            // Иначе открываем по нажатию кнопки "открыть"
             if (tumbler[IS_BUTTON_DOOR_L_OPEN].getState())
                 door_L->open();
         }
 
-        door_R->setStepsEnabled(tumbler[IS_BUTTON_STEP].getState());
         if (tumbler[IS_FIXED_DOOR_R_CLOSE].getState())
         {
+            // Безусловно закрываем, если кнопка "закрыть" зафиксирована нажатой
             door_R->close();
         }
         else
         {
+            // Иначе открываем по нажатию кнопки "открыть"
             if (tumbler[IS_BUTTON_DOOR_R_OPEN].getState())
                 door_R->open();
         }

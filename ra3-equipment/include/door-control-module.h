@@ -16,6 +16,9 @@ public:
 
     void step(double t, double dt) override;
 
+    /// Электропитание
+    void setPowerVoltage(double U);
+
     /// Включить выдвижные ступени
     void setStepsEnabled(bool is_steps_enabled);
 
@@ -57,6 +60,12 @@ private:
         DOOR_SKID_STATE = 1,
         DOOR_STATE = 2
     };
+
+    /// Напряжение питания, В
+    double  U_power = 0.0;
+
+    /// Номинальное напряжение питания, В
+    double  U_nom = 110.0;
 
     /// Целевое состояние
     bool steps_enabled = false;

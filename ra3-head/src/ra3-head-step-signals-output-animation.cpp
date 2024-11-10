@@ -32,6 +32,9 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[DOOR_R_RIGHT] = door_R->getDoorState();
 
     // === АНИМАЦИИ КАБИНЫ ===
+    // Включаем подсветку кнопок в активной кабине
+    bool is_active = active_cab_relay->getContactState(1);
+
     // Панель органов управления ПОУ
     // Кнопки "БОРТСЕТЬ"
     analogSignal[BUTTON_BOARDNET_ON] = static_cast<float>(tumbler[IS_BUTTON_PWR_ON].getState());
@@ -88,6 +91,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     analogSignal[AZV_30_RESERVE1] = 0.0f;
     analogSignal[AZV_31_RESERVE2] = 0.0f;
 
+    // Органы управления
     analogSignal[TRACTION_CONTROLLER_HANDLE] = km->getHandlePosition();
     analogSignal[BRAKES_CONTROLLER_HANDLE] = kru->getHandlePosition();
     analogSignal[BUTTON_EMERGENCY_STOP] = static_cast<float>(emerg_brake_valve->isEmergencyBrake());
@@ -121,19 +125,20 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     // Панель управления ПУ-4
     // Верхний ряд
     analogSignal[BUTTON_OPEN_L_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_L_OPEN].getState());
-    analogSignal[BUTTON_OPEN_L_DOORS_INDICATOR] = static_cast<float>(door_L->getDoorControlState() > 1);
+    analogSignal[BUTTON_OPEN_L_DOORS_INDICATOR] = static_cast<float>(is_active && (door_L->getDoorControlState() > 1));
     analogSignal[BUTTON_CLOSE_L_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_L_CLOSE].getState()) * 0.5f +
                                          static_cast<float>(tumbler[IS_BUTTON_DOOR_L_CLOSE].getState()) * 0.5f;
-    analogSignal[BUTTON_CLOSE_L_DOORS_INDICATOR] = static_cast<float>(tumbler[IS_FIXED_DOOR_L_CLOSE].getState());
+    analogSignal[BUTTON_CLOSE_L_DOORS_INDICATOR] = static_cast<float>(is_active && (tumbler[IS_FIXED_DOOR_L_CLOSE].getState()));
     //analogSignal[BUTTON_SAND] = sand_system->isSandDelivery();
     analogSignal[TOOGLE_SALON_LIGHTING] = 0.0f;
     analogSignal[BUTTON_STEPS] = static_cast<float>(tumbler[IS_BUTTON_STEP].getState());
-    analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(tumbler[IS_BUTTON_STEP].getState());
+    //analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_BUTTON_STEP].getState());
+    analogSignal[BUTTON_STEPS_INDICATOR] = 0.5f + sinf(2.0f * t) / 2.0f;
     analogSignal[BUTTON_OPEN_R_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_R_OPEN].getState());
-    analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(door_R->getDoorControlState() > 1);
+    analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(is_active && (door_R->getDoorControlState() > 1));
     analogSignal[BUTTON_CLOSE_R_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_R_CLOSE].getState()) * 0.5f +
                                          static_cast<float>(tumbler[IS_BUTTON_DOOR_R_CLOSE].getState()) * 0.5f;
-    analogSignal[BUTTON_CLOSE_R_DOORS_INDICATOR] = static_cast<float>(tumbler[IS_FIXED_DOOR_R_CLOSE].getState());
+    analogSignal[BUTTON_CLOSE_R_DOORS_INDICATOR] = static_cast<float>(is_active && (tumbler[IS_FIXED_DOOR_R_CLOSE].getState()));
     // Нижний ряд
     analogSignal[BUTTON_SPEED_MAINTAINING] = static_cast<float>(tumbler[IS_FIXED_SPEED_HOLD].getState()) * 0.5f +
                                             static_cast<float>(tumbler[IS_BUTTON_SPEED_HOLD].getState()) * 0.5f;
