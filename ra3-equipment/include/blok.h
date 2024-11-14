@@ -4,6 +4,8 @@
 #include    "device.h"
 #include    "blok-stations.h"
 #include    "ALSN-struct.h"
+#include    "ALSN-coil.h"
+#include    "ALSN-decoder.h"
 #include    "speedmap.h"
 
 //------------------------------------------------------------------------------
@@ -41,6 +43,12 @@ public:
         old_code_alsn = this->code_alsn;
         this->code_alsn = code_alsn;
     };
+
+    /// Модуль приёма сигналов АЛС с путевой топологии
+    void setCoilALSNModule(CoilALSN *device)
+    {
+        coilALSN = device;
+    }
 
     /// Модуль работы с ограничениями скорости на путевой топологии
     void setSpeedMapModule(SpeedMap *device)
@@ -132,13 +140,19 @@ public:
             speedmap->setDirection(dir);
     }
 
-   double getLimitDistance() const { return limit_dist; }
+   double getTargetDistance() const { return target_dist; }
 
    double getRailCoord() const { return rail_coord / 1000.0; }
 
    int getStationIndex() const { return station_idx; }
 
    bool isTractionAllowed() const { return is_trac_allowed; }
+
+    /// Текст в табло "станция"
+    QString getStationText() const;
+
+    /// Текст в табло информационной строки
+    QString getInfoText() const;
 
    enum {
        NUM_SOUNDS = 2,
@@ -197,7 +211,7 @@ private:
 
    Timer *safety_timer = new Timer(45.0, false);
 
-   double train_length;
+   double train_length = 23.62;
 
    /// Конструкционная скорость
    double v_max = 120.0;
@@ -211,14 +225,17 @@ private:
    /// Направление
    int dir = 1;
 
-   /// Дистанция до ограничения
-   double limit_dist = 0.0;
+   /// Дистанция до следующей цели
+   double target_dist = 0.0;
 
    /// Индекс станции из ЭК
    int station_idx = -1;
 
    /// Признак разрешения тяги
    bool is_trac_allowed = false;
+
+    /// Модуль приёма сигналов АЛС с путевой топологии
+    CoilALSN *coilALSN = nullptr;
 
     /// Модуль работы с ограничениями скорости на путевой топологии
     SpeedMap *speedmap = nullptr;
@@ -237,6 +254,18 @@ private:
 
     std::array<float, NUM_LAMPS> lamps = {0.0f, 0.0f, 0.0f, 0.0f,
                                           0.0f, 0.0f, 0.0f, 0.0f};
+
+    enum
+    {
+        STATION_MAX_SYMBOLS = 8,
+        INFO_MAX_SYMBOLS = 24,
+    };
+
+    /// Текст в табло "станция"
+    QString station_text = QString("");
+
+    /// Текст в табло информационной строки
+    QString info_text = QString("");
 
    Trigger epk_state;
 
@@ -268,11 +297,14 @@ private:
    /// Вычисление ускорения
    void calc_acceleration(double t, double dt);
 
+   /// Расчет ограничений скорости путевой инфраструктуры
+   void calc_speed_limits_by_speedmap();
+
+   /// Расчет ограничений скорости от сигнала следующего светофора
+   void calc_speed_limits_by_next_signal();
+
    /// Работа с ограничениями скорости
    void speed_control();
-
-   /// Расчет ограничений
-   void calc_speed_limits();
 
    /// Определение текущей станции
    void stations_process();

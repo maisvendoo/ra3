@@ -61,16 +61,16 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
 
     // устанавливаем элементы информационного блока и заносим в map
     geoIP = QRect(10,0, 200,fooH_ip);
-    informPart_ = new InformPart(geoIP, "КООРДИНАТА", "1222км 7пк 19м", alignCenter, this, config_dir);
+    informPart_ = new InformPart(geoIP, "КООРДИНАТА", "   1км 1пк  0м", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->coordinate, informPart_);
     geoIP = QRect(212,0, 160,fooH_ip);
     informPart_ = new InformPart(geoIP, "СТАНЦИЯ", "ТЕМРЮК", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->station, informPart_);
     geoIP = QRect(374,0, 110,fooH_ip);
-    informPart_ = new InformPart(geoIP, "ВРЕМЯ", "14:59:11", alignCenter, this, config_dir);
+    informPart_ = new InformPart(geoIP, "ВРЕМЯ", "00:00:00", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->time, informPart_);
 //    geoIP = QRect(530,0, 140,fooH_ip);
-//    informPart_ = new InformPart(geoIP, "ПО ГРАФИКУ", "14:59:00", alignCenter, this);
+//    informPart_ = new InformPart(geoIP, "ПО ГРАФИКУ", "00:00:00", alignCenter, this);
 //    informPartMap_.insert(ip_->grafic, informPart_);
     geoIP = QRect(489,0, 50,fooH_ip);
     informPart_ = new InformPart(geoIP, "", "П", alignCenter, this, config_dir);
@@ -90,15 +90,15 @@ TopBlock::TopBlock(QRect geo, QWidget *parent, QString config_dir) : QWidget(par
     informPart_ = new InformPart(geoIP, "УСКОРЕНИЕ", "-0.00", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->acceleration, informPart_);
     geoIP = QRect(15,250, 150,fooH_ip);
-    informPart_ = new InformPart(geoIP, "", "1477м", alignCenter, this, config_dir);
+    informPart_ = new InformPart(geoIP, "", "0м", alignCenter, this, config_dir);
     //informPart_->setTextOverHead("РАССТ. ДО ЦЕЛИ САУТ", QRect(15,250, 250,fooH_ip));  // РАССТ. ДО ЦЕЛИ САУТ
     informPartMap_.insert(ip_->distanceTargetSAUT, informPart_);
     geoIP = QRect(15,330, 150,fooH_ip);
-    informPart_ = new InformPart(geoIP, "КОЭФ. ТОРМ.", "0.47", alignCenter, this, config_dir);
+    informPart_ = new InformPart(geoIP, "КОЭФ. ТОРМ.", "0.0", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->coeffBraking, informPart_);
 
     geoIP = QRect(10,this->height()-fooH_ip-65, 207,fooH_ip);
-    informPart_ = new InformPart(geoIP, "РАССТ. ДО ЦЕЛИ", "", alignCenter, this, config_dir);
+    informPart_ = new InformPart(geoIP, "РАССТ. ДО ЦЕЛИ", "0м", alignCenter, this, config_dir);
     informPartMap_.insert(ip_->distanceTarget, informPart_);
     geoIP = QRect(227,this->height()-fooH_ip-65, 207,fooH_ip);
     informPart_ = new InformPart(geoIP, "ВИД ЦЕЛИ", "", alignCenter, this, config_dir);
@@ -255,17 +255,17 @@ void TopBlock::setCurSpeed(double speed)
 //-----------------------------------------------------------------------------
 QString TopBlock::getCoordinateStr_(double coordinate)
 {
-    if (coordinate <= 0)
+    if (coordinate <= 0.0)
     {
-        return "0км 0пк 0м";
+        return "   1км 1пк  0м";
     }
 
-    int coord_km        = static_cast<int>(coordinate);
-    int coord_ostatok   = qRound((coordinate - coord_km) * 1000);
-    int coord_pk        = coord_ostatok / 100;// + 1;
+    int coord_km        = static_cast<int>(floor(coordinate));
+    int coord_ostatok   = floor((coordinate - coord_km) * 1000);
+    int coord_pk        = coord_ostatok / 100;
     int coord_m         = ((coord_ostatok - 100 * coord_pk) / 10) * 10;
 
-    return  QString("%1км %2пк %3м").arg(coord_km).arg(coord_pk).arg(coord_m);
+    return  QString("%1км%2пк%3м").arg(coord_km + 1, 4).arg(coord_pk + 1, 2).arg(coord_m, 3);
 }
 
 //-----------------------------------------------------------------------------

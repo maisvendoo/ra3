@@ -373,18 +373,59 @@ enum
 
     // === СИГНАЛЫ БЛОК ===
     BLOK_DISPLAY_ON = 350,      // Включение дисплея
-    BLOK_STATION_INDEX = 351,   // Номер станции в списке
-    BLOK_ACCELERATION = 352,    // Ускорение
-    BLOK_VIGILANCE = 353,       // Проверка бдительности
-    BLOK_TM_PRESS = 354,
-    BLOK_UR_PRESS = 355,
-    BLOK_TC_PRESS = 356,
-
-    BLOK_RAILWAY_COORD = 357,
-    BLOK_VELOCITY = 358,
-    BLOK_VELOCITY_CURRENT_LIMIT = 359,
-    BLOK_VELOCITY_NEXT_LIMIT = 360,
-    BLOK_REVERS = 361,
+    BLOK_RAILWAY_COORD = 351,   // Координата
+    BLOK_TIME = 352,            // Время
+    BLOK_SHEDULE_TIME = 353,    // Время по графику
+    BLOK_M_P_RDT_CASSETE = 354, // Индикаторы: Маневровый / Поездной / Режим двойной тяги / Регистрация параметров на кассету
+    BLOK_ALS_CHANNEL = 355,     // Канал сигнала локомотивного светофора
+    BLOK_TRACK_NUM = 356,       // Номер и правильность пути
+    BLOK_ACCELERATION = 357,    // Ускорение
+    BLOK_SAUT_DISTANCE = 358,   // Расстояние до цели САУТ
+    BLOK_BREAKING_COEFF = 359,  // Коэффициент торможения
+    BLOK_VIGILANCE_TSKBM = 360, // Индикаторы: Проверка бдительности / Признак работы ТСКБМ / Проверка работоспособности от ТСКБМ
+    BLOK_BC_PRESS = 361,        // Давление в тормозных цилиндрах
+    BLOK_BP_PRESS = 362,        // Давление в тормозной магистрали
+    BLOK_FL_PRESS = 363,        // Давление в главных резервуарах и питательной магистрали
+    BLOK_REVERS = 364,          // Положение реверсора
+    BLOK_SPEED = 365,           // Скорость
+    BLOK_SPEED_CUR_LIMIT = 366, // Ограничение скорости
+    BLOK_SPEED_NEXT_LIMIT = 367,// Следующее ограничение скорости
+    BLOK_TARGET_DIST = 368,     // Расстояние до цели
+    // Символы информационной строки - вид цели
+    BLOK_STRING_SYMB1  = 371,
+    BLOK_STRING_SYMB2  = 372,
+    BLOK_STRING_SYMB3  = 373,
+    BLOK_STRING_SYMB4  = 374,
+    BLOK_STRING_SYMB5  = 375,
+    BLOK_STRING_SYMB6  = 376,
+    BLOK_STRING_SYMB7  = 377,
+    BLOK_STRING_SYMB8  = 378,
+    BLOK_STRING_SYMB9  = 379,
+    BLOK_STRING_SYMB10 = 380,
+    BLOK_STRING_SYMB11 = 381,
+    BLOK_STRING_SYMB12 = 382,
+    BLOK_STRING_SYMB13 = 383,
+    BLOK_STRING_SYMB14 = 384,
+    BLOK_STRING_SYMB15 = 385,
+    BLOK_STRING_SYMB16 = 386,
+    // Символы информационной строки - название цели
+    BLOK_STRING_SYMB17 = 387,
+    BLOK_STRING_SYMB18 = 388,
+    BLOK_STRING_SYMB19 = 389,
+    BLOK_STRING_SYMB20 = 390,
+    BLOK_STRING_SYMB21 = 391,
+    BLOK_STRING_SYMB22 = 392,
+    BLOK_STRING_SYMB23 = 393,
+    BLOK_STRING_SYMB24 = 394,
+    // Символы строки "Станция"
+    BLOK_STATION_SYMB1 = 401,
+    BLOK_STATION_SYMB2 = 402,
+    BLOK_STATION_SYMB3 = 403,
+    BLOK_STATION_SYMB4 = 404,
+    BLOK_STATION_SYMB5 = 405,
+    BLOK_STATION_SYMB6 = 406,
+    BLOK_STATION_SYMB7 = 407,
+    BLOK_STATION_SYMB8 = 408
 };
 
 #endif // RA3_HEAD_SIGNALS_H

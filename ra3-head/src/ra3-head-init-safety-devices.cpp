@@ -30,6 +30,7 @@ void RA3HeadMotor::initSafetyDevices(const QString &modules_dir, const QString &
     //blok->read_config("blok", custom_cfg_dir);
     blok->setMaxVelocity(120.0);
     blok->setSpeedMapModule(speedmap_fwd);
+    blok->setCoilALSNModule(coil_ALSN_fwd);
     blok->setDirection(dir * orient);
     blok->setTrainLength(mpsu->getOutputData().train_length);
 
