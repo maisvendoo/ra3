@@ -2,7 +2,6 @@
 <Config>
 
 	<!-- Свисток -->
-	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
 	<Sound>
 		<SignalID>201</SignalID>
 		<Filename>svistok.wav</Filename>
@@ -15,7 +14,6 @@
 	</Sound>
 
 	<!-- Тифон -->
-	<!-- ПЕРЕДЕЛАТЬ ЗВУК БЕЗ СТЕРЕО -->
 	<Sound>
 		<SignalID>202</SignalID>
 		<Filename>tifon.wav</Filename>
@@ -254,5 +252,30 @@
 		<PlayOnStart>0</PlayOnStart>
 		<LocalPosition>0.0 8.6 0.0</LocalPosition>
 	</Sound>
+
+	<!-- Зуммер предупреждения о закрытии дверей -->
+	<!-- ВРЕМЕННО СДЕЛАН ИЗ ЗВУКА НАЖАТИЯ КНОПОК БЛОК -->
+	<Sound>
+		<SignalID>243</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-1.5 -0.7 3.8</LocalPosition>
+	</Sound>
+
+	<Sound>
+		<SignalID>244</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.5 -0.7 3.8</LocalPosition>
+	</Sound>
+
 
 </Config>

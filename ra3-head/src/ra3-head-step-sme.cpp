@@ -79,8 +79,8 @@ void RA3HeadMotor::stepSME(double t, double dt)
         sme_bwd->setSignal(SME_IS_EMERGENCY_BRAKE, static_cast<double>(is_emergency));
 
         // Сигнал использовать выдвижную ступень
-        sme_fwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_BUTTON_STEP].getState()));
-        sme_bwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_BUTTON_STEP].getState()));
+        sme_fwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_FIXED_STEP].getState()));
+        sme_bwd->setSignal(SME_IS_STEP, static_cast<double>(tumbler[IS_FIXED_STEP].getState()));
 
         // Сигналы управления дверями - дублируем команду с дверей данного вагона
         // Вперёд отправляем правильно, назад зеркально

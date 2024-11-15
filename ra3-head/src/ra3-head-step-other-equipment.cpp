@@ -26,8 +26,8 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
     if (active_cab_relay->getContactState(1))
     {
         // Включение выдвижной ступени
-        door_L->setStepsEnabled(tumbler[IS_BUTTON_STEP].getState());
-        door_R->setStepsEnabled(tumbler[IS_BUTTON_STEP].getState());
+        door_L->setStepsEnabled(tumbler[IS_FIXED_STEP].getState());
+        door_R->setStepsEnabled(tumbler[IS_FIXED_STEP].getState());
 
         if (tumbler[IS_FIXED_DOOR_L_CLOSE].getState())
         {
