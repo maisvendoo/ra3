@@ -63,6 +63,29 @@ enum
     // Резерв сигналов под анимации концевых кранов питательной магистрали
     //ANGLECOCK_FL_FWD_HANDLE = 30,
     //ANGLECOCK_FL_BWD_HANDLE = 31,
+
+    // Резерв сигналов под анимации концевых кранов питательной магистрали
+    //ANGLECOCK_FL_FWD_HANDLE = 30,
+    //ANGLECOCK_FL_BWD_HANDLE = 31,
+
+    // === СИГНАЛЫ ЗВУКОВ ===
+    //SOUND_5_10 = 41,
+    //SOUND_10_20 = 42,
+    //SOUND_20_30 = 43,
+    //SOUND_30_40 = 44,
+    //SOUND_40_50 = 45,
+    //SOUND_50_60 = 46,
+    //SOUND_60_70 = 47,
+    //SOUND_70_80 = 48,
+    //SOUND_80_90 = 49,
+    //SOUND_90_100 = 50,
+    //SOUND_100_110 = 51,
+    //SOUND_110_X = 52,
+
+    SOUND_DOOR_WARN_L = 63,
+    SOUND_DOOR_WARN_L2 = 64,
+    SOUND_DOOR_WARN_R = 65,
+    SOUND_DOOR_WARN_R2 = 66
 };
 
 #endif // RA3_MIDDLE_SIGNALS_H

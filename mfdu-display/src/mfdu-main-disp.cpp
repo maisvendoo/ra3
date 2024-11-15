@@ -113,6 +113,9 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     int size = static_cast<int>(input_signals[MFDU_TRAIN_SIZE]);
     if (size > MAX_TRAIN_SIZE)
         size = MAX_TRAIN_SIZE;
+    int pos = static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1;
+    if (pos > size)
+        pos = 0;
     int x = 403 - 66 * size;
     int y = 62;
     int j = 0;
@@ -123,21 +126,44 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             int bias = i * MFDU_UNIT_SIGNALS_SIZE;
 
             // Тип вагона
-            setNeededIcon_(labTrainUnit_[i], input_signals[MFDU_TRAIN_UNIT + bias], x, y);
+            int tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT + bias]);
+            setNeededIcon_(labTrainUnit_[i], tmp, x, y);
 
             // Двери
-            setNeededIcon_(labDoorR_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_R + bias], x + 46, y - 2);
-            setNeededIcon_(labDoorL_[i], input_signals[MFDU_TRAIN_UNIT_DOOR_L + bias], x + 46, y + 77);
+            if (tmp == 3)
+            {
+                // В промежуточных вагонах все четыре двери
+                tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DOOR_R + bias]);
+                setNeededIcon_(labDoorR_[i], (i < pos) ? (tmp / 4) : (tmp % 4), x + 24, y - 2);
+                setNeededIcon_(labDoorR2_[i], (i < pos) ? (tmp % 4) : (tmp / 4), x + 68, y - 2);
+                tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DOOR_L + bias]);
+                setNeededIcon_(labDoorL_[i], (i < pos) ? (tmp / 4) : (tmp % 4), x + 24, y + 77);
+                setNeededIcon_(labDoorL2_[i], (i < pos) ? (tmp % 4) : (tmp / 4), x + 68, y + 77);
+            }
+            else
+            {
+                // В головных вагонах только две двери
+                tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DOOR_R + bias]);
+                setNeededIcon_(labDoorR_[i], tmp % 4, x + 46, y - 2);
+                setNeededIcon_(labDoorR2_[i], 0);
+                tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DOOR_L + bias]);
+                setNeededIcon_(labDoorL_[i], tmp % 4, x + 46, y + 77);
+                setNeededIcon_(labDoorL2_[i], 0);
+            }
 
             // Номер вагона или сигнал ошибки CAN
-            int num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + bias]);
-            if ((num > 100) && (num < 100000))
+            tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_NUM + bias]);
+            if ((tmp > 100) && (tmp < 100000))
             {
                 setNeededIcon_(labCAN_[i], 0);
-                labNo1_[i]->setText(QString("%1").arg(num / 100, 3, 10, QChar('0')));
+                labNo1_[i]->setText(QString("%1").arg(tmp / 100, 3, 10, QChar('0')));
                 labNo1_[i]->move(x + 14, y + 1);
-                labNo2_[i]->setText(QString("%1").arg(num % 100, 2, 10, QChar('0')));
+                labNo2_[i]->setText(QString("%1").arg(tmp % 100, 2, 10, QChar('0')));
                 labNo2_[i]->move(x + 14, y + 15);
+
+                // Также задаём номер вагона в шапке экрана
+                if (static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1 == pos)
+                    labNoHead_->setText(QString("%1").arg(tmp, 5, 10, QChar('0')));
             }
             else
             {
@@ -151,17 +177,17 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             labT_[i]->move(x + 60, y + 8);
 
             // Состояние дизеля
-            num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DIESEL + bias]);
-            labMotor_state = std::max(labMotor_state, num);
-            setNeededIcon_(labDiesel_[i], num, x + 46, y + 42);
+            tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_DIESEL + bias]);
+            labMotor_state = std::max(labMotor_state, tmp);
+            setNeededIcon_(labDiesel_[i], tmp, x + 46, y + 42);
 
             // Состояние компрессора
-            num = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_COMPRESSOR + bias]);
-            if (num > 0)
+            tmp = static_cast<int>(input_signals[MFDU_TRAIN_UNIT_COMPRESSOR + bias]);
+            if (tmp > 0)
             {
-                setNeededIcon_(labMotorCompressorOn_[j], num);
+                setNeededIcon_(labMotorCompressorOn_[j], tmp);
                 labMotorCompressorNum_[j]->setText(QString("%1").arg(i + 1));
-                labMotorCompressor_state = std::max(labMotorCompressor_state, num);
+                labMotorCompressor_state = std::max(labMotorCompressor_state, tmp);
                 j++;
             }
 
@@ -177,7 +203,9 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             // Очищаем лишние вагоны
             setNeededIcon_(labTrainUnit_[i], 0);
             setNeededIcon_(labDoorR_[i], 0);
+            setNeededIcon_(labDoorR2_[i], 0);
             setNeededIcon_(labDoorL_[i], 0);
+            setNeededIcon_(labDoorL2_[i], 0);
             setNeededIcon_(labCAN_[i], 0);
             labNo1_[i]->setText(QString(""));
             labNo2_[i]->setText(QString(""));
@@ -194,11 +222,6 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
             labMotorCompressorNum_[i]->setText(QString(""));
         }
     }
-
-    // Номер вагона в шапке
-    size = MFDU_TRAIN_UNIT_NUM + (static_cast<int>(input_signals[MFDU_POS_IN_TRAIN]) - 1) * MFDU_UNIT_SIGNALS_SIZE;
-    labNoHead_->setText(QString("%1")
-        .arg(static_cast<int>(input_signals[size]), 5, 10, QChar('0')));
 
     // Сообщение об ошибке
     setNeededIcon_(labErros_, input_signals[MFDU_ERROR_CODE]);
@@ -839,6 +862,10 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labDoorR_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_working")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
@@ -852,10 +879,48 @@ void MfduMainDisp::setBlockIcon_topSpeedometer_(QLabel *parent)
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labDoorL_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_working")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL_[i].push_back(labFoo);
         if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
         labFoo = new QLabel(parent);
         labFoo->setPixmap(pixmap);
         labDoorL_[i].push_back(labFoo);
+
+        if (!pixmap.load(":/mfdu/main_unit_door_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_closed")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_working")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorR2_[i].push_back(labFoo);
+
+        if (!pixmap.load(":/mfdu/main_unit_door_no_active")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_closed")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_working")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL2_[i].push_back(labFoo);
+        if (!pixmap.load(":/mfdu/main_unit_door_opened")) { return; }
+        labFoo = new QLabel(parent);
+        labFoo->setPixmap(pixmap);
+        labDoorL2_[i].push_back(labFoo);
 
         labNo1_[i] = new TriggerLabel("001", parent);
         labNo1_[i]->resize(40, 20);
@@ -1001,6 +1066,12 @@ void MfduMainDisp::setErrosMsgBox_(QLabel *parent)
     labErros_.push_back(labFoo);
 
     if (!pixmap.load(":/mfdu/error_epk_off")) { return; }
+    labFoo = new QLabel(parent);
+    labFoo->move(fooX,fooY);
+    labFoo->setPixmap(pixmap);
+    labErros_.push_back(labFoo);
+
+    if (!pixmap.load(":/mfdu/error_no_doors")) { return; }
     labFoo = new QLabel(parent);
     labFoo->move(fooX,fooY);
     labFoo->setPixmap(pixmap);

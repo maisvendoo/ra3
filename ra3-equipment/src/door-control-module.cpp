@@ -85,9 +85,15 @@ bool DoorControlModule::getRefState() const
 //------------------------------------------------------------------------------
 int DoorControlModule::getDoorControlState() const
 {
+    // Закрыто
     if ((getY(STEP_STATE) < 0.05) && (getY(DOOR_SKID_STATE) < 0.05) && (getY(DOOR_STATE) < 0.05))
         return 1;
 
+    // Открыто
+    if (ref_state && (getY(DOOR_STATE) > 0.95))
+        return 3;
+
+    // В процессе открытия или закрытия
     return 2;
 }
 
@@ -151,6 +157,10 @@ void DoorControlModule::preStep(state_vector_t &Y, double t)
 
     if (ref_state)
     {
+        warnSignalTimer->stop();
+        warnSignalChange->stop();
+        warn_signal = false;
+
         // Открытие дверей
         // Сперва открываем выдвижную ступень, если включена
         if (steps_enabled)

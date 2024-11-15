@@ -11,6 +11,10 @@ void RA3Middle::initOtherEquipment(const QString &modules_dir, const QString &cu
 
     door_L = new DoorControlModule();
     door_L->read_config("door-control-module", custom_cfg_dir);
+    door_L2 = new DoorControlModule();
+    door_L2->read_config("door-control-module", custom_cfg_dir);
     door_R = new DoorControlModule();
     door_R->read_config("door-control-module", custom_cfg_dir);
+    door_R2 = new DoorControlModule();
+    door_R2->read_config("door-control-module", custom_cfg_dir);
 }

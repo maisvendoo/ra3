@@ -54,9 +54,11 @@ private:
 
     /// Двери справа
     DoorControlModule *door_R = nullptr;
+    DoorControlModule *door_R2 = nullptr;
 
     /// Двери слева
     DoorControlModule *door_L = nullptr;
+    DoorControlModule *door_L2 = nullptr;
 
     /// Напряжение от батареи 110 В
     double U_bat_110 = 0.0;

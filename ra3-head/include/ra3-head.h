@@ -87,6 +87,12 @@ private:
     /// Дверь слева
     DoorControlModule *door_L = nullptr;
 
+    /// Контроль дверей справа
+    bool kdp = false;
+
+    /// Контроль дверей слева
+    bool kdl = true;
+
     /// Аккумуляторная батарея 110 В
     Battery     *bat110 = nullptr;
 

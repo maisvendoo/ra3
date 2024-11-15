@@ -125,7 +125,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     // Панель управления ПУ-4
     // Верхний ряд
     analogSignal[BUTTON_OPEN_L_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_L_OPEN].getState());
-    analogSignal[BUTTON_OPEN_L_DOORS_INDICATOR] = static_cast<float>(is_active && (door_L->getDoorControlState() > 1));
+    analogSignal[BUTTON_OPEN_L_DOORS_INDICATOR] = static_cast<float>(is_active && (!tumbler[IS_FIXED_DOOR_L_CLOSE].getState()));
     analogSignal[BUTTON_CLOSE_L_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_L_CLOSE].getState()) * 0.5f +
                                          static_cast<float>(tumbler[IS_BUTTON_DOOR_L_CLOSE].getState()) * 0.5f;
     analogSignal[BUTTON_CLOSE_L_DOORS_INDICATOR] = static_cast<float>(is_active && (tumbler[IS_FIXED_DOOR_L_CLOSE].getState()));
@@ -135,7 +135,7 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
                                  static_cast<float>(tumbler[IS_BUTTON_STEP].getState()) * 0.5f;
     analogSignal[BUTTON_STEPS_INDICATOR] = static_cast<float>(is_active && tumbler[IS_FIXED_STEP].getState());
     analogSignal[BUTTON_OPEN_R_DOORS] = static_cast<float>(tumbler[IS_BUTTON_DOOR_R_OPEN].getState());
-    analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(is_active && (door_R->getDoorControlState() > 1));
+    analogSignal[BUTTON_OPEN_R_DOORS_INDICATOR] = static_cast<float>(is_active && (!tumbler[IS_FIXED_DOOR_R_CLOSE].getState()));
     analogSignal[BUTTON_CLOSE_R_DOORS] = static_cast<float>(tumbler[IS_FIXED_DOOR_R_CLOSE].getState()) * 0.5f +
                                          static_cast<float>(tumbler[IS_BUTTON_DOOR_R_CLOSE].getState()) * 0.5f;
     analogSignal[BUTTON_CLOSE_R_DOORS_INDICATOR] = static_cast<float>(is_active && (tumbler[IS_FIXED_DOOR_R_CLOSE].getState()));

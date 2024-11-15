@@ -17,8 +17,9 @@ enum
     ERROR_ST6 = 6,
     ERROR_REVERS_0 = 7,
     ERROR_EPK_OFF = 8,
-    ERROR_HOLD_SPEED_TRAC = 9,
-    ERROR_HOLD_SPEED_BRAKE = 10
+    ERROR_NO_DOORS_CONTROL = 9,
+    ERROR_HOLD_SPEED_TRAC = 10,
+    ERROR_HOLD_SPEED_BRAKE = 11
 };
 
 //------------------------------------------------------------------------------
@@ -99,6 +100,9 @@ struct mpsu_input_t
 
     /// Максимальный момент от ГДТ
     double M_gb_max;
+
+    /// Признак контроля дверей
+    bool is_doors_control;
 
     /// Признак экстренного торможения
     bool is_emergency_brake;

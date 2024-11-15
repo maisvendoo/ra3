@@ -27,25 +27,6 @@ void RA3HeadMotor::controlLampsSignalsOutput(double t, double dt)
     }
 
     // Лампы контроля закрытия дверей
-    bool kdp = (door_R->getDoorControlState() == 1);
-    bool kdl = (door_L->getDoorControlState() == 1);
-    int pos = mpsu->getOutputData().pos_in_train - 1;
-    // Проверяем состояние дверей вагонов спереди, принимаем сигналы зеркально
-    if (pos > 0)
-        for (int i = 0; i < pos; i++)
-        {
-            int bias = (pos - i - 1) * SME_UNIT_STATE_SIZE;
-            kdp &= (sme_fwd->getSignal(SME_UNIT_DOOR_L + bias) == 1.0);
-            kdl &= (sme_fwd->getSignal(SME_UNIT_DOOR_R + bias) == 1.0);
-        }
-    // Проверяем состояние дверей вагонов сзади
-    if (pos < mpsu->getOutputData().train_size)
-        for (int i = 1; i < (mpsu->getOutputData().train_size - pos); i++)
-        {
-            int bias = (i - 1) * SME_UNIT_STATE_SIZE;
-            kdp &= (sme_bwd->getSignal(SME_UNIT_DOOR_R + bias) == 1.0);
-            kdl &= (sme_bwd->getSignal(SME_UNIT_DOOR_L + bias) == 1.0);
-        }
     analogSignal[INDICATOR_DOORS_CLOSED_L] = static_cast<float>(kdl);
     analogSignal[INDICATOR_DOORS_CLOSED_R] = static_cast<float>(kdp);
 

@@ -370,10 +370,11 @@ void MPSU::check_moition_disable()
     errors[ERROR_ST1 + i] = mpsu_input.unit_spt_state[i] && mpsu_output.is_disel_started;
     errors[ERROR_REVERS_0] = (mpsu_input.revers_handle == 0) && mpsu_output.is_disel_started;
     errors[ERROR_EPK_OFF] = !mpsu_input.is_autostop_ON && mpsu_output.is_disel_started;
+    errors[ERROR_NO_DOORS_CONTROL] = !mpsu_input.is_doors_control && mpsu_output.is_disel_started;
 
     mpsu_output.motion_disable = false;
 
-    for (size_t i = ERROR_ST1; i <= ERROR_EPK_OFF; ++i)
+    for (size_t i = ERROR_ST1; i <= ERROR_NO_DOORS_CONTROL; ++i)
     {
         mpsu_output.motion_disable |= errors[i];
     }

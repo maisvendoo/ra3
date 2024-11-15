@@ -50,6 +50,10 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.button_speed_select = tumbler[IS_BUTTON_SPEED_SELECTION].getState();
         mpsu_input.button_speed_plus = tumbler[IS_BUTTON_SPEED_PLUS].getState();
         mpsu_input.button_speed_minus = tumbler[IS_BUTTON_SPEED_MINUS].getState();
+
+        // Начинаем проверять контроль дверей
+        kdl = tumbler[IS_FIXED_DOOR_L_CLOSE].getState();
+        kdp = tumbler[IS_FIXED_DOOR_R_CLOSE].getState();
     }
     else
     {
@@ -79,14 +83,16 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
         mpsu_input.button_speed_select = false;
         mpsu_input.button_speed_plus = false;
         mpsu_input.button_speed_minus = false;
-
+        kdl = true;
+        kdp = true;
     }
 
     mpsu_input.pBC_max = brake_module->getMaxBCpressure();
 
     int pos = mpsu->getOutputData().pos_in_train - 1;
-    // Состояние тормозов вагонов спереди
-    // Давление в ТЦ тележек от вагонов спереди принимаем в обратном порядке
+    // Состояние тормозов и контроль дверей вагонов спереди
+    // Давление в ТЦ тележек принимаем в обратном порядке
+    // Состояние дверей принимаем зеркально
     if (pos > 0)
         for (int i = 0; i < pos; i++)
         {
@@ -95,15 +101,21 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             mpsu_input.unit_pBC[i * 2]     = sme_fwd->getSignal(SME_UNIT_BC2 + bias);
             mpsu_input.unit_pBC[i * 2 + 1] = sme_fwd->getSignal(SME_UNIT_BC1 + bias);
             mpsu_input.unit_spt_state[i] = static_cast<bool>(sme_fwd->getSignal(SME_UNIT_SPT_STATE + bias));
+            double signal = sme_fwd->getSignal(SME_UNIT_DOOR_R + bias);
+            kdl &= ((signal == 1.0) || (signal == 5.0));
+            signal = sme_fwd->getSignal(SME_UNIT_DOOR_L + bias);
+            kdp &= ((signal == 1.0) || (signal == 5.0));
         }
 
-    // Состояние тормозов данного вагона
+    // Состояние тормозов и контроль дверей данного вагона
     mpsu_input.unit_level_GDB[pos] = hydro_trans->getBrakeLevel();
     mpsu_input.unit_pBC[pos * 2] = brake_mech[TROLLEY_FWD]->getBCpressure();
     mpsu_input.unit_pBC[pos * 2 + 1] = brake_mech[TROLLEY_BWD]->getBCpressure();
     mpsu_input.unit_spt_state[pos] = brake_module->isParkingBraked();
+    kdl &= (door_L->getDoorControlState() == 1);
+    kdp &= (door_R->getDoorControlState() == 1);
 
-    // Состояние тормозов вагонов сзади
+    // Состояние тормозов и контроль дверей вагонов сзади
     if (pos < MAX_TRAIN_SIZE)
         for (int i = 1; i < (MAX_TRAIN_SIZE - pos); i++)
         {
@@ -112,6 +124,14 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             mpsu_input.unit_pBC[(pos + i) * 2]     = sme_bwd->getSignal(SME_UNIT_BC1 + bias);
             mpsu_input.unit_pBC[(pos + i) * 2 + 1] = sme_bwd->getSignal(SME_UNIT_BC2 + bias);
             mpsu_input.unit_spt_state[pos + i] = static_cast<bool>(sme_bwd->getSignal(SME_UNIT_SPT_STATE + bias));
+
+            if (i < (mpsu->getOutputData().train_size - pos))
+            {
+                double signal = sme_bwd->getSignal(SME_UNIT_DOOR_L + bias);
+                kdl &= ((signal == 1.0) || (signal == 5.0));
+                signal = sme_bwd->getSignal(SME_UNIT_DOOR_R + bias);
+                kdp &= ((signal == 1.0) || (signal == 5.0));
+            }
         }
 
     mpsu_input.Kmax = brake_mech[TROLLEY_FWD]->getMaxShoeForce();
@@ -125,6 +145,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
             emerg_brake_valve->isEmergencyBrake() ||
             static_cast<bool>(sme_fwd->getSignal(SME_IS_EMERGENCY_BRAKE)) ||
             static_cast<bool>(sme_bwd->getSignal(SME_IS_EMERGENCY_BRAKE));
+
+    mpsu_input.is_doors_control = kdl && kdp;
 
     mpsu->setInputData(mpsu_input);
     mpsu->step(t, dt);

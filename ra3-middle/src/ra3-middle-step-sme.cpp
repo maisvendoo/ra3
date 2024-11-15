@@ -56,10 +56,14 @@ void RA3Middle::stepSME(double t, double dt)
     // Состояние дверей
     // Вперёд отправляем правильно
     // Назад отправляем зеркально
-    sme_fwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_R->getDoorControlState()));
-    sme_fwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_L->getDoorControlState()));
-    sme_bwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_L->getDoorControlState()));
-    sme_bwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_R->getDoorControlState()));
+    sme_fwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_R->getDoorControlState() +
+                                                            door_R2->getDoorControlState() * 4));
+    sme_fwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_L->getDoorControlState() +
+                                                            door_L2->getDoorControlState() * 4));
+    sme_bwd->setSignal(SME_UNIT_DOOR_R, static_cast<double>(door_L2->getDoorControlState() +
+                                                            door_L->getDoorControlState() * 4));
+    sme_bwd->setSignal(SME_UNIT_DOOR_L, static_cast<double>(door_R2->getDoorControlState() +
+                                                            door_R->getDoorControlState() * 4));
 
     // Состояние стояночного пружинного тормоза в ведущую секцию
     sme_fwd->setSignal(SME_UNIT_SPT_STATE, static_cast<double>(brake_module->isParkingBraked()));

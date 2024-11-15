@@ -89,6 +89,8 @@ private:
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labTrainUnit_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorR_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorL_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorR2_;
+    std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labDoorL2_;
     std::array<std::vector<QLabel*>, MAX_TRAIN_SIZE> labCAN_;
     std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo1_;
     std::array<TriggerLabel*, MAX_TRAIN_SIZE> labNo2_;
