@@ -22,7 +22,7 @@
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
-		<LocalPosition>1.5 -10.0 3.8</LocalPosition>
+		<LocalPosition>-1.5 -10.0 3.8</LocalPosition>
 	</Sound>
 
 	<Sound>
@@ -33,7 +33,7 @@
 		<InitPitch>1.0</InitPitch>
 		<Loop>0</Loop>
 		<PlayOnStart>0</PlayOnStart>
-		<LocalPosition>-1.5 10.0 3.8</LocalPosition>
+		<LocalPosition>1.5 10.0 3.8</LocalPosition>
 	</Sound>
 
 	<Sound>
