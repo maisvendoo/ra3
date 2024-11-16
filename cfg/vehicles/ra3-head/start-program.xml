@@ -48,7 +48,7 @@
 		<KeyTumbler>1</KeyTumbler>
 		<ID>4</ID>
 		<State>1</State>
-		<Timeout>0.1</Timeout>
+		<Timeout>1.0</Timeout>
 		<IsRelease>0</IsRelease>
 	</Step>
 
