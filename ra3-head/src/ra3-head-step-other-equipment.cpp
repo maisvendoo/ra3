@@ -37,7 +37,7 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
         else
         {
             // Иначе открываем по нажатию кнопки "открыть"
-            if (tumbler[IS_BUTTON_DOOR_L_OPEN].getState())
+            if (key_tumbler[IS_BUTTON_DOOR_L_OPEN].getState())
                 door_L->open();
         }
 
@@ -49,7 +49,7 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
         else
         {
             // Иначе открываем по нажатию кнопки "открыть"
-            if (tumbler[IS_BUTTON_DOOR_R_OPEN].getState())
+            if (key_tumbler[IS_BUTTON_DOOR_R_OPEN].getState())
                 door_R->open();
         }
     }

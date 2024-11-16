@@ -3,16 +3,13 @@
 
 struct autostart_step_t
 {
-    int     id;
-    bool    state;
-    double  timeout;
-    bool    is_release;
+    bool    is_key_tumbler = false;
+    int     id = 0;
+    bool    state = false;
+    double  timeout = 1.0;
+    bool    is_release = true;
 
     autostart_step_t()
-        : id(0)
-        , state(false)
-        , timeout(1.0)
-        , is_release(true)
     {
 
     }

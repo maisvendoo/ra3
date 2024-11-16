@@ -11,8 +11,8 @@ void RA3HeadMotor::stepMPSU(double t, double dt)
 
     mpsu_input.is_power_on = static_cast<bool>(hs_p(Ucc_110 - 90.0));
 
-    mpsu_input.start_disel = tumbler[IS_BUTTON_START].getState();
-    mpsu_input.stop_disel = tumbler[IS_BUTTON_STOP].getState();
+    mpsu_input.start_disel = key_tumbler[IS_BUTTON_START].getState();
+    mpsu_input.stop_disel = key_tumbler[IS_BUTTON_STOP].getState();
     mpsu_input.start_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == 1.0f)
                                ||(sme_bwd->getSignal(SME_DIESEL_START_STOP) == 1.0f);
     mpsu_input.stop_disel_sme = (sme_fwd->getSignal(SME_DIESEL_START_STOP) == -1.0f)

@@ -19,7 +19,7 @@ void RA3HeadMotor::stepBrakesControl(double t, double dt)
     {
         epk->setFLpressure(main_reservoir->getPressure());
         epk->setBPpressure(brakepipe->getPressure());
-        epk->setKeyOn(tumbler[IS_KEY_EPK].getState());
+        epk->setKeyOn(key_tumbler[IS_KEY_EPK].getState());
         epk->setPowered(blok->getEPKstate());
         epk->step(t, dt);
     }

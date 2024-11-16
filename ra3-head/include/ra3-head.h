@@ -4,6 +4,7 @@
 #include    "vehicle-api.h"
 
 #include    "ra3-tumblers-define.h"
+#include    "key-trigger.h"
 #include    "fuel-tank.h"
 #include    "mpsu.h"
 #include    "ra3-sme-connector.h"
@@ -254,8 +255,11 @@ private:
     /// Топливные баки
     std::array<FuelTank *, NUM_TANKS> fuel_tank = {nullptr, nullptr};
 
-    /// Выключатели в кабине
+    /// Элементы управления в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
+
+    /// Элементы управления в кабине с задержкой срабатывания
+    std::array<KeyTrigger, KEY_TUMBLERS_NUM> key_tumbler;
 
     /// Ограничения скорости на путевой инфраструктуре
     SpeedMap    *speedmap_fwd = nullptr;

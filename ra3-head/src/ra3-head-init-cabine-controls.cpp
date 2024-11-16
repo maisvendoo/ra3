@@ -1,7 +1,7 @@
 #include    "ra3-head.h"
 
 #include    <QDir>
-
+#include    "registrator.h"
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ void RA3HeadMotor::initCabineControls(const QString &modules_dir, const QString 
 //
 //------------------------------------------------------------------------------
 void RA3HeadMotor::initTumblers(const QString &config_name, const QString &custom_cfg_dir)
-{
+{Registrator *init_reg = new Registrator(); init_reg->setFileName(QString("init_ra3_%1").arg(num)); init_reg->init();
     CfgReader cfg;
 
     if (!cfg.load(custom_cfg_dir + QDir::separator() + config_name + ".xml"))
@@ -41,11 +41,33 @@ void RA3HeadMotor::initTumblers(const QString &config_name, const QString &custo
         bool state = false;
 
         if (cfg.getInt(node, "ID", id) && cfg.getBool(node, "State", state))
-        {
+        {init_reg->print(QString("Init tumbler #%1 to %2").arg(id).arg(state));
             if (state)
                 tumbler[id].set();
             else
                 tumbler[id].reset();
+        }
+
+        node = cfg.getNextSection();
+    }
+
+    node = cfg.getFirstSection("KeyTumbler");
+
+    while (!node.isNull())
+    {
+        int id = 0;
+        bool state = false;
+
+        if (cfg.getInt(node, "ID", id) && cfg.getBool(node, "State", state))
+        {init_reg->print(QString("Init KEY tumbler #%1 to %2").arg(id).arg(state));
+            key_tumbler[id].setInitState(state);
+
+            double timeout_on = 0.0;
+            double timeout_off = 0.0;
+            cfg.getDouble(node, "timeout_on", timeout_on);
+            cfg.getDouble(node, "timeout_off", timeout_off);
+            key_tumbler[id].setTimeoutOn(timeout_on);
+            key_tumbler[id].setTimeoutOff(timeout_off);
         }
 
         node = cfg.getNextSection();

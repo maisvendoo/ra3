@@ -10,50 +10,61 @@ void RA3HeadMotor::keyProcess()
 
     // БОРТСЕТЬ ВКЛ.
     if (getKeyState(KEY_U))
-        tumbler[IS_BUTTON_PWR_ON].set();
+        key_tumbler[IS_BUTTON_PWR_ON].set();
     else
-        tumbler[IS_BUTTON_PWR_ON].reset();
+        key_tumbler[IS_BUTTON_PWR_ON].reset();
 
     // БОРТСЕТЬ ОТКЛ.
     if (getKeyState(KEY_I))
-        tumbler[NO_BUTTON_PWR_OFF].reset();
+        key_tumbler[NO_BUTTON_PWR_OFF].reset();
     else
-        tumbler[NO_BUTTON_PWR_OFF].set();
+        key_tumbler[NO_BUTTON_PWR_OFF].set();
 
     // СТАРТ
     if (getKeyState(KEY_K))
-        tumbler[IS_BUTTON_START].set();
+        key_tumbler[IS_BUTTON_START].set();
     else
-        tumbler[IS_BUTTON_START].reset();
+        key_tumbler[IS_BUTTON_START].reset();
 
     // СТОП
     if (getKeyState(KEY_H))
-        tumbler[IS_BUTTON_STOP].set();
+        key_tumbler[IS_BUTTON_STOP].set();
     else
-        tumbler[IS_BUTTON_STOP].reset();
+        key_tumbler[IS_BUTTON_STOP].reset();
 
     // СПТ
-    if (getKeyState(KEY_Leftbracket) && !getKeyState(KEY_Rightbracket))
+    if (getKeyState(KEY_Rightbracket))
     {
-        tumbler[IS_SWITCH_PARKING_BRAKE].reset();
+        key_tumbler[IS_SWITCH_PARKING_BRAKE].set();
     }
-
-    if (getKeyState(KEY_Rightbracket) && !getKeyState(KEY_Leftbracket))
+    else
     {
-        tumbler[IS_SWITCH_PARKING_BRAKE].set();
+        if (getKeyState(KEY_Leftbracket))
+        {
+            key_tumbler[IS_SWITCH_PARKING_BRAKE].reset();
+        }
+        else
+        {
+            // Если клавиши были кратковременно нажаты и отпущены,
+            // обновляем текущее состояние для сброса таймеров срабатывания
+            if (key_tumbler[IS_SWITCH_PARKING_BRAKE].getState())
+                key_tumbler[IS_SWITCH_PARKING_BRAKE].set();
+            else
+                key_tumbler[IS_SWITCH_PARKING_BRAKE].reset();
+        }
     }
 
     // РБ
     if (getKeyState(KEY_M))
-        tumbler[IS_BUTTON_RB].set();
+        key_tumbler[IS_BUTTON_RB].set();
     else
-        tumbler[IS_BUTTON_RB].reset();
+        key_tumbler[IS_BUTTON_RB].reset();
 
     // РБС
     if (getKeyState(KEY_Z))
-        tumbler[IS_BUTTON_RBS].set();
+        key_tumbler[IS_BUTTON_RBS].set();
     else
-        tumbler[IS_BUTTON_RBS].reset();
+        key_tumbler[IS_BUTTON_RBS].reset();
 
     // Выбор скорости
     if (getKeyState(KEY_F))
@@ -83,33 +94,42 @@ void RA3HeadMotor::keyProcess()
     if (getKeyState(KEY_N))
     {
         if (isShift())
-            tumbler[IS_KEY_EPK].set();
+            key_tumbler[IS_KEY_EPK].set();
         else
-            tumbler[IS_KEY_EPK].reset();
+            key_tumbler[IS_KEY_EPK].reset();
+    }
+    else
+    {
+        // Если клавиша была кратковременно нажата и отпущена,
+        // обновляем текущее состояние для сброса таймеров срабатывания
+        if (key_tumbler[IS_KEY_EPK].getState())
+            key_tumbler[IS_KEY_EPK].set();
+        else
+            key_tumbler[IS_KEY_EPK].reset();
     }
 
     // Реверсивный переключатель
     if (getKeyState(KEY_W))
-        tumbler[IS_SWITCH_REVERS_FWD].set();
+        key_tumbler[IS_SWITCH_REVERS_FWD].set();
     else
-        tumbler[IS_SWITCH_REVERS_FWD].reset();
+        key_tumbler[IS_SWITCH_REVERS_FWD].reset();
 
     if (getKeyState(KEY_S))
-        tumbler[IS_SWITCH_REVERS_BWD].set();
+        key_tumbler[IS_SWITCH_REVERS_BWD].set();
     else
-        tumbler[IS_SWITCH_REVERS_BWD].reset();
+        key_tumbler[IS_SWITCH_REVERS_BWD].reset();
 
     // Кнопка "Поддержание скорости"
     if (getKeyState(KEY_G))
     {
-        tumbler[IS_BUTTON_SPEED_HOLD].set();
+        key_tumbler[IS_BUTTON_SPEED_HOLD].set();
     }
     else
     {
-        if (tumbler[IS_BUTTON_SPEED_HOLD].getState())
-        {
-            tumbler[IS_BUTTON_SPEED_HOLD].reset();
+        key_tumbler[IS_BUTTON_SPEED_HOLD].reset();
 
+        if (key_tumbler[IS_BUTTON_SPEED_HOLD].getState())
+        {
             // При отпускании кнопки - меняем статус фиксации нажатого положения
             if (tumbler[IS_FIXED_SPEED_HOLD].getState())
                 tumbler[IS_FIXED_SPEED_HOLD].reset();
@@ -121,14 +141,14 @@ void RA3HeadMotor::keyProcess()
     // Кнопка "ступени"
     if (isShift() && (getKeyState(KEY_R)))
     {
-        tumbler[IS_BUTTON_STEP].set();
+        key_tumbler[IS_BUTTON_STEP].set();
     }
     else
     {
-        if (tumbler[IS_BUTTON_STEP].getState())
-        {
-            tumbler[IS_BUTTON_STEP].reset();
+        key_tumbler[IS_BUTTON_STEP].reset();
 
+        if (key_tumbler[IS_BUTTON_STEP].getState())
+        {
             // При отпускании кнопки - меняем статус фиксации нажатого положения
             if (tumbler[IS_FIXED_STEP].getState())
                 tumbler[IS_FIXED_STEP].reset();
@@ -139,21 +159,21 @@ void RA3HeadMotor::keyProcess()
 
     // Кнопка "Открыть двери левые"
     if (isControl() && (getKeyState(KEY_T)))
-        tumbler[IS_BUTTON_DOOR_L_OPEN].set();
+        key_tumbler[IS_BUTTON_DOOR_L_OPEN].set();
     else
-        tumbler[IS_BUTTON_DOOR_L_OPEN].reset();
+        key_tumbler[IS_BUTTON_DOOR_L_OPEN].reset();
 
     // Кнопка "Закрыть двери левые"
     if (isShift() && (getKeyState(KEY_T)))
     {
-        tumbler[IS_BUTTON_DOOR_L_CLOSE].set();
+        key_tumbler[IS_BUTTON_DOOR_L_CLOSE].set();
     }
     else
     {
-        if (tumbler[IS_BUTTON_DOOR_L_CLOSE].getState())
-        {
-            tumbler[IS_BUTTON_DOOR_L_CLOSE].reset();
+        key_tumbler[IS_BUTTON_DOOR_L_CLOSE].reset();
 
+        if (key_tumbler[IS_BUTTON_DOOR_L_CLOSE].getState())
+        {
             // При отпускании кнопки - меняем статус фиксации нажатого положения
             if (tumbler[IS_FIXED_DOOR_L_CLOSE].getState())
                 tumbler[IS_FIXED_DOOR_L_CLOSE].reset();
@@ -164,21 +184,21 @@ void RA3HeadMotor::keyProcess()
 
     // Кнопка "Открыть двери левые"
     if (isControl() && (getKeyState(KEY_Y)))
-        tumbler[IS_BUTTON_DOOR_R_OPEN].set();
+        key_tumbler[IS_BUTTON_DOOR_R_OPEN].set();
     else
-        tumbler[IS_BUTTON_DOOR_R_OPEN].reset();
+        key_tumbler[IS_BUTTON_DOOR_R_OPEN].reset();
 
     // Кнопка "Закрыть двери левые"
     if (isShift() && (getKeyState(KEY_Y)))
     {
-        tumbler[IS_BUTTON_DOOR_R_CLOSE].set();
+        key_tumbler[IS_BUTTON_DOOR_R_CLOSE].set();
     }
     else
     {
-        if (tumbler[IS_BUTTON_DOOR_R_CLOSE].getState())
-        {
-            tumbler[IS_BUTTON_DOOR_R_CLOSE].reset();
+        key_tumbler[IS_BUTTON_DOOR_R_CLOSE].reset();
 
+        if (key_tumbler[IS_BUTTON_DOOR_R_CLOSE].getState())
+        {
             // При отпускании кнопки - меняем статус фиксации нажатого положения
             if (tumbler[IS_FIXED_DOOR_R_CLOSE].getState())
                 tumbler[IS_FIXED_DOOR_R_CLOSE].reset();

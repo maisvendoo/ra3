@@ -3,6 +3,7 @@
 
 	<!-- Кнопка "БОРТСЕТЬ ВКЛ." -->
 	<Step>
+		<KeyTumbler>1</KeyTumbler>
 		<ID>0</ID>
 		<State>1</State>
 		<Timeout>2.0</Timeout>
@@ -11,6 +12,7 @@
 
 	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
 	<Step>
+		<KeyTumbler>1</KeyTumbler>
 		<ID>2</ID>
 		<State>1</State>
 		<Timeout>2.0</Timeout>
@@ -19,14 +21,13 @@
 
 	<!-- ПУСТОЙ ШАГ - ЗАДЕРЖКА ПЕРЕД ВТОРЫМ НАЖАТИЕМ КНОПКИ ДЛЯ СТАРТА ДИЗЕЛЕЙ -->
 	<Step>
-		<ID>24</ID>
-		<State>1</State>
+		<ID>-1</ID>
 		<Timeout>1.0</Timeout>
-		<IsRelease>1</IsRelease>
 	</Step>
 
 	<!-- Кнопка "СТАРТ" (запуск дизелей) -->
 	<Step>
+		<KeyTumbler>1</KeyTumbler>
 		<ID>2</ID>
 		<State>1</State>
 		<Timeout>2.0</Timeout>
@@ -35,7 +36,8 @@
 
 	<!-- Выключатель СПТ -->
 	<Step>
-		<ID>4</ID>
+		<KeyTumbler>1</KeyTumbler>
+		<ID>15</ID>
 		<State>0</State>
 		<Timeout>1.0</Timeout>
 		<IsRelease>1</IsRelease>
@@ -43,14 +45,16 @@
 
 	<!-- Ключ ЭПК -->
 	<Step>
-		<ID>11</ID>
+		<KeyTumbler>1</KeyTumbler>
+		<ID>4</ID>
 		<State>1</State>
-		<Timeout>1.0</Timeout>
+		<Timeout>0.1</Timeout>
 		<IsRelease>0</IsRelease>
 	</Step>
 
 	<!-- Рукоятка бдительности (РБ) -->
 	<Step>
+		<KeyTumbler>1</KeyTumbler>
 		<ID>5</ID>
 		<State>1</State>
 		<Timeout>1.0</Timeout>
@@ -59,7 +63,8 @@
 
 	<!-- Реверс вперёд -->
 	<Step>
-		<ID>12</ID>
+		<KeyTumbler>1</KeyTumbler>
+		<ID>13</ID>
 		<State>1</State>
 		<Timeout>1.0</Timeout>
 		<IsRelease>1</IsRelease>
