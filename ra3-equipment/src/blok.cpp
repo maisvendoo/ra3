@@ -26,6 +26,9 @@ BLOK::~BLOK()
 //------------------------------------------------------------------------------
 void BLOK::step(double t, double dt)
 {
+    if (no_code_limit > no_code_limit_ref)
+        passed_distance += v * dt;
+
     safety_timer->step(t, dt);
     beepTimer->step(t, dt);
 
@@ -167,12 +170,6 @@ void BLOK::preStep(state_vector_t &Y, double t)
 
     if (code_alsn == ALSN::RED_YELLOW)
     {
-        if (v_kmh > 60.0)
-        {
-            epk_state.reset();
-            return;
-        }
-
         if (v_kmh > 5)
         {
             if (!safety_timer->isStarted())
@@ -247,7 +244,7 @@ void BLOK::alsn_process(ALSN code_alsn)
     {
     case ALSN::NO_CODE:
     {
-        if (old_code_alsn == ALSN::RED_YELLOW)
+        if ((old_code_alsn == ALSN::RED_YELLOW) && (v_kmh > 1.0))
         {
             lamps[RED_LAMP] = 1.0f;
             is_red.set();
@@ -353,7 +350,7 @@ void BLOK::calc_speed_limits_by_speedmap()
     next_limit = speedmap->getNextLimit();
 
     double v_lim = v_max;
-    if (current_limit > next_limit)
+    if ((current_limit - 1) > next_limit)
     {
         double a = 0.7;
         target_dist = speedmap->getNextLimitDistance();
@@ -376,45 +373,65 @@ void BLOK::calc_speed_limits_by_next_signal()
     if (code_alsn == ALSN::YELLOW)
     {
         double a = 0.7;
-        double yellow_limit = 60.0;
+        double yellow_limit = 61.0;
         double v_lim = sqrt( pow(yellow_limit / Physics::kmh, 2) + 2 * a * distance) * Physics::kmh;
-        current_limit = min(v_lim, current_limit - 1) + 1;
+        current_limit = min(v_lim, current_limit);
     }
 
     // Если сигнал АЛСН красный с жёлтым (светофор закрыт),
-    // рассчитываем кривую торможения до 0 км/ч
+    // устанавливаем ограничение 60 км/ч и
+    // рассчитываем кривую торможения к светофору до 0 км/ч
     if (code_alsn == ALSN::RED_YELLOW)
     {
         double a = 0.7;
-        double red_yellow_limit = 0.0;
-        double v_lim = sqrt( pow(red_yellow_limit / Physics::kmh, 2) + 2 * a * distance) * Physics::kmh;
-        current_limit = min(v_lim, current_limit - 1) + 1;
+        double red_yellow_limit = 61.0;
+        double v_lim = sqrt(2 * a * distance) * Physics::kmh;
+        v_lim = min(v_lim, red_yellow_limit);
+        current_limit = min(v_lim, current_limit);
     }
 
     // Если сигнал АЛСН отсутствует, устанавливаем ограничение 40 км/ч
     if (code_alsn == ALSN::NO_CODE)
     {
-        current_limit = min(40.0, current_limit - 1) + 1;
+        // Если до этого был код зелёный или жёлтый,
+        // плавно уменьшаем ограничение от текущей скорости
+        if ((old_code_alsn == ALSN::YELLOW) || (old_code_alsn == ALSN::GREEN))
+        {
+            no_code_limit = max(no_code_limit_ref, v_kmh + 5.0);
+        }
+
+        // Уменьшаем ограничение на 1 км/ч каждые 50 метров
+        if ((no_code_limit > no_code_limit_ref) && (passed_distance > 50.0))
+        {
+            passed_distance = 0.0;
+            no_code_limit += -1.0;
+        }
+
+        current_limit = min(no_code_limit, current_limit);
+    }
+    else
+    {
+        no_code_limit = no_code_limit_ref;
     }
 
     QString liter = coilALSN->getNextSignalLiter();
-    if (liter.isEmpty() || (distance > target_dist))
+    if ( (current_limit > next_limit) && (liter.isEmpty() || (distance > target_dist)) )
     {
-        // Если следующего светофора нет
-        // или он дальше чем ближайшее ограничение в карте скоростей,
+        // Если впереди ограничение скорости,
+        // а следующего светофора нет или он дальше чем ограничение,
         // то выводим информацию об ограничении скорости
-        if (current_limit > next_limit)
-        {
-            info_text = "ОПАСНОЕ МЕСТО";
-            liter = QString::number(next_limit, 'f', 0) + " КМ/Ч";
+        info_text = "ОПАСНОЕ МЕСТО";
+        liter = QString::number(next_limit, 'f', 0) + " КМ/Ч";
 
-            size_t fill_size = INFO_MAX_SYMBOLS - info_text.size() - liter.size();
-            info_text += QString(fill_size, QChar(' '));
-            info_text += liter;
-            return;
-        }
+        size_t fill_size = INFO_MAX_SYMBOLS - info_text.size() - liter.size();
+        info_text += QString(fill_size, QChar(' '));
+        info_text += liter;
+        return;
+    }
 
-        // Если и следующего ограничения скорости нет, ничего не выводим
+    if (liter.isEmpty())
+    {
+        // Если следующего светофора нет, ничего не выводим
         target_dist = 0.0;
         info_text = "";
     }
