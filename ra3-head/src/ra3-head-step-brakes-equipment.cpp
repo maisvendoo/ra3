@@ -31,7 +31,7 @@ void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
     brake_module->releaseBrakes(mpsu->getOutputData().release_PB);
 
     bool is_parking_braked =
-            ( tumbler[SWITCH_PARKING_BRAKE].getState() && active_cab_relay->getContactState(1) ) ||
+            ( key_tumbler[IS_SWITCH_PARKING_BRAKE].getState() && active_cab_relay->getContactState(1) ) ||
             static_cast<bool>(sme_fwd->getSignal(SME_PARKING_BRAKE_ON)) ||
             static_cast<bool>(sme_bwd->getSignal(SME_PARKING_BRAKE_ON));
     brake_module->setParkingBrakeState(is_parking_braked);
@@ -79,13 +79,13 @@ void RA3HeadMotor::stepBrakesEquipment(double t, double dt)
     // Рукава тормозной магистрали
     hose_bp_fwd->setPressure(anglecock_bp_fwd->getPressureToHose());
     hose_bp_fwd->setFlowCoeff(anglecock_bp_fwd->getFlowCoeff());
-    hose_bp_fwd->setCoord(railway_coord + dir * orient * (length / 2.0 - anglecock_bp_fwd->getShiftCoord()));
+    hose_bp_fwd->setCoord(train_coord + dir * orient * (length / 2.0 - anglecock_bp_fwd->getShiftCoord()));
     hose_bp_fwd->setShiftSide(anglecock_bp_fwd->getShiftSide());
     hose_bp_fwd->setControl(keys);
     hose_bp_fwd->step(t, dt);
     hose_bp_bwd->setPressure(anglecock_bp_bwd->getPressureToHose());
     hose_bp_bwd->setFlowCoeff(anglecock_bp_bwd->getFlowCoeff());
-    hose_bp_bwd->setCoord(railway_coord - dir * orient * (length / 2.0 - anglecock_bp_bwd->getShiftCoord()));
+    hose_bp_bwd->setCoord(train_coord - dir * orient * (length / 2.0 - anglecock_bp_bwd->getShiftCoord()));
     hose_bp_bwd->setShiftSide(anglecock_bp_bwd->getShiftSide());
     //hose_bp_bwd->setControl(keys);
     hose_bp_bwd->step(t, dt);

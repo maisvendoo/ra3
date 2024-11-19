@@ -2,14 +2,18 @@
 #define     BLOK_H
 
 #include    "device.h"
-#include    "blok-speed-limits.h"
 #include    "blok-stations.h"
+#include    "ALSN-struct.h"
+#include    "ALSN-coil.h"
+#include    "ALSN-decoder.h"
+#include    "speedmap.h"
 
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
 enum
 {
+    NUM_LAMPS = 8,
     WHITE_LAMP = 0,
     RED_LAMP = 1,
     RED_YELLOW_LAMP = 2,
@@ -33,12 +37,26 @@ public:
 
     void step(double t, double dt) override;
 
-   /// Прием кода АЛСН
-   void setAlsnCode(int code_alsn)
-   {
-       old_code_alsn = this->code_alsn;
-       this->code_alsn = code_alsn;
-   };
+    /// Прием кода АЛСН
+    void setAlsnCode(ALSN code_alsn)
+    {
+        old_code_alsn = this->code_alsn;
+        this->code_alsn = code_alsn;
+    };
+
+    /// Модуль приёма сигналов АЛС с путевой топологии
+    void setCoilALSNModule(CoilALSN *device)
+    {
+        coilALSN = device;
+    }
+
+    /// Модуль работы с ограничениями скорости на путевой топологии
+    void setSpeedMapModule(SpeedMap *device)
+    {
+        speedmap = device;
+        speedmap->setDirection(dir);
+        speedmap->setCurrentSearchDistance(train_length);
+    }
 
    /// Прием состояния РБ
    void setRBstate(bool state) { state_RB = state; };
@@ -58,7 +76,7 @@ public:
    /// Выдача состояния цепи удерживающей катушки ЭПК
    bool getEPKstate() { return epk_state.getState(); };
 
-   /// Получить состояние лампы локомотивного световора
+   /// Получить состояние лампы локомотивного светофора
    float getLampState(size_t lamp_idx)
    {
        if (lamp_idx < lamps.size())
@@ -66,6 +84,18 @@ public:
 
         return 0.0f;
    }
+
+    /// Получить активную лампу локомотивного светофора
+    float getLampNum()
+    {
+        for (int i = 0; i <= GREEN_LAMP1; ++i)
+        {
+            if (lamps[i] == 1.0f)
+                return static_cast<float>(i);
+        }
+
+        return 0.0f;
+    }
 
    double getCurrentSpeedLimit() const { return current_limit; }
 
@@ -75,7 +105,7 @@ public:
 
    void setVoltage(double U_pow) { this->U_pow = U_pow; }
 
-   double getVelocityKmh() const { return qAbs(v_kmh); }
+   double getVelocityKmh() const { return v_kmh; }
 
    /// Сигнал "Проверка бдительности"
    bool isCheckVigilanse() const { return check_vigilance; }
@@ -83,28 +113,46 @@ public:
    /// Вернуть ускорение поезда
    double getAcceleration() const { return acceleration; }
 
-   /// Задать координату
+   /// Задать координату центра локомотива в пространстве
+   void setCoord(dvec3 coord) { this->coord = coord; }
+
+   /// Задать координату по железнодорожному пикетажу
    void setRailCoord(double rail_coord) { this->rail_coord = rail_coord; }
 
-   /// Задать длину поезда
-   void setTrainLength(double train_length);
+    /// Задать длину поезда
+    void setTrainLength(double train_length)
+    {
+        this->train_length = train_length;
+        if (speedmap)
+            speedmap->setCurrentSearchDistance(train_length);
+    }
 
    /// Задать конструкционную скорость
    void setMaxVelocity(double v_max) { this->v_max = v_max; }
 
-   /// Загрузка скоростей из ЭК
-   void loadSpeedsMap(QString path);
-
    /// Загрузка станций из ЭК
    void loadStationsMap(QString path);
 
-   void setDirection(int dir) { this->dir = dir; }
+    void setDirection(int dir)
+    {
+        this->dir = dir;
+        if (speedmap)
+            speedmap->setDirection(dir);
+    }
 
-   double getLimitDistance() const { return limit_dist; }
+   double getTargetDistance() const { return target_dist; }
 
    double getRailCoord() const { return rail_coord / 1000.0; }
 
    int getStationIndex() const { return station_idx; }
+
+   bool isTractionAllowed() const { return is_trac_allowed; }
+
+    /// Текст в табло "станция"
+    QString getStationText() const;
+
+    /// Текст в табло информационной строки
+    QString getInfoText() const;
 
    enum {
        NUM_SOUNDS = 2,
@@ -118,85 +166,115 @@ public:
 
 private:
 
-   double U_pow;
+   double U_pow = 0.0;
 
-   int code_alsn;
+   double U_nom = 110.0;
 
-   int old_code_alsn;
+   ALSN code_alsn = ALSN::NO_CODE;
 
-   bool state_RB;
+   ALSN old_code_alsn = ALSN::NO_CODE;
 
-   bool state_RB_old;
+   bool state_RB = false;
 
-   bool state_RBS;
+   bool state_RB_old = false;
 
-   bool state_RBS_old;
+   bool state_RBS = false;
 
-   bool state_EPK;
+   bool state_RBS_old = false;
 
-   double v_kmh;
+   bool state_EPK = false;
 
-   double v;
+   double v_kmh = 0.0;
+
+   double v = 0.0;
 
    /// Шаг дифференцирования скорости
-   double delta_t;
+   double delta_t = 0.1;
 
-   size_t v_count;
+   size_t v_count = 0;
 
-   double t_diff;
+   double t_diff = 0.0;
 
-   double acceleration;
+   double acceleration = 0.0;
 
-   bool key_epk;
+   bool key_epk = false;
 
-   bool is_dislplay_ON;
+   bool key_epk_old = false;
 
-   bool check_vigilance;
+   bool is_dislplay_ON = false;
 
-   enum
-   {
-       NUM_LAMPS = 8
-   };
+   bool check_vigilance = false;
 
-   Timer *safety_timer;
+   double beep_interval = 0.5;
 
-   Timer *beepTimer;
+   Timer *beepTimer = new Timer(beep_interval, false);
 
-   double beep_interval;
+   Timer *safety_timer = new Timer(45.0, false);
 
-   double rail_coord;
-
-   double train_length;
+   double train_length = 23.62;
 
    /// Конструкционная скорость
-   double v_max;
+   double v_max = 120.0;
 
    /// Текущее ограничение скорости
-   double current_limit;
+   double current_limit = 300.0;
 
    /// Следующее ограничение скорости
-   double next_limit;
+   double next_limit = 300.0;
 
-   int dir;
+   /// Текущее ограничение скорости при отсутствии кода АЛСН
+   double no_code_limit = 41.0;
 
-   /// Дистанция до ограничения
-   double limit_dist;
+   /// Ограничение скорости при отсутствии кода АЛСН
+   double no_code_limit_ref = 41.0;
+
+   /// Счётчик пройденной дистанции
+   double passed_distance = 0.0;
+
+   /// Направление
+   int dir = 1;
+
+   /// Дистанция до следующей цели
+   double target_dist = 0.0;
 
    /// Индекс станции из ЭК
-   int station_idx;
+   int station_idx = -1;
 
-   /// Флаг окончания поиска начальной станции
-   bool begin_station_finded;
+   /// Признак разрешения тяги
+   bool is_trac_allowed = false;
 
-   /// База ограничений скорости
-   std::vector<speed_limit_t> limits;
+    /// Модуль приёма сигналов АЛС с путевой топологии
+    CoilALSN *coilALSN = nullptr;
 
-   /// База станций
+    /// Модуль работы с ограничениями скорости на путевой топологии
+    SpeedMap *speedmap = nullptr;
+
+    /// Координата локомотива по железнодорожному пикетажу
+    double rail_coord = 0.0;
+
+    /// Положение центра локомотива в пространстве
+    dvec3 coord = {0.0, 0.0, 0.0};
+
+    /// Радиус поиска ближайшей станции
+    double station_search_radius = 5000.0;
+
+    /// База станций
     std::vector<station_t> stations;
 
-   std::array<float, NUM_LAMPS> lamps;
+    std::array<float, NUM_LAMPS> lamps = {0.0f, 0.0f, 0.0f, 0.0f,
+                                          0.0f, 0.0f, 0.0f, 0.0f};
 
-    std::array<sound_state_t, NUM_SOUNDS> sounds;
+    enum
+    {
+        STATION_MAX_SYMBOLS = 8,
+        INFO_MAX_SYMBOLS = 24,
+    };
+
+    /// Текст в табло "станция"
+    QString station_text = QString("");
+
+    /// Текст в табло информационной строки
+    QString info_text = QString("");
 
    Trigger epk_state;
 
@@ -208,7 +286,9 @@ private:
    };
 
    /// Мвссив значений скоростей для численного дифференцирования
-   std::array<double, DIFF_NUM> v_i;
+   std::array<double, DIFF_NUM> v_i = {0.0, 0.0, 0.0};
+
+   std::array<sound_state_t, NUM_SOUNDS> sounds;
 
    void preStep(state_vector_t &Y, double t) override;
 
@@ -218,7 +298,7 @@ private:
 
    void load_config(CfgReader &cfg) override;
 
-   void alsn_process(int code_alsn);
+   void alsn_process(ALSN code_alsn);
 
    /// Озвучка
    void sounds_process();
@@ -226,20 +306,17 @@ private:
    /// Вычисление ускорения
    void calc_acceleration(double t, double dt);
 
+   /// Расчет ограничений скорости путевой инфраструктуры
+   void calc_speed_limits_by_speedmap();
+
+   /// Расчет ограничений скорости от сигнала следующего светофора
+   void calc_speed_limits_by_next_signal();
+
    /// Работа с ограничениями скорости
    void speed_control();
 
-   /// Расчет ограничений
-   void calc_speed_limits();
-
-   /// Поиск текущего и следующего ограничения в базе
-   void findLimits(speed_limit_t &cur_limit, speed_limit_t &next_limit);
-
    /// Определение текущей станции
    void stations_process();
-
-   /// Поиск начальной станции
-   void find_begin_station();
 
 private slots:
 

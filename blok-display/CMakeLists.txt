@@ -26,12 +26,13 @@ find_package(vehicle ${RRS_VERSION} REQUIRED)
 find_package(display ${RRS_VERSION} REQUIRED)
 
 file (GLOB INCLUDES "./include/*.h")
-file (GLOB EQP_INCLUDES "../ra3-equipment/include/*.h")
+#file (GLOB EQP_INCLUDES "../ra3-equipment/include/*.h")
 file (GLOB SOURCES "./src/*.cpp")
-file (GLOB EQP_SOURCES "../ra3-equipment/src/*.cpp")
+#file (GLOB EQP_SOURCES "../ra3-equipment/src/*.cpp")
 file (GLOB RESOURCES "./resources/*.qrc")
 
-add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES} ${EQP_SOURCES} ${EQP_INCLUDES} ${RESOURCES})
+#add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES} ${EQP_SOURCES} ${EQP_INCLUDES} ${RESOURCES})
+add_library (${TARGET} MODULE ${SOURCES} ${INCLUDES} ${RESOURCES})
 
 target_include_directories (${TARGET} PRIVATE ./include/)
 target_include_directories (${TARGET} PRIVATE ../ra3-head/include)

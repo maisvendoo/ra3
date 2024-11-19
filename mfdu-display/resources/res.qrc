@@ -100,6 +100,7 @@
         <file alias="main_unit_door_no_active">img/main-disp/unit_door_no_active.png</file>
         <file alias="main_unit_door_closed">img/main-disp/unit_door_closed.png</file>
         <file alias="main_unit_door_opened">img/main-disp/unit_door_opened.png</file>
+        <file alias="main_unit_door_working">img/main-disp/unit_door_working.png</file>
         <file alias="mk_frame_on">img/main-disp/motor-compressor-frame_on.png</file>
         <file alias="mk_frame_off">img/main-disp/motor-compressor-frame_off.png</file>
 
@@ -112,6 +113,7 @@
         <file alias="error_ST6">img/errors/error_ST6.png</file>
         <file alias="error_revers_0">img/errors/error_revers_0.png</file>
         <file alias="error_epk_off">img/errors/error_epk_off.png</file>
+        <file alias="error_no_doors">img/errors/error_no_doors_control.png</file>
         <file alias="error_hold_speed_trac">img/errors/error_hold_speed_trac.png</file>
         <file alias="error_hold_speed_brake">img/errors/error_hold_speed_brake.png</file>
     </qresource>

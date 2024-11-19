@@ -4,6 +4,7 @@
 #include    "vehicle-api.h"
 
 #include    "ra3-tumblers-define.h"
+#include    "key-trigger.h"
 #include    "fuel-tank.h"
 #include    "mpsu.h"
 #include    "ra3-sme-connector.h"
@@ -21,8 +22,8 @@
 #include    "blok.h"
 #include    "hydro-transmission.h"
 #include    "emergency-brake-valve.h"
-#include    "key-trigger.h"
 #include    "epk151d.h"
+#include    "door-control-module.h"
 
 #include    "ra3-head-signals.h"
 
@@ -44,177 +45,180 @@ public:
 private:
 
     /// Имя модуля сцепного устройства спереди
-    QString coupling_fwd_module_name;
+    QString coupling_fwd_module_name = "sa3";
     /// Имя конфига сцепного устройства спереди
-    QString coupling_fwd_config_name;
+    QString coupling_fwd_config_name = "sa3";
 
     /// Имя модуля сцепного устройства сзади
-    QString coupling_bwd_module_name;
+    QString coupling_bwd_module_name = "sa3";
     /// Имя конфига сцепного устройства сзади
-    QString coupling_bwd_config_name;
+    QString coupling_bwd_config_name = "sa3";
 
     /// Сцепка спереди
-    Coupling *coupling_fwd;
+    Coupling *coupling_fwd = nullptr;
     /// Сцепка сзади
-    Coupling *coupling_bwd;
+    Coupling *coupling_bwd = nullptr;
 
     /// Расцепной рычаг спереди
-    OperatingRod *oper_rod_fwd;
+    OperatingRod *oper_rod_fwd = nullptr;
 /*    /// Расцепной рычаг сзади
-    OperatingRod *oper_rod_bwd;*/
+    OperatingRod *oper_rod_bwd = nullptr;*/
 
     /// Серийный номер вагона
-    int num;
+    int num = 101;
 
     /// Передаточные числа редуктора 1 ступени
-    double ip1;
+    double ip1 = 1.2;
 
     /// Передаточные числа редуктора 2 ступени
-    double ip2;
+    double ip2 = 2.78;
 
     /// Регистратор параметров движения
-    Registrator *reg;
-
-    /// Зарядное давление ТМ
-    double charge_press;
+    Registrator *reg = nullptr;
 
     /// Темп утечки из ГР
-    double main_res_leak;
+    double main_res_leak = 0.0;
 
     /// Реле активной кабины
-    Relay   *active_cab_relay;
+    Relay   *active_cab_relay = nullptr;
 
-    /// Состояние дверей справа
-    int door_R_state;
+    /// Дверь справа
+    DoorControlModule *door_R = nullptr;
 
-    /// Состояние дверей слева
-    int door_L_state;
+    /// Дверь слева
+    DoorControlModule *door_L = nullptr;
+
+    /// Контроль дверей справа
+    bool kdp = false;
+
+    /// Контроль дверей слева
+    bool kdl = true;
 
     /// Аккумуляторная батарея 110 В
-    Battery     *bat110;
+    Battery     *bat110 = nullptr;
 
     /// Аккумуляторная батарея 24 В
-    Battery     *bat24;
+    Battery     *bat24 = nullptr;
 
     /// Напряжение от батареи 110 В
-    double U_bat_110;
+    double U_bat_110 = 0.0;
 
     /// Напряжение от батареи 24 В
-    double U_bat_24;
+    double U_bat_24 = 0.0;
 
     /// Напряжение питания цепей управления 110 В
-    double Ucc_110;
+    double Ucc_110 = 0.0;
 
     /// Ток, потребляемый цепями управления 110 В
-    double Icc_110;
+    double Icc_110 = 0.0;
 
     /// Напряжение на линии 24 В
-    double Ucc_24;
+    double Ucc_24 = 0.0;
 
     /// Ток, потребляемый на линии 24 В
-    double Icc_24;
+    double Icc_24 = 0.0;
 
     /// Контактор включения батареи 110 В
-    Relay   *KM_power;
+    Relay   *KM_power = nullptr;
 
     /// Микропроцессорная система управления МПСУ
-    MPSU    *mpsu;
+    MPSU    *mpsu = nullptr;
 
     /// Соединения для работы по системе многих единиц (СМЕ) спереди
-    RA3SME  *sme_fwd;
+    RA3SME  *sme_fwd = nullptr;
 
     /// Соединения для работы по системе многих единиц (СМЕ) сзади
-    RA3SME  *sme_bwd;
+    RA3SME  *sme_bwd = nullptr;
 
     /// Свисток и тифон
-    TrainHorn *horn;
+    TrainHorn *horn = nullptr;
 
     /// Система подачи песка под оси передней (моторной) тележки
-    SandingSystem   *sand_system;
+    SandingSystem   *sand_system = nullptr;
 
     /// Топливоподкачивающий насос
-    ElectricFuelPump    *fuel_pump;
+    ElectricFuelPump    *fuel_pump = nullptr;
 
     /// Дизель
-    Disel   *disel;
+    Disel   *disel = nullptr;
 
     /// Стартер
-    Starter *starter;
+    Starter *starter = nullptr;
 
     /// Таймер автозапуска
-    Timer   *autostart_timer;
+    Timer   *autostart_timer = nullptr;
 
     /// Счетчик шагов автозапуска
-    size_t count_step;
+    size_t count_step = 0;
 
     /// Признак автозапуска
-    bool is_autostart;
+    bool is_autostart = false;
 
     /// Признак включения регистрации
-    bool is_Registrator_on;
+    bool is_Registrator_on = false;
 
     /// Реле стартера
-    Relay *starter_relay;
+    Relay *starter_relay = nullptr;
 
     /// Главный генератор
-    Generator   *generator;
+    Generator   *generator = nullptr;
 
     /// Преобразователь собственных нужд (ПСН)
-    AuxiliaryConverter  *aux_conv;
+    AuxiliaryConverter  *aux_conv = nullptr;
 
     /// Насос гидростатического привода
-    HydroPump   *hydro_pump;
+    HydroPump   *hydro_pump = nullptr;
 
     /// Компрессорный агрегат
-    MotorCompressor     *motor_compressor;
+    MotorCompressor     *motor_compressor = nullptr;
 
     /// Регулятор давления ГР
-    PressureRegulator   *press_reg;
+    PressureRegulator   *press_reg = nullptr;
 
     /// Главный резервуар
-    Reservoir   *main_reservoir;
+    Reservoir   *main_reservoir = nullptr;
 
     /// Концевой кран питательной магистрали спереди
-    PneumoAngleCock *anglecock_fl_fwd;
+    PneumoAngleCock *anglecock_fl_fwd = nullptr;
 
     /// Концевой кран питательной магистрали сзади
-    PneumoAngleCock *anglecock_fl_bwd;
+    PneumoAngleCock *anglecock_fl_bwd = nullptr;
 
     /// Рукав питательной  магистрали спереди
-    PneumoHose      *hose_fl_fwd;
+    PneumoHose      *hose_fl_fwd = nullptr;
 
     /// Рукав питательной  магистрали сзади
-    PneumoHose      *hose_fl_bwd;
+    PneumoHose      *hose_fl_bwd = nullptr;
 
     /// Кран резервного управления
-    KRU091  *kru;
+    KRU091  *kru = nullptr;
 
     /// ЭПК
-    AutoTrainStopEPK151D *epk;
+    AutoTrainStopEPK151D *epk = nullptr;
 
     /// Тормозная магистраль
-    Reservoir   *brakepipe;
+    Reservoir   *brakepipe = nullptr;
 
     /// Блок тормозного оборудования БТО-092
-    BTO092  *brake_module;
+    BTO092  *brake_module = nullptr;
 
     /// Запасный резервуар
-    Reservoir   *supply_reservoir;
+    Reservoir   *supply_reservoir = nullptr;
 
     /// Концевой кран тормозной магистрали спереди
-    PneumoAngleCock *anglecock_bp_fwd;
+    PneumoAngleCock *anglecock_bp_fwd = nullptr;
 
     /// Концевой кран тормозной магистрали сзади
-    PneumoAngleCock *anglecock_bp_bwd;
+    PneumoAngleCock *anglecock_bp_bwd = nullptr;
 
     /// Рукав тормозной магистрали спереди
-    PneumoHose   *hose_bp_fwd;
+    PneumoHose   *hose_bp_fwd = nullptr;
 
     /// Рукав тормозной магистрали сзади
-    PneumoHose   *hose_bp_bwd;
+    PneumoHose   *hose_bp_bwd = nullptr;
 
     /// Тройник на питание СТ
-    PneumoSplitter *pb_split;
+    PneumoSplitter *pb_split = nullptr;
 
     enum
     {
@@ -225,19 +229,19 @@ private:
     };
 
     /// Тормозные механизмы тележек
-    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
+    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech = {nullptr, nullptr};
 
     /// Контроллер тяги/торможения
-    TracController *km;
+    TracController *km = nullptr;
 
     /// Безопасный локомотивный объединённый комплекс (БЛОК)
-    BLOK    *blok;
+    BLOK    *blok = nullptr;
 
     /// Гидропередача
-    HydroTransmission *hydro_trans;
+    HydroTransmission *hydro_trans = nullptr;
 
     /// Клапан аварийного экстренного торможения
-    EmergencyBrakeValve *emerg_brake_valve;
+    EmergencyBrakeValve *emerg_brake_valve = nullptr;
 
     double tractionForce = 0.0;
 
@@ -249,13 +253,22 @@ private:
     };
 
     /// Топливные баки
-    std::array<FuelTank *, NUM_TANKS> fuel_tank;
+    std::array<FuelTank *, NUM_TANKS> fuel_tank = {nullptr, nullptr};
 
-    /// Выключатели в кабине
+    /// Элементы управления в кабине
     std::array<Trigger, TUMBLERS_NUM> tumbler;
 
-    /// Кнопка "Поддержание скорости"
-    KeyTrigger  button_speed_hold;
+    /// Элементы управления в кабине с задержкой срабатывания
+    std::array<KeyTrigger, KEY_TUMBLERS_NUM> key_tumbler;
+
+    /// Ограничения скорости на путевой инфраструктуре
+    SpeedMap    *speedmap_fwd = nullptr;
+
+    /// Приёмная катушка АЛСН
+    CoilALSN    *coil_ALSN_fwd = nullptr;
+
+    /// Дешифратор сигнала АЛСН
+    DecoderALSN *alsn_decoder = nullptr;
 
     /// Программа автозапуска
     std::vector<autostart_step_t>   autostart_prog;

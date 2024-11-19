@@ -29,6 +29,7 @@ void RA3HeadMotor::initAutostart(const QString &modules_dir, const QString &cust
     {
         autostart_step_t step;
 
+        cfg.getBool(node, "KeyTumbler", step.is_key_tumbler);
         cfg.getInt(node, "ID", step.id);
         cfg.getBool(node, "State", step.state);
         cfg.getDouble(node, "Timeout", step.timeout);

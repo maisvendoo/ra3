@@ -9,6 +9,7 @@
 #include    "battery.h"
 #include    "ra3-brake-mech.h"
 #include    "bto-092.h"
+#include    "door-control-module.h"
 
 //------------------------------------------------------------------------------
 //
@@ -26,19 +27,19 @@ public:
 private:
 
     /// Имя модуля сцепного устройства спереди
-    QString coupling_fwd_module_name;
+    QString coupling_fwd_module_name = "sa3";
     /// Имя конфига сцепного устройства спереди
-    QString coupling_fwd_config_name;
+    QString coupling_fwd_config_name = "sa3";
 
     /// Имя модуля сцепного устройства сзади
-    QString coupling_bwd_module_name;
+    QString coupling_bwd_module_name = "sa3";
     /// Имя конфига сцепного устройства сзади
-    QString coupling_bwd_config_name;
+    QString coupling_bwd_config_name = "sa3";
 
     /// Сцепка спереди
-    Coupling *coupling_fwd;
+    Coupling *coupling_fwd = nullptr;
     /// Сцепка сзади
-    Coupling *coupling_bwd;
+    Coupling *coupling_bwd = nullptr;
 
 /*    /// Расцепной рычаг спереди
     OperatingRod *oper_rod_fwd;
@@ -46,73 +47,75 @@ private:
     OperatingRod *oper_rod_bwd;*/
 
     /// Серийный номер вагона
-    int num;
+    int num = 103;
 
     /// Коэффициент утечки из ГР
-    double main_res_leak;
+    double main_res_leak = 0.0;
 
-    /// Состояние дверей справа
-    int door_R_state;
+    /// Двери справа
+    DoorControlModule *door_R = nullptr;
+    DoorControlModule *door_R2 = nullptr;
 
-    /// Состояние дверей слева
-    int door_L_state;
+    /// Двери слева
+    DoorControlModule *door_L = nullptr;
+    DoorControlModule *door_L2 = nullptr;
 
     /// Напряжение от батареи 110 В
-    double U_bat_110;
+    double U_bat_110 = 0.0;
 
     /// Напряжение питания цепей управления 110 В
-    double Ucc_110;
+    double Ucc_110 = 0.0;
 
     /// Батарея 110 В
-    Battery *bat110;
+    Battery *bat110 = nullptr;
 
     /// Контактор включения батареи 110 В
-    Relay   *KM_power;
+    Relay   *KM_power = nullptr;
 
     /// Соединения для работы по системе многих единиц (СМЕ) спереди
-    RA3SME  *sme_fwd;
+    RA3SME  *sme_fwd = nullptr;
 
     /// Соединения для работы по системе многих единиц (СМЕ) сзади
-    RA3SME  *sme_bwd;
+    RA3SME  *sme_bwd = nullptr;
 
     /// Главный резервуар
-    Reservoir   *main_reservoir;
+    Reservoir   *main_reservoir = nullptr;
 
     /// Концевой кран питательной магистрали спереди
-    PneumoAngleCock *anglecock_fl_fwd;
+    PneumoAngleCock *anglecock_fl_fwd = nullptr;
 
     /// Концевой кран питательной магистрали сзади
-    PneumoAngleCock *anglecock_fl_bwd;
+    PneumoAngleCock *anglecock_fl_bwd = nullptr;
 
     /// Рукав питательной  магистрали спереди
-    PneumoHose      *hose_fl_fwd;
+    PneumoHose      *hose_fl_fwd = nullptr;
 
     /// Рукав питательной  магистрали сзади
-    PneumoHose      *hose_fl_bwd;
+    PneumoHose      *hose_fl_bwd = nullptr;
 
     /// Тормозная магистраль
-    Reservoir   *brakepipe;
+    Reservoir   *brakepipe = nullptr;
 
     /// Блок тормозного оборудования БТО-092
-    BTO092  *brake_module;
+    BTO092  *brake_module = nullptr;
 
     /// Запасный резервуар
-    Reservoir   *supply_reservoir;
+    Reservoir   *supply_reservoir = nullptr;
 
     /// Концевой кран тормозной магистрали спереди
-    PneumoAngleCock *anglecock_bp_fwd;
+    PneumoAngleCock *anglecock_bp_fwd = nullptr;
 
     /// Концевой кран тормозной магистрали сзади
-    PneumoAngleCock *anglecock_bp_bwd;
+    PneumoAngleCock *anglecock_bp_bwd = nullptr;
 
     /// Рукав тормозной магистрали спереди
-    PneumoHose   *hose_bp_fwd;
+    PneumoHose   *hose_bp_fwd = nullptr;
 
     /// Рукав тормозной магистрали сзади
-    PneumoHose   *hose_bp_bwd;
+    PneumoHose   *hose_bp_bwd = nullptr;
 
     /// Тройник на питание СТ
-    PneumoSplitter *pb_split;
+    PneumoSplitter *pb_split = nullptr;
 
     enum
     {
@@ -123,7 +126,7 @@ private:
     };
 
     /// Тормозные механизмы тележек
-    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech;
+    std::array<RA3BrakeMech *, NUM_TROLLEYS> brake_mech = {nullptr, nullptr};
 
     void initialization() override;
 
@@ -141,6 +144,9 @@ private:
 
     /// Инициализация тормозного оборудования
     void initBrakesEquipment(const QString &modules_dir, const QString &custom_cfg_dir);
+
+    /// Инициализация прочего оборудования
+    void initOtherEquipment(const QString &modules_dir, const QString &custom_cfg_dir);
 
     /// Предварительные расчёты перед симуляцией
     void preStep(double t) override;
@@ -165,6 +171,9 @@ private:
 
     /// Работа тормозного оборудования
     void stepBrakesEquipment(double t, double dt);
+
+    /// Работа прочего оборудования
+    void stepOtherEquipment(double t, double dt);
 
     /// Вывод сигналов на анимации модели поезда
     void stepSignalsOutput(double t, double dt);

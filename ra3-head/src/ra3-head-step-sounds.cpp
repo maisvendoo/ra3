@@ -23,7 +23,7 @@ void RA3HeadMotor::stepSoundSignalsOutput(double t, double dt)
     analogSignal[SOUND_BLOK_SPEED_LIMIT] = blok->getSoundSignal(BLOK::VELOCITY_NEAR_LIMIT_SOUND);
 
     // Стояночный пружинный тормоз
-    analogSignal[SOUND_PARKING_BRAKE_SWITCHER] = tumbler[SWITCH_PARKING_BRAKE].getSoundSignal(Trigger::CHANGE_SOUND);
+    analogSignal[SOUND_PARKING_BRAKE_SWITCHER] = key_tumbler[IS_SWITCH_PARKING_BRAKE].getSoundSignal(Trigger::CHANGE_SOUND);
     analogSignal[SOUND_PARKING_BRAKE_FLOW] = brake_module->getSoundSignal();
 
     // Кран резервного управления
@@ -46,4 +46,8 @@ void RA3HeadMotor::stepSoundSignalsOutput(double t, double dt)
 
     // Песочница
     analogSignal[SOUND_SAND_DELIVERY] = sand_system->getSoundSignal();
+
+    // Предупреждение о закрытии дверей
+    analogSignal[SOUND_DOOR_WARN_L] = door_L->getSoundSignal();
+    analogSignal[SOUND_DOOR_WARN_R] = door_R->getSoundSignal();
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+	<!-- Зуммер предупреждения о закрытии дверей -->
+	<!-- ВРЕМЕННО СДЕЛАН ИЗ ЗВУКА НАЖАТИЯ КНОПОК БЛОК -->
+	<Sound>
+		<SignalID>63</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-1.5 10.0 3.8</LocalPosition>
+	</Sound>
+
+	<Sound>
+		<SignalID>64</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>-1.5 -10.0 3.8</LocalPosition>
+	</Sound>
+
+	<Sound>
+		<SignalID>65</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.5 10.0 3.8</LocalPosition>
+	</Sound>
+
+	<Sound>
+		<SignalID>66</SignalID>
+		<Filename>blok_beep_3.wav</Filename>
+		<InitVolume>1.0</InitVolume>
+		<MaxVolume>1.0</MaxVolume>
+		<InitPitch>1.0</InitPitch>
+		<Loop>0</Loop>
+		<PlayOnStart>0</PlayOnStart>
+		<LocalPosition>1.5 -10.0 3.8</LocalPosition>
+	</Sound>
+
+</Config>

@@ -39,9 +39,9 @@ BlokDisplay::~BlokDisplay()
 void BlokDisplay::init()
 {
     //config_dir = "C:\\RRS\\cfg\\vehicles\\ra3-head-fwd";
-
+/*
     loadStations();
-
+*/
     initMainWindow();
 
     initTopBlock();
@@ -101,74 +101,116 @@ void BlokDisplay::initTopBlock()
     topBlock = new TopBlock(rect, this, config_dir + getConfigPath(""));
     this->layout()->addWidget(topBlock);
 }
-
+/*
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
 void BlokDisplay::loadStations()
 {
-    QString path = QDir::toNativeSeparators(route_dir) +
-            QDir::separator() +
-            "stations.conf";
+    QString path = QDir::toNativeSeparators(route_dir);
+    path += QDir::separator() + QString("topology");
+    path += QDir::separator() + QString("stations.conf");
 
     QFile stations_file(path);
 
-    if (stations_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!stations_file.open(QIODevice::ReadOnly))
     {
-        while (!stations_file.atEnd())
-        {
-            QByteArray line = stations_file.readLine();
-            QStringList tokens = QString(line).remove('\n').split(';');
+        return;
+    }
 
-            if (tokens.size() < 3)
-                continue;
+    QTextStream stream(&stations_file);
 
-            stations.push_back(tokens[2]);
-        }
+    while (!stream.atEnd())
+    {
+        QString line = stream.readLine();
+        QStringList tokens = line.split('\t');
+
+        stations.push_back(tokens[0]);
     }
 }
-
+*/
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
 void BlokDisplay::slotUpdateTimer()
 {
-    structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_TM_PRESS]);
-    structsBLOK.ip2_val.UR = static_cast<double>(input_signals[BLOK_UR_PRESS]);
-    structsBLOK.ip2_val.BC = static_cast<double>(input_signals[BLOK_TC_PRESS]);
+    if (input_signals[BLOK_DISPLAY_ON] == 0.0f)
+    {
+        off_screen->setVisible(true);
+        off_screen->raise();
+        return;
+    }
+
+    off_screen->setVisible(false);
+
+    structsBLOK.ip2_val.BC = static_cast<double>(input_signals[BLOK_BC_PRESS]);
+    structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_BP_PRESS]);
+    structsBLOK.ip2_val.UR = static_cast<double>(input_signals[BLOK_FL_PRESS]);
     structsBLOK.ip2_val.revers = static_cast<int>(input_signals[BLOK_REVERS]);
 
     topBlock->set_ip2Val(&structsBLOK.ip2_val);
 
-    structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
-    structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
 
-    if ((!stations.empty()) && (input_signals[BLOK_STATION_INDEX] >= 0.0f))
+    structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
+
+    int seconds = static_cast<int>(input_signals[BLOK_TIME]);
+    QString text = QString("%1:%2:%3")
+                           .arg(seconds / 3600, 2, 10, QChar('0'))
+                           .arg(seconds / 60 % 60, 2, 10, QChar('0'))
+                           .arg(seconds % 60, 2, 10, QChar('0'));
+    strcpy(structsBLOK.ip_val.time, text.toStdString().c_str());
+    seconds = static_cast<int>(input_signals[BLOK_SHEDULE_TIME]);
+    text = QString("%1:%2:%3")
+                           .arg(seconds / 3600, 2, 10, QChar('0'))
+                           .arg(seconds / 60 % 60, 2, 10, QChar('0'))
+                           .arg(seconds % 60, 2, 10, QChar('0'));
+    strcpy(structsBLOK.ip_val.grafic, text.toStdString().c_str());
+
+    text = "";
+    for (size_t i = 0; i < 8; ++i)
     {
-        size_t i = static_cast<size_t>(input_signals[BLOK_STATION_INDEX]);
-        if (i < stations.size())
-            strcpy(structsBLOK.ip_val.station, stations[i].toStdString().c_str());
-        else
-            strcpy(structsBLOK.ip_val.station, " ");
+        int c = static_cast<int>(input_signals[BLOK_STATION_SYMB1 + i]);
+        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
     }
-    else
+    strcpy(structsBLOK.ip_val.station, text.toStdString().c_str());
+
+    structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
+    structsBLOK.ip_val.distanceTarget = static_cast<int>(input_signals[BLOK_TARGET_DIST]);
+
+    text = "";
+    for (size_t i = 0; i < 16; ++i)
     {
-        strcpy(structsBLOK.ip_val.station, " ");
+        int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
+        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
     }
+    strcpy(structsBLOK.ip_val.typeTarget, text.toStdString().c_str());
+
+    text = "";
+    for (size_t i = 16; i < 24; ++i)
+    {
+        int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
+        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+    }
+    strcpy(structsBLOK.ip_val.nameTarget, text.toStdString().c_str());
+
 
     topBlock->set_ipVal(&structsBLOK.ip_val);
 
-    structsBLOK.other_val.curSpeed = qRound(input_signals[BLOK_VELOCITY]);
-    structsBLOK.other_val.curSpeedLimit = qRound(input_signals[BLOK_VELOCITY_CURRENT_LIMIT]);
-    structsBLOK.other_val.nextSpeedLimit = qRound(input_signals[BLOK_VELOCITY_NEXT_LIMIT]);
-    structsBLOK.other_val.signalControlLookOut = static_cast<bool>(input_signals[BLOK_VIGILANCE]);
+
+    int vigilance_and_tskbm = static_cast<int>(input_signals[BLOK_VIGILANCE_TSKBM]);
+    bool is_vigilance = static_cast<bool>(vigilance_and_tskbm % 10);
+    //bool is_tskbm = static_cast<bool>(vigilance_and_tskbm / 10 % 10);
+    bool is_vigilance_tskbm = static_cast<bool>(vigilance_and_tskbm / 100);
+    structsBLOK.other_val.signalControlLookOut = is_vigilance;
+    structsBLOK.other_val.signalTSKBM = is_vigilance_tskbm;
+
+    structsBLOK.other_val.curSpeed = qRound(input_signals[BLOK_SPEED]);
+    structsBLOK.other_val.curSpeedLimit = qRound(input_signals[BLOK_SPEED_CUR_LIMIT]);
+    structsBLOK.other_val.nextSpeedLimit = qRound(input_signals[BLOK_SPEED_NEXT_LIMIT]);
 
     topBlock->setCurSpeed(structsBLOK.other_val.curSpeed);
     topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
     topBlock->setTriangleYellow(structsBLOK.other_val.signalControlLookOut);
-
-    off_screen->setVisible(!static_cast<bool>(input_signals[BLOK_DISPLAY_ON]));
-    off_screen->raise();
 }
 
 GET_DISPLAY(BlokDisplay)

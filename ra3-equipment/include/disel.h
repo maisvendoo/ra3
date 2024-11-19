@@ -65,6 +65,9 @@ public:
     /// Вернуть частоту вращения коленчатого вала в об/мин
     double getShaftFreq() const { return getY(1) * 30.0 / Physics::PI; }
 
+    /// Вернуть крутящий момент на валу
+    double getTorque() const {return M_d; }
+
     /// Вернуть фактический расход топлива
     double getFuelFlow() const { return Q_fuel; }
 

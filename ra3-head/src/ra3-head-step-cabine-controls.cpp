@@ -15,7 +15,7 @@ void RA3HeadMotor::stepCabineControls(double t, double dt)
     else
     {
         // Включаем вместе с борсетью и проверяем самоподпитку
-        bool is_active = tumbler[BUTTON_PWR_ON].getState() ||
+        bool is_active = key_tumbler[IS_BUTTON_PWR_ON].getState() ||
                          active_cab_relay->getContactState(0);
 
         // Подаём напряжение для включения
@@ -23,10 +23,14 @@ void RA3HeadMotor::stepCabineControls(double t, double dt)
     }
     active_cab_relay->step(t, dt);
 
+    // Элементы управления с задержкой срабатывания
+    for (auto it = key_tumbler.begin(); it != key_tumbler.end(); ++it)
+        it->step(t, dt);
+
     // Контроллер машиниста
     km->setControl(keys);
-    km->setFwdKey(tumbler[SWITCH_REVERS_FWD].getState());
-    km->setBwdKey(tumbler[SWITCH_REVERS_BWD].getState());
+    km->setFwdKey(key_tumbler[IS_SWITCH_REVERS_FWD].getState());
+    km->setBwdKey(key_tumbler[IS_SWITCH_REVERS_BWD].getState());
     km->setBPpressure(static_cast<double>(active_cab_relay->getContactState(0)) * brakepipe->getPressure());
     km->step(t, dt);
 }

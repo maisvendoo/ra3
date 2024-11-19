@@ -106,16 +106,16 @@ void MfduDisplay::init()
     input_signals[MFDU_TRANSMISSION] = 0;       // Ошибка трансмиссии
     input_signals[MFDU_OIL_MOTOR] = 1;          // Уровень масла двигателя
     input_signals[MFDU_PRESSURE_OIL_MOTOR] = 1; // Пониженное давление масла двигателя
-    input_signals[MFDU_ATTENTION] = 0;      // Внимание!
-    input_signals[MFDU_STOP] = 0;           // СТОП
-    input_signals[MFDU_REVERS_FWD] = 0;     // Реверсор вперед
-    input_signals[MFDU_REVERS_BWD] = 0;     // Реверсор назад
-    input_signals[MFDU_REVERS_NEUTRAL] = 0; // Реверсор нейтальное положение
-    input_signals[MFDU_XREN1] = 0;          //
-    input_signals[MFDU_XREN2] = 0;          //
-    input_signals[MFDU_XREN3] = 0;          //
-    // Тяга/торможение
-    input_signals[MFDU_TRACTION_BRAKING] = 0;
+    // Иконки слева от спидометра
+    input_signals[MFDU_ATTENTION] = 0;          // Внимание!
+    input_signals[MFDU_STOP] = 0;               // СТОП
+    input_signals[MFDU_REVERS_FWD] = 0;         // Реверсор вперед
+    input_signals[MFDU_REVERS_BWD] = 0;         // Реверсор назад
+    input_signals[MFDU_REVERS_NEUTRAL] = 0;     // Реверсор нейтальное положение
+    input_signals[MFDU_EMERGENCY_BRAKES] = 0;   // Экстренное торможение
+    input_signals[MFDU_PARKING_BRAKES] = 0;     // Стояночный пружинный тормоз
+    input_signals[MFDU_HOLDING_BRAKES] = 0;     // Тормоз удержания
+    input_signals[MFDU_TRACTION_BRAKING] = 0;   // Тяга/торможение
     // Блок нижних параметров
     input_signals[MFDU_PRESSURE_PM] = 0.0;      // Давление ПМ
     input_signals[MFDU_PRESSURE_TM] = 0.5;      // Давление ТМ
@@ -124,7 +124,7 @@ void MfduDisplay::init()
     input_signals[MFDU_TEMPERATURE_KAB] = 0;    // Температура кабины
     input_signals[MFDU_I_AKB_24] = -103.7;      // Ток акб 24
     input_signals[MFDU_I_AKB_110] = -103.7;     // Ток акб 110
-    input_signals[MFDU_ERROR_CODE] = 0;     // Ток акб 110
+    input_signals[MFDU_ERROR_CODE] = 0;         // id сообщения об ошибке
     // Блок иконок сверху от спидометра
     input_signals[MFDU_TRAIN_SIZE] = 0;             // Количество вагонов
     input_signals[MFDU_POS_IN_TRAIN] = 1;           // Порядковый номер вагона в поезде

@@ -50,4 +50,26 @@ void RA3HeadMotor::initTumblers(const QString &config_name, const QString &custo
 
         node = cfg.getNextSection();
     }
+
+    node = cfg.getFirstSection("KeyTumbler");
+
+    while (!node.isNull())
+    {
+        int id = 0;
+        bool state = false;
+
+        if (cfg.getInt(node, "ID", id) && cfg.getBool(node, "State", state))
+        {
+            key_tumbler[id].setInitState(state);
+
+            double timeout_on = 0.0;
+            double timeout_off = 0.0;
+            cfg.getDouble(node, "timeout_on", timeout_on);
+            cfg.getDouble(node, "timeout_off", timeout_off);
+            key_tumbler[id].setTimeoutOn(timeout_on);
+            key_tumbler[id].setTimeoutOff(timeout_off);
+        }
+
+        node = cfg.getNextSection();
+    }
 }
