@@ -1,16 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Config>
 
-	<!-- По умолчанию включен стояночный пружинный тормоз (СПТ) -->
+	<!-- По умолчанию зафиксирована нажатой кнопка ЗАКРЫТЬ ДВЕРИ ЛЕВЫЕ -->
 	<Tumbler>
-		<ID>4</ID>
+		<ID>5</ID>
 		<State>1</State>
 	</Tumbler>
 
-	<!-- По умолчанию включен сигнал, что не нажата кнопка ОТКЛЮЧЕНИЕ БОРТСЕТИ -->
+	<!-- По умолчанию зафиксирована нажатой кнопка ЗАКРЫТЬ ДВЕРИ ПРАВЫЕ -->
 	<Tumbler>
-		<ID>1</ID>
+		<ID>6</ID>
 		<State>1</State>
 	</Tumbler>
+
+	<!-- По умолчанию зафиксирована нажатой кнопка СТУПЕНИ -->
+	<Tumbler>
+		<ID>7</ID>
+		<State>1</State>
+	</Tumbler>
+
+	<!-- ВКЛЮЧЕНИЕ БОРТСЕТИ -->
+	<KeyTumbler>
+		<ID>0</ID>
+		<State>0</State>
+		<timeout_on>1.0</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- По умолчанию включен сигнал, что не нажата кнопка ОТКЛЮЧЕНИЕ БОРТСЕТИ -->
+	<KeyTumbler>
+		<ID>1</ID>
+		<State>1</State>
+		<timeout_on>0.0</timeout_on>
+		<timeout_off>1.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- СТАРТ дизелей -->
+	<KeyTumbler>
+		<ID>2</ID>
+		<State>0</State>
+		<timeout_on>1.0</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- СТОП дизелей -->
+	<KeyTumbler>
+		<ID>3</ID>
+		<State>0</State>
+		<timeout_on>1.0</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Ключ ЭПК -->
+	<KeyTumbler>
+		<ID>4</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.5</timeout_off>
+	</KeyTumbler>
+
+	<!-- РБ -->
+	<KeyTumbler>
+		<ID>5</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- РБС -->
+	<KeyTumbler>
+		<ID>6</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Поддержание скорости -->
+	<KeyTumbler>
+		<ID>7</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Открыть двери левые -->
+	<KeyTumbler>
+		<ID>8</ID>
+		<State>0</State>
+		<timeout_on>1.0</timeout_on>
+		<timeout_off>1.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Закрыть двери левые -->
+	<KeyTumbler>
+		<ID>9</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Открыть двери правые -->
+	<KeyTumbler>
+		<ID>10</ID>
+		<State>0</State>
+		<timeout_on>1.0</timeout_on>
+		<timeout_off>1.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Закрыть двери правые -->
+	<KeyTumbler>
+		<ID>11</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Ступени -->
+	<KeyTumbler>
+		<ID>12</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Сигнал переключить реверс вперёд -->
+	<KeyTumbler>
+		<ID>13</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- Сигнал переключить реверс назад -->
+	<KeyTumbler>
+		<ID>14</ID>
+		<State>0</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.0</timeout_off>
+	</KeyTumbler>
+
+	<!-- По умолчанию включен стояночный пружинный тормоз (СПТ) -->
+	<KeyTumbler>
+		<ID>15</ID>
+		<State>1</State>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.5</timeout_off>
+	</KeyTumbler>
 
 </Config>

@@ -8,7 +8,7 @@
 		<MainResist>loco-resist</MainResist>
 		<WheelRailFriction>loco-diesel</WheelRailFriction>
 		<NumAxis>4</NumAxis>
-		<SoundDir>ra3</SoundDir>
+		<SoundDir>ra3-head</SoundDir>
 		<WheelInertia>100.0</WheelInertia>
 
 		<FuelCapacity>350</FuelCapacity>

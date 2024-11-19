@@ -8,7 +8,7 @@
 		<MainResist>loco-resist</MainResist>
 		<WheelRailFriction>default</WheelRailFriction>
 		<NumAxis>4</NumAxis>
-		<SoundDir>ra3</SoundDir>
+		<SoundDir>ra3-middle</SoundDir>
 		<WheelInertia>100.0</WheelInertia>
 
 		<FuelCapacity>350</FuelCapacity>
@@ -20,7 +20,7 @@
 		<ExtModelName>ra3/ra3-middle.osgt</ExtModelName>
 		<ModelShift>0.0 0.0 0.04</ModelShift>
 
-		<AnimationsConfigDir>ra3-head</AnimationsConfigDir>
+		<AnimationsConfigDir>ra3-middle</AnimationsConfigDir>
 
 		<DriverPos>0.56 9.95 2.9</DriverPos>
 
