@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+	<!-- По умолчанию включен стояночный пружинный тормоз (СПТ) -->
+	<Tumbler>
+		<ID>4</ID>
+		<State>1</State>
+	</Tumbler>
+
+	<!-- По умолчанию включен сигнал, что не нажата кнопка ОТКЛЮЧЕНИЕ БОРТСЕТИ -->
+	<Tumbler>
+		<ID>1</ID>
+		<State>1</State>
+	</Tumbler>
+
+</Config>

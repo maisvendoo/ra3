@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+	<Joint>
+		<ModuleDir>ra3-head</ModuleDir>
+		<ModuleName>joint-ra3-sme</ModuleName>
+
+		<!-- Начальное состояние шлейфов СМЕ: 0 - разъединены, 1 - соединены -->
+		<initConnectionState>1</initConnectionState>
+	</Joint>
+</Config>
