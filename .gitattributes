@@ -1,10 +1,8 @@
 * text=auto
-
-*.osgt binary
+*.osgt filter=lfs diff=lfs merge=lfs -text
 *.osg binary
 *.osgb binary
 *.dmd binary
-
 *.png binary
 *.bmp binary
 *.tga binary

@@ -13,9 +13,9 @@
 
 		<T_gb>0.5</T_gb>
 
-		<i_min>0.41</i_min>
+		<i_min>0.87</i_min>
 
-		<i_max>0.57</i_max>
+		<i_max>0.93</i_max>
 
 		<T_revers>1.0</T_revers>
 
