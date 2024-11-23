@@ -70,56 +70,58 @@ private:
 
     /// Позиция, определяющая режим управления
     /// (0 - выбег, 1 - ход, -1 - торможение, -2 - экстренное торможение)
-    int mode_pos;
+    int mode_pos = 0;
 
-    int mode_pos_old;
+    int mode_pos_old = 0;
 
-    bool old_traction_key;
+    bool old_traction_key = false;
 
-    bool old_brake_key;
+    bool old_brake_key = false;
 
-    bool fwd_key;
+    bool fwd_key = false;
 
-    bool old_fwd_key;
+    bool old_fwd_key = false;
 
-    bool bwd_key;
+    bool bwd_key = false;
 
-    bool old_bwd_key;
+    bool old_bwd_key = false;
 
-    int revers_pos;
+    int revers_pos = 0;
 
-    int trac_min;
+    int trac_min = 10;
 
-    int brake_min;
+    int brake_min = 10;
 
-    int trac_level;
+    int trac_level = 0;
 
-    int brake_level;
+    int brake_level = 0;
 
-    double handle_pos;
+    double handle_pos = 0.0;
 
-    double omega_handle;
+    /// Вращение контроллера по сигналу таймера
+    int handle_motion_speed = 0;
 
-    int dir;
+    /// Коэффициент ускорения контроллера с нажатым Shift
+    int handle_high_speed_coeff = 8;
 
-    Timer *brakeTimer;
+    Timer *brakeTimer = new Timer(0.1, true);
 
-    Timer *tracTimer;
+    Timer *tracTimer = new Timer(0.1, true);
 
     /// Коэффициент утечки через клапан экстренного торможения
-    double K_flow;
+    double K_flow = 5.0e-2;
 
     /// Дввление в тормозной магистрали
-    double pBP;
+    double pBP = 0.0;
 
     /// Расход из тормозной магистрали при экстренном торможении
-    double QBP;
+    double QBP = 0.0;
 
     /// Управление рукояткой в тяге после второго нажатия
-    bool traction;
+    bool traction = false;
 
     /// Управление рукояткой в торможении после второго нажатия
-    bool brake;
+    bool brake = false;
 
     /// Счётчик и состояние звуков
     std::array <sound_state_t, NUM_SOUNDS> sounds;
