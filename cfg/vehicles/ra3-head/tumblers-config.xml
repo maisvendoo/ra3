@@ -23,7 +23,7 @@
 	<KeyTumbler>
 		<ID>0</ID>
 		<State>0</State>
-		<timeout_on>1.0</timeout_on>
+		<timeout_on>0.5</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -32,14 +32,14 @@
 		<ID>1</ID>
 		<State>1</State>
 		<timeout_on>0.0</timeout_on>
-		<timeout_off>1.0</timeout_off>
+		<timeout_off>0.5</timeout_off>
 	</KeyTumbler>
 
 	<!-- СТАРТ дизелей -->
 	<KeyTumbler>
 		<ID>2</ID>
 		<State>0</State>
-		<timeout_on>1.0</timeout_on>
+		<timeout_on>0.5</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -47,7 +47,7 @@
 	<KeyTumbler>
 		<ID>3</ID>
 		<State>0</State>
-		<timeout_on>1.0</timeout_on>
+		<timeout_on>0.5</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -55,15 +55,15 @@
 	<KeyTumbler>
 		<ID>4</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
-		<timeout_off>0.5</timeout_off>
+		<timeout_on>0.2</timeout_on>
+		<timeout_off>0.2</timeout_off>
 	</KeyTumbler>
 
 	<!-- РБ -->
 	<KeyTumbler>
 		<ID>5</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -71,7 +71,7 @@
 	<KeyTumbler>
 		<ID>6</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -79,7 +79,7 @@
 	<KeyTumbler>
 		<ID>7</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -87,15 +87,15 @@
 	<KeyTumbler>
 		<ID>8</ID>
 		<State>0</State>
-		<timeout_on>1.0</timeout_on>
-		<timeout_off>1.0</timeout_off>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.2</timeout_off>
 	</KeyTumbler>
 
 	<!-- Закрыть двери левые -->
 	<KeyTumbler>
 		<ID>9</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -103,15 +103,15 @@
 	<KeyTumbler>
 		<ID>10</ID>
 		<State>0</State>
-		<timeout_on>1.0</timeout_on>
-		<timeout_off>1.0</timeout_off>
+		<timeout_on>0.5</timeout_on>
+		<timeout_off>0.2</timeout_off>
 	</KeyTumbler>
 
 	<!-- Закрыть двери правые -->
 	<KeyTumbler>
 		<ID>11</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -119,7 +119,7 @@
 	<KeyTumbler>
 		<ID>12</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -127,7 +127,7 @@
 	<KeyTumbler>
 		<ID>13</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -135,7 +135,7 @@
 	<KeyTumbler>
 		<ID>14</ID>
 		<State>0</State>
-		<timeout_on>0.5</timeout_on>
+		<timeout_on>0.2</timeout_on>
 		<timeout_off>0.0</timeout_off>
 	</KeyTumbler>
 
@@ -143,8 +143,8 @@
 	<KeyTumbler>
 		<ID>15</ID>
 		<State>1</State>
-		<timeout_on>0.5</timeout_on>
-		<timeout_off>0.5</timeout_off>
+		<timeout_on>0.2</timeout_on>
+		<timeout_off>0.2</timeout_off>
 	</KeyTumbler>
 
 </Config>
