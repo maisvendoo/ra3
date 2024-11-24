@@ -25,10 +25,6 @@ MfduDisplay::MfduDisplay(QWidget *parent, Qt::WindowFlags f)
     this->setLayout(new QVBoxLayout);
     this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     this->layout()->setContentsMargins(0, 0, 0, 0);
-
-    connect(&updateTimer_, &QTimer::timeout, this, &MfduDisplay::slotUpdateTimer, Qt::QueuedConnection);
-    updateTimer_.setInterval(1000);
-    updateTimer_.start();
 }
 
 //------------------------------------------------------------------------------
@@ -151,17 +147,54 @@ void MfduDisplay::init()
 
 
 
-void MfduDisplay::slotUpdateTimer()
+void MfduDisplay::update(double t, double dt)
 {
+    (void) t;
+
+    // Интервал обновления
+    upd_time += dt;
+    if (upd_time < upd_interval)
+        return;
+
+    upd_time = 0.0;
+
+    // Проверяем выключенный дисплей
+    if (input_signals[MFDU_DISPLAY_ON] == 0.0f)
+    {
+        mfduDispOff_->setVisible(true);
+        mfduDispOff_->raise();
+        return;
+    }
+
+    mfduDispOff_->setVisible(false);
     labelCurTime_->setText(QTime::currentTime().toString());
-    //labelCurDate_->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
-    //
-    mfduMainDisp_->updateData(input_signals);
+    // Обновляем блоки экрана по очереди
+    ++upd_block;
 
-    //
-    mfduDispOff_->setVisible(!static_cast<bool>(input_signals[MFDU_DISPLAY_ON]));
-    mfduDispOff_->raise();
+    // В блок обновлений №1 соберём важные элементы, обновляем его чаще
+    if ((upd_block == 1) || (upd_block == 3))
+    {
+        mfduMainDisp_->updateData1(input_signals);
+        return;
+    }
+
+    // Блок обновлений №2
+    if (upd_block == 2)
+    {
+        mfduMainDisp_->updateData2(input_signals);
+        return;
+    }
+
+    // Блок обновлений №3
+    if (upd_block >= 4)
+    {
+        mfduMainDisp_->updateData3(input_signals);
+
+        // Сбрасываем счётчик
+        upd_block = 0;
+        return;
+    }
 }
 
 

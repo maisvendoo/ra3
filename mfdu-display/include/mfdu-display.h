@@ -4,7 +4,6 @@
 #include    "display.h"
 
 #include    <QLabel>
-#include    <QTimer>
 
 class MfduDispOff;
 class MfduMainDisp;
@@ -25,28 +24,24 @@ public:
 
     void init();
 
+    void update(double t, double dt);
+
 private:
+
     QLabel* background_;
     QPixmap pic_;
-
 
     // Текущая дата
     QLabel* labelCurDate_;
     // Текущее время
     QLabel* labelCurTime_;
 
-
     MfduDispOff*    mfduDispOff_;
     MfduMainDisp*   mfduMainDisp_;
 
-
-    QTimer updateTimer_;
-
-
-private slots:
-    void slotUpdateTimer();
-
-
+    double upd_time = 0.0;
+    double upd_interval = 0.2;
+    int  upd_block = 0;
 };
 
 #endif // MFDU_DISPLAY_H

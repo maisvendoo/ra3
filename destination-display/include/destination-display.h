@@ -1,7 +1,6 @@
 #ifndef     DESTINATION_DISPLAY_H
 #define     DESTINATION_DISPLAY_H
 
-#include    <QTimer>
 #include    <QLabel>
 #include    "display.h"
 
@@ -19,9 +18,9 @@ public:
 
     void init();
 
-private:
+    void update(double t, double dt);
 
-    QTimer  *updateTimer = nullptr;
+private:
 
     QLabel  *background = nullptr;
 
@@ -29,9 +28,7 @@ private:
 
     QString prev_text = "";
 
-private slots:
-
-    void slotUpdateTimer();
+    short upd_count = 0;
 };
 
 #endif // DESTINATION_DISPLAY_H

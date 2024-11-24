@@ -54,11 +54,6 @@ void DestinationDisplay::init()
     destination_text->setStyleSheet("color: " + color + ";" +
                                     "font-weight: bold;");
 
-    updateTimer = new QTimer;
-    connect(updateTimer, &QTimer::timeout, this, &DestinationDisplay::slotUpdateTimer, Qt::QueuedConnection);
-    updateTimer->setInterval(1000);
-    updateTimer->start();
-
     input_signals[DESTINATION_SIZE] = 0.0f;
     for (size_t i = 0; i < 15; ++i)
     {
@@ -71,8 +66,16 @@ void DestinationDisplay::init()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void DestinationDisplay::slotUpdateTimer()
+void DestinationDisplay::update(double t, double dt)
 {
+    (void) t;
+    (void) dt;
+
+    ++upd_count;
+    if (upd_count < 5)
+        return;
+
+    upd_count = 0;
     int size = static_cast<int>(input_signals[DESTINATION_SIZE]);
     if ((size <= 0) || (size > 15))
     {

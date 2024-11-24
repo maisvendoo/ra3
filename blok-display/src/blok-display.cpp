@@ -12,7 +12,6 @@
 //------------------------------------------------------------------------------
 BlokDisplay::BlokDisplay(QWidget *parent, Qt::WindowFlags f)
     : AbstractDisplay(parent, f)
-    , updateTimer(Q_NULLPTR)
     , topBlock(Q_NULLPTR)
 
 {
@@ -38,10 +37,6 @@ BlokDisplay::~BlokDisplay()
 //------------------------------------------------------------------------------
 void BlokDisplay::init()
 {
-    //config_dir = "C:\\RRS\\cfg\\vehicles\\ra3-head-fwd";
-/*
-    loadStations();
-*/
     initMainWindow();
 
     initTopBlock();
@@ -78,11 +73,6 @@ void BlokDisplay::initMainWindow()
     this->resize(sizeWindow_X, sizeWindow_Y);
     this->setAutoFillBackground(true);
     this->setPalette(QPalette(QColor(0, 0, 0)));
-
-    updateTimer = new QTimer;
-    connect(updateTimer, &QTimer::timeout, this, &BlokDisplay::slotUpdateTimer, Qt::QueuedConnection);
-    updateTimer->setInterval(timeInterval);
-    updateTimer->start();
 }
 
 //------------------------------------------------------------------------------
@@ -101,39 +91,21 @@ void BlokDisplay::initTopBlock()
     topBlock = new TopBlock(rect, this, config_dir + getConfigPath(""));
     this->layout()->addWidget(topBlock);
 }
-/*
+
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void BlokDisplay::loadStations()
+void BlokDisplay::update(double t, double dt)
 {
-    QString path = QDir::toNativeSeparators(route_dir);
-    path += QDir::separator() + QString("topology");
-    path += QDir::separator() + QString("stations.conf");
+    (void) t;
 
-    QFile stations_file(path);
-
-    if (!stations_file.open(QIODevice::ReadOnly))
-    {
+    // Интервал обновления
+    upd_time += dt;
+    if (upd_time < upd_interval)
         return;
-    }
 
-    QTextStream stream(&stations_file);
+    upd_time = 0.0;
 
-    while (!stream.atEnd())
-    {
-        QString line = stream.readLine();
-        QStringList tokens = line.split('\t');
-
-        stations.push_back(tokens[0]);
-    }
-}
-*/
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void BlokDisplay::slotUpdateTimer()
-{
     if (input_signals[BLOK_DISPLAY_ON] == 0.0f)
     {
         off_screen->setVisible(true);
@@ -143,74 +115,97 @@ void BlokDisplay::slotUpdateTimer()
 
     off_screen->setVisible(false);
 
-    structsBLOK.ip2_val.BC = static_cast<double>(input_signals[BLOK_BC_PRESS]);
-    structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_BP_PRESS]);
-    structsBLOK.ip2_val.UR = static_cast<double>(input_signals[BLOK_FL_PRESS]);
-    structsBLOK.ip2_val.revers = static_cast<int>(input_signals[BLOK_REVERS]);
+    // Обновляем блоки экрана по очереди
+    upd_time += dt;
 
-    topBlock->set_ip2Val(&structsBLOK.ip2_val);
+    // Обновляем блоки экрана по очереди
+    ++upd_block;
 
+    // Блок обновлений №1
+    if (upd_block == 1)
+    {
+        structsBLOK.ip2_val.BC = static_cast<double>(input_signals[BLOK_BC_PRESS]);
+        structsBLOK.ip2_val.TM = static_cast<double>(input_signals[BLOK_BP_PRESS]);
+        structsBLOK.ip2_val.UR = static_cast<double>(input_signals[BLOK_FL_PRESS]);
+        structsBLOK.ip2_val.revers = static_cast<int>(input_signals[BLOK_REVERS]);
 
-    structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
+        topBlock->set_ip2Val(&structsBLOK.ip2_val);
+        return;
+    }
 
-    int seconds = static_cast<int>(input_signals[BLOK_TIME]);
-    QString text = QString("%1:%2:%3")
+    // Блок обновлений №2
+    if (upd_block == 2)
+    {
+        int seconds = static_cast<int>(input_signals[BLOK_TIME]);
+        QString text = QString("%1:%2:%3")
                            .arg(seconds / 3600, 2, 10, QChar('0'))
                            .arg(seconds / 60 % 60, 2, 10, QChar('0'))
                            .arg(seconds % 60, 2, 10, QChar('0'));
-    strcpy(structsBLOK.ip_val.time, text.toStdString().c_str());
-    seconds = static_cast<int>(input_signals[BLOK_SHEDULE_TIME]);
-    text = QString("%1:%2:%3")
-                           .arg(seconds / 3600, 2, 10, QChar('0'))
-                           .arg(seconds / 60 % 60, 2, 10, QChar('0'))
-                           .arg(seconds % 60, 2, 10, QChar('0'));
-    strcpy(structsBLOK.ip_val.grafic, text.toStdString().c_str());
+        strcpy(structsBLOK.ip_val.time, text.toStdString().c_str());
 
-    text = "";
-    for (size_t i = 0; i < 8; ++i)
-    {
-        int c = static_cast<int>(input_signals[BLOK_STATION_SYMB1 + i]);
-        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+        seconds = static_cast<int>(input_signals[BLOK_SHEDULE_TIME]);
+        text = QString("%1:%2:%3")
+                   .arg(seconds / 3600, 2, 10, QChar('0'))
+                   .arg(seconds / 60 % 60, 2, 10, QChar('0'))
+                   .arg(seconds % 60, 2, 10, QChar('0'));
+        strcpy(structsBLOK.ip_val.grafic, text.toStdString().c_str());
+
+
+        structsBLOK.ip_val.coordinate = static_cast<double>(input_signals[BLOK_RAILWAY_COORD]);
+
+        text = "";
+        for (size_t i = 0; i < 8; ++i)
+        {
+            int c = static_cast<int>(input_signals[BLOK_STATION_SYMB1 + i]);
+            text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+        }
+        strcpy(structsBLOK.ip_val.station, text.toStdString().c_str());
+
+        structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
+        structsBLOK.ip_val.distanceTarget = static_cast<int>(input_signals[BLOK_TARGET_DIST]);
+
+        text = "";
+        for (size_t i = 0; i < 16; ++i)
+        {
+            int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
+            text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+        }
+        strcpy(structsBLOK.ip_val.typeTarget, text.toStdString().c_str());
+
+        text = "";
+        for (size_t i = 16; i < 24; ++i)
+        {
+            int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
+            text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+        }
+        strcpy(structsBLOK.ip_val.nameTarget, text.toStdString().c_str());
+
+        topBlock->set_ipVal(&structsBLOK.ip_val);
+        return;
     }
-    strcpy(structsBLOK.ip_val.station, text.toStdString().c_str());
 
-    structsBLOK.ip_val.acceleration = static_cast<double>(input_signals[BLOK_ACCELERATION]);
-    structsBLOK.ip_val.distanceTarget = static_cast<int>(input_signals[BLOK_TARGET_DIST]);
-
-    text = "";
-    for (size_t i = 0; i < 16; ++i)
+    // Блок обновлений №3
+    if (upd_block >= 3)
     {
-        int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
-        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
+        int vigilance_and_tskbm = static_cast<int>(input_signals[BLOK_VIGILANCE_TSKBM]);
+        bool is_vigilance = static_cast<bool>(vigilance_and_tskbm % 10);
+        //bool is_tskbm = static_cast<bool>(vigilance_and_tskbm / 10 % 10);
+        bool is_vigilance_tskbm = static_cast<bool>(vigilance_and_tskbm / 100);
+        structsBLOK.other_val.signalControlLookOut = is_vigilance;
+        structsBLOK.other_val.signalTSKBM = is_vigilance_tskbm;
+
+        structsBLOK.other_val.curSpeed = qRound(input_signals[BLOK_SPEED]);
+        structsBLOK.other_val.curSpeedLimit = qRound(input_signals[BLOK_SPEED_CUR_LIMIT]);
+        structsBLOK.other_val.nextSpeedLimit = qRound(input_signals[BLOK_SPEED_NEXT_LIMIT]);
+
+        topBlock->setCurSpeed(structsBLOK.other_val.curSpeed);
+        topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
+        topBlock->setTriangleYellow(structsBLOK.other_val.signalControlLookOut);
+
+        // Сбрасываем счётчик
+        upd_block = 0;
+        return;
     }
-    strcpy(structsBLOK.ip_val.typeTarget, text.toStdString().c_str());
-
-    text = "";
-    for (size_t i = 16; i < 24; ++i)
-    {
-        int c = static_cast<int>(input_signals[BLOK_STRING_SYMB1 + i]);
-        text.push_back(((c > 0) && (c < 65536)) ? QChar(c) : QChar(' '));
-    }
-    strcpy(structsBLOK.ip_val.nameTarget, text.toStdString().c_str());
-
-
-    topBlock->set_ipVal(&structsBLOK.ip_val);
-
-
-    int vigilance_and_tskbm = static_cast<int>(input_signals[BLOK_VIGILANCE_TSKBM]);
-    bool is_vigilance = static_cast<bool>(vigilance_and_tskbm % 10);
-    //bool is_tskbm = static_cast<bool>(vigilance_and_tskbm / 10 % 10);
-    bool is_vigilance_tskbm = static_cast<bool>(vigilance_and_tskbm / 100);
-    structsBLOK.other_val.signalControlLookOut = is_vigilance;
-    structsBLOK.other_val.signalTSKBM = is_vigilance_tskbm;
-
-    structsBLOK.other_val.curSpeed = qRound(input_signals[BLOK_SPEED]);
-    structsBLOK.other_val.curSpeedLimit = qRound(input_signals[BLOK_SPEED_CUR_LIMIT]);
-    structsBLOK.other_val.nextSpeedLimit = qRound(input_signals[BLOK_SPEED_NEXT_LIMIT]);
-
-    topBlock->setCurSpeed(structsBLOK.other_val.curSpeed);
-    topBlock->setSpeedLimits(structsBLOK.other_val.curSpeedLimit, structsBLOK.other_val.nextSpeedLimit);
-    topBlock->setTriangleYellow(structsBLOK.other_val.signalControlLookOut);
 }
 
 GET_DISPLAY(BlokDisplay)
