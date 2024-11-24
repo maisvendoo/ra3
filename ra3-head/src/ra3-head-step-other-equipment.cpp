@@ -20,6 +20,18 @@ void RA3HeadMotor::stepOtherEquipment(double t, double dt)
     hydro_pump->setDiselOmega(disel->getOmega());
     hydro_pump->step(t, dt);
 
+    // БУЦИК
+    if (active_cab_relay->getContactState(1))
+    {
+        bucik->setControl(keys);
+    }
+    else
+    {
+        size_t idx = sme_fwd->getSignal(SME_BUCIK_DESTINATION) + sme_bwd->getSignal(SME_BUCIK_DESTINATION);
+        bucik->setDestinationStationIndex(idx);
+    }
+    bucik->step(t, dt);
+
     // Двери
     door_L->setPowerVoltage(Ucc_110);
     door_R->setPowerVoltage(Ucc_110);

@@ -24,6 +24,7 @@
 #include    "emergency-brake-valve.h"
 #include    "epk151d.h"
 #include    "door-control-module.h"
+#include    "bucik.h"
 
 #include    "ra3-head-signals.h"
 
@@ -269,6 +270,9 @@ private:
 
     /// Дешифратор сигнала АЛСН
     DecoderALSN *alsn_decoder = nullptr;
+
+    /// Заготовка БУЦИК - пока только вывод станций на маршрутоуказательное табло
+    BUCIK *bucik = nullptr;
 
     /// Программа автозапуска
     std::vector<autostart_step_t>   autostart_prog;
