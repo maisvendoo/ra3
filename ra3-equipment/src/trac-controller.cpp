@@ -4,27 +4,6 @@
 //
 //------------------------------------------------------------------------------
 TracController::TracController(QObject *parent) : Device(parent)
-  , mode_pos(0)
-  , mode_pos_old(mode_pos)
-  , old_traction_key(false)
-  , old_brake_key(false)
-  , fwd_key(false)
-  , old_fwd_key(false)
-  , bwd_key(false)
-  , old_bwd_key(false)
-  , revers_pos(0)
-  , trac_min(17)
-  , brake_min(26)
-  , trac_level(0)
-  , brake_level(0)
-  , handle_pos(0.0)
-  , omega_handle(0.5)
-  , dir(0)
-  , brakeTimer(new Timer)
-  , tracTimer(new Timer)
-  , K_flow(5.0e-2)
-  , pBP(0.0)
-  , QBP(0.0)
 {
     connect(brakeTimer, &Timer::process, this, &TracController::slotBrakeLevelProcess);
     connect(tracTimer, &Timer::process, this, &TracController::slotTracLevelProcess);
@@ -157,14 +136,25 @@ void TracController::load_config(CfgReader &cfg)
 {
     QString secName = "Device";
 
+    double timeout = 0.1;
+    cfg.getDouble(secName, "handle_motion_time", timeout);
+    if (timeout > Physics::ZERO)
+    {
+        brakeTimer->setTimeout(timeout);
+        tracTimer->setTimeout(timeout);
+    }
+
+    int coeff = 1;
+    cfg.getInt(secName, "handle_high_speed_coeff", coeff);
+    if ((coeff > 1) && (coeff < 100))
+    {
+        handle_high_speed_coeff = coeff;
+    }
+
     cfg.getInt(secName, "trac_min", trac_min);
     cfg.getInt(secName, "brake_min", brake_min);
-    cfg.getDouble(secName, "omega_handle", omega_handle);
 
     cfg.getDouble(secName, "K_flow", K_flow);
-
-    brakeTimer->setTimeout(0.02);
-    tracTimer->setTimeout(0.02);
 }
 
 //------------------------------------------------------------------------------
@@ -172,131 +162,7 @@ void TracController::load_config(CfgReader &cfg)
 //------------------------------------------------------------------------------
 void TracController::stepKeysControl(double t, double dt)
 {
-    // Контроллер в нулевой позиции (выбег)
-    if (mode_pos == 0)
-    {
-        trac_level = brake_level = 0;
-
-        if ( (getKeyState(KEY_D)) && (!old_brake_key) )
-        {
-            --mode_pos;
-            // Запрещаем непрерывное управление до второго нажатия клавиши
-            brake = false;
-        }
-        else if ( (getKeyState(KEY_A)) && (!old_traction_key) )
-        {
-            ++mode_pos;
-            // Запрещаем непрерывное управление до второго нажатия клавиши
-            traction = false;
-        }
-    }
-
-    // Контроллер в экстренном торможении
-    if (mode_pos == -2)
-    {
-        traction = false;
-        brake = true;
-        // Возврат в максимальный уровень торможения
-        if (getKeyState(KEY_A))
-        {
-            mode_pos = -1;
-            brake_level = 90;
-        }
-    }
-
-    // Контроллер в торможении
-    if (mode_pos == -1)
-    {
-        traction = false;
-        dir = 0;
-
-        if (!brakeTimer->isStarted())
-            brakeTimer->start();
-
-        if (getKeyState(KEY_A))
-        {
-            // Возврат в выбег
-            if (brake_level == 0)
-            {
-                mode_pos = 0;
-                brakeTimer->stop();
-                brake = false;
-            }
-            else
-            {
-                dir = 1;
-            }
-        }
-
-        if (getKeyState(KEY_D))
-        {
-            // Управляем дальше только после второго нажатия клавиши
-            if (brake)
-                dir = -1;
-
-            // После максимального уровня торможения переход в экстренное
-            if (brake_level == 90)
-            {
-                // Только новым нажатием клавиши
-                if (!old_brake_key)
-                {
-                    mode_pos = -2;
-                }
-            }
-        }
-        else
-        {
-            // Разрешаем управление, отпустив клавишу после первого нажатия
-            brake = true;
-        }
-    }
-
-    brakeTimer->step(t, dt);
-
-    // Контроллер в тяге
-    if (mode_pos == 1)
-    {
-        brake = false;
-        dir = 0;
-
-        if (!tracTimer->isStarted())
-            tracTimer->start();
-
-        if (getKeyState(KEY_D))
-        {
-            // Возврат в выбег
-            if (trac_level == 0)
-            {
-                mode_pos = 0;
-                tracTimer->stop();
-                traction = false;
-            }
-            else
-            {
-                dir = -1;
-            }
-        }
-
-        if (getKeyState(KEY_A))
-        {
-            // Управляем дальше только после второго нажатия клавиши
-            if (traction)
-                dir = 1;
-
-        }
-        else
-        {
-            // Разрешаем управление, отпустив клавишу после первого нажатия
-            traction = true;
-        }
-    }
-
-    tracTimer->step(t, dt);
-
-    old_traction_key = getKeyState(KEY_A);
-    old_brake_key = getKeyState(KEY_D);
-
-    // Управление реверсом
+    // Управление переключателем реверса
     if (fwd_key && !old_fwd_key && (revers_pos < 1))
     {
         revers_pos++;
@@ -311,6 +177,170 @@ void TracController::stepKeysControl(double t, double dt)
 
     old_fwd_key = fwd_key;
     old_bwd_key = bwd_key;
+
+    // Управление контроллером
+    // Возврат контроллера в 0 по Ctrl+D
+    if ( isControl() && (getKeyState(KEY_D)) )
+    {
+        mode_pos = 0;
+        handle_motion_speed = 0;
+        brake = false;
+        brake_level = 0;
+        traction = false;
+        trac_level = 0;
+        old_traction_key = true;
+        old_brake_key = true;
+        return;
+    }
+
+    // Контроллер в экстренном торможении
+    if (mode_pos == -2)
+    {
+        // Возврат в максимальный уровень торможения
+        if (getKeyState(KEY_A))
+        {
+            mode_pos = -1;
+            brake_level = 90;
+        }
+        return;
+    }
+
+    // Контроллер в нулевой позиции (выбег)
+    if (mode_pos == 0)
+    {
+        trac_level = brake_level = 0;
+
+        if ( (getKeyState(KEY_D)) && (!old_brake_key) )
+        {
+            --mode_pos;
+            // Запрещаем непрерывное управление до второго нажатия клавиши
+            brake = false;
+        }
+
+        if ( (getKeyState(KEY_A)) && (!old_traction_key) )
+        {
+            ++mode_pos;
+            // Запрещаем непрерывное управление до второго нажатия клавиши
+            traction = false;
+        }
+    }
+
+    // Контроллер в торможении
+    if (mode_pos == -1)
+    {
+        traction = false;
+
+        if (!brakeTimer->isStarted())
+            brakeTimer->start();
+
+        if (getKeyState(KEY_A))
+        {
+            // Возврат в выбег
+            if (brake_level == 0)
+            {
+                mode_pos = 0;
+                brakeTimer->stop();
+                brake = false;
+                handle_motion_speed = 0;
+            }
+            else
+            {
+                if (isShift())
+                    handle_motion_speed = handle_high_speed_coeff;
+                else
+                    handle_motion_speed = 1;
+            }
+            brakeTimer->step(t, dt);
+        }
+
+        if (getKeyState(KEY_D))
+        {
+            // Управляем дальше только после второго нажатия клавиши
+            if (brake)
+            {
+                if (isShift())
+                    handle_motion_speed = -handle_high_speed_coeff;
+                else
+                    handle_motion_speed = -1;
+            }
+            else
+            {
+                handle_motion_speed = 0;
+            }
+
+            // После максимального уровня торможения переход в экстренное
+            if (brake_level == 90)
+            {
+                // Только новым нажатием клавиши
+                if (!old_brake_key)
+                {
+                    mode_pos = -2;
+                    brakeTimer->stop();
+                }
+            }
+
+            brakeTimer->step(t, dt);
+        }
+        else
+        {
+            // Разрешаем управление, отпустив клавишу после первого нажатия
+            brake = true;
+        }
+    }
+
+    // Контроллер в тяге
+    if (mode_pos == 1)
+    {
+        brake = false;
+
+        if (!tracTimer->isStarted())
+            tracTimer->start();
+
+        if (getKeyState(KEY_D))
+        {
+            // Возврат в выбег
+            if (trac_level == 0)
+            {
+                mode_pos = 0;
+                tracTimer->stop();
+                traction = false;
+                handle_motion_speed = 0;
+            }
+            else
+            {
+                if (isShift())
+                    handle_motion_speed = -handle_high_speed_coeff;
+                else
+                    handle_motion_speed = -1;
+            }
+            tracTimer->step(t, dt);
+        }
+
+        if (getKeyState(KEY_A))
+        {
+            // Управляем дальше только после второго нажатия клавиши
+            if (traction)
+            {
+                if (isShift())
+                    handle_motion_speed = handle_high_speed_coeff;
+                else
+                    handle_motion_speed = 1;
+            }
+            else
+            {
+                handle_motion_speed = 0;
+            }
+            tracTimer->step(t, dt);
+        }
+        else
+        {
+            // Разрешаем управление, отпустив клавишу после первого нажатия
+            traction = true;
+        }
+    }
+
+    old_traction_key = getKeyState(KEY_A);
+    old_brake_key = getKeyState(KEY_D);
 }
 
 //------------------------------------------------------------------------------
@@ -318,7 +348,7 @@ void TracController::stepKeysControl(double t, double dt)
 //------------------------------------------------------------------------------
 void TracController::slotTracLevelProcess()
 {
-    trac_level += dir * mode_pos;
+    trac_level += handle_motion_speed * mode_pos;
 
     trac_level = cut(trac_level, 0, 100 - trac_min);
 }
@@ -328,7 +358,7 @@ void TracController::slotTracLevelProcess()
 //------------------------------------------------------------------------------
 void TracController::slotBrakeLevelProcess()
 {
-    brake_level += dir * mode_pos;
+    brake_level += handle_motion_speed * mode_pos;
 
     brake_level = cut(brake_level, 0, 100 - brake_min);
 }

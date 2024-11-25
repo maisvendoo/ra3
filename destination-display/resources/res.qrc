@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/destination">
+        <file alias="background">img/display-background.png</file>
+    </qresource>
+</RCC>

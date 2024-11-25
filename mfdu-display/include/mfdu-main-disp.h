@@ -18,8 +18,10 @@ class MfduMainDisp : public QLabel
 public:
     MfduMainDisp(QLabel* parent = Q_NULLPTR);
 
-    void updateData(display_signals_t input_signals);
-
+    // Группируем элементы экрана в блоки, которые будут обновлятся по очереди
+    void updateData1(display_signals_t input_signals);
+    void updateData2(display_signals_t input_signals);
+    void updateData3(display_signals_t input_signals);
 
 private:
     Speedometer* speedometer_;

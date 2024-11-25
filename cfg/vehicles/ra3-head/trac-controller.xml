@@ -2,7 +2,11 @@
 <Config>
 	<Device>
 
-		<omega_handle>5</omega_handle>
+		<!-- Время перемещения рукоятки контроллера на 1% тягового/тормозного сектора, с -->
+		<handle_motion_time>0.1</handle_motion_time>
+
+		<!-- Коэффициент ускорения контроллера с нажатым Shift -->
+		<handle_high_speed_coeff>8</handle_high_speed_coeff>
 
 		<trac_min>10</trac_min>
 		<brake_min>10</brake_min>

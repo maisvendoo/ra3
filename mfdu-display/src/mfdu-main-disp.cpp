@@ -41,9 +41,24 @@ MfduMainDisp::MfduMainDisp(QLabel *parent)
 
 
 //-----------------------------------------------------------------------------
-// Обновление данных на экране: "Основной экран"
+// Обновление данных на экране: "Основной экран". Блок обновлений №1
 //-----------------------------------------------------------------------------
-void MfduMainDisp::updateData(display_signals_t input_signals)
+void MfduMainDisp::updateData1(display_signals_t input_signals)
+{
+    // вертикальная шкала тяги/торможения
+    verticalScaleBar_->setVal(input_signals[MFDU_TRACTION_BRAKING]);
+
+    // блок нижних параметров
+    labPpm_->setText(QString::number(input_signals[MFDU_PRESSURE_PM], 'f', 3));
+    labPtm_->setText(QString::number(input_signals[MFDU_PRESSURE_TM], 'f', 3));
+    labPtc_max_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MAX], 'f', 3));
+    labPtc_min_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MIN], 'f', 3));
+}
+
+//-----------------------------------------------------------------------------
+// Обновление данных на экране: "Основной экран". Блок обновлений №2
+//-----------------------------------------------------------------------------
+void MfduMainDisp::updateData2(display_signals_t input_signals)
 {
     // спидометр
     speedometer_->setSpeed(input_signals[MFDU_S_SPEED]);
@@ -92,15 +107,14 @@ void MfduMainDisp::updateData(display_signals_t input_signals)
     setNeededIcon_(labEmergBrakes_, input_signals[MFDU_EMERGENCY_BRAKES]);
     setNeededIcon_(labParkBrakes_, input_signals[MFDU_PARKING_BRAKES]);
     setNeededIcon_(labHoldBrakes_, input_signals[MFDU_HOLDING_BRAKES]);
+}
 
-    // вертикальная шкала тяги/торможения
-    verticalScaleBar_->setVal(input_signals[MFDU_TRACTION_BRAKING]);
-
+//-----------------------------------------------------------------------------
+// Обновление данных на экране: "Основной экран". Блок обновлений №3
+//-----------------------------------------------------------------------------
+void MfduMainDisp::updateData3(display_signals_t input_signals)
+{
     // блок нижних параметров
-    labPpm_->setText(QString::number(input_signals[MFDU_PRESSURE_PM], 'f', 3));
-    labPtm_->setText(QString::number(input_signals[MFDU_PRESSURE_TM], 'f', 3));
-    labPtc_max_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MAX], 'f', 3));
-    labPtc_min_->setText(QString::number(input_signals[MFDU_PRESSURE_TC_MIN], 'f', 3));
     labTkab_->setText(QString::number(input_signals[MFDU_TEMPERATURE_KAB], 'f', 1));
     labIakb24_->setText(QString::number(input_signals[MFDU_I_AKB_24], 'f', 1));
     labIakb110_->setText(QString::number(input_signals[MFDU_I_AKB_110], 'f', 1));

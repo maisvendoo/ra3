@@ -5,7 +5,6 @@
 #include    "blok-funcs.h"
 #include    "structures-BLOK.h"
 
-#include    <QTimer>
 #include    <QLabel>
 
 #include    "TopBlock.h"
@@ -25,27 +24,23 @@ public:
 
     void init();
 
-private:
+    void update(double t, double dt);
 
-    QTimer          *updateTimer;
+private:
 
     TopBlock        *topBlock;
 
     BlokOffScreen   *off_screen;
 
     structs_BLOK_t  structsBLOK;
-/*
-    std::vector<QString>    stations;
-*/
+
+    double upd_time = 0.0;
+    double upd_interval = 0.2;
+    int  upd_block = 0;
+
     void initMainWindow();
 
     void initTopBlock();
-/*
-    void loadStations();
-*/
-private slots:
-
-    void slotUpdateTimer();
 };
 
 #endif // BLOK_DISPLAY_H

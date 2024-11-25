@@ -188,4 +188,18 @@ void RA3HeadMotor::animationSignalsOutput(double t, double dt)
     //analogSignal[JOYSTIK_MIRROR_HORIZONTAL_AXIS] = 0.0f;
     //analogSignal[JOYSTIK_MIRROR_VERTICAL_AXIS] = 0.0f;
     //analogSignal[CONTROL_GEAR_MANOMETER_BRIGTHNESS] = 0.0f;
+
+    QString text = bucik->getDestinationText();
+    if (((Ucc_110 - 99.0) < 0.0) || text.isEmpty() || (text.size() > 15))
+    {
+        analogSignal[DESTINATION_SIZE] = 0.0f;
+    }
+    else
+    {
+        analogSignal[DESTINATION_SIZE] = static_cast<float>(text.size());
+        for (size_t i = 0; i < text.size(); ++i)
+        {
+            analogSignal[DESTINATION_SYMB1 + i] = static_cast<float>(text[i].unicode());
+        }
+    }
 }

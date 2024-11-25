@@ -158,8 +158,23 @@ void DoorControlModule::preStep(state_vector_t &Y, double t)
     if (ref_state)
     {
         warnSignalTimer->stop();
-        warnSignalChange->stop();
-        warn_signal = false;
+
+        if (Y[DOOR_STATE] > 0.95)
+        {
+            // Двери открыты и останутся открытыми
+            door_ref_state = 1.0;
+            door_skid_ref_state = 1.0;
+            warnSignalChange->stop();
+            warn_signal = false;
+        }
+        else
+        {
+            // При открытии дверей работает предупреждающий сигнал
+            if (!warnSignalChange->isStarted())
+            {
+                warnSignalChange->start();
+            }
+        }
 
         // Открытие дверей
         // Сперва открываем выдвижную ступень, если включена
@@ -237,7 +252,6 @@ void DoorControlModule::preStep(state_vector_t &Y, double t)
         {
             step_ref_state = 0.0;
         }
-
     }
 }
 

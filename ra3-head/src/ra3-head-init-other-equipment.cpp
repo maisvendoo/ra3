@@ -1,6 +1,6 @@
 #include    "ra3-head.h"
 
-#include    <QDir>
+#include    "filesystem.h"
 
 //------------------------------------------------------------------------------
 //
@@ -25,4 +25,13 @@ void RA3HeadMotor::initOtherEquipment(const QString &modules_dir, const QString 
     door_L->read_config("door-control-module", custom_cfg_dir);
     door_R = new DoorControlModule();
     door_R->read_config("door-control-module", custom_cfg_dir);
+
+    // БУЦИК
+    bucik = new BUCIK();
+    FileSystem &fs = FileSystem::getInstance();
+    QString path = fs.getRouteRootDir().c_str();
+    path += QDir::separator() + route_dir;
+    path += QDir::separator() + QString("topology");
+    path += QDir::separator() + QString("stations.conf");
+    bucik->loadStations(path);
 }

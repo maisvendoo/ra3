@@ -254,10 +254,9 @@
 	</Sound>
 
 	<!-- Зуммер предупреждения о закрытии дверей -->
-	<!-- ВРЕМЕННО СДЕЛАН ИЗ ЗВУКА НАЖАТИЯ КНОПОК БЛОК -->
 	<Sound>
 		<SignalID>243</SignalID>
-		<Filename>blok_beep_3.wav</Filename>
+		<Filename>passdoor.wav</Filename>
 		<InitVolume>1.0</InitVolume>
 		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
@@ -268,7 +267,7 @@
 
 	<Sound>
 		<SignalID>244</SignalID>
-		<Filename>blok_beep_3.wav</Filename>
+		<Filename>passdoor.wav</Filename>
 		<InitVolume>1.0</InitVolume>
 		<MaxVolume>1.0</MaxVolume>
 		<InitPitch>1.0</InitPitch>
@@ -276,6 +275,5 @@
 		<PlayOnStart>0</PlayOnStart>
 		<LocalPosition>1.5 -0.7 3.8</LocalPosition>
 	</Sound>
-
 
 </Config>

@@ -84,6 +84,10 @@ void RA3HeadMotor::stepSME(double t, double dt)
         sme_fwd->setSignal(SME_DOOR_R_OPEN, static_cast<double>(door_R->getRefState()));
         sme_bwd->setSignal(SME_DOOR_L_OPEN, static_cast<double>(door_R->getRefState()));
         sme_bwd->setSignal(SME_DOOR_R_OPEN, static_cast<double>(door_L->getRefState()));
+
+        // Сигнал с номером станции, выбранной в БУЦИК конечной
+        sme_fwd->setSignal(SME_BUCIK_DESTINATION, static_cast<double>(bucik->getDestinationStationIndex()));
+        sme_bwd->setSignal(SME_BUCIK_DESTINATION, static_cast<double>(bucik->getDestinationStationIndex()));
     }
     // Обработка сигналов неактивной кабиной
     else
