@@ -6,6 +6,7 @@
 		<ModuleDir>ra3-head</ModuleDir>
 		<Module>mfdu-display</Module>
 		<SurfaceName>display_MFDU</SurfaceName>
+		<UpdateInterval>0.6</UpdateInterval>
 
 		<Corner1>0.0 0.0</Corner1>
 		<Corner2>1.0 0.0</Corner2>
@@ -19,6 +20,7 @@
 		<ModuleDir>ra3-head</ModuleDir>
 		<Module>blok-display</Module>
 		<SurfaceName>display_BLOK</SurfaceName>
+		<UpdateInterval>0.6</UpdateInterval>
 
 		<Corner1>0.0 0.0</Corner1>
 		<Corner2>1.0 0.0</Corner2>
@@ -32,6 +34,7 @@
 		<ModuleDir>ra3-head</ModuleDir>
 		<Module>destination-display</Module>
 		<SurfaceName>display_tablo</SurfaceName>
+		<UpdateInterval>0.6</UpdateInterval>
 
 		<Corner1>0.0 0.0</Corner1>
 		<Corner2>1.0 0.0</Corner2>

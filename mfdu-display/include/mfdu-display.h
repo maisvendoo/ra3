@@ -40,7 +40,7 @@ private:
     MfduMainDisp*   mfduMainDisp_;
 
     double upd_time = 0.0;
-    double upd_interval = 0.2;
+    //double upd_interval = 0.2;
     int  upd_block = 0;
 };
 

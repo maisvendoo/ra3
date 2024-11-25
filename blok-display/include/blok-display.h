@@ -34,8 +34,7 @@ private:
 
     structs_BLOK_t  structsBLOK;
 
-    double upd_time = 0.0;
-    double upd_interval = 0.2;
+    double upd_time = 0.0;    
     int  upd_block = 0;
 
     void initMainWindow();
