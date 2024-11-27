@@ -60,6 +60,8 @@ void DestinationDisplay::init()
         input_signals[DESTINATION_SYMB1 + i] = static_cast<float>(QChar(' ').unicode());
     }
 
+    this->resize(900, 90);
+
     AbstractDisplay::init();
 }
 
@@ -80,7 +82,7 @@ void DestinationDisplay::update(double t, double dt)
     if ((size <= 0) || (size > 15))
     {
         prev_text = "";
-        destination_text->setText("");
+        destination_text->setText("Тест");
         return;
     }
 

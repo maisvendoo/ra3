@@ -45,5 +45,5 @@ void RA3HeadMotor::blokSignalsOutput(double t, double dt)
     for (size_t i = 0; i < text.size(); ++i)
     {
         analogSignal[BLOK_STRING_SYMB1 + i] = static_cast<float>(text[i].unicode());
-    }
+    }    
 }
